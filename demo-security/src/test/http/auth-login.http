@@ -1,0 +1,12 @@
+###
+POST http://localhost:8080/open/auth/1/login
+Content-Type: application/json;charset=utf-8
+
+{
+  "json": {
+    "username": "admin",
+    "password": "admin"
+  }
+}
+
+###

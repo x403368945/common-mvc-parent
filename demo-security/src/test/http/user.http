@@ -1,0 +1,6 @@
+###
+GET http://localhost:8080/admin-config/1
+Authorization: Basic dXNlcjoxMTExMTE=
+Accept: application/json
+
+###

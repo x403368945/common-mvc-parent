@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.utils</groupId>
+    <artifactId>common-mvc-parent</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>common-mvc</module><!-- Spring MVC 封装 -->
+        <module>common-cache</module><!-- 缓存封装【暂为实现】 -->
+        <module>common-mongo</module><!-- MongoDB 封装【JPA已经实现基本需求，不再封装】 -->
+        <module>demo-security</module><!-- Spring Security 基本应用【参考案例，独立运行】 -->
+        <module>demo-socket</module><!-- Spring Socket 基本应用【参考案例，独立运行】 -->
+        <module>demo-main</module><!-- 应用入口【独立运行，可选依赖[demo-service]】 -->
+        <module>demo-service</module><!-- 参考案例【必须依赖[demo-main]】 -->
+        <!--<module>demo-mvc</module>-->
+        <!--<module>jfinal-wechat</module>-->
+        <!--<module>lx-server</module>-->
+        <!--<module>mq-server</module>-->
+        <!-- <module>financial-report-server</module> -->
+    </modules>
+
+    <profiles>
+        <profile> <!-- 本地开发环境 -->
+            <id>dev</id>
+            <activation> <!-- 设置默认激活这个配置 -->
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <env>dev</env>
+            </properties>
+        </profile>
+        <!--
+                <profile> &lt;!&ndash; 本地 windows 开发环境 &ndash;&gt;
+                    <id>windows</id>
+                    <properties>
+                        <env>windows</env>
+                    </properties>
+                    &lt;!&ndash; 设置 windows 环境激活这个配置 &ndash;&gt;
+                    <activation>
+                        <os>
+                            <name>Windows</name>
+                            <family>Windows</family>
+                        </os>
+                    </activation>
+                </profile>
+        -->
+        <profile> <!-- 测试环境 -->
+            <id>beta</id>
+            <properties>
+                <env>beta</env>
+            </properties>
+            <!-- build -> plugins 可以写在 project ，但是开发环境不需要挂起 antrun 插件，只有在按环境打包时需要 -->
+            <!--<build>
+                <plugins>
+                    &lt;!&ndash; 使用AntRun插件，因为此插件能绑定Maven生命周期阶段，并通过Ant的标签即可输出信息、复制文件等&ndash;&gt;
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.8</version>
+                        <executions>
+                            <execution>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <tasks>
+                                        <echo>Using Environment : ${env}</echo> &lt;!&ndash; 复制文件文件夹 &ndash;&gt;
+                                        <copy todir="${project.build.outputDirectory}" overwrite="true">
+                                            <fileset dir="src/demo/resources/${env}"/>
+                                        </copy>
+                                        &lt;!&ndash;
+                                        <echo>Using ${env}/application.properties</echo> &lt;!&ndash; 复制单个文件 &ndash;&gt;
+                                        <copy file="src/demo/resources/${env}/application.properties" tofile="${project.build.outputDirectory}/application.properties" overwrite="true"/>
+                                        &ndash;&gt;
+                                    </tasks>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>-->
+        </profile>
+        <profile> <!-- 生产环境 -->
+            <id>prod</id>
+            <properties>
+                <env>prod</env>
+            </properties>
+            <!-- build -> plugins 可以写在 project ，但是开发环境不需要挂起 antrun 插件，只有在按环境打包时需要 -->
+            <!--<build>
+                <plugins>
+                    &lt;!&ndash; 使用AntRun插件，因为此插件能绑定Maven生命周期阶段，并通过Ant的标签即可输出信息、复制文件等&ndash;&gt;
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                </plugins>
+            </build>-->
+        </profile>
+    </profiles>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring.version>5.1.3.RELEASE</spring.version>
+        <spring.data.version>2.1.3.RELEASE</spring.data.version>
+        <spring.security.version>5.1.2.RELEASE</spring.security.version>
+        <querydsl.version>4.2.1</querydsl.version>
+        <hibernate.validator.version>6.0.14.Final</hibernate.validator.version>
+        <thymeleaf.version>3.0.11.RELEASE</thymeleaf.version>
+        <jackson.version>2.9.8</jackson.version>
+    </properties>
+    <dependencies>
+        <!--
+            下载源码编译安装到本地仓库
+            https://gitee.com/xcc/common-utils.git
+            https://github.com/x403368945/common-utils
+        -->
+        <dependency>
+            <groupId>com.utils</groupId>
+            <artifactId>common-utils</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.4</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/javax.el/javax.el-api -->
+        <dependency> <!-- 解决单元测试 hibernate-validator 框架初始化失败异常；非tomcat、jetty容器，都需要添加该依赖 -->
+            <groupId>javax.el</groupId>
+            <artifactId>javax.el-api</artifactId>
+            <version>3.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.glassfish/javax.el -->
+        <dependency> <!-- 解决单元测试 hibernate-validator 框架初始化失败异常；非tomcat、jetty容器，都需要添加该依赖 -->
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.el</artifactId>
+            <version>3.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/junit/junit -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-test -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+            <type>jar</type>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-tx -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-orm -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-commons -->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons</artifactId>
+            <version>${spring.data.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-jpa -->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+            <version>${spring.data.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.querydsl/querydsl-core -->
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-core</artifactId>
+            <version>4.2.1</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>guava</artifactId>
+                    <groupId>com.google.guava</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.querydsl/querydsl-apt -->
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-apt</artifactId>
+            <version>${querydsl.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>guava</artifactId>
+                    <groupId>com.google.guava</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- http://mvnrepository.com/artifact/com.querydsl/querydsl-jpa -->
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-jpa</artifactId>
+            <version>${querydsl.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- Spring Security -->
+        <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-core -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>${spring.security.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-config -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>${spring.security.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-web -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>${spring.security.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-test -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <version>${spring.security.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver -->
+        <dependency> <!-- Spring AOP -->
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.9.2</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.13</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.4.0.Final</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator -->
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate.validator.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator-annotation-processor -->
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator-annotation-processor</artifactId>
+            <version>${hibernate.validator.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
+        <!--<dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>2.0.1.Final</version>
+        </dependency>-->
+
+        <!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.9.3</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.4</version>
+            <!--
+                        <exclusions>
+                            <exclusion>
+                                <artifactId>commons-io</artifactId>
+                                <groupId>commons-io</groupId>
+                            </exclusion>
+                        </exclusions>
+            -->
+        </dependency>
+    </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-redis -->
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-redis</artifactId>
+                <version>${spring.data.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/redis.clients/jedis -->
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>3.0.1</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-mongodb -->
+            <dependency> <!-- Spring mongo 一定要注意版本匹配 -->
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-mongodb</artifactId>
+                <version>${spring.data.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.querydsl/querydsl-mongodb -->
+            <dependency>
+                <groupId>com.querydsl</groupId>
+                <artifactId>querydsl-mongodb</artifactId>
+                <version>${querydsl.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.mongodb.morphia/morphia -->
+            <dependency>
+                <groupId>org.mongodb.morphia</groupId>
+                <artifactId>morphia</artifactId>
+                <version>1.3.2</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf -->
+            <dependency>
+                <groupId>org.thymeleaf</groupId>
+                <artifactId>thymeleaf</artifactId>
+                <version>${thymeleaf.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf-spring5 -->
+            <dependency>
+                <groupId>org.thymeleaf</groupId>
+                <artifactId>thymeleaf-spring5</artifactId>
+                <version>${thymeleaf.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.springframework/spring-websocket -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-websocket</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-websocket -->
+            <dependency> <!-- 解决启用 WebSocket之后，单元测试报错-->
+                <groupId>org.apache.tomcat.embed</groupId>
+                <artifactId>tomcat-embed-websocket</artifactId>
+                <version>9.0.14</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- 打包发布时起作用：支付宝 sdk 集成；需要手动安装支付宝 sdk jar包到 maven 仓库，参考: /src/test/files/libs/README.md -->
+            <!--<dependency>
+                <groupId>com.alipay.api</groupId>
+                <artifactId>alipay-sdk</artifactId>
+                <version>20180104135026</version>
+            </dependency>-->
+            <!-- 编译时起作用：支付宝 sdk 集成；由于mvn install:install-file 命令安装 sdk jar包之后，maven 打包时可以检测到依赖，但编译时检测不到依赖，所以编译时使用这个依赖，打包时使用上面的依赖 -->
+            <!--<dependency>
+                <groupId>com.alipay.api</groupId>
+                <artifactId>sdk</artifactId>
+                <version>20180104135026</version>
+                <scope>system</scope>
+                <systemPath>${project.basedir}/src/test/files/libs/alipay-sdk-java20180104135026.jar</systemPath>
+            </dependency>-->
+        </dependencies>
+    </dependencyManagement>
+    <build>
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+                <targetPath>${basedir}/target/classes</targetPath>
+                <filtering>true</filtering>
+                <includes>
+                    <include>db/*</include>
+                    <include>*.properties</include>
+                    <include>*.sql</include>
+                    <include>*.xml</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+                <targetPath>${basedir}/target/test-classes</targetPath>
+                <filtering>true</filtering>
+                <includes>
+                    <include>*.properties</include>
+                </includes>
+            </resource>
+            <resource> <!-- 指定必须编译打包的资源文件 -->
+                <directory>${basedir}/src/main/resources/${env}</directory>
+                <targetPath>${basedir}/target/classes</targetPath>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>${basedir}/src/main/resources/${env}</directory>
+                <targetPath>${basedir}/target/test-classes</targetPath>
+                <filtering>true</filtering>
+                <!-- 排除不打包的文件 -->
+                <!--
+                <excludes>
+                    <exclude>logback.xml</exclude>
+                </excludes>
+                -->
+            </resource>
+            <!--<resource>
+                <directory>src/demo/static</directory>&lt;!&ndash; 将静态资源复制到编译目录下 &ndash;&gt;
+                <targetPath>${basedir}/target/${artifactId}-${version}/static/</targetPath>
+                &lt;!&ndash;<targetPath>${basedir}/target/classes/static/</targetPath>&ndash;&gt;
+                <filtering>true</filtering>
+            </resource>-->
+        </resources>
+        <plugins>
+            <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                    <skip>true</skip>
+                    <!--<compilerArgs>
+                        <arg>-extdirs</arg>
+                        <arg>${basedir}/src/demo/static/*</arg>
+                    </compilerArgs>-->
+                </configuration>
+            </plugin>
+            <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin -->
+            <plugin> <!-- 打包的时候跳过单元测试-->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.1</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-source-plugin -->
+            <plugin> <!-- 默认打包源码 -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin> <!-- war 包插件 -->
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>3.2.2</version>
+                    <configuration>
+                        <failOnMissingWebXml>false</failOnMissingWebXml>
+                        <!--
+                          attachClasses:在打包时相关的类会被独立打成jar,
+                          classesClassifier:指定jar包后缀，默认 -classes
+                        -->
+                        <attachClasses>true</attachClasses>
+                        <classesClassifier>${env}</classesClassifier>
+                        <!-- 参考地址： http://maven.apache.org/plugins-archives/maven-war-plugin-2.4/examples/adding-filtering-webresources.html-->
+                        <!--<webResources>
+                            <resource>
+                                <directory>${basedir}/src/demo/webapp</directory>
+                            </resource>
+                        </webResources>-->
+                    </configuration>
+                </plugin>
+                <!-- https://mvnrepository.com/artifact/com.mysema.maven/apt-maven-plugin -->
+                <plugin>
+                    <!--
+                      该插件可以生成 querydsl 需要的查询对象，运行 mvn compile 即可
+                      参考地址：http://www.querydsl.com/static/querydsl/4.1.3/reference/html_single/#jpa_integration
+                    -->
+                    <groupId>com.mysema.maven</groupId>
+                    <artifactId>apt-maven-plugin</artifactId>
+                    <version>1.1.3</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>process</goal>
+                            </goals>
+                            <configuration>
+                                <!--警告：需要将 target/generated-sources/java 设置为 Generated Sources Root -->
+                                <outputDirectory>target/generated-sources/java</outputDirectory>
+                                <processors>
+                                    <!-- 只支持 @Entity 注解的类，生成Q{ClassName}.java -->
+                                    <!--<processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>-->
+                                    <!-- 可以将所有 @Entity @Document 注解的类，生成Q{ClassName}.java，同时会将这些类中引用的类也生成 Q{ClassName}.java ；但是类属性不支持 @QueryTransient 注解 -->
+                                    <!--<processor>org.springframework.data.mongodb.repository.support.MongoAnnotationProcessor</processor>-->
+                                    <!-- 只支持 @QueryEntity 注解的类，生成Q{ClassName}.java，可通过 @QueryTransient 指定生成 Q{ClassName}.java 时忽略类属性；可选择性的生成 Q{ClassName}.java，不需要的类不加 @QueryEntity 即可，控制性比较高 -->
+                                    <processor>com.querydsl.apt.QuerydslAnnotationProcessor</processor>
+                                </processors>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!-- https://mvnrepository.com/artifact/com.querydsl/querydsl-maven-plugin -->
+                <!--
+                <plugin>
+                    <groupId>com.querydsl</groupId>
+                    <artifactId>querydsl-maven-plugin</artifactId>
+                    <version>${project.version}</version>
+                    <executions>
+                        <execution>com.mysema.maven
+                            <goals>
+                                <goal>export</goal>
+                            </goals>
+                            <configuration>
+                                <targetFolder>target/generated-sources/java</targetFolder>
+                                <packageName></packageName>
+                            </configuration>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <jdbcDriver>org.h2.Driver</jdbcDriver>
+                        <jdbcUrl>jdbc:h2:mem:;INIT=runscript from 'file:${project.baseUri}/src/demo/sql/001_schema.sql'</jdbcUrl>
+                        <jdbcUser>sa</jdbcUser>
+                        <customTypes>
+                            <customType>com.querydsl.sql.types.DateTimeType</customType>
+                            <customType>com.querydsl.sql.types.LocalDateType</customType>
+                        </customTypes>
+                        <packageName>com.querydsl.example.sql</packageName>
+                        <targetFolder>${project.basedir}/target/generated-sources/java</targetFolder>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.h2database</groupId>
+                            <artifactId>h2</artifactId>
+                            <version>${h2.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+                -->
+                <!-- https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-maven-plugin -->
+                <!--
+                            <plugin>
+                                <groupId>org.eclipse.jetty</groupId>
+                                <artifactId>jetty-maven-plugin</artifactId>
+                                <version>9.4.12.v20180830</version>
+                            </plugin>
+                -->
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

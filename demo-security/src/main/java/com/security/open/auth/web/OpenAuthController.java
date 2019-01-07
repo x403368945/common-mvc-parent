@@ -1,0 +1,199 @@
+package com.security.open.auth.web;
+
+
+import com.mvc.entity.base.Param;
+import com.mvc.entity.base.Result;
+import com.mvc.entity.base.Version;
+import com.mvc.enums.Code;
+import com.security.business.user.entity.TabUser;
+import com.security.business.user.entity.TabUser.Props;
+import com.security.config.init.AppConfig.URL;
+import com.security.enums.Session;
+import com.security.open.auth.entity.AuthLogin;
+import com.security.open.auth.service.AuthService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.beans.BeanMap;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.Arrays;
+
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
+/**
+ * 操作请求处理：授权
+ */
+@RequestMapping("/open/auth/{version}")
+@Controller
+@Slf4j
+public class OpenAuthController {
+
+    @Autowired
+    private AuthService authService;
+
+    /**
+     * 默认以 session 模式登录
+     * URL:/open/auth/login
+     * 参数：param=JSONObject
+     *
+     * @param version  int 当前请求接口版本号
+     * @param param   Param
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     * @return Result
+     */
+    @PostMapping("/login")
+    @ResponseBody
+    public Result<?> login(@PathVariable final int version,
+                           @RequestBody final Param param,
+                           HttpServletRequest request,
+                           HttpServletResponse response
+    ) {
+        final Result<TabUser> result = new Result<>();
+        try {
+//            log.debug("request.getAuthType():"+request.getAuthType());
+//            log.debug("request.getContextPath()"+request.getContextPath());
+//            log.debug("request.getPathInfo()"+request.getPathInfo());
+//            log.debug("request.getRequestURI()"+request.getRequestURI());
+//            log.debug("request.getServletPath()"+request.getServletPath());
+//            log.debug("request.getLocalAddr()"+request.getLocalAddr());
+//            log.debug("request.getLocalName()"+request.getLocalName());
+//            log.debug("request.getProtocol()"+request.getProtocol());
+//            log.debug("request.getRemoteAddr()"+request.getRemoteAddr());
+//            log.debug("request.getRemoteHost()"+request.getRemoteHost());
+//            log.debug("request.getScheme()"+request.getScheme());
+//            log.debug("request.getServerName()"+request.getServerName());
+//            log.debug("request.getRemotePort()"+request.getRemotePort());
+//            log.debug("request.getServerPort()"+request.getServerPort());
+//            log.debug("request.getServletContext().getContextPath()"+request.getServletContext().getContextPath());
+//            log.debug("request.getServletContext().getServerInfo()"+request.getServletContext().getServerInfo());
+//            log.debug("request.getServletContext().getServletContextName()"+request.getServletContext().getServletContextName());
+//            log.debug("request.getServletContext().getVirtualServerName()"+request.getServletContext().getVirtualServerName());
+            AuthLogin authLogin = Param.of(param).required().parseObject(AuthLogin.class);
+            switch (authLogin.getMethod()) {
+                case SESSION:
+                    return loginBySession(version, param, request);
+                case TOKEN:
+//                    return loginByToken(version, param, request, response);
+                case CODE:
+                    throw Code.FAILURE.exception("暂不支持手机验证码登录模式");
+                default:
+                    break;
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            result.setException(e);
+        }
+        return result;
+    }
+
+    /**
+     * 以 session 模式登录
+     * URL:/open/auth/login/SESSION
+     * 参数：param=JSONObject
+     *
+     * @param version int 当前请求接口版本号
+     * @param param  Param
+     * @param request HttpServletRequest
+     * @return Result
+     */
+    @PostMapping("/login/SESSION")
+    @ResponseBody
+    public Result<?> loginBySession(@PathVariable final int version,
+                                    @RequestBody final Param param,
+                                    HttpServletRequest request
+    ) {
+        final Result<TabUser> result = new Result<>(1);
+        try {
+            result
+                    .version(builder -> builder
+                            .url("/open/auth/{version}/login/SESSION")
+                            .markdown(this.getClass().getSimpleName().concat("/loginBySession.md"))
+                            .method(POST)
+                            .props(Props.list())
+                            .notes(Arrays.asList(
+                                    "会话模式登录，有效期30分钟"
+                            ))
+                            .build()
+                            .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl()),
+                                    BeanMap.create(new AuthLogin()
+                                            .setUsername("admin")
+                                            .setPassword("admin")
+                                    )
+                            ))
+                    )
+                    .versionAssert(version);
+            AuthLogin authLogin = Param.of(param).required().parseObject(AuthLogin.class);
+            // 登录成功之后，将用户信息放入session
+            TabUser user = authService.login(authLogin.getUsername(), authLogin.getPassword());
+            HttpSession session = request.getSession(true);
+//            session.setMaxInactiveInterval(60); // 测试时，设置 session 超时时间为60s
+            session.setAttribute(Session.user.name(), user);
+            result.setSuccess(user.toLoginResult());
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            result.setException(e);
+        }
+        return result;
+    }
+
+//    /**
+//     * 以 token 模式登录
+//     * URL:/open/auth/login/TOKEN
+//     * 参数：param=JSONObject
+//     *
+//     * @param version int 当前请求接口版本号
+//     * @param param  Param
+//     * @param request HttpServletRequest
+//     * @return Result
+//     */
+//    @PostMapping("/login/TOKEN")
+//    @ResponseBody
+//    public Result<?> loginByToken(@PathVariable final int version,
+//                                  @RequestBody final Param param,
+//                                  HttpServletRequest request,
+//                                  HttpServletResponse response
+//    ) {
+//        final Result<TabUser> result = new Result<>(1);
+//        try {
+//            result
+//                    .version(builder -> builder
+//                            .url("/open/auth/{version}/login/TOKEN")
+//                            .markdown(this.getClass().getSimpleName().concat("/loginByToken.md"))
+//                            .method(POST)
+//                            .props(Props.comments())
+//                            .notes(Arrays.asList(
+//                                    "TOKEN模式登录，最长有效期30天，重新调用该接口则上次的token失效；返回结果extras中存放的是当前有效token，请将该键值对存储在本地，向服务端发起请求时附加到请求头"
+//                            ))
+//                            .build()
+//                            .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl()),
+//                                    BeanMap.create(new AuthLogin()
+//                                            .setUsername("admin")
+//                                            .setPassword("admin")
+//                                    )
+//                            ))
+//                    )
+//                    .versionAssert(version);
+//            AuthLogin authLogin = Param.of(param).required().parseObject(AuthLogin.class);
+//            Assert.hasText(authLogin.getUsername(), "用户名不能为空");
+//            Assert.hasText(authLogin.getPassword(), "密码不能为空");
+//            // 登录成功之后，将用户信息放入session； 同时生成 token 回传到前端
+//            TabUser user = authService.login(authLogin.getUsername(), authLogin.getPassword());
+//            HttpSession session = request.getSession(true);
+////            session.setMaxInactiveInterval(60); // 测试时，设置 session 超时时间为60s
+//            session.setAttribute(Session.user.name(), user);
+//            // 生成token 放在响应头
+//            final String token = tokenCache.generate(user);
+//            response.setHeader(Session.token.name(), token);
+//            result.setSuccess(user.toLoginResult()).addExtras(Session.token.name(), token);
+//        } catch (Exception e) {
+//            log.error(e.getMessage(), e);
+//            result.setException(e);
+//        }
+//        return result;
+//    }
+}

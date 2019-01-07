@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <meta http-equiv="cache-control" content="max-age=10"/>
+    <meta name="author" content="Jason Xie">
+
+    <title>Socket</title>
+</head>
+<body>
+<h1>看控制台打印日志</h1>
+<script>
+    const host = window.location.host;
+    console.log(host);
+    // TODO 采坑记录，如果是跨域请求，每次 JSESSIONID 都在变，需要配置 {credentials: 'include'}
+    fetch(`http://${host}/login`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {'Content-Type': 'application/json;charset=utf-8'},
+        body: JSON.stringify({json: {username: 'admin', password: 'admin'}})// 这里是请求对象
+    })
+        .then(res => res.json())
+        .then(json => {
+            new Promise(resolve => {
+                console.log(json);
+                const socket = new WebSocket(`ws://${host}/socket/router`);
+                socket.onopen = function () {
+                    console.log('socket:open');
+                    socket.send(JSON.stringify({module: 'PUSH', json: {name: 'admin'}}));
+                };
+                socket.onmessage = function ({data}) {
+                    console.log('socket:message');
+                    console.log(data);
+                    if (JSON.parse(data).event === 'END') {
+                        socket.close();
+                    }
+                };
+                socket.onclose = function () {
+                    console.log('socket:close');
+                    resolve();
+                };
+                socket.onerror = function (event) {
+                    console.log(event);
+                    console.log('socket:error');
+                };
+            })
+                .then(() => new Promise(resolve => {
+                    const arrs = [
+                        '1+1',
+                        '1/(100-100)',
+                        'a+b',
+                        '1+1*100/(1001-999)',
+                    ];
+                    console.log(json);
+                    const socket = new WebSocket(`ws://${host}/socket/router`);
+                    socket.onopen = function () {
+                        console.log('socket:open');
+                        socket.send(JSON.stringify({module: 'FORMULA', json: {formula: arrs.shift()}}));
+                    };
+                    socket.onmessage = function ({data}) {
+                        console.log('socket:message');
+                        console.log(data);
+                        if (JSON.parse(data).event === 'END') {
+                            if (arrs.length === 0) {
+                                socket.close();
+                            } else {
+                                socket.send(JSON.stringify({module: 'FORMULA', json: {formula: arrs.shift()}}));
+                            }
+                        }
+                    };
+                    socket.onclose = function () {
+                        console.log('socket:close');
+                        resolve()
+                    };
+                    socket.onerror = function (event) {
+                        console.log(event);
+                        console.log('socket:error');
+                    };
+                }))
+                .then(() => {
+                    // sse 如果不调用 close() 连接断开后会自动重连
+                    const event = new EventSource(`/sse/${new Date().getTime()}`);
+                    event.addEventListener('open', () => console.log('sse:open'), false);
+                    event.addEventListener('error', (e) => {
+                        console.log('sse:error');
+                        console.error(e);
+                    }, false);
+                    event.addEventListener('message', ({data}) => {
+                        console.log('sse:message');
+                        console.log(JSON.parse(data))
+                    }, false);
+                    // 自定义 EventHandler，在收到 event 字段为 push 的消息时触发
+                    event.addEventListener('push', ({data}) => {
+                        console.log('sse:push');
+                        console.log(JSON.parse(data));
+                    }, false);
+                    event.addEventListener('end', ({data}) => {
+                        console.log('sse:end');
+                        console.log(JSON.parse(data));
+                        event.close();
+                    }, false);
+                })
+        });
+
+</script>
+</body>
+</html>

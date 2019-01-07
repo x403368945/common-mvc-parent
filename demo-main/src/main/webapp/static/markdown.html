@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Markdown</title>
+</head>
+<body>
+<h1>Markdown</h1>
+<script>
+    (async function () {
+        // TODO 采坑记录，如果是跨域请求，每次 JSESSIONID 都在变，需要配置 {credentials: 'include'}
+        await fetch(`http://${location.host}/login`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {'Content-Type': 'application/json;charset=utf-8'},
+            body: JSON.stringify({json: {username: 'admin', password: 'admin'}})
+        }).then((res) => res.json()).then(json => console.log(json));
+
+        const http = {
+            POST: (url) => {
+                return fetch(`http://${location.host}${url}`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {'Content-Type': 'application/json;charset=utf-8'},
+                    body: JSON.stringify({json: {}})
+                }).then((res) => res.json()).then(json => console.log(json))
+            },
+            PUT: (url) => {
+                return fetch(`http://${location.host}${url}`, {
+                    method: 'PUT',
+                    credentials: 'include',
+                    headers: {'Content-Type': 'application/json;charset=utf-8'},
+                    body: JSON.stringify({json: {}})
+                }).then((res) => res.json()).then(json => console.log(json))
+            },
+            PATCH: (url) => {
+                return fetch(`http://${location.host}${url}`, {
+                    method: 'PATCH',
+                    credentials: 'include',
+                    headers: {'Content-Type': 'application/json;charset=utf-8'},
+                    body: JSON.stringify({json: {}})
+                }).then((res) => res.json()).then(json => console.log(json))
+            },
+            DELETE: (url) => {
+                return fetch(`http://${location.host}${url}`, {
+                    method: 'DELETE',
+                    credentials: 'include',
+                    headers: {'Content-Type': 'application/json;charset=utf-8'}
+                }).then((res) => res.json()).then(json => console.log(json))
+            },
+            GET: (url) => {
+                return fetch(`http://${location.host}${url}`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {'Content-Type': 'application/json;charset=utf-8'}
+                }).then((res) => res.json()).then(json => console.log(json))
+            }
+        };
+
+        const arrs = `
+	c.d.b.d.w.DemoJpaMongoController:
+	{PUT /demo-jpa-mongo/{version}/{id}}: update(TabUser,int,Long,Param)
+	{POST /demo-jpa-mongo/{version}}: save(TabUser,int,Param)
+	{GET /demo-jpa-mongo/{version}}: search(TabUser,int,String)
+	{GET /demo-jpa-mongo/{version}/{id}/{timestamp}}: findByIdTimestamp(TabUser,int,Long,long)
+	{GET /demo-jpa-mongo/{version}/{id}/{uid}/{timestamp}}: findByUidTimestamp(TabUser,int,Long,String,long)
+	{DELETE /demo-jpa-mongo/{version}/{id}}: deleteById(TabUser,int,Long)
+	{PATCH /demo-jpa-mongo/{version}/{id}/{uid}}: markDeleteByUid(TabUser,int,Long,String)
+	{PATCH /demo-jpa-mongo/{version}}: markDelete(TabUser,int,Param)
+	{DELETE /demo-jpa-mongo/{version}/{id}/{uid}}: deleteByUid(TabUser,int,Long,String)
+	{PATCH /demo-jpa-mongo/{version}/{id}}: markDeleteById(TabUser,int,Long)
+	{GET /demo-jpa-mongo/{version}/page/{number}/{size}}: page(TabUser,int,int,int,String)
+20:02:20.112 TRACE [] - [RMI TCP Connection(2)-127.0.0.1] - Caller+0	 at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.detectHandlerMethods(AbstractHandlerMethodMapping.java:278)
+
+	c.d.b.e.w.DemoListController:
+	{PUT /demo-list/{version}/{id}}: update(TabUser,int,Long,Param)
+	{POST /demo-list/{version}}: save(TabUser,int,Param)
+	{GET /demo-list/{version}}: search(TabUser,int,String)
+	{GET /demo-list/{version}/{id}/{timestamp}}: findByIdTimestamp(TabUser,int,Long,long)
+	{GET /demo-list/{version}/{id}/{uid}/{timestamp}}: findByUidTimestamp(TabUser,int,Long,String,long)
+	{DELETE /demo-list/{version}/{id}}: deleteById(TabUser,int,Long)
+	{PATCH /demo-list/{version}/{id}/{uid}}: markDeleteByUid(TabUser,int,Long,String)
+	{PATCH /demo-list/{version}}: markDelete(TabUser,int,Param)
+	{DELETE /demo-list/{version}/{id}/{uid}}: deleteByUid(TabUser,int,Long,String)
+	{PATCH /demo-list/{version}/{id}}: markDeleteById(TabUser,int,Long)
+	{GET /demo-list/{version}/page/{number}/{size}}: page(TabUser,int,int,int,String)
+20:02:20.258 TRACE [] - [RMI TCP Connection(2)-127.0.0.1] - Caller+0	 at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.detectHandlerMethods(AbstractHandlerMethodMapping.java:278)
+
+	c.d.b.e.w.ValidController:
+	{GET /valid/{version}/min}: min(int)
+	{GET /valid/{version}/max}: max(int)
+	{PUT /valid/{version}/{id}}: update(TabUser,int,Long,Param)
+	{GET /valid/{version}/size}: size(int)
+	{POST /valid/{version}}: save(TabUser,int,Param)
+	{GET /valid/{version}/digits}: digits(int)
+	{GET /valid/{version}}: search(TabUser,int,String)
+	{GET /valid/{version}/pattern}: pattern(int)
+	{GET /valid/{version}/notEmpty}: notEmpty(int)
+	{GET /valid/{version}/{id}/{timestamp}}: findByIdTimestamp(TabUser,int,Long,long)
+	{GET /valid/{version}/{id}/{uid}/{timestamp}}: findByUidTimestamp(TabUser,int,Long,String,long)
+	{GET /valid/{version}/notNull}: notNull(int)
+	{GET /valid/{version}/future}: future(int)
+	{GET /valid/{version}/hasNull}: hasNull(int)
+	{GET /valid/{version}/notBlank}: notBlank(int)
+	{GET /valid/{version}/decimalMax}: decimalMax(int)
+	{GET /valid/{version}/negativeOrZero}: negativeOrZero(int)
+	{GET /valid/{version}/decimalMin}: decimalMin(int)
+	{GET /valid/{version}/negative}: negative(int)
+	{GET /valid/{version}/assertTrue}: assertTrue(int)
+	{GET /valid/{version}/past}: past(int)
+	{GET /valid/{version}/positive}: positive(int)
+	{GET /valid/{version}/positiveOrZero}: positiveOrZero(int)
+	{GET /valid/{version}/assertFalse}: assertFalse(int)
+	{DELETE /valid/{version}/{id}}: deleteById(TabUser,int,Long)
+	{PATCH /valid/{version}/{id}/{uid}}: markDeleteByUid(TabUser,int,Long,String)
+	{PATCH /valid/{version}}: markDelete(TabUser,int,Param)
+	{DELETE /valid/{version}/{id}/{uid}}: deleteByUid(TabUser,int,Long,String)
+	{PATCH /valid/{version}/{id}}: markDeleteById(TabUser,int,Long)
+	{GET /valid/{version}/email}: email(int)
+	{GET /valid/{version}/page/{number}/{size}}: page(TabUser,int,int,int,String)
+20:02:20.272 TRACE [] - [RMI TCP Connection(2)-127.0.0.1] - Caller+0	 at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.detectHandlerMethods(AbstractHandlerMethodMapping.java:278)
+
+	c.d.b.c.w.AdminConfigController:
+	{GET /admin-config/{version}}: getConfig(TabUser,int)
+	{GET /admin-config/{version}/{key}}: getByKey(int,String)
+20:02:20.274 TRACE [] - [RMI TCP Connection(2)-127.0.0.1] - Caller+0	 at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.detectHandlerMethods(AbstractHandlerMethodMapping.java:278)
+
+	c.d.b.c.w.FileController:
+	{POST /file/{version}/upload}: uploadFile(int,MultipartFile)
+	{POST /file/{version}/uploads}: uploadFiles(int,MultipartFile[])
+20:02:20.275 TRACE [] - [RMI TCP Connection(2)-127.0.0.1] - Caller+0	 at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.detectHandlerMethods(AbstractHandlerMethodMapping.java:278)
+
+	c.d.b.c.w.HomeController:
+	{[GET, POST, PUT, PATCH, DELETE] /}: home()
+20:02:20.279 TRACE [] - [RMI TCP Connection(2)-127.0.0.1] - Caller+0	 at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.detectHandlerMethods(AbstractHandlerMethodMapping.java:278)
+
+	c.d.b.u.w.UserController:
+	{GET /user/{version}/current}: current(TabUser,int)
+	{PATCH /user/{version}/nickname}: updateNickname(TabUser,int,Param)
+20:02:20.282 TRACE [] - [RMI TCP Connection(2)-127.0.0.1] - Caller+0	 at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.detectHandlerMethods(AbstractHandlerMethodMapping.java:278)
+
+	c.d.o.a.w.OpenAuthController:
+	{POST /open/auth/{version}/login}: login(int,Param,HttpServletRequest,HttpServletResponse)
+	{POST /open/auth/{version}/login/SESSION}: loginBySession(int,Param,HttpServletRequest)
+20:02:20.284 TRACE [] - [RMI TCP Connection(2)-127.0.0.1] - Caller+0	 at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.detectHandlerMethods(AbstractHandlerMethodMapping.java:278)
+
+	c.d.o.c.w.OpenCodeController:
+	{GET /open/code/{version}/check/{code}}: checkImageCode(int,String,HttpServletRequest)
+	{GET /open/code/{version}}: getImageCode(int,HttpServletRequest)
+20:02:20.306 TRACE [] - [RMI TCP Connection(2)-127.0.0.1] - Caller+0	 at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.detectHandlerMethods(AbstractHandlerMethodMapping.java:278)
+
+	c.d.o.c.w.OpenTestController:
+	{PUT /open/test/{version}/{id}}: update(int,String,Param)
+	{POST /open/test/{version}}: save(int,Param)
+	{GET /open/test/{version}}: search(int,String)
+	{GET /open/test/{version}/thymeleaf}: thymeleaf(ModelMap)
+	{GET /open/test/{version}/text/xml, produces [text/xml]}: getTextXml()
+	{PATCH /open/test/{version}/change/{id}}: updateById(int,String,Param)
+	{GET /open/test/{version}/codes}: codes(int)
+	{GET /open/test/{version}/{id}}: findById(int,String)
+	{DELETE /open/test/{version}/{id}}: deleteById(int,String)
+	{PATCH /open/test/{version}}: markDelete(int,Param)
+	{PATCH /open/test/{version}/{id}}: markDeleteById(int,String)
+	{GET /open/test/{version}/application/xml, produces [application/xml]}: getApplicationXml()
+	{GET /open/test/{version}/{number}/{size}}: page(int,int,int,String)
+20:02:20.312 DEBUG [] - [RMI TCP Connection(2)-127.0.0.1] - Caller+0	 at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.handlerMethodsInitialized(AbstractHandlerMethodMapping.java:353)
+`.trim().split(/\n/)
+            .map(v => v.trim().replace(/^({.*}).*$/, '$1'))
+            .filter(v => v.startsWith('{'))
+            .map(v => v.slice(1).slice(0, -1)
+                .replace(/(\[(\w+).*])/, '$2')
+                .split(' '))
+            .map(([method, url]) => Object.assign({
+                method,
+                url: url
+                    .replace(/{(version|id|uid|number|size|timestamp)}/g, 1)
+                    .replace(/{\w}/g, 1)
+            }))
+            // .map(v => {
+            //     console.log(v);
+            //     return v
+            // })
+        ;
+        for (let i = 0; i < arrs.length; i++) {
+            const {method, url} = arrs[i];
+            console.log([method, url]);
+            if (url.match(/^\/open\/test/) || '/' === url) {
+                console.log(`忽略接口：${url}`);
+            } else if (
+                [
+                    // '/file/1/upload',
+                    // '/file/1/uploads',
+                    ''
+                ].includes(url)) {
+                console.warn(`暂时排除该接口：${url}`);
+            } else {
+                await http[method](url)
+            }
+        }
+    })();
+</script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+### 保存
+POST http://localhost:8080/demo-mongo/1
+Content-Type: application/json
+Authorization: basic YWRtaW46YWRtaW4=
+
+{
+  "json": {
+    "name": "JX",
+    "phone": "18700000000",
+    "status": "WATING",
+    "age": 18
+  }
+}
+
+###
+### 修改
+PUT http://localhost:8080/demo-mongo/1/0899cdda57ca44e58e3505cbb6f60cb1
+Content-Type: application/json
+Authorization: basic YWRtaW46YWRtaW4=
+
+{
+  "json": {
+    "name": "PeXImPsqeI",
+    "content": "OyTlwNFavgqaHgc",
+    "status": "RUNNING",
+    "age": 150,
+    "modifyTime": "2019-01-04 23:03:45.857"
+  }
+}
+
+###
+### 物理删除:id
+DELETE http://localhost:8080/demo-mongo/1/e3de48f859854bc6974d84e4a5620d68
+Authorization: basic YWRtaW46YWRtaW4=
+
+###
+### 逻辑删除:id
+PATCH http://localhost:8080/demo-mongo/1/d7529587c3e94f8a8385bc14c16b1020
+Authorization: basic YWRtaW46YWRtaW4=
+
+###
+### 批量逻辑删除:id
+PATCH http://localhost:8080/demo-mongo/1
+Content-Type: application/json
+Authorization: basic YWRtaW46YWRtaW4=
+
+{
+  "json": [
+    "d7529587c3e94f8a8385bc14c16b1020",
+    "83b67bebebbc4b4b8e31ee38f4f18ac0"
+  ]
+}
+
+###
+### 查询:id+timestamp
+GET http://localhost:8080/demo-mongo/1/0899cdda57ca44e58e3505cbb6f60cb1/1545100853000
+Authorization: basic YWRtaW46YWRtaW4=
+
+###
+### 查询:不分页
+GET http://localhost:8080/demo-mongo/1?json={"createTimeRange":{"begin":"2019-01-04", "end":"2019-01-04"}}
+Authorization: basic YWRtaW46YWRtaW4=
+
+###
+### 查询:分页
+GET http://localhost:8080/demo-mongo/1/page/1/10?json={"ageRange":{"min":1,"max":20}}
+Authorization: basic YWRtaW46YWRtaW4=
+
+###
