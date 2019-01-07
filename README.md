@@ -113,11 +113,11 @@ git clone https://gitee.com/xcc/common-mvc-parent.git
 cd {git代码下载位置}/common-mvc-parent/
 mvn clean install # 
 ```
-* common-utils：工具类封装
-* common-mvc：spring mvc 基础配置封装
-* common-cache：缓存封装【未实现】，只有pom文件添加了依赖
-* common-mongo：mongodb封装【未实现】，只有pom文件添加了依赖，JPA已经实现了大多数功能
-* demo-main：应用入口【主模块】
-* demo-service：参考案例【依赖于主模块】
-* demo-security：参考案例【Spring Security 基本应用】，可独立运行
-* demo-socket：参考案例【Spring Socket 基本应用】，可独立运行
+* common-utils[jar]：工具类封装
+* common-mvc[jar]：spring mvc 基础配置封装
+* common-cache[jar]：缓存封装【未实现】，只有pom文件添加了依赖
+* common-mongo[jar]：mongodb封装【未实现】，只有pom文件添加了依赖，JPA已经实现了大多数功能
+* demo-main[war&jar]：应用入口【主模块】
+* demo-service[war&jar]：参考案例【依赖于主模块】
+* demo-security[war]：参考案例【Spring Security 基本应用】，可独立运行
+* demo-socket[war]：参考案例【Spring Socket 基本应用】，可独立运行
