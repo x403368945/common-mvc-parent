@@ -21,7 +21,7 @@ import java.util.Properties;
 /**
  * <pre>
  * Spring Data JPA 配置
- *   参考配置： https://docs.spring.io/spring_data/jpa/docs/current/reference/html/
+ *   参考配置：https://docs.spring.io/spring-data/jpa/docs/current/reference/html/
  * QueryDSL
  *   参考配置：http://www.querydsl.com/static/querydsl/4.1.3/reference/html_single/#jpa_integration
  */
