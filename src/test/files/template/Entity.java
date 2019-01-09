@@ -43,7 +43,7 @@ import static com.mvc.enums.Code.ORDER_BY;
 /**
  * 实体类：
  *
- * @author 谢长春 on {date}.
+ * @author 谢长春 on {date}
  */
 @Table(name = "{tab_name}")
 @Entity

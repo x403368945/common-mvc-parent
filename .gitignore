@@ -32,5 +32,6 @@ hs_err_pid*
 /.*/CATALINA_HOME_IS_UNDEFINED
 /.idea
 /.*/.idea
+/log
 /logs
 /.*/logs

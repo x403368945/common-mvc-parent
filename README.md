@@ -111,7 +111,13 @@ mvn clean install
 
 git clone https://gitee.com/xcc/common-mvc-parent.git
 cd {git代码下载位置}/common-mvc-parent/
-mvn clean install # 
+mvn clean install # 安装依赖包到本地仓库，web子项目打成war包
+
+# 需要把以下目录设置为 Generated Sources Root，对着该目录右键 =》Mark Directory as =》 Generated Sources Root  
+demo-main/target/generated-sources/java  
+demo-service/target/generated-sources/java  
+demo-security/target/generated-sources/java  
+demo-socket/target/generated-sources/java  
 ```
 * common-utils[jar]：工具类封装
 * common-mvc[jar]：spring mvc 基础配置封装
@@ -121,3 +127,4 @@ mvn clean install #
 * demo-service[war&jar]：参考案例【依赖于主模块】
 * demo-security[war]：参考案例【Spring Security 基本应用】，可独立运行
 * demo-socket[war]：参考案例【Spring Socket 基本应用】，可独立运行
+

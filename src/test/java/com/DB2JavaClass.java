@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
+ *
  * @author 谢长春 on 2018/3/15.
  */
 public class DB2JavaClass {

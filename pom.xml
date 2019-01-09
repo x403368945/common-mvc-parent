@@ -8,6 +8,7 @@
     <artifactId>common-mvc-parent</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
+
     <modules>
         <module>common-mvc</module><!-- Spring MVC 封装 -->
         <module>common-cache</module><!-- 缓存封装【暂为实现】 -->
