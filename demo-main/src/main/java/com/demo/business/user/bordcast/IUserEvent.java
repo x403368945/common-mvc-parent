@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 /**
  * 用户操作广播事件
  *
+ *
  * @author 谢长春 2018/12/16
  */
 @EventBusListener

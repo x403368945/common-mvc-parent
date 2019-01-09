@@ -12,6 +12,7 @@
     <artifactId>demo-main</artifactId>
     <version>1.0.0</version>
     <packaging>war</packaging>
+
     <profiles>
         <profile> <!-- 打包发布 mvn clean package -Pdeploy -Denv={dev|beta|prod} -->
             <id>deploy</id>

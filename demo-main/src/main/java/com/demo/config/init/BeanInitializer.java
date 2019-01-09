@@ -19,6 +19,8 @@ import java.util.stream.Stream;
 
 /**
  * 初始化单例类、实体类、接口需要的bean，因为单例类无法直接注入bean
+ *
+ * @author 谢长春
  */
 @Component
 @Slf4j

@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 缓存服务接口基础方法定义
  *
- * @author 谢长春 on 2018/2/8.
+ * @author 谢长春 on 2018/2/8 .
  */
 public interface ICache<V> {
     /**

@@ -36,3 +36,4 @@ CREATE TABLE tab_user_login (
   `timestamp` TIMESTAMP                         NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '登录时间',
   KEY (`timestamp`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+

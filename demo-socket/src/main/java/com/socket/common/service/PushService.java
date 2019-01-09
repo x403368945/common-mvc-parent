@@ -17,6 +17,7 @@ import static com.socket.config.init.BeanInitializer.Beans.singleThread;
 /**
  * 推送服务
  *
+ *
  * @author 谢长春 2018/12/4
  */
 @Slf4j

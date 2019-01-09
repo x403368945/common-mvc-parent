@@ -3,6 +3,7 @@ package com.mvc.exception;
 /**
  * 自定义异常: 数据更新异常
  *
+ *
  * @author 谢长春 2016-11-23
  */
 public class UpdateRowsException extends RuntimeException {

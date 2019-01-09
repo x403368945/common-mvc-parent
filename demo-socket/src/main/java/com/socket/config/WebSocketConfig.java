@@ -11,6 +11,9 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 import org.springframework.web.socket.server.standard.ServletServerContainerFactoryBean;
 import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
 
+/**
+ * @author 谢长春
+ */
 @Configuration
 @EnableWebSocket
 @Slf4j

@@ -11,6 +11,7 @@ package com.demo.config;
 //import java.util.Properties;
 //
 ///**
+// * @author 谢长春
 // */
 ////, repositoryFactoryBeanClass = CustomJpaRepositoryFactoryBean.class
 //@Configuration

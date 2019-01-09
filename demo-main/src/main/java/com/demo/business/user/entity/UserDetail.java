@@ -14,6 +14,7 @@ import java.util.Objects;
 /**
  * Spring Security 鉴权信息
  *
+ *
  * @author 谢长春 on 2018/3/15.
  */
 public class UserDetail implements UserDetails {

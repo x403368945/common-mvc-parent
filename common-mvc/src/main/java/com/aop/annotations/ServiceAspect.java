@@ -11,6 +11,7 @@ import java.lang.annotation.*;
  * Service 会有代理方法，自动设置 UUID 和 操作用户信息，部分业务场景需要将数据库表同步到 mongo ，需要保留数据库的 ID 和时间戳；
  * 所以通过该注解配置自动装配信息
  *
+ *
  * @author 谢长春 2018-10-11
  */
 @Documented

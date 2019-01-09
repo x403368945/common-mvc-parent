@@ -31,3 +31,4 @@ CREATE TABLE tab_demo_list (
   `deleted`        TINYINT(1) UNSIGNED               NOT NULL DEFAULT 0 COMMENT '是否逻辑删除（1、已删除， 0、未删除）',
   KEY (`uid`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 comment '测试案例表';
+

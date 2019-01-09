@@ -22,6 +22,7 @@ import java.util.Objects;
 /**
  * 验证码接口
  *
+ *
  * @author 谢长春 on 2017-9-18
  */
 @RequestMapping("/open/code/{version}")

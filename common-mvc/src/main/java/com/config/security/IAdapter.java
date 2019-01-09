@@ -5,6 +5,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 /**
  * Spring Security 配置
  *
+ *
  * @author 谢长春 2018/12/4
  */
 public interface IAdapter {

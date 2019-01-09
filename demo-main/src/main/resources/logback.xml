@@ -124,14 +124,14 @@
     -->
     <!--<logger name="ch.qos.logback"/ >-->
     <!--
-    <logger name="org.hibernate.type.EnumType" level="TRACE" />
-    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE" />
-    <logger name="org.hibernate.type.descriptor.sql.BasicExtractor" level="DEBUG" />
-    <logger name="org.hibernate.SQL" level="TRACE" />
-    <logger name="org.hibernate.engine.QueryParameters" level="DEBUG" />
-    <logger name="org.hibernate.engine.query.HQLQueryPlan" level="DEBUG" />
-    <logger name="org.hibernate.hql.internal" level="INFO" />
--->
+        <logger name="org.hibernate.type.EnumType" level="TRACE" />
+        <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE" />
+        <logger name="org.hibernate.type.descriptor.sql.BasicExtractor" level="DEBUG" />
+        <logger name="org.hibernate.SQL" level="TRACE" />
+        <logger name="org.hibernate.engine.QueryParameters" level="DEBUG" />
+        <logger name="org.hibernate.engine.query.HQLQueryPlan" level="DEBUG" />
+        <logger name="org.hibernate.hql.internal" level="INFO" />
+    -->
     <!-- 打印编译完成的sql语句 -->
     <logger name="org.hibernate.resource.jdbc.internal.ResourceRegistryStandardImpl" level="TRACE"/>
     <!-- 打印 Controller 注册url -->

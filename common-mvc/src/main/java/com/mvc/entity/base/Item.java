@@ -16,6 +16,7 @@ import java.util.Objects;
 /**
  * 通用简单对象
  *
+ *
  * @author 谢长春 2016-11-23
  */
 @NoArgsConstructor

@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 /**
  * 选择状态，只有两种状态，YES or NO
  *
+ *
  * @author 谢长春 2017年7月4日 下午5:19:22
  */
 public enum Radio {

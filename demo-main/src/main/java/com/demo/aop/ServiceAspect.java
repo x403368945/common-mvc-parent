@@ -22,6 +22,7 @@ import java.util.Optional;
  * 比如：在 udpate 方法中调用 delete 方法，则 delete 方法的事务和AOP都不会起作用，
  *       这样 {@link ServiceAspect#afterDelete} 就无法记录删除的数据，所以不建议在 service 内部调用 delete 方法
  *
+ *
  * @author 谢长春 2018-10-4
  */
 @Component

@@ -25,7 +25,11 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 
-
+/**
+ * 用户实体
+ *
+ * @author 谢长春
+ */
 //@Table(name = "tab_user", uniqueConstraints = {@UniqueConstraint(columnNames = "uid")})
 @Table(name = "tab_user")
 @Entity

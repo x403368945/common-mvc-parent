@@ -10,7 +10,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Result 返回编码定义
+ * 定义{@link Result#setCode(Code)}返回编码
+ *
+ * @author 谢长春 2019-1-9
  */
 public enum Code {
     SUCCESS("成功"),

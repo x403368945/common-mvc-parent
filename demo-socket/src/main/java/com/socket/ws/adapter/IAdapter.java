@@ -7,6 +7,7 @@ import org.springframework.web.socket.WebSocketSession;
 import java.io.IOException;
 
 /**
+ *
  * @author 谢长春 on 2017/12/11.
  */
 public interface IAdapter {

@@ -31,6 +31,7 @@ import static com.utils.util.Dates.Pattern.yyyy_MM_dd_HH_mm_ss;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 
 /**
+ *
  * @author 谢长春 on 2017/11/20.
  */
 interface ITest {

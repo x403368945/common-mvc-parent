@@ -11,6 +11,7 @@ import java.util.Optional;
  * 数据访问接口方法定义，默认继承 QDSL 查询，建议查询尽量使用 QDSL 语法 <br>
  * 所有参数校验建议都写在 Service 中，数据逻辑不再校验参数
  *
+ *
  * @param <E>
  * @author 谢长春 2017年7月14日 上午11:23:18
  */

@@ -16,6 +16,7 @@ import java.util.Optional;
 /**
  * 用户会话拦截器；将需要记录到日志中的用户信息存入 ThreadLocal
  *
+ *
  * @author 谢长春 on 2018/1/28.
  */
 @Slf4j

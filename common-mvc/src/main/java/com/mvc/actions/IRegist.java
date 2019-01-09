@@ -8,6 +8,7 @@ import com.mvc.entity.base.Message;
  *  applicationContext.getBeansOfType(IRegist.class)
  *                 .values()
  *                 .map(IRegist::regist);
+ *
  * @author 谢长春 on 2017/11/14.
  */
 public interface IRegist {

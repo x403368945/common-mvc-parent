@@ -39,6 +39,7 @@ import static com.google.common.base.Charsets.UTF_8;
  * Spring Thymeleaf 配置
  * 参考 ： https://www.thymeleaf.org/doc/tutorials/3.0/thymeleafspring.html#spring-mvc-configuration
  *
+ *
  * @author 谢长春 2018-10-3
  */
 @Configuration

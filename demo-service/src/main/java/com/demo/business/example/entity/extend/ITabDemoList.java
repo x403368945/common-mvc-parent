@@ -24,6 +24,7 @@ import static com.mvc.enums.Code.ORDER_BY;
 /**
  * 扩展 {@link TabDemoList}；可以通过接口扩展的形式减少实体类的代码量
  *
+ *
  * @author 谢长春 2018/12/20
  */
 public interface ITabDemoList {

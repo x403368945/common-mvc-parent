@@ -46,6 +46,7 @@ import static com.mvc.enums.Code.ORDER_BY;
 /**
  * 实体类：
  *
+ *
  * @author 谢长春 on 2018-12-17.
  */
 @Table(name = "tab_demo_list") // 注解映射数据库表名

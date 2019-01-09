@@ -5,3 +5,4 @@ VALUES (1, replace(uuid(), '-', ''), 'admin', '$2a$10$VQ.Rj7bc73B.WwU99k7R.eEAwq
 -- user:111111
 INSERT INTO tab_user(uid, username, password, nickname, role, createUserId, modifyUserId)
 VALUES (replace(uuid(), '-', ''), 'user', '$2a$10$6unbpf74Dc7NEBywaCHl..FzzprMb69gA.Qi09U7ud7vlKHP9PXfu', '普通用户',2, 1, 1);
+

@@ -22,6 +22,8 @@ import static com.mvc.entity.base.Prop.Type.STRING;
 
 /**
  * 实体：登录参数
+ *
+ * @author 谢长春
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,7 +38,8 @@ public class AuthLogin implements Serializable {
         username(STRING.build("SESSION|TOKEN登录模式，必填")),
         password(STRING.build("SESSION|TOKEN登录模式，必填")),
         phone(STRING.build("CODE登录模式，必填")),
-        code(STRING.build("CODE登录模式，必填")),;
+        code(STRING.build("CODE登录模式，必填")),
+        ;
         private final Prop prop;
 
         public Prop getProp() {
@@ -59,7 +62,8 @@ public class AuthLogin implements Serializable {
     public enum Method {
         SESSION("用户名密码登录，以会话模式实现，用户信息存储在session中，有效期默认为30分钟"),
         TOKEN("户名密码登录，以TOKEN建立会话，用户信息存储在头部的token中，有效期默认为30天"),
-        CODE("手机验证码模式登录，以TOKEN建立会话，用户信息存储在头部的token中，有效期默认为永久有效"),;
+        CODE("手机验证码模式登录，以TOKEN建立会话，用户信息存储在头部的token中，有效期默认为永久有效"),
+        ;
         /**
          * 枚举属性说明
          */

@@ -26,6 +26,8 @@ import java.util.Date;
  * AbstractMongoConfiguration 已经默认实现了 mongoTemplate和mongoFactoryBean
  * 参考配置：https://docs.spring.io/spring-data/mongodb/docs/2.0.0.RC3/reference/html/
  * QueryDSL 参考配置： http://www.querydsl.com/static/querydsl/4.1.3/reference/html_single/#mongodb_integration
+ *
+ * @author 谢长春
  */
 @Configuration
 @EnableMongoRepositories(basePackages = {"com.demo.**.dao.mongo"})

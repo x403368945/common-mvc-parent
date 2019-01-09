@@ -26,6 +26,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * 操作请求处理：授权
+ *
+ * @author 谢长春
  */
 @RequestMapping("/open/auth/{version}")
 @Controller
@@ -41,7 +43,7 @@ public class OpenAuthController {
      * 参数：param=JSONObject
      *
      * @param version  int 当前请求接口版本号
-     * @param param   Param
+     * @param param    Param
      * @param request  HttpServletRequest
      * @param response HttpServletResponse
      * @return Result
@@ -97,7 +99,7 @@ public class OpenAuthController {
      * 参数：param=JSONObject
      *
      * @param version int 当前请求接口版本号
-     * @param param  Param
+     * @param param   Param
      * @param request HttpServletRequest
      * @return Result
      */

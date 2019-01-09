@@ -12,6 +12,7 @@
     <artifactId>common-cache</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
+
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-redis -->
         <dependency>

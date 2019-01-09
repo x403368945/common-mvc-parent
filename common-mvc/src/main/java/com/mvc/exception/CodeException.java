@@ -6,6 +6,7 @@ import com.mvc.enums.Code;
 /**
  * 自定义异常:指定返回编码异常,禁止指定Code.SUCCESS
  *
+ *
  * @author 谢长春 2017年7月21日 下午1:02:04
  */
 public class CodeException extends RuntimeException {

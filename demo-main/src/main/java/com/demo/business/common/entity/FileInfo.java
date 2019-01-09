@@ -22,6 +22,7 @@ import static com.mvc.entity.base.Prop.Type.STRING;
 /**
  * 上传文件对象
  *
+ *
  * @author 谢长春 on 2017/10/17.
  */
 @NoArgsConstructor

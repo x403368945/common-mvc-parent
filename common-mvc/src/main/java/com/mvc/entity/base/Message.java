@@ -15,6 +15,7 @@ import java.util.Map;
 /**
  * 事件消息对象
  *
+ *
  * @author 谢长春 on 2017/11/16.
  */
 @NoArgsConstructor

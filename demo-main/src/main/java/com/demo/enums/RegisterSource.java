@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 /**
  * 用户注册渠道
  *
+ *
  * @author 谢长春 2017年7月4日 下午5:19:05
  */
 public enum RegisterSource {

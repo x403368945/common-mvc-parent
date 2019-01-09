@@ -28,6 +28,8 @@ import javax.validation.constraints.NotBlank;
 /**
  * 登录时要生成token，完成Spring Security认证，然后返回token给客户端
  * 注册时将用户密码用BCrypt加密，写入用户角色
+ *
+ * @author 谢长春
  */
 @Slf4j
 @Service

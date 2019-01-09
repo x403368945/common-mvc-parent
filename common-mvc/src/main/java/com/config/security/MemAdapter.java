@@ -49,6 +49,7 @@ import java.util.List;
  *         Authorization: basic YWRtaW46c3VwZXJhZG1pbg==
  *     ###
  *
+ *
  * @author 谢长春 2018/12/4
  */
 public class MemAdapter extends WebSecurityConfigurerAdapter {

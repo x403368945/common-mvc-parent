@@ -22,6 +22,8 @@ import static com.mvc.entity.base.Prop.Type.STRING;
 
 /**
  * 实体：登录参数
+ *
+ * @author 谢长春
  */
 @AllArgsConstructor
 @NoArgsConstructor

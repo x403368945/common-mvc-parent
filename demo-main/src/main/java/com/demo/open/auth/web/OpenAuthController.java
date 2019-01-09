@@ -24,6 +24,8 @@ import java.util.Arrays;
 
 /**
  * 操作请求处理：授权
+ *
+ * @author 谢长春
  */
 @RequestMapping("/open/auth/{version}")
 @Controller

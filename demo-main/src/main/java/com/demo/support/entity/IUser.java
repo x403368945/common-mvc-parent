@@ -6,6 +6,7 @@ import com.querydsl.core.annotations.QueryTransient;
 /**
  * 所有实体类，跟用户相关的可以实现此接口；此接口自带获取创建者和修改者的获取方法
  *
+ *
  * @author 谢长春 2017-9-26
  */
 public interface IUser {

@@ -24,6 +24,7 @@ import static com.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 /**
  * 数据操作：用户表
  *
+ *
  * @author 谢长春 on 2017/10/26
  */
 public interface UserRepository extends

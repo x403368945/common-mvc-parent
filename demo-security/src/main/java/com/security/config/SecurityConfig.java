@@ -25,6 +25,7 @@ import java.util.Collections;
  *     中文文档：https://springcloud.cc/spring-security-zhcn.html
  *     官方文档：https://docs.spring.io/spring-security/site/docs/5.1.1.RELEASE/reference/htmlsingle/
  *
+ *
  * @author 谢长春 2017年7月7日 下午1:28:31
  */
 @EnableWebSecurity

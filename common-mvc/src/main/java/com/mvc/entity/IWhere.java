@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
  * 动态查询条件规范接口
  * 用于实现构建 {@link ISearchRepository} 需要的查询条件
  *
+ *
  * @author 谢长春 2018-1-12
  */
 public interface IWhere<U, W> {

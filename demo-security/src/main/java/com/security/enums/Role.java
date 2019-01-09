@@ -16,6 +16,8 @@ import java.util.stream.Stream;
 
 /**
  * 角色定义
+ *
+ * @author 谢长春
  */
 @Slf4j
 public enum Role {

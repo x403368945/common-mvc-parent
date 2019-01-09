@@ -17,6 +17,7 @@ import java.util.List;
 /**
  * 服务接口基础方法规范定义
  *
+ *
  * @param <E>
  * @author 谢长春 2017年7月14日 上午11:23:18
  */

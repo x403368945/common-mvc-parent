@@ -26,6 +26,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * 版本信息
+ *
+ * @author 谢长春 2019-1-9
  */
 @NoArgsConstructor
 @AllArgsConstructor

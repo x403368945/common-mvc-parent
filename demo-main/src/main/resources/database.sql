@@ -57,7 +57,6 @@ CREATE OR REPLACE VIEW view_vip AS
   FROM tab_user u
   WHERE u.role = 3
 ;
-
 SELECT * FROM view_vip;
 */
 -- 同时使用jpa和mongo

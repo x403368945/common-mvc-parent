@@ -20,6 +20,7 @@ import static com.mvc.entity.base.Prop.Type.*;
 /**
  * 数据库字段说明
  *
+ *
  * @author 谢长春 2018-10-10
  */
 @NoArgsConstructor

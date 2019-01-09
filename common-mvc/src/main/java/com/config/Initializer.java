@@ -9,6 +9,7 @@ package com.config;
  * .sorted(Comparator.comparing(Initializer::priority))
  * .forEach(Initializer::init);
  *
+ *
  * @author 谢长春 on 2017/11/14.
  */
 public interface Initializer {

@@ -37,6 +37,7 @@ import static com.mvc.enums.Code.ORDER_BY;
 /**
  * 实体：用户登录记录表
  *
+ *
  * @author 谢长春 on 2018/2/2.
  */
 @Table(name = "tab_user_login")

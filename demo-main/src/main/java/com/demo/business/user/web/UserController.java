@@ -23,6 +23,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
 /**
  * 请求操作响应:用户
  *
+ *
  * @author 谢长春 on 2017/11/13.
  */
 @RequestMapping("/user/{version}")

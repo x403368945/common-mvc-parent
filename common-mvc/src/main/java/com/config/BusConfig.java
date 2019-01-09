@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
  * 初始化 EventBus，所有注解 @{@link EventBusListener} 的服务都将注册到全局广播事件监听
  * 该接口的作用是在Spring启动的最后阶段，Spring自动执行该接口的方法onApplicationEvent
  *
+ *
  * @author 谢长春 on 2017/11/14.
  */
 @Slf4j

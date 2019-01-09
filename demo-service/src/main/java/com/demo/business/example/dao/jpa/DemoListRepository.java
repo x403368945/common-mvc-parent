@@ -22,6 +22,7 @@ import static com.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 /**
  * 数据操作：
  *
+ *
  * @author 谢长春 on 2018-12-17
  */
 public interface DemoListRepository extends

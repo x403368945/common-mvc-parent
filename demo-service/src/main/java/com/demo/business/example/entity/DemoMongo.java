@@ -48,6 +48,7 @@ import static com.mvc.enums.Code.ORDER_BY;
 /**
  * 实体类：
  *
+ *
  * @author 谢长春 on 2019-01-03.
  */
 @Document

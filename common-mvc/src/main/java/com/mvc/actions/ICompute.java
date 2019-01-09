@@ -5,6 +5,7 @@ package com.mvc.actions;
  *
  * @param <R> Result -> data 存储的元素
  * @param <P> 入参数据对象
+ *
  * @author 谢长春 on 2017/10/12.
  */
 public interface ICompute<R, P> {

@@ -22,6 +22,7 @@ import static com.mvc.actions.ICallback.Event.ERROR;
 
 /**
  * socket 分发路由
+ * @author 谢长春
  */
 @Slf4j
 public class RouterHandler extends AbstractWebSocketHandler {

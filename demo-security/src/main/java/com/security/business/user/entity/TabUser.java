@@ -19,6 +19,10 @@ import java.util.stream.Stream;
 
 import static com.mvc.entity.base.Prop.Type.*;
 
+/**
+ *
+ * @author 谢长春
+ */
 //@Table(name = "tab_user")
 //@Entity
 //@QueryEntity

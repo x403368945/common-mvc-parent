@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 /**
  * 枚举：Demo数据状态
  *
+ *
  * @author 谢长春 2018/12/17
  */
 public enum DemoStatus {

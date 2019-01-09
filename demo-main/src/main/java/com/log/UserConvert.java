@@ -7,6 +7,7 @@ import com.demo.config.interceptor.LogUserInterceptor;
 /**
  * 将当前操作用户写入日志
  *
+ *
  * @author 谢长春 2018-10-5
  */
 public class UserConvert extends ClassicConverter {
