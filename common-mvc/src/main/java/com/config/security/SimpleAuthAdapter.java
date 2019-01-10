@@ -5,17 +5,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Spring Security 简单的授权认证配置；<br>
@@ -23,10 +16,14 @@ import java.util.List;
  * 官方文档：https://docs.spring.io/spring-security/site/docs/5.1.1.RELEASE/reference/htmlsingle/
  *
  * <pre>
- *     在内存中产生两个用户，用户名:密码
- *     admin:admin
- *     user:111111
- *     可以通过 {@link MemAdapter#users()} 方法追加用户
+ *     实现以下方法指定登录用户及权限
+ *     \@Bean
+ *     public UserDetailsService userDetailsService() {
+ *         final InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+ *         manager.createUser(User.builder().username("admin").password(passwordEncoder().encode("admin")).roles("USER", "ADMIN").build());
+ *         manager.createUser(User.builder().username("user").password(passwordEncoder().encode("111111")).roles("USER").build());
+ *         return manager;
+ *     }
  *
  *     登录url:/login
  *     支持三种登录传参
@@ -52,7 +49,7 @@ import java.util.List;
  *
  * @author 谢长春 2018/12/4
  */
-public class MemAdapter extends WebSecurityConfigurerAdapter {
+public class SimpleAuthAdapter extends WebSecurityConfigurerAdapter {
     /**
      * 是否支持跨域
      * <pre>
@@ -66,27 +63,9 @@ public class MemAdapter extends WebSecurityConfigurerAdapter {
         return false;
     }
 
-    /**
-     * 追加用户
-     *
-     * @return {@link List<UserDetails>}
-     */
-    protected List<? extends UserDetails> users() {
-        return Collections.emptyList();
-    }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        final InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.builder().username("admin").password(passwordEncoder().encode("admin")).roles("USER", "ADMIN").build());
-        manager.createUser(User.builder().username("user").password(passwordEncoder().encode("111111")).roles("USER").build());
-        users().forEach(user -> manager.createUser(user));
-        return manager;
     }
 
     @Override
@@ -97,7 +76,7 @@ public class MemAdapter extends WebSecurityConfigurerAdapter {
                 // 允许跨域
                 .cors().and()
                 // 用户访问未经授权的rest API，返回错误码401（未经授权）
-                .exceptionHandling().authenticationEntryPoint(authHandler)
+                .exceptionHandling().authenticationEntryPoint(authHandler).accessDeniedHandler(authHandler)
                 .and().authorizeRequests()
                 // TODO 建议在类头部或方法头上加权限注解，这里配置太多的权限容易混淆
                 .antMatchers("/").permitAll()

@@ -3,6 +3,7 @@ package com.demo.config;
 import com.config.security.AuthHandler;
 import com.config.security.IAdapter;
 import com.config.security.JsonUsernamePasswordAuthenticationFilter;
+import com.config.security.SimpleAuthAdapter;
 import com.demo.config.init.AppConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -120,7 +121,7 @@ public class SecurityConfig {
      * @author 谢长春 2017年7月7日 上午9:59:45
      */
     @Configuration
-    public static class FormLoginWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
+    public static class FormLoginWebSecurityConfigurerAdapter extends SimpleAuthAdapter {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
@@ -129,7 +130,7 @@ public class SecurityConfig {
                     .csrf().disable()
 //                    .cors().and()
                     //用户访问未经授权的rest API，返回错误码401（未经授权）
-                    .exceptionHandling().authenticationEntryPoint(authHandler)
+                    .exceptionHandling().authenticationEntryPoint(authHandler).accessDeniedHandler(authHandler)
 //                    // 指定会话策略；ALWAYS:总是创建HttpSession, IF_REQUIRED:只会在需要时创建一个HttpSession, NEVER:不会创建HttpSession，但如果它已经存在，将可以使用HttpSession, STATELESS:永远不会创建HttpSession，它不会使用HttpSession来获取SecurityContext
 //                    .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 基于Token，不需要Session
                     .and().authorizeRequests()
@@ -169,26 +170,6 @@ public class SecurityConfig {
                 );
 //                http.addFilterAfter(authTokenFilter, BasicAuthenticationFilter.class);
             }
-        }
-
-        /**
-         * 配置Spring Security的Filter链
-         */
-        @Override
-        public void configure(WebSecurity web) throws Exception {
-            // 解决静态资源被拦截的问题
-            web.ignoring().antMatchers("/static/**", "/files/**");
-        }
-
-        @Bean
-        public PasswordEncoder passwordEncoder() {
-            return new BCryptPasswordEncoder();
-        }
-
-        @Bean
-        @Override
-        protected AuthenticationManager authenticationManager() throws Exception {
-            return super.authenticationManager();
         }
 
 //        /**

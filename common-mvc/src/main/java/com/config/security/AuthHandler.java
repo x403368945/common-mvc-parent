@@ -4,10 +4,12 @@ import com.mvc.entity.base.Result;
 import com.mvc.enums.Code;
 import com.utils.enums.ContentType;
 import lombok.Cleanup;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -21,19 +23,30 @@ import java.io.PrintWriter;
 /**
  * 响应回调处理器；包含：未登录状态、登录成功状态、登录失败状态、退出操作成功状态
  *
- *
  * @author 谢长春 2018/12/2
  */
 public class AuthHandler implements
+        AccessDeniedHandler,
         AuthenticationEntryPoint,
         AuthenticationSuccessHandler,
         AuthenticationFailureHandler,
-        LogoutSuccessHandler {
+        LogoutSuccessHandler{
 
     /**
-     * 定制未登录响应状态
-     * <pre>
-     *     用户访问未经授权的rest API，返回错误码401（未经授权）
+     * 定制无权限响应状态：403；用户已登录，无访问权限
+     */
+    @Override
+    public void handle(final HttpServletRequest request,
+                       final HttpServletResponse response,
+                       final AccessDeniedException e) throws IOException, ServletException {
+        response.setContentType(ContentType.json.utf8());
+        @Cleanup final PrintWriter writer = response.getWriter();
+        writer.write(Code.PERMISSION.toResult("未授权的接口禁止访问").jsonFormat());
+        writer.flush();
+    }
+
+    /**
+     * 定制未登录响应状态：401；匿名用户访问需要授权的接口
      */
     @Override
     public void commence(final HttpServletRequest request,

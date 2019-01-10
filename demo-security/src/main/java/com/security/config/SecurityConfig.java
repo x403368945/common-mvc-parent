@@ -1,8 +1,7 @@
 package com.security.config;
 
 import com.config.security.IAdapter;
-import com.config.security.IAdapter.Open;
-import com.config.security.MemAdapter;
+import com.config.security.SimpleAuthAdapter;
 import com.security.config.init.AppConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +15,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -113,11 +111,19 @@ public class SecurityConfig {
      * @author 谢长春 2017年7月7日 上午9:59:45
      */
     @Configuration
-    public static class FormLoginWebSecurityConfigurerAdapter extends MemAdapter {
+    public static class AuthAdapter extends SimpleAuthAdapter {
         @Override
         public boolean cors() {
             return !AppConfig.isProd(); // ************************************************** 环境发布：非生产环境才能跨域
         }
+        // TODO 不能有两个 UserDetailsService 的实现，若必须要有两个 UserDetailsService ，其中一个必须指定 name
+//        @Bean
+//        public UserDetailsService userDetailsService() {
+//            final InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+//            manager.createUser(User.builder().username("admin").password(passwordEncoder().encode("admin")).roles("USER", "ADMIN").build());
+//            manager.createUser(User.builder().username("user").password(passwordEncoder().encode("111111")).roles("USER").build());
+//            return manager;
+//        }
     }
 
 }

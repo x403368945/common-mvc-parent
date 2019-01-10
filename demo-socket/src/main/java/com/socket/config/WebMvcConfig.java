@@ -2,6 +2,7 @@ package com.socket.config;
 
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.config.Initializer;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -25,6 +26,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -55,6 +57,12 @@ public class WebMvcConfig implements WebMvcConfigurer, ApplicationContextAware {
         // 这里执行在 Spring 初始化成功后的操作；因为在 Spring 未初始化完成之前，部分依赖注入的服务是不可用的
         // 初始化applicationContext
         APP_CONTEXT = applicationContext;
+        // 初始化所有实现 Initializer 接口，且注解为 @Component 的类
+        applicationContext.getBeansOfType(Initializer.class)
+                .values()
+                .stream()
+                .sorted(Comparator.comparing(Initializer::priority))
+                .forEach(Initializer::init);
     }
 
     /**

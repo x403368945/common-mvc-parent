@@ -1,10 +1,14 @@
 package com.socket.config;
 
-import com.config.security.MemAdapter;
+import com.config.security.SimpleAuthAdapter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 /**
  * Spring Security 权限控制
@@ -22,5 +26,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 // @EnableGlobalMethodSecurity(prePostEnabled = true) // 启用注解：@PreAuthorize；[@PreAuthorize("hasAuthority('ROLE_USER')"), @PreAuthorize("isAnonymous()")]
 @Slf4j
 @Configuration
-public class SecurityConfig extends MemAdapter {
+public class SecurityConfig extends SimpleAuthAdapter {
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        final InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+        manager.createUser(User.builder().username("admin").password(passwordEncoder().encode("admin")).roles("USER", "ADMIN").build());
+        manager.createUser(User.builder().username("user").password(passwordEncoder().encode("111111")).roles("USER").build());
+        return manager;
+    }
 }

@@ -90,7 +90,7 @@ public class SseController {
                     emitter.completeWithError(e);
                 }
             }
-        }, 1500 * 10);
+        }, 1500);
     }
 
 
