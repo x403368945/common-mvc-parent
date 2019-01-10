@@ -9,7 +9,6 @@ import com.demo.config.interceptor.LogUserInterceptor;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.*;
@@ -203,8 +202,12 @@ public class WebMvcConfig implements WebMvcConfigurer, ApplicationContextAware {
         // 添加静态资源过滤
         // 需要在 Spring Security 中配置忽略静态资源 WebSecurity.ignoring().antMatchers("/files/**");
         registry.addResourceHandler("/files/**")
-                // Locations 可以指定绝对路径 file:d:\\files\\
-                .addResourceLocations(String.format("file:%s", AppConfig.Path.ROOT.absolute()))
+                // TODO 采坑记录结尾带 / 和不带 / 的区别
+                //   假设请求url为：http://localhost:8080/files/temp/a.txt
+                //   addResourceLocations 指定绝对路径
+                //   d:/files => d:/temp/a.txt
+                //   d:/files/ => d:/files/temp/a.txt
+                .addResourceLocations(String.format("file:%s/", AppConfig.Path.ROOT.absolute()))
         ;
     }
 

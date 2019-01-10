@@ -105,9 +105,8 @@ mvn clean package -Pprod
 # 源码下载地址，以下地址2选1
 git clone https://gitee.com/xcc/common-utils.git
 git clone https://github.com/x403368945/common-utils.git
-# 安装到本地仓库
 cd {git代码下载位置}/common-utils/
-mvn clean install
+mvn clean install # 安装到本地仓库
 
 git clone https://gitee.com/xcc/common-mvc-parent.git
 cd {git代码下载位置}/common-mvc-parent/
