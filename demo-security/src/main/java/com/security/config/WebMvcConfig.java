@@ -136,7 +136,7 @@ public class WebMvcConfig implements WebMvcConfigurer, ApplicationContextAware {
         // 需要在 Spring Security 中配置忽略静态资源 WebSecurity.ignoring().antMatchers("/static/**");
         registry.addResourceHandler("/static/**")
                 // Locations 这里应该是编译后的静态文件目录
-                .addResourceLocations("/static/")
+                .addResourceLocations("classpath:/static/")
                 .setCacheControl(CacheControl.maxAge(1, TimeUnit.MINUTES).cachePublic());
         // 添加静态资源过滤
         // 需要在 Spring Security 中配置忽略静态资源 WebSecurity.ignoring().antMatchers("/files/**");

@@ -197,7 +197,7 @@ public class WebMvcConfig implements WebMvcConfigurer, ApplicationContextAware {
         // 需要在 Spring Security 中配置忽略静态资源 WebSecurity.ignoring().antMatchers("/static/**");
         registry.addResourceHandler("/static/**")
                 // Locations 这里应该是编译后的静态文件目录
-                .addResourceLocations("/static/")
+                .addResourceLocations("classpath:/static/")
                 .setCacheControl(CacheControl.maxAge(1, TimeUnit.MINUTES).cachePublic());
         // 添加静态资源过滤
         // 需要在 Spring Security 中配置忽略静态资源 WebSecurity.ignoring().antMatchers("/files/**");
@@ -234,6 +234,7 @@ public class WebMvcConfig implements WebMvcConfigurer, ApplicationContextAware {
         final SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
         resolver.setApplicationContext(applicationContext);
 //        resolver.setPrefix("/WEB-INF/classes/");
+        resolver.setPrefix("classpath:");
         resolver.setSuffix(".html");
         // HTML is the default value, added here for the sake of clarity.
         resolver.setTemplateMode(TemplateMode.HTML);

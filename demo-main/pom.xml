@@ -30,13 +30,14 @@
                     </exclusions>
                 </dependency>
             </dependencies>
+<!--
             <build>
                 <plugins>
-                    <plugin> <!-- war 包插件 -->
+                    <plugin> &lt;!&ndash; war 包插件 &ndash;&gt;
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
                         <configuration>
-                            <!-- 参考地址： http://maven.apache.org/plugins-archives/maven-war-plugin-2.4/examples/adding-filtering-webresources.html-->
+                            &lt;!&ndash; 参考地址： http://maven.apache.org/plugins-archives/maven-war-plugin-2.4/examples/adding-filtering-webresources.html&ndash;&gt;
                             <webResources>
                                 <resource>
                                     <directory>${basedir}/../demo-service/src/main/webapp</directory>
@@ -46,6 +47,7 @@
                     </plugin>
                 </plugins>
             </build>
+-->
         </profile>
     </profiles>
 

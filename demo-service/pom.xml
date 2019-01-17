@@ -26,14 +26,16 @@
             <plugin> <!-- war 包插件 -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
+<!--
                 <configuration>
-                    <!-- 参考地址： http://maven.apache.org/plugins-archives/maven-war-plugin-2.4/examples/adding-filtering-webresources.html-->
+                    &lt;!&ndash; 参考地址： http://maven.apache.org/plugins-archives/maven-war-plugin-2.4/examples/adding-filtering-webresources.html&ndash;&gt;
                     <webResources>
                         <resource>
                             <directory>${basedir}/../demo-main/src/main/webapp</directory>
                         </resource>
                     </webResources>
                 </configuration>
+-->
             </plugin>
             <!-- https://mvnrepository.com/artifact/com.mysema.maven/apt-maven-plugin -->
             <plugin> <!-- 该插件可以生成 querydsl 需要的查询对象，执行 mvn compile 即可-->

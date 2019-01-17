@@ -426,7 +426,9 @@
                 <targetPath>${basedir}/target/classes</targetPath>
                 <filtering>true</filtering>
                 <includes>
-                    <include>db/*</include>
+                    <include>db/**</include>
+                    <include>static/**</include>
+                    <include>templates/**</include>
                     <include>*.properties</include>
                     <include>*.sql</include>
                     <include>*.xml</include>
