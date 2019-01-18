@@ -12,8 +12,10 @@ import java.lang.annotation.*;
 import java.util.stream.Collectors;
 
 /**
- * 初始化 EventBus，所有注解 @{@link EventBusListener} 的服务都将注册到全局广播事件监听
- * 该接口的作用是在Spring启动的最后阶段，Spring自动执行该接口的方法onApplicationEvent
+ * <pre>
+ * 初始化 EventBus：需要在WebMvcConfig中引入配置 @Import(value = {BusConfig.class})
+ * 所有注解 @{@link EventBusListener} 的服务都将注册到全局广播事件监听
+ * {@link ApplicationListener}该接口的作用是在Spring启动的最后阶段，Spring自动执行 {@link ApplicationListener#onApplicationEvent}
  *
  *
  * @author 谢长春 on 2017/11/14.

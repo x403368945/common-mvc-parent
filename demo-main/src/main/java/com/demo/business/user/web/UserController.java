@@ -75,7 +75,7 @@ public class UserController implements IAuthController<Long> {
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
-                        .execute(() -> service.update(user.getId(), Param.of(param).required().parseObject().getString("nickname"), user.getId()))
+                        .execute(() -> service.updateNickname(user.getId(), Param.of(param).required().parseObject().getString("nickname"), user.getId()))
                 );
     }
 }

@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 /**
  * 服务接口实现类：用户
  *
- *
  * @author 谢长春 on 2017/10/12.
  */
 @Slf4j
@@ -103,10 +102,10 @@ public class UserService implements IService<TabUser> {
      * @param nickname String 昵称
      */
     @Transactional(rollbackFor = Exception.class)
-    public void update(@NotNull(message = "【id】不能为null") @Positive(message = "【id】必须大于0") final Long id,
+    public void updateNickname(@NotNull(message = "【id】不能为null") @Positive(message = "【id】必须大于0") final Long id,
                        @NotBlank(message = "【nickname】不能为null") final String nickname,
                        @NotNull(message = "【userId】不能为null") @Positive(message = "【userId】必须大于0") final Long userId) {
-        UpdateRowsException.asserts(repository.update(id, nickname, userId));
+        UpdateRowsException.asserts(repository.updateNickname(id, nickname, userId));
         { // 发送广播
             eventBus.post(IUserEvent.NicknameUpdate.of(TabUser.builder().id(id).nickname(nickname).build()));
         }

@@ -1,11 +1,14 @@
 package com.demo.support.entity;
 
-import com.demo.config.init.AppConfig;
+import com.demo.business.user.dao.jpa.UserRepository;
 import com.querydsl.core.annotations.QueryTransient;
+
+import java.util.Optional;
+
+import static com.demo.config.init.BeanInitializer.Beans.userRepository;
 
 /**
  * 所有实体类，跟用户相关的可以实现此接口；此接口自带获取创建者和修改者的获取方法
- *
  *
  * @author 谢长春 2017-9-26
  */
@@ -26,9 +29,7 @@ public interface IUser {
      */
     @QueryTransient
     default String getCreateUserName() {
-        if (AppConfig.isJunit()) return null;
-        return null;
-//        return UserCache.instance().getNickname(getModifyUserId());
+        return Optional.ofNullable(getCreateUserId()).map(id -> userRepository.<UserRepository>get().getNickame(id)).orElse(null);
     }
 
     /**
@@ -47,9 +48,7 @@ public interface IUser {
      */
     @QueryTransient
     default String getModifyUserName() {
-        if (AppConfig.isJunit()) return null;
-        return null;
-//        return UserCache.instance().getNickname(getModifyUserId());
+        return Optional.ofNullable(getModifyUserId()).map(id -> userRepository.<UserRepository>get().getNickame(id)).orElse(null);
     }
 
 //    /**

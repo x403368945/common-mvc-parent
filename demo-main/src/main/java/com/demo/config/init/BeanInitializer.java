@@ -1,8 +1,7 @@
 package com.demo.config.init;
 
-import com.config.Initializer;
-import com.demo.config.init.AppConfig.App;
-import com.demo.config.init.AppConfig.Path;
+import com.config.InitConfig;
+import com.demo.business.user.dao.jpa.UserRepository;
 import com.google.common.eventbus.EventBus;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +13,6 @@ import org.springframework.stereotype.Component;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * 初始化单例类、实体类、接口需要的bean，因为单例类无法直接注入bean
@@ -24,7 +21,7 @@ import java.util.stream.Stream;
  */
 @Component
 @Slf4j
-public class BeanInitializer implements Initializer {
+public class BeanInitializer implements InitConfig.Initializer {
     private static ApplicationContext APP_CONTEXT;
     @Autowired
     private ApplicationContext applicationContext;
@@ -50,6 +47,7 @@ public class BeanInitializer implements Initializer {
         multiThread("多线程服务", ExecutorService.class),
         jpaQueryFactory("QueryDSL 数据操作，通过此枚举获取到 jpa 查询对象，可以在接口中声明 default 方法后做更新删除查询操作", JPAQueryFactory.class),
         mongoTemplate("Mongodb 数据操作，通过此枚举获取到 mongo 查询对象，可以在接口中声明 default 方法后做更新删除查询操作", MongoTemplate.class),
+        userRepository("IUser.java 获取用户昵称时需要", UserRepository.class),
         ;
         // 枚举属性说明
         public final String comment;

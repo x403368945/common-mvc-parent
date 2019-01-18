@@ -1,6 +1,6 @@
 package com.demo.config.init;
 
-import com.config.Initializer;
+import com.config.InitConfig;
 import com.demo.config.init.AppConfig.App;
 import com.demo.config.init.AppConfig.Path;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ import java.util.stream.Stream;
  */
 @Component
 @Slf4j
-public class PathInitializer implements Initializer {
+public class PathInitializer implements InitConfig.Initializer {
     @Override
     public int priority() {
         return 1;

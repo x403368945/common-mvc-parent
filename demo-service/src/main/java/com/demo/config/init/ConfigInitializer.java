@@ -1,6 +1,6 @@
 package com.demo.config.init;
 
-import com.config.Initializer;
+import com.config.InitConfig;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  */
 @Component
 @Slf4j
-public class ConfigInitializer implements Initializer {
+public class ConfigInitializer implements InitConfig.Initializer {
     private static final Properties properties = new Properties(); // 创建资源对象
 
     @SneakyThrows

@@ -8,9 +8,8 @@ import com.mvc.entity.base.Pager;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.utils.util.Op;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -19,11 +18,11 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.demo.business.user.entity.QTabUser.tabUser;
+import static com.demo.config.CacheConfig.nicknameCache;
 import static com.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 
 /**
  * 数据操作：用户表
- *
  *
  * @author 谢长春 on 2017/10/26
  */
@@ -31,6 +30,13 @@ public interface UserRepository extends
         JpaRepository<TabUser, Long>,
         IRepository<TabUser, Long> {
     QTabUser q = tabUser;
+
+
+    @Cacheable(cacheNames = nicknameCache, key = "#id")
+    @Query
+    default String getNickame(final Long id) {
+        return jpaQueryFactory.<JPAQueryFactory>get().select(q.nickname).from(q).where(q.id.eq(id)).fetchOne();
+    }
 
     @Override
     default long markDeleteById(final Long id, final Long userId) {
@@ -121,9 +127,10 @@ public interface UserRepository extends
      * @param userId   Long 修改者ID
      * @return long 影响行数
      */
+    @CacheEvict(cacheNames = nicknameCache, key = "#id")
     @Modifying
     @Query
-    default long update(final Long id, final String nickname, final Long userId) {
+    default long updateNickname(final Long id, final String nickname, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.nickname, nickname)

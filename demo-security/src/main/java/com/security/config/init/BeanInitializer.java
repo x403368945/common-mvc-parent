@@ -1,6 +1,6 @@
 package com.security.config.init;
 
-import com.config.Initializer;
+import com.config.InitConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -17,7 +17,7 @@ import java.util.function.Supplier;
  */
 @Component
 @Slf4j
-public class BeanInitializer implements Initializer {
+public class BeanInitializer implements InitConfig.Initializer {
     private static ApplicationContext APP_CONTEXT;
     @Autowired
     private ApplicationContext applicationContext;

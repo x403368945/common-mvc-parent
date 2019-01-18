@@ -1,6 +1,6 @@
 package com.security.config.init;
 
-import com.config.Initializer;
+import com.config.InitConfig;
 import com.security.config.init.AppConfig.Path;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ import java.util.stream.Stream;
  */
 @Component
 @Slf4j
-public class PathInitializer implements Initializer {
+public class PathInitializer implements InitConfig.Initializer {
 
     @Override
     public void init() {

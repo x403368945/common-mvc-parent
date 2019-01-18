@@ -345,6 +345,20 @@
                         </exclusions>
             -->
         </dependency>
+<!--
+        &lt;!&ndash; https://mvnrepository.com/artifact/org.ehcache/ehcache &ndash;&gt;
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>3.6.3</version>
+        </dependency>
+        &lt;!&ndash; https://mvnrepository.com/artifact/javax.cache/cache-api &ndash;&gt;
+        <dependency>&lt;!&ndash; org.ehcache 需要依赖该库 &ndash;&gt;
+            <groupId>javax.cache</groupId>
+            <artifactId>cache-api</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+-->
     </dependencies>
     <dependencyManagement>
         <dependencies>

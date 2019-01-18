@@ -2,13 +2,9 @@ package com.security.config;
 
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import com.config.Initializer;
+import com.config.InitConfig;
 import com.security.config.init.AppConfig;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.*;
 import org.springframework.http.CacheControl;
 import org.springframework.http.MediaType;
@@ -23,7 +19,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.nio.charset.Charset;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -35,27 +30,16 @@ import static com.google.common.base.Charsets.UTF_8;
  * Spring Thymeleaf 配置
  * 参考 ： https://www.thymeleaf.org/doc/tutorials/3.0/thymeleafspring.html#spring-mvc-configuration
  *
- *
  * @author 谢长春 2018-10-3
  */
 @Configuration
+@Import(value = {InitConfig.class})
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @ComponentScan(basePackages = {"com.security"})
 @EnableWebMvc
 @PropertySource({"classpath:application.properties"})
 @Slf4j
-public class WebMvcConfig implements WebMvcConfigurer, ApplicationContextAware {
-
-    @Override
-    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        // 这里执行在 Spring 初始化成功后的操作；因为在 Spring 未初始化完成之前，部分依赖注入的服务是不可用的
-        // 初始化所有实现 Initializer 接口，且注解为 @Component 的类
-        applicationContext.getBeansOfType(Initializer.class)
-                .values()
-                .stream()
-                .sorted(Comparator.comparing(Initializer::priority))
-                .forEach(Initializer::init);
-    }
+public class WebMvcConfig implements WebMvcConfigurer {
 
     /**
      * 禁止自动匹配路径；‘.’ 不作为匹配规则
