@@ -289,7 +289,7 @@ public class TabDemoList implements
     @Override
     public QdslWhere where() {
         final QTabDemoList q = tabDemoList;
-        // 构建查询顺序规则请参考：com.mvc.entity.IWhere#qdslWhere
+        // 构建查询顺序规则请参考：com.mvc.entity.IWhere#where
         return QdslWhere.of()
                 .and(status, () -> q.status.eq(status))
                 .and(uid, () -> q.uid.eq(uid))

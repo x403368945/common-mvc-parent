@@ -246,7 +246,7 @@ public class DemoMongo implements
     @Override
     public QdslWhere where() {
         final QDemoMongo q = demoMongo;
-        // 构建查询顺序规则请参考：com.mvc.entity.IWhere#qdslWhere
+        // 构建查询顺序规则请参考：com.mvc.entity.IWhere#where
         return QdslWhere.of()
                 .and(phone, () -> q.phone.eq(phone))
                 .and(createUserId, () -> q.createUserId.eq(createUserId))

@@ -4,9 +4,9 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import javax.servlet.Filter;
+import javax.servlet.ServletRegistration;
 
 /**
- *
  * @author 谢长春
  */
 public class WebInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
@@ -46,4 +46,9 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
         };
     }
 
+    @Override
+    protected void customizeRegistration(final ServletRegistration.Dynamic registration) {
+        super.customizeRegistration(registration);
+        registration.setInitParameter("throwExceptionIfNoHandlerFound", "true"); // 指定 404 抛出异常
+    }
 }

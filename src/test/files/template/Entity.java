@@ -158,7 +158,7 @@ public class {TabName} implements
     @Override
     public QdslWhere where() {
 //        final Q{TabName} q = {tabName};
-//        // 构建查询顺序规则请参考：com.mvc.entity.IWhere#qdslWhere
+//        // 构建查询顺序规则请参考：com.mvc.entity.IWhere#where
 //        return QdslWhere.of()
 //                .and(phone, () -> q.phone.eq(phone))
 //                .and(createUserId, () -> q.createUserId.eq(createUserId))
