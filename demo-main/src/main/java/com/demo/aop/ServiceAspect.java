@@ -55,7 +55,7 @@ public class ServiceAspect implements IServiceAspect {
 
     @Before("execution(* com.demo.business.*.service..*.update(..))")
     public void beforeUpdate(final JoinPoint joinPoint) {
-        udpate(joinPoint);
+        update(joinPoint);
     }
 
     @AfterReturning(pointcut = "execution(* com.demo.business.*.service..*.delete*(..))", returning = "result")

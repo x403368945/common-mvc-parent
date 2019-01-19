@@ -123,7 +123,7 @@ public interface IServiceAspect {
 
 
     //    @Before(value = "point()")
-    default void udpate(final JoinPoint joinPoint) {
+    default void update(final JoinPoint joinPoint) {
         //        log.info("{}", ((MethodSignature) joinPoint.getSignature()).getMethod().getAnnotation(ServiceAspect.class));
 //        log.info("{}", joinPoint.getTarget().getClass().getAnnotation(ServiceAspect.class));
 //        log.info("{}", Optional.ofNullable(joinPoint.getArgs()).map(JSON::toJSONString).orElse("参数为空"));
@@ -225,7 +225,7 @@ public interface IServiceAspect {
 
             }
             if (service.timestamp()) { // MongoDB 没有自动更新时间戳的功能，将当前时间戳填充到新增对象 createTime|modifyTime 字段
-                final Timestamp timestamp = Dates.now().timestamp();
+                final Timestamp timestamp = Dates.now ().timestamp();
                 set(obj, "createTime", timestamp);
                 set(obj, "modifyTime", timestamp);
             }
