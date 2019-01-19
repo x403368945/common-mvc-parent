@@ -421,10 +421,6 @@ public class Result<E> implements IJson {
         return this;
     }
 
-    private String first(final String[] values) {
-        return values.length > 0 ? values[0] : "";
-    }
-
     /**
      * 设置版本信息
      *

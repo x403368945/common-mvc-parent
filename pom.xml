@@ -10,13 +10,15 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>common-utils</module><!-- 工具类封装 -->
         <module>common-mvc</module><!-- Spring MVC 封装 -->
         <module>common-cache</module><!-- 缓存封装【暂为实现】 -->
         <module>common-mongo</module><!-- MongoDB 封装【JPA已经实现基本需求，不再封装】 -->
         <module>demo-security</module><!-- Spring Security 基本应用【参考案例，独立运行】 -->
         <module>demo-socket</module><!-- Spring Socket 基本应用【参考案例，独立运行】 -->
         <module>demo-main</module><!-- 应用入口【独立运行，可选依赖[demo-service]】 -->
-        <module>demo-service</module><!-- 参考案例【必须依赖[demo-main]】 -->
+        <module>demo-service</module>
+        <module>example</module><!-- 参考案例【必须依赖[demo-main]】 -->
         <!--<module>demo-mvc</module>-->
         <!--<module>jfinal-wechat</module>-->
         <!--<module>lx-server</module>-->
@@ -114,8 +116,9 @@
     </properties>
     <dependencies>
         <!--
-            下载源码编译安装到本地仓库
-            https://gitee.com/xcc/common-utils.git
+            下载 common-utils 源码到 common-mvc-parent 目录
+            以下是 common-utils 源码地址，任选一个即可
+            https://gitee.com/xcc/common-utils
             https://github.com/x403368945/common-utils
         -->
         <dependency>
@@ -345,20 +348,20 @@
                         </exclusions>
             -->
         </dependency>
-<!--
-        &lt;!&ndash; https://mvnrepository.com/artifact/org.ehcache/ehcache &ndash;&gt;
-        <dependency>
-            <groupId>org.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
-            <version>3.6.3</version>
-        </dependency>
-        &lt;!&ndash; https://mvnrepository.com/artifact/javax.cache/cache-api &ndash;&gt;
-        <dependency>&lt;!&ndash; org.ehcache 需要依赖该库 &ndash;&gt;
-            <groupId>javax.cache</groupId>
-            <artifactId>cache-api</artifactId>
-            <version>1.1.0</version>
-        </dependency>
--->
+        <!--
+                &lt;!&ndash; https://mvnrepository.com/artifact/org.ehcache/ehcache &ndash;&gt;
+                <dependency>
+                    <groupId>org.ehcache</groupId>
+                    <artifactId>ehcache</artifactId>
+                    <version>3.6.3</version>
+                </dependency>
+                &lt;!&ndash; https://mvnrepository.com/artifact/javax.cache/cache-api &ndash;&gt;
+                <dependency>&lt;!&ndash; org.ehcache 需要依赖该库 &ndash;&gt;
+                    <groupId>javax.cache</groupId>
+                    <artifactId>cache-api</artifactId>
+                    <version>1.1.0</version>
+                </dependency>
+        -->
     </dependencies>
     <dependencyManagement>
         <dependencies>
@@ -596,7 +599,7 @@
                             <customType>com.querydsl.sql.types.DateTimeType</customType>
                             <customType>com.querydsl.sql.types.LocalDateType</customType>
                         </customTypes>
-                        <packageName>com.querydsl.example.sql</packageName>
+                        <packageName>com.querydsl.demo.sql</packageName>
                         <targetFolder>${project.basedir}/target/generated-sources/java</targetFolder>
                     </configuration>
                     <dependencies>

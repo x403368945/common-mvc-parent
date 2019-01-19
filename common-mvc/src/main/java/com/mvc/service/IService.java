@@ -17,7 +17,6 @@ import java.util.List;
 /**
  * 服务接口基础方法规范定义
  *
- *
  * @param <E>
  * @author 谢长春 2017年7月14日 上午11:23:18
  */
@@ -53,11 +52,11 @@ public interface IService<E> extends ISearchService<E> {
      * @param userId {@link Long} 操作用户ID
      * @return List<E> 实体对象集合
      */
-        @Validated({Default.class, ISave.class})
-        @Transactional(rollbackFor = Exception.class)
-        default @NotNull(message = "返回值不能为null") List<E> saveAll(
-        @NotEmpty(message = "【list】不能为空") final List<@Valid @NotNull E> list,
-        @NotNull(message = "【userId】不能为null") @Positive(message = "【userId】必须大于0") final Long userId) {
+    @Validated({Default.class, ISave.class})
+    @Transactional(rollbackFor = Exception.class)
+    default @NotNull(message = "返回值不能为null") List<E> saveAll(
+            @NotEmpty(message = "【list】不能为空") final List<@Valid @NotNull E> list,
+            @NotNull(message = "【userId】不能为null") @Positive(message = "【userId】必须大于0") final Long userId) {
 /* 以下字段将会在 @ServiceAspect 中设置
         obj.setId(null);
         obj.setUid(Util.uuid());

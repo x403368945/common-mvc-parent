@@ -21,6 +21,8 @@ public enum Code {
     VERSION("接口版本号不匹配"),
     LAMBDA("lambda 表达式抛出异常"),
     TIMEOUT("会话超时"),
+    ARGUMENT("请求缺少必要的参数"),
+    MAPPING("请求方式不支持"),
     USER_PWD("用户名密码错误"),
     USER_DISABLED("账户已禁用"),
     USER_LOCKED("账户已锁定"),
