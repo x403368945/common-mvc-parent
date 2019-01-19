@@ -25,6 +25,7 @@
 hs_err_pid*
 */target/*
 /demo-mvc
+/common-utils
 /financial-report-server
 /jfinal-wechat
 /lx-server
