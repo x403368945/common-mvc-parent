@@ -136,6 +136,7 @@ public class SecurityConfig {
                     .and().authorizeRequests()
                     // TODO 建议在类头部或方法头上加权限注解，这里配置太多的权限容易混淆
                     .antMatchers("/").permitAll()
+                    .antMatchers("/error").permitAll()
                     // 所有方法都需要登录认证
                     .anyRequest().authenticated()
                     // 开启 Basic 认证

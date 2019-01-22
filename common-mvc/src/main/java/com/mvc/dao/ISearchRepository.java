@@ -3,7 +3,6 @@ package com.mvc.dao;
 import com.mvc.entity.base.Pager;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Expression;
-import org.springframework.data.domain.Page;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.NoRepositoryBean;
 

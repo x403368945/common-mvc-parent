@@ -3,54 +3,37 @@ package com.demo.config.init;
 import com.utils.util.FPath;
 import com.utils.util.FWrite;
 import com.utils.util.Util;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Properties;
+import java.util.function.Supplier;
 
 import static com.demo.config.init.AppConfig.App.*;
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * 初始化 application.properties 中的应用配置参数；
  * <pre>
  * TODO
- *   先在 {@link App} 中定义好枚举，然后到 {@link AppConfig}.{@link AppConfig#get(App)} 中初始化；
+ *   先在 {@link App} 中定义好枚举，然后到 {@link AppProperties} 中初始化；
  *   {@link Path} 应用中所有依赖的文件目录
  *   {@link URL} 应用中所有依赖的请求URL
  *
  *
  * @author 谢长春 on 2018-10-2
  */
+@Component
 @Slf4j
 public class AppConfig {
-    /**
-     * 存储应用配置
-     */
-    private static final Properties properties = new Properties(); // 创建资源对象
+    private static AppProperties properties;
 
-    /**
-     * 初始化应用配置
-     */
-    @SneakyThrows
-    private static String get(final App app) {
-        if (Objects.isNull(properties.getProperty(app.key))) {
-            properties.load(new InputStreamReader(AppConfig.class.getResourceAsStream("/application.properties"), UTF_8));
-            final String catalinaBase = Optional.ofNullable(System.getProperty("catalina.base")).orElse("");
-            final String catalinaHome = Optional.ofNullable(System.getProperty("catalina.home")).orElse("");
-            properties.forEach((key, value) ->
-                    properties.setProperty(Objects.toString(key), Objects.toString(value)
-                            .replace("${catalina.base}", catalinaBase)
-                            .replace("${catalina.home}", catalinaHome)
-                    )
-            );
-        }
-        return properties.getProperty(app.key);
+    @Autowired
+    public AppConfig(AppProperties appProperties) {
+        AppConfig.properties = appProperties;
     }
 
     /**
@@ -72,7 +55,7 @@ public class AppConfig {
         if (isProd()) {
             return false; // 生产环境无法切调试模式
         }
-        properties.put(DEBUG, Objects.toString(debug));
+        properties.setDebug(debug);
         return debug;
     }
 
@@ -96,7 +79,7 @@ public class AppConfig {
         if (isProd()) {
             return false; // 生产环境无法切单元测试模式
         }
-        properties.put(JUNIT, Objects.toString(junit));
+        properties.setJunit(junit);
         return junit;
     }
 
@@ -106,7 +89,7 @@ public class AppConfig {
      * @return boolean true：本地开发环境
      */
     public static boolean isDev() {
-        return "dev".equals(ENV.value());
+        return "dev".equals(properties.getEnv());
     }
 
     /**
@@ -115,7 +98,7 @@ public class AppConfig {
      * @return boolean true：云开发测试环境
      */
     public static boolean isBeta() {
-        return "beta".equals(ENV.value());
+        return "beta".equals(properties.getEnv());
     }
 
     /**
@@ -124,7 +107,7 @@ public class AppConfig {
      * @return boolean true：线上生产环境
      */
     public static boolean isProd() {
-        return "prod".equals(ENV.value());
+        return "prod".equals(properties.getEnv());
     }
 
     /**
@@ -133,30 +116,32 @@ public class AppConfig {
      */
     public enum App {
         ENV("当前环境：[dev:本地|beta:测试|prod:生产]",
-                "app.env"),
+                "app.env", () -> Objects.toString(properties.getEnv())),
         ADMIN_USER_ID("管理员用户ID",
-                "app.admin_user_id"),
+                "app.admin-user-id", () -> Objects.toString(properties.getAdminUserId())),
         ADMIN_USER("管理员账户登录账户",
-                "app.admin_user"),
+                "app.admin-user", () -> properties.getAdminUser()),
         IP("当前主机 IP 地址；可使用 frp 服务器IP",
-                "app.ip"),
+                "app.ip", () -> properties.getIp()),
         DOMAIN("应用路径，域名；可使用 frp 服务器域名",
-                "app.domain"),
-        PATH_ROOT("文件上传根目录",
-                "app.path_root"),
+                "app.domain", () -> properties.getDomain()),
+        PATH_ROOT("应用文件根目录",
+                "app.path-root", () -> properties.getPathRoot()),
         MARKDOWN("markdown 文档存放地址",
-                "app.markdown"),
+                "app.markdown", () -> properties.getMarkdown()),
         DEBUG("调试模式开关：true开启调试模式，false关闭调试模式",
-                "app.debug"),
+                "app.debug", () -> Objects.toString(properties.isDebug())),
         JUNIT("单元测试模式开关：true开启单元测试模式，false关闭单元测试模式",
-                "app.junit"),
+                "app.junit", () -> Objects.toString(properties.isJunit())),
         ;
         public final String key;
         public final String comment;
+        private final Supplier<String> supplier;
 
-        App(final String comment, final String key) {
+        App(final String comment, final String key, final Supplier<String> supplier) {
             this.key = key;
             this.comment = comment;
+            this.supplier = supplier;
         }
 
         /**
@@ -165,7 +150,7 @@ public class AppConfig {
          * @return {@link String}
          */
         public String value() {
-            return Optional.ofNullable(get(this))
+            return Optional.ofNullable(supplier.get())
                     .orElseThrow(() -> new NullPointerException(String.format("应用配置【%s】不能空", this.name())));
         }
 

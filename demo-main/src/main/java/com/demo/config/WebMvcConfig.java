@@ -7,6 +7,10 @@ import com.config.InitConfig;
 import com.demo.config.init.AppConfig;
 import com.demo.config.interceptor.LogUserInterceptor;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.mvc.enums.Code;
+import com.utils.enums.ContentType;
+import lombok.Cleanup;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -17,14 +21,24 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.servlet.HandlerExceptionResolver;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.config.annotation.*;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
@@ -58,20 +72,15 @@ import static com.google.common.base.Charsets.UTF_8;
  * @author 谢长春 2018-10-3
  */
 @Configuration
-@Import(value = {InitConfig.class, BusConfig.class})
-@EnableAspectJAutoProxy(proxyTargetClass = true)
-@ComponentScan(basePackages = {"com.demo"})
-@EnableWebMvc
-@PropertySource({"classpath:application.properties"})
 @Slf4j
-public class WebMvcConfig implements WebMvcConfigurer, ApplicationContextAware {
-    private ApplicationContext applicationContext;
-
-    @Override
-    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        // 这里执行在 Spring 初始化成功后的操作；因为在 Spring 未初始化完成之前，部分依赖注入的服务是不可用的
-        this.applicationContext = applicationContext;
-    }
+public class WebMvcConfig implements WebMvcConfigurer {
+//    private ApplicationContext applicationContext;
+//
+//    @Override
+//    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
+//        // 这里执行在 Spring 初始化成功后的操作；因为在 Spring 未初始化完成之前，部分依赖注入的服务是不可用的
+//        this.applicationContext = applicationContext;
+//    }
 
     /**
      * 禁止自动匹配路径；‘.’ 不作为匹配规则
@@ -115,18 +124,6 @@ public class WebMvcConfig implements WebMvcConfigurer, ApplicationContextAware {
             converter.getFastJsonConfig().setFeatures(Feature.OrderedField);
             converters.add(converter);
         }
-    }
-
-    /**
-     * 注入文件上传的bean
-     */
-    @Bean
-    public MultipartResolver multipartResolver() {
-        final CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-//        StandardServletMultipartResolver resolver = new StandardServletMultipartResolver();
-        resolver.setDefaultEncoding(UTF_8.displayName());
-        resolver.setMaxUploadSize(1048576000);
-        return resolver;
     }
 
     /**
@@ -204,6 +201,32 @@ public class WebMvcConfig implements WebMvcConfigurer, ApplicationContextAware {
         ;
     }
 
+    @Override
+    public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
+        resolvers.add((request, response, o, e) -> {
+            try {
+                String message = "";
+                if (e instanceof MissingServletRequestParameterException) {
+                    message = Code.ARGUMENT.toResult("请求 url 映射的方法缺少必要的参数").jsonFormat();
+                } else if (e instanceof NoHandlerFoundException) {
+                    message = Code.URL_MAPPING.toResult("404：请求url不存在").jsonFormat();
+                } else if (e instanceof HttpRequestMethodNotSupportedException) {
+                    Code.MAPPING.toResult("405：请求方式不被该接口支持，或者请求url错误未映射到正确的方法").jsonFormat();
+                } else {
+                    message = Code.FAILURE.toResult(String.format("请求失败，不明确的异常：%s", e.getMessage())).jsonFormat();
+                }
+                log.error(e.getMessage(), e);
+                response.setContentType(ContentType.json.utf8());
+                @Cleanup final PrintWriter writer = response.getWriter();
+                writer.write(message);
+                writer.flush();
+            } catch (IOException ex) {
+                log.error(ex.getMessage(), ex);
+            }
+            return null;
+        });
+    }
+
     //    @Override
 //    public void addFormatters(final FormatterRegistry registry) {
 //        super.addFormatters(registry);
@@ -219,57 +242,57 @@ public class WebMvcConfig implements WebMvcConfigurer, ApplicationContextAware {
 //    public VarietyFormatter varietyFormatter() {
 //        return new VarietyFormatter();
 //    }
-
-    @Bean
-    public SpringResourceTemplateResolver templateResolver() {
-        // SpringResourceTemplateResolver automatically integrates with Spring's own
-        // resource resolution infrastructure, which is highly recommended.
-        final SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
-        resolver.setApplicationContext(applicationContext);
-//        resolver.setPrefix("/WEB-INF/classes/");
-        resolver.setPrefix("classpath:");
-        resolver.setSuffix(".html");
-        // HTML is the default value, added here for the sake of clarity.
-        resolver.setTemplateMode(TemplateMode.HTML);
-        // Template cache is true by default. Set to false if you want
-        // templates to be automatically updated when modified.
-        resolver.setCharacterEncoding("UTF-8");
-//        resolver.setCacheable(true);
-        return resolver;
-    }
-
-    @Bean
-    public SpringTemplateEngine templateEngine() {
-        // SpringTemplateEngine automatically applies SpringStandardDialect and
-        // enables Spring's own MessageSource message resolution mechanisms.
-        final SpringTemplateEngine engine = new SpringTemplateEngine();
-        engine.setTemplateResolver(templateResolver());
-        // Enabling the SpringEL compiler with Spring 4.2.4 or newer can
-        // speed up execution in most scenarios, but might be incompatible
-        // with specific cases when expressions in one template are reused
-        // across different data types, so this flag is "false" by default
-        // for safer backwards compatibility.
-        engine.setEnableSpringELCompiler(true);
-        return engine;
-    }
-
-    @Bean
-    public ThymeleafViewResolver viewResolver() {
-        final ThymeleafViewResolver resolver = new ThymeleafViewResolver();
-        resolver.setTemplateEngine(templateEngine());
-        resolver.setCharacterEncoding("UTF-8");
-        return resolver;
-    }
-
-    /**
-     * Spring validator 方法级别的校验
-     * https://www.baeldung.com/javax-validation-method-constraints
-     * https://juejin.im/entry/5b5a94d2f265da0f7c4fd2b2
-     */
-    @Bean
-    public MethodValidationPostProcessor methodValidationPostProcessor() {
-        return new MethodValidationPostProcessor();
-    }
+//
+//    @Bean
+//    public SpringResourceTemplateResolver templateResolver() {
+//        // SpringResourceTemplateResolver automatically integrates with Spring's own
+//        // resource resolution infrastructure, which is highly recommended.
+//        final SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
+//        resolver.setApplicationContext(applicationContext);
+////        resolver.setPrefix("/WEB-INF/classes/");
+//        resolver.setPrefix("classpath:");
+//        resolver.setSuffix(".html");
+//        // HTML is the default value, added here for the sake of clarity.
+//        resolver.setTemplateMode(TemplateMode.HTML);
+//        // Template cache is true by default. Set to false if you want
+//        // templates to be automatically updated when modified.
+//        resolver.setCharacterEncoding("UTF-8");
+////        resolver.setCacheable(true);
+//        return resolver;
+//    }
+//
+//    @Bean
+//    public SpringTemplateEngine templateEngine() {
+//        // SpringTemplateEngine automatically applies SpringStandardDialect and
+//        // enables Spring's own MessageSource message resolution mechanisms.
+//        final SpringTemplateEngine engine = new SpringTemplateEngine();
+//        engine.setTemplateResolver(templateResolver());
+//        // Enabling the SpringEL compiler with Spring 4.2.4 or newer can
+//        // speed up execution in most scenarios, but might be incompatible
+//        // with specific cases when expressions in one template are reused
+//        // across different data types, so this flag is "false" by default
+//        // for safer backwards compatibility.
+//        engine.setEnableSpringELCompiler(true);
+//        return engine;
+//    }
+//
+//    @Bean
+//    public ThymeleafViewResolver viewResolver() {
+//        final ThymeleafViewResolver resolver = new ThymeleafViewResolver();
+//        resolver.setTemplateEngine(templateEngine());
+//        resolver.setCharacterEncoding("UTF-8");
+//        return resolver;
+//    }
+//
+//    /**
+//     * Spring validator 方法级别的校验
+//     * https://www.baeldung.com/javax-validation-method-constraints
+//     * https://juejin.im/entry/5b5a94d2f265da0f7c4fd2b2
+//     */
+//    @Bean
+//    public MethodValidationPostProcessor methodValidationPostProcessor() {
+//        return new MethodValidationPostProcessor();
+//    }
 
     /*
      * 快速失败返回模式，只要有一个异常就返回

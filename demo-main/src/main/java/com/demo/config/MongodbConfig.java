@@ -1,26 +1,5 @@
 package com.demo.config;
 
-import com.mongodb.MongoClient;
-import com.mongodb.ServerAddress;
-import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.Morphia;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.data.convert.CustomConversions;
-import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
-import org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper;
-import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
-import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-
-import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-
 /**
  * Spring Data MongoDB 配置
  * AbstractMongoConfiguration 已经默认实现了 mongoTemplate和mongoFactoryBean
@@ -29,113 +8,113 @@ import java.util.Date;
  *
  * @author 谢长春
  */
-@Configuration
-@EnableMongoRepositories(basePackages = {"com.demo.**.dao.mongo"})
-//,repositoryFactoryBeanClass= CustomMongoRepositoryFactoryBean.class
-public class MongodbConfig extends AbstractMongoConfiguration {
-
-    @Value("${mongo.host}")
-    private String host;
-    @Value("${mongo.port}")
-    private Integer port;
-    @Value("${mongo.database}")
-    private String database;
-
-    @Override
-    protected String getDatabaseName() {
-        return database;
-    }
-
-    @Bean
-    @Override
-    public CustomConversions customConversions() {
-        return new MongoCustomConversions(Collections.singletonList(
-                new TimestampConverter()
-//                new TimestampWriteConverter(),
-//                new TimestampReadConverter(),
-//                new DateWriteConverter(),
-//                new DateReadConverter()
-        ));
-    }
-
-    class TimestampConverter implements Converter<Date, Timestamp> {
-        @Override
-        public Timestamp convert(Date date) {
-            return new Timestamp(date.getTime());
-        }
-    }
-
-//    class TimestampWriteConverter implements Converter<Timestamp, String> {
-//        @Nullable
+//@Configuration
+//@EnableMongoRepositories(basePackages = {"com.demo.**.dao.mongo"})
+////,repositoryFactoryBeanClass= CustomMongoRepositoryFactoryBean.class
+//public class MongodbConfig extends AbstractMongoConfiguration {
+//
+//    @Value("${mongo.host}")
+//    private String host;
+//    @Value("${mongo.port}")
+//    private Integer port;
+//    @Value("${mongo.database}")
+//    private String database;
+//
+//    @Override
+//    protected String getDatabaseName() {
+//        return database;
+//    }
+//
+//    @Bean
+//    @Override
+//    public CustomConversions customConversions() {
+//        return new MongoCustomConversions(Collections.singletonList(
+//                new TimestampConverter()
+////                new TimestampWriteConverter(),
+////                new TimestampReadConverter(),
+////                new DateWriteConverter(),
+////                new DateReadConverter()
+//        ));
+//    }
+//
+//    class TimestampConverter implements Converter<Date, Timestamp> {
 //        @Override
-//        public String convert(Timestamp timestamp) {
-//            return Dates.of(timestamp).format(yyyyMMddHHmmssSSS);
+//        public Timestamp convert(Date date) {
+//            return new Timestamp(date.getTime());
 //        }
 //    }
-//    class TimestampReadConverter implements Converter<String, Timestamp> {
-//        @Nullable
-//        @Override
-//        public Timestamp convert(String s) {
-//            return Dates.of(s, yyyyMMddHHmmssSSS).timestamp();
-//        }
+//
+////    class TimestampWriteConverter implements Converter<Timestamp, String> {
+////        @Nullable
+////        @Override
+////        public String convert(Timestamp timestamp) {
+////            return Dates.of(timestamp).format(yyyyMMddHHmmssSSS);
+////        }
+////    }
+////    class TimestampReadConverter implements Converter<String, Timestamp> {
+////        @Nullable
+////        @Override
+////        public Timestamp convert(String s) {
+////            return Dates.of(s, yyyyMMddHHmmssSSS).timestamp();
+////        }
+////    }
+////    class DateWriteConverter implements Converter<Date, String> {
+////        @Nullable
+////        @Override
+////        public String convert(Date date) {
+////            return Dates.of(date).format(yyyyMMddHHmmssSSS);
+////        }
+////    }
+////    class DateReadConverter implements Converter<String, Date> {
+////        @Nullable
+////        @Override
+////        public Date convert(String s) {
+////            return Dates.of(s, yyyyMMddHHmmssSSS).date();
+////        }
+////    }
+//
+//    @Bean
+//    @Override
+//    public MongoClient mongoClient() {
+//        return new MongoClient(
+//                new ServerAddress(host, port)
+////                , MongoCredential.createCredential("name", "jpa", "pwd".toCharArray())
+//        );
 //    }
-//    class DateWriteConverter implements Converter<Date, String> {
-//        @Nullable
-//        @Override
-//        public String convert(Date date) {
-//            return Dates.of(date).format(yyyyMMddHHmmssSSS);
-//        }
+//
+//    //    @Bean
+////    public MongoTypeMapper customTypeMapper() {
+////        return new DefaultMongoTypeMapper(null); // typeKey为null的时候，插入mongodb 不会产生 _class 属性
+////    }
+//    @Bean
+//    @Override
+//    public MappingMongoConverter mappingMongoConverter() throws Exception {
+//        final MappingMongoConverter converter = super.mappingMongoConverter();
+//        converter.setTypeMapper(new DefaultMongoTypeMapper(null)); // typeKey为null的时候，插入mongodb 不会产生 _class 属性
+//        return converter;
+//
 //    }
-//    class DateReadConverter implements Converter<String, Date> {
-//        @Nullable
-//        @Override
-//        public Date convert(String s) {
-//            return Dates.of(s, yyyyMMddHHmmssSSS).date();
-//        }
+//
+//    @Bean
+//    public Morphia morphiaMongo() {
+//        return new Morphia();
 //    }
-
-    @Bean
-    @Override
-    public MongoClient mongoClient() {
-        return new MongoClient(
-                new ServerAddress(host, port)
-//                , MongoCredential.createCredential("name", "jpa", "pwd".toCharArray())
-        );
-    }
-
-    //    @Bean
-//    public MongoTypeMapper customTypeMapper() {
-//        return new DefaultMongoTypeMapper(null); // typeKey为null的时候，插入mongodb 不会产生 _class 属性
+//
+//    @Bean
+//    public Datastore morphiaDatastore(@Autowired Morphia morphiaMongo, @Autowired MongoClient mongoClient) {
+//        return morphiaMongo.createDatastore(mongoClient, database);
 //    }
-    @Bean
-    @Override
-    public MappingMongoConverter mappingMongoConverter() throws Exception {
-        final MappingMongoConverter converter = super.mappingMongoConverter();
-        converter.setTypeMapper(new DefaultMongoTypeMapper(null)); // typeKey为null的时候，插入mongodb 不会产生 _class 属性
-        return converter;
-
-    }
-
-    @Bean
-    public Morphia morphiaMongo() {
-        return new Morphia();
-    }
-
-    @Bean
-    public Datastore morphiaDatastore(@Autowired Morphia morphiaMongo, @Autowired MongoClient mongoClient) {
-        return morphiaMongo.createDatastore(mongoClient, database);
-    }
-
-//    /**
-//     * QueryDSL 查询对象
-//     * @return MorphiaQuery<ActivityData>
-//     */
-//    public MorphiaQuery<ActivityData> morphiaQuery(){
-//        final QActivityData q = QActivityData.activityData;
-//        return new MorphiaQuery<ActivityData>(
-//                morphiaMongo(),
-//                morphiaDatastore(),
-//                q
-//        ).where(q.activityId.eq(""));
-//    }
-}
+//
+////    /**
+////     * QueryDSL 查询对象
+////     * @return MorphiaQuery<ActivityData>
+////     */
+////    public MorphiaQuery<ActivityData> morphiaQuery(){
+////        final QActivityData q = QActivityData.activityData;
+////        return new MorphiaQuery<ActivityData>(
+////                morphiaMongo(),
+////                morphiaDatastore(),
+////                q
+////        ).where(q.activityId.eq(""));
+////    }
+//}

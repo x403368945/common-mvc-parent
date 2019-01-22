@@ -1,6 +1,5 @@
 package com.demo.aop;
 
-import com.demo.config.WebInitializer;
 import com.mvc.enums.Code;
 import com.utils.enums.ContentType;
 import lombok.Cleanup;
@@ -38,12 +37,9 @@ public class ControllerException {
     /**
      * <pre>
      * 404 异常
-     *   需要在 {@link WebInitializer} 中添加以下代码
-     *     \\@Override
-     *     protected void customizeRegistration(ServletRegistration.Dynamic registration) {
-     *         super.customizeRegistration(registration);
-     *         registration.setInitParameter("throwExceptionIfNoHandlerFound", "true"); // 指定 404 抛出异常
-     *     }
+     *   需要在 application.yml 中添加以下代码
+     *   # 出现错误时, 直接抛出异常(便于异常统一处理，否则捕获不到404)
+     *   spring.mvc.throw-exception-if-no-handler-found: true
      */
     @SneakyThrows
     @ExceptionHandler(NoHandlerFoundException.class)

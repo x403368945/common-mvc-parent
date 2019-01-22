@@ -19,7 +19,6 @@ import java.util.Objects;
 /**
  * 记录用户请求及响应数据日志
  *
- *
  * @author 谢长春 2017-9-29
  */
 public interface IControllerAspect {
@@ -39,7 +38,7 @@ public interface IControllerAspect {
 //            sb.append("内容超长，请使用命令查看日志：\ncat ").append(Logs.start(this.getClass()).d(sb.toString().concat(log)).end()).append("\n");
 //        } else {
 //        }
-        log.info(String.join("\n",
+        log.info("\n{}", String.join("\n",
                 START,
                 Objects.toString(joinPoint),
                 String.format("time:%dms", Duration.between(time, LocalTime.now()).toMillis()),

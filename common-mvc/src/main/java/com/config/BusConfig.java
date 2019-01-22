@@ -46,8 +46,8 @@ public class BusConfig implements ApplicationListener<ContextRefreshedEvent> {
 
     @Override
     public void onApplicationEvent(final ContextRefreshedEvent contextRefreshedEvent) {
-        log.info("┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬ 注册 EVENT_BUS 广播监听 ┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬");
-        log.info(applicationContext.getBeansWithAnnotation(EventBusListener.class).entrySet().stream()
+        log.info("\n┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬ 注册 EVENT_BUS 广播监听 ┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬\n{}\n┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴ 注册 EVENT_BUS 广播监听 ┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴",
+                applicationContext.getBeansWithAnnotation(EventBusListener.class).entrySet().stream()
                         .map(entry -> {
 //                    System.out.println(JSON.toJSONString(Arrays.asList(entry.getKey(), entry.getValue().getClass().getName())));
                             EVENT_BUS.register(entry.getValue());
@@ -55,8 +55,6 @@ public class BusConfig implements ApplicationListener<ContextRefreshedEvent> {
                         })
                         .collect(Collectors.joining("\n"))
         );
-        log.info("┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴ 注册 EVENT_BUS 广播监听 ┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴");
-
     }
 
     /**

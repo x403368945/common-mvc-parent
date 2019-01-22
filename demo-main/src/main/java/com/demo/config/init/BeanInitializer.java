@@ -7,7 +7,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -46,7 +45,7 @@ public class BeanInitializer implements InitConfig.Initializer {
         singleThread("单线程服务", ExecutorService.class),
         multiThread("多线程服务", ExecutorService.class),
         jpaQueryFactory("QueryDSL 数据操作，通过此枚举获取到 jpa 查询对象，可以在接口中声明 default 方法后做更新删除查询操作", JPAQueryFactory.class),
-        mongoTemplate("Mongodb 数据操作，通过此枚举获取到 mongo 查询对象，可以在接口中声明 default 方法后做更新删除查询操作", MongoTemplate.class),
+//        mongoTemplate("Mongodb 数据操作，通过此枚举获取到 mongo 查询对象，可以在接口中声明 default 方法后做更新删除查询操作", MongoTemplate.class),
         userRepository("IUser.java 获取用户昵称时需要", UserRepository.class),
         ;
         // 枚举属性说明
