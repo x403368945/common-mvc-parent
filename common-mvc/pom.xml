@@ -12,9 +12,6 @@
     <artifactId>common-mvc</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
-    <properties>
-        <querydsl.version>4.2.1</querydsl.version>
-    </properties>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

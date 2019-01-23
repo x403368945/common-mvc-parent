@@ -41,7 +41,7 @@ public class AuthHandler implements
                        final AccessDeniedException e) throws IOException, ServletException {
         response.setContentType(ContentType.json.utf8());
         @Cleanup final PrintWriter writer = response.getWriter();
-        writer.write(Code.PERMISSION.toResult("未授权的接口禁止访问").jsonFormat());
+        writer.write(Code.ACCESS_DENIED.toResult("未授权的接口禁止访问").jsonFormat());
         writer.flush();
     }
 

@@ -1,53 +1,12 @@
 package com.demo.config;
 
-import com.alibaba.fastjson.parser.Feature;
-import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import com.config.BusConfig;
-import com.config.InitConfig;
+import com.config.AbstractMvcConfig;
 import com.demo.config.init.AppConfig;
 import com.demo.config.interceptor.LogUserInterceptor;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.mvc.enums.Code;
-import com.utils.enums.ContentType;
-import lombok.Cleanup;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.*;
-import org.springframework.http.CacheControl;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.multipart.MultipartResolver;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.HandlerExceptionResolver;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.NoHandlerFoundException;
-import org.springframework.web.servlet.config.annotation.*;
-import org.thymeleaf.spring5.SpringTemplateEngine;
-import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
-import org.thymeleaf.spring5.view.ThymeleafViewResolver;
-import org.thymeleaf.templatemode.TemplateMode;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
-import static com.google.common.base.Charsets.UTF_8;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 /**
  * <pre>
@@ -68,12 +27,11 @@ import static com.google.common.base.Charsets.UTF_8;
  * https://juejin.im/entry/5b5a94d2f265da0f7c4fd2b2
  * https://www.cnblogs.com/mr-yang-localhost/p/7812038.html
  *
- *
  * @author 谢长春 2018-10-3
  */
 @Configuration
 @Slf4j
-public class WebMvcConfig implements WebMvcConfigurer {
+public class WebMvcConfig extends AbstractMvcConfig {
 //    private ApplicationContext applicationContext;
 //
 //    @Override
@@ -82,61 +40,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //        this.applicationContext = applicationContext;
 //    }
 
-    /**
-     * 禁止自动匹配路径；‘.’ 不作为匹配规则
-     *
-     * @param configurer {@link PathMatchConfigurer}
-     */
-    @Override
-    public void configurePathMatch(PathMatchConfigurer configurer) {
-        configurer.setUseSuffixPatternMatch(false);
-    }
-
-    @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        final Charset encoding = UTF_8;
-        {
-            StringHttpMessageConverter converter = new StringHttpMessageConverter(encoding);
-            converter.setSupportedMediaTypes(
-                    Arrays.asList(
-                            MediaType.APPLICATION_JSON,
-                            MediaType.APPLICATION_OCTET_STREAM,
-                            MediaType.APPLICATION_FORM_URLENCODED,
-                            MediaType.TEXT_PLAIN,
-                            MediaType.APPLICATION_XML,
-                            MediaType.TEXT_XML,
-                            MediaType.TEXT_HTML
-                    )
-            );
-            converters.add(converter);
-        }
-        {
-            final FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
-            converter.setDefaultCharset(encoding);
-            converter.setSupportedMediaTypes(
-                    Arrays.asList(
-                            MediaType.APPLICATION_JSON,
-                            MediaType.APPLICATION_OCTET_STREAM,
-                            MediaType.APPLICATION_FORM_URLENCODED,
-                            MediaType.TEXT_PLAIN
-                    )
-            );
-            converter.getFastJsonConfig().setFeatures(Feature.OrderedField);
-            converters.add(converter);
-        }
-    }
-
-    /**
-     * 支持异步响应配置，参考：https://linesh.gitbooks.io/spring-mvc-documentation-linesh-translation/content/publish/21-3/4-asynchronous-request-processing.html
-     */
-    @Override
-    public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
-    }
 
     /**
      * 添加自定义拦截器
-     *
-     * @param registry
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -144,51 +50,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LogUserInterceptor()).addPathPatterns("/**");
     }
 
-    /**
-     * 多线程管理
-     *
-     * @return ExecutorService
-     */
-    @Bean(destroyMethod = "shutdownNow")
-    public ExecutorService multiThread() {
-        return new ThreadPoolExecutor(
-                16,
-                16 * 4,
-                0L,
-                TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<>(1024), // 线程池队列，超过 1024 个任务将会抛出异常
-//                    new LinkedBlockingQueue<>(100),
-                new ThreadFactoryBuilder().setNameFormat("multi-thread-%d").build(),
-                new ThreadPoolExecutor.AbortPolicy()
-        );
-    }
-
-    /**
-     * 单线程管理
-     *
-     * @return ExecutorService
-     */
-    @Bean(destroyMethod = "shutdownNow")
-    public ExecutorService singleThread() {
-        return new ThreadPoolExecutor(
-                1,
-                1,
-                0L,
-                TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<>(1024), // 线程池队列，超过 1024 个任务将会抛出异常
-                new ThreadFactoryBuilder().setNameFormat("single-thread-%d").build(),
-                new ThreadPoolExecutor.AbortPolicy()
-        );
-    }
-
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-        // 添加静态资源过滤
-        // 需要在 Spring Security 中配置忽略静态资源 WebSecurity.ignoring().antMatchers("/static/**");
-        registry.addResourceHandler("/static/**")
-                // Locations 这里应该是编译后的静态文件目录
-                .addResourceLocations("classpath:/static/")
-                .setCacheControl(CacheControl.maxAge(1, TimeUnit.MINUTES).cachePublic());
+        super.addResourceHandlers(registry);
         // 添加静态资源过滤
         // 需要在 Spring Security 中配置忽略静态资源 WebSecurity.ignoring().antMatchers("/files/**");
         registry.addResourceHandler("/files/**")
@@ -199,32 +63,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 //   d:/files/ => d:/files/temp/a.txt
                 .addResourceLocations(String.format("file:%s/", AppConfig.Path.ROOT.absolute()))
         ;
-    }
-
-    @Override
-    public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
-        resolvers.add((request, response, o, e) -> {
-            try {
-                String message = "";
-                if (e instanceof MissingServletRequestParameterException) {
-                    message = Code.ARGUMENT.toResult("请求 url 映射的方法缺少必要的参数").jsonFormat();
-                } else if (e instanceof NoHandlerFoundException) {
-                    message = Code.URL_MAPPING.toResult("404：请求url不存在").jsonFormat();
-                } else if (e instanceof HttpRequestMethodNotSupportedException) {
-                    Code.MAPPING.toResult("405：请求方式不被该接口支持，或者请求url错误未映射到正确的方法").jsonFormat();
-                } else {
-                    message = Code.FAILURE.toResult(String.format("请求失败，不明确的异常：%s", e.getMessage())).jsonFormat();
-                }
-                log.error(e.getMessage(), e);
-                response.setContentType(ContentType.json.utf8());
-                @Cleanup final PrintWriter writer = response.getWriter();
-                writer.write(message);
-                writer.flush();
-            } catch (IOException ex) {
-                log.error(ex.getMessage(), ex);
-            }
-            return null;
-        });
     }
 
     //    @Override
@@ -284,27 +122,4 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //        return resolver;
 //    }
 //
-//    /**
-//     * Spring validator 方法级别的校验
-//     * https://www.baeldung.com/javax-validation-method-constraints
-//     * https://juejin.im/entry/5b5a94d2f265da0f7c4fd2b2
-//     */
-//    @Bean
-//    public MethodValidationPostProcessor methodValidationPostProcessor() {
-//        return new MethodValidationPostProcessor();
-//    }
-
-    /*
-     * 快速失败返回模式，只要有一个异常就返回
-     * https://www.cnblogs.com/mr-yang-localhost/p/7812038.html
-     @Bean
-     public Validator validator() {
-     return Validation.byProvider(HibernateValidator.class)
-     .configure()
-     .failFast(true)
-     //                .addProperty( "hibernate.validator.fail_fast", "true" )
-     .buildValidatorFactory()
-     .getValidator();
-     }
-     */
 }

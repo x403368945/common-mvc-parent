@@ -1,25 +1,26 @@
 # TODO 这里是默认开发环境配置；编辑时注意，请同时变更其他环境对应的参数
+env: dev # 当前环境：[dev:本地|beta:测试|prod:生产]
+
 spring:
   profiles:
-    active: dev
+    active: ${env}
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/demo_main_db?characterEncoding=UTF-8&characterSetResults=UTF-8&serverTimezone=GMT%2B8&useSSL=false
     username: root
     password: 111111
+#    schema: classpath:schema.sql
+#    data: classpath:database-init.sql
   thymeleaf:
     enabled: true
     prefix: "classpath:"
     suffix: .html
     encoding: utf-8
     mode: HTML
-#  mvc:
-#    # 出现错误时, 直接抛出异常(便于异常统一处理，否则捕获不到404)
-#    throw-exception-if-no-handler-found: true
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   servlet:
@@ -27,10 +28,19 @@ spring:
       enabled: true
       max-file-size: 10MB
       max-request-size: 50MB
+  mvc:
+    throw-exception-if-no-handler-found: true # 出现错误时, 直接抛出异常(便于异常统一处理，否则捕获不到404)
+  resources:
+    add-mappings: false # 404关闭资源映射，否则会去寻找静态资源
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: demo_main_db
+      #uri: mongodb://name:pass@localhost/demo_main_db
 
-# 本地开发 windows 环境
-app:
-  env: dev # 当前环境：[dev:本地|beta:测试|prod:生产]
+app: # 本地开发 windows 环境
+  env: ${env}
   admin-user-id: 1 # 管理员用户ID
   admin-user: admin # 管理员账户登录账户
   ip: 127.0.0.1 # 当前主机 IP 地址；可使用 frp 服务器IP

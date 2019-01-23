@@ -1,10 +1,5 @@
 DROP DATABASE IF EXISTS demo_main_db;
-
-CREATE DATABASE demo_main_db
-  CHARACTER SET 'utf8'
-  COLLATE 'utf8_general_ci'
-;
-
+CREATE DATABASE demo_main_db CHARACTER SET 'utf8' COLLATE 'utf8_general_ci';
 -- 用户表
 DROP TABLE IF EXISTS tab_user;
 CREATE TABLE tab_user (
@@ -26,7 +21,7 @@ CREATE TABLE tab_user (
   KEY (`username`),
   KEY (`phone`),
   KEY (`email`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+) ENGINE InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '用户表';
 
 -- 用户登录记录表
 DROP TABLE IF EXISTS tab_user_login;
@@ -35,5 +30,5 @@ CREATE TABLE tab_user_login (
   `userId`    BIGINT                            NOT NULL COMMENT '用户ID，tab_user.id',
   `timestamp` TIMESTAMP                         NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '登录时间',
   KEY (`timestamp`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+) ENGINE InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '用户登录记录表';
 
