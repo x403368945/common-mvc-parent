@@ -36,6 +36,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.boot.demo.business.{javaname}.entity.Q{TabName}.{tabName};
+import static com.support.mvc.entity.base.Prop.*;
+import static com.support.mvc.entity.base.Prop.Type.*;
 import static com.support.mvc.enums.Code.ORDER_BY;
 
 /**

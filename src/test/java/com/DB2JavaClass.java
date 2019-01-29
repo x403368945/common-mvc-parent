@@ -41,8 +41,8 @@ public class DB2JavaClass {
         try {
             Supplier<Module> supplier = () -> {
                 final Module[] modules = new Module[]{
-                        Module.builder().output("demo-main/src/main/java/com/demo/business").source("demo-main/src/main/resources/db/db.sql").build(),
-                        Module.builder().output("demo-service/src/main/java/com/demo/business").source("demo-service/src/main/resources/db-demo-service.sql").build(),
+                        Module.builder().output("demo-main/src/main/java/com/boot/demo/business").source("demo-main/src/main/resources/db/db.sql").build(),
+                        Module.builder().output("demo-service/src/main/java/com/boot/demo/business").source("demo-service/src/main/resources/db-demo-service.sql").build(),
                 };
                 System.out.println("请选择输出模块目录，完成之后使用命令编译该模块：mvn clean compile");
                 for (int i = 0; i < modules.length; i++) {
