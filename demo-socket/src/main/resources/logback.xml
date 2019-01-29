@@ -9,14 +9,14 @@
 <configuration scan="false" scanPeriod="60 second" debug="true">
     <property name="APP_NAME" value="demo-socket"/>
     <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
-    <property name="LOG_HOME" value="${CATALINA_HOME}/logs"/>
+    <property name="LOG_HOME" value="${CATALINA_HOME:-.}/logs"/>
     <contextName>${APP_NAME}</contextName>
 
     <!-- 负责写日志,控制台日志 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- 一是把日志信息转换成字节数组,二是把字节数组写入到输出流 -->
         <encoder>
-            <pattern>%highlight(%d{HH:mm:ss.SSS} %5level [%thread] - %caller{1}%m%n)</pattern>
+            <pattern>%highlight(%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} : %m%n)</pattern>
             <charset>UTF-8</charset>
         </encoder>
     </appender>

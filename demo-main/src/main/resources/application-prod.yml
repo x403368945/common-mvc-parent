@@ -1,0 +1,46 @@
+app: # 生产环境
+  env: prod # 当前环境：[dev:本地|beta:测试|prod:生产]
+  admin-user-id: 1 # 管理员用户ID
+  admin-user: admin # 管理员账户登录账户
+  ip: 127.0.0.1 # 当前主机 IP 地址；可使用 frp 服务器IP
+  domain: http://localhost:8080 # 应用路径，域名；可使用 frp 服务器域名
+  markdown: http://localhost:8080/md/ # markdown 文档地址
+  path-root: D:/nginx/html/files # 应用文件根目录
+  debug: false # 调试模式开关：true开启调试模式，false关闭调试模式
+  junit: false # 单元测试开关：true开启单元测试模式，false关闭单元测试模式
+
+spring:
+  mvc:
+    throw-exception-if-no-handler-found: true # 出现错误时, 直接抛出异常(便于异常统一处理，否则捕获不到404)
+  resources:
+    add-mappings: false # 404关闭资源映射，否则会去寻找静态资源
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 50MB
+  thymeleaf:
+    enabled: true
+    prefix: "classpath:"
+    suffix: .html
+    encoding: utf-8
+    mode: HTML
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/demo_main_db?characterEncoding=UTF-8&characterSetResults=UTF-8&serverTimezone=GMT%2B8&useSSL=false
+    username: root
+    password: 111111
+  #    schema: classpath:schema.sql
+  #    data: classpath:database-init.sql
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: demo_main_db
+      #uri: mongodb://name:pass@localhost/demo_main_db

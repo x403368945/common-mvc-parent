@@ -1,0 +1,24 @@
+### 查看应用全局配置
+GET http://localhost:8080/admin-config/1/app
+Content-Type: application/json
+Authorization: basic YWRtaW46YWRtaW4=
+
+###
+### 查看应用目录配置
+GET http://localhost:8080/admin-config/1/path
+Content-Type: application/json
+Authorization: basic YWRtaW46YWRtaW4=
+
+###
+### 查看应用 URL 配置
+GET http://localhost:8080/admin-config/1/url
+Content-Type: application/json
+Authorization: basic YWRtaW46YWRtaW4=
+
+###
+### 普通用户，模拟无权限时的响应消息
+GET http://localhost:8080/admin-config/1/app
+Authorization: Basic dXNlcjoxMTExMTE=
+Accept: application/json
+
+###

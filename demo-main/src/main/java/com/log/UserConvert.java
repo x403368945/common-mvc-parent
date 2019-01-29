@@ -2,7 +2,7 @@ package com.log;
 
 import ch.qos.logback.classic.pattern.ClassicConverter;
 import ch.qos.logback.classic.spi.ILoggingEvent;
-import com.demo.config.interceptor.LogUserInterceptor;
+import com.boot.demo.config.interceptor.LogUserInterceptor;
 
 /**
  * 将当前操作用户写入日志

@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.utils</groupId>
+    <groupId>com.boot</groupId>
     <artifactId>common-mvc-parent</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
@@ -12,16 +12,40 @@
     <modules>
         <module>common-utils</module><!-- 工具类封装 -->
         <module>common-mvc</module><!-- Spring MVC 封装 -->
-        <!--<module>demo-security</module>&lt;!&ndash; Spring Security 基本应用【参考案例，独立运行】 &ndash;&gt;-->
-        <!--<module>demo-socket</module>&lt;!&ndash; Spring Socket 基本应用【参考案例，独立运行】 &ndash;&gt;-->
+        <module>demo-security</module><!-- Spring Security 基本应用【参考案例，独立运行】 -->
+        <module>demo-socket</module><!-- Spring Socket 基本应用【参考案例，独立运行】 -->
         <module>demo-main</module><!-- 应用入口【独立运行，可选依赖[demo-service]】 -->
-        <!--<module>demo-service</module>&lt;!&ndash; 参考案例【必须依赖[demo-main]】 &ndash;&gt;-->
-        <!--<module>demo-mvc</module>-->
-        <!--<module>jfinal-wechat</module>-->
-        <!--<module>lx-server</module>-->
-        <!--<module>mq-server</module>-->
-        <!-- <module>financial-report-server</module> -->
+        <module>demo-service</module><!-- 参考案例【必须依赖[demo-main]】 -->
+        <module>demo-deploy</module><!-- 组合打包所有发布模块，避免出现循环依赖 -->
     </modules>
+
+    <profiles>
+        <profile> <!-- 本地开发环境 -->
+            <id>dev</id>
+            <!-- 设置默认激活配置 -->
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <env>dev</env>
+            </properties>
+        </profile>
+        <profile> <!-- 测试环境 -->
+            <id>beta</id>
+            <!--<activation><activeByDefault>true</activeByDefault></activation>-->
+            <properties>
+                <env>beta</env>
+            </properties>
+        </profile>
+        <profile> <!-- 生产环境 -->
+            <id>prod</id>
+            <!--<activation><activeByDefault>true</activeByDefault></activation>-->
+            <properties>
+                <env>prod</env>
+            </properties>
+        </profile>
+    </profiles>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
@@ -82,6 +106,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -124,6 +149,45 @@
         </dependency>
     </dependencies>
     <build>
+        <!--<finalName>${artifactId}</finalName>--> <!--build目标文件的文件名，默认情况下为${artifactId}-${version}；-->
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+                <targetPath>${basedir}/target/classes</targetPath>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+                <targetPath>${basedir}/target/test-classes</targetPath>
+                <filtering>true</filtering>
+                <includes>
+                    <include>*.properties</include>
+                    <include>*.yml</include>
+                </includes>
+            </resource>
+            <resource> <!-- 指定必须编译打包的资源文件 -->
+                <directory>${basedir}/src/main/resources/env/${env}</directory>
+                <targetPath>${basedir}/target/classes</targetPath>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>${basedir}/src/main/resources/env/${env}</directory>
+                <targetPath>${basedir}/target/test-classes</targetPath>
+                <filtering>true</filtering>
+                <!-- 排除不打包的文件 -->
+                <!--
+                <excludes>
+                    <exclude>logback.xml</exclude>
+                </excludes>
+                -->
+            </resource>
+            <!--<resource>
+                <directory>src/demo/static</directory>&lt;!&ndash; 将静态资源复制到编译目录下 &ndash;&gt;
+                <targetPath>${basedir}/target/${artifactId}-${version}/static/</targetPath>
+                &lt;!&ndash;<targetPath>${basedir}/target/classes/static/</targetPath>&ndash;&gt;
+                <filtering>true</filtering>
+            </resource>-->
+        </resources>
         <plugins>
             <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-maven-plugin -->
             <plugin>
@@ -135,6 +199,13 @@
                     <fork>true</fork> <!-- 热启动配置 -->
                     <addResources>true</addResources>
                 </configuration>
+                <!--<executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>-->
             </plugin>
             <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-failsafe-plugin -->
             <plugin>
@@ -178,6 +249,15 @@
         </plugins>
         <pluginManagement>
             <plugins>
+                <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-war-plugin -->
+                <plugin> <!-- war 包插件 -->
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>3.2.2</version>
+                    <configuration>
+                        <failOnMissingWebXml>false</failOnMissingWebXml>
+                    </configuration>
+                </plugin>
                 <!-- https://mvnrepository.com/artifact/com.mysema.maven/apt-maven-plugin -->
                 <plugin>
                     <!--

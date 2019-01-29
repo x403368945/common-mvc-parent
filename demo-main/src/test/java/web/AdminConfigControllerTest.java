@@ -1,8 +1,8 @@
 package web;
 
-import com.demo.config.WebMvcConfig;
-import com.demo.config.init.AppConfig;
-import com.mvc.entity.base.Param;
+import com.boot.demo.config.WebMvcConfig;
+import com.boot.demo.config.init.AppConfig;
+import com.support.mvc.entity.base.Param;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;

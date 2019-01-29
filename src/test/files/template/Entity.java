@@ -1,19 +1,19 @@
-package com.demo.business.{javaname}.entity;
+package com.boot.demo.business.{javaname}.entity;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
-import com.demo.enums.Radio;
-import com.demo.support.entity.IUser;
-import com.mvc.entity.ITable;
-import com.mvc.entity.ITimestamp;
-import com.mvc.entity.IWhere;
-import com.mvc.entity.IWhere.QdslWhere;
-import com.mvc.entity.base.Prop;
-import com.mvc.entity.base.Sorts;
-import com.mvc.entity.validated.IMarkDelete;
-import com.mvc.entity.validated.ISave;
-import com.mvc.entity.validated.IUpdate;
+import com.boot.demo.enums.Radio;
+import com.boot.demo.support.entity.IUser;
+import com.support.mvc.entity.ITable;
+import com.support.mvc.entity.ITimestamp;
+import com.support.mvc.entity.IWhere;
+import com.support.mvc.entity.IWhere.QdslWhere;
+import com.support.mvc.entity.base.Prop;
+import com.support.mvc.entity.base.Sorts;
+import com.support.mvc.entity.validated.IMarkDelete;
+import com.support.mvc.entity.validated.ISave;
+import com.support.mvc.entity.validated.IUpdate;
 import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;
 import com.querydsl.core.types.OrderSpecifier;
@@ -35,10 +35,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.demo.business.{javaname}.entity.Q{TabName}.{tabName};
-import static com.mvc.entity.base.Prop.*;
-import static com.mvc.entity.base.Prop.Type.*;
-import static com.mvc.enums.Code.ORDER_BY;
+import static com.boot.demo.business.{javaname}.entity.Q{TabName}.{tabName};
+import static com.support.mvc.enums.Code.ORDER_BY;
 
 /**
  * 实体类：
@@ -59,8 +57,8 @@ public class {TabName} implements
         ITable, // 所有与数据库表 - 实体类映射的表都实现该接口；方便后续一键查看所有表的实体
         {IUser}
         {ITimestamp}
-        // JPAUpdateClause => com.mvc.dao.IRepository#update 需要的动态更新字段；采用 方案2 时需要实现该接口
-        // QdslWhere       => com.mvc.dao.IViewRepository 需要的查询条件
+        // JPAUpdateClause => com.support.mvc.dao.IRepository#update 需要的动态更新字段；采用 方案2 时需要实现该接口
+        // QdslWhere       => com.support.mvc.dao.IViewRepository 需要的查询条件
         IWhere<JPAUpdateClause, QdslWhere>
 {
 {fields}
@@ -158,7 +156,7 @@ public class {TabName} implements
     @Override
     public QdslWhere where() {
 //        final Q{TabName} q = {tabName};
-//        // 构建查询顺序规则请参考：com.mvc.entity.IWhere#where
+//        // 构建查询顺序规则请参考：com.support.mvc.entity.IWhere#where
 //        return QdslWhere.of()
 //                .and(phone, () -> q.phone.eq(phone))
 //                .and(createUserId, () -> q.createUserId.eq(createUserId))

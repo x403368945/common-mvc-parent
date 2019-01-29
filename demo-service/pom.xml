@@ -4,38 +4,33 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>common-mvc-parent</artifactId>
-        <groupId>com.utils</groupId>
+        <groupId>com.boot</groupId>
         <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>demo-service</artifactId>
     <version>1.0.0</version>
-    <packaging>war</packaging>
-
+    <packaging>jar</packaging>
     <dependencies>
         <dependency>
-            <groupId>com.utils</groupId>
+            <groupId>com.boot</groupId>
             <artifactId>demo-main</artifactId>
             <version>1.0.0</version>
-            <classifier>${env}</classifier>
         </dependency>
     </dependencies>
     <build>
         <plugins>
-            <plugin> <!-- war 包插件 -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-<!--
+            <!--  <plugin> &lt;!&ndash; war 包插件 &ndash;&gt;
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-war-plugin</artifactId>
+              </plugin>-->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    &lt;!&ndash; 参考地址： http://maven.apache.org/plugins-archives/maven-war-plugin-2.4/examples/adding-filtering-webresources.html&ndash;&gt;
-                    <webResources>
-                        <resource>
-                            <directory>${basedir}/../demo-main/src/main/webapp</directory>
-                        </resource>
-                    </webResources>
+                    <mainClass>com.boot.DemoServiceApplication</mainClass>
                 </configuration>
--->
             </plugin>
             <!-- https://mvnrepository.com/artifact/com.mysema.maven/apt-maven-plugin -->
             <plugin> <!-- 该插件可以生成 querydsl 需要的查询对象，执行 mvn compile 即可-->

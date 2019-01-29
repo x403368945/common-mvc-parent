@@ -4,46 +4,45 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>common-mvc-parent</artifactId>
-        <groupId>com.utils</groupId>
+        <groupId>com.boot</groupId>
         <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>demo-socket</artifactId>
     <version>1.0.0</version>
     <packaging>war</packaging>
     <dependencies>
         <dependency>
-            <groupId>com.utils</groupId>
+            <groupId>com.boot</groupId>
             <artifactId>common-mvc</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf -->
         <dependency>
-            <groupId>org.thymeleaf</groupId>
-            <artifactId>thymeleaf</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf-spring5 -->
         <dependency>
-            <groupId>org.thymeleaf</groupId>
-            <artifactId>thymeleaf-spring5</artifactId>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework/spring-websocket -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-websocket</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-websocket -->
-        <dependency> <!-- 解决启用 WebSocket之后，单元测试报错-->
+        <!--<dependency> &lt;!&ndash; 解决启用 WebSocket之后，单元测试报错&ndash;&gt;
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-websocket</artifactId>
-        </dependency>
+        </dependency>-->
     </dependencies>
     <build>
         <plugins>
             <plugin> <!-- war 包插件 -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.boot.Application</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>
