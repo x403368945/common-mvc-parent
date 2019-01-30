@@ -11,7 +11,7 @@
 --   `modifyTime`     TIMESTAMP                         NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
 --   `modifyUserId`   BIGINT                            NOT NULL COMMENT '修改用户ID',
 --   `deleted`        TINYINT(1) UNSIGNED               NOT NULL DEFAULT 0 COMMENT '是否逻辑删除（1、已删除， 0、未删除）'
--- ) ENGINE = InnoDB DEFAULT CHARSET = utf8 comment '测试案例表：将mysql数据与mongodb同步';
+-- ) ENGINE InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '测试案例表：将mysql数据与mongodb同步';
 
 -- 测试表
 DROP TABLE IF EXISTS tab_demo_list;
@@ -30,5 +30,5 @@ CREATE TABLE tab_demo_list (
   `modifyUserName` VARCHAR(30)                       NOT NULL COMMENT '修改用户昵称',
   `deleted`        TINYINT(1) UNSIGNED               NOT NULL DEFAULT 0 COMMENT '是否逻辑删除（1、已删除， 0、未删除）',
   KEY (`uid`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8 comment '测试案例表';
+) ENGINE InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '测试案例表';
 

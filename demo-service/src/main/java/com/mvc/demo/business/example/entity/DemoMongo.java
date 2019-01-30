@@ -34,6 +34,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import javax.validation.constraints.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -268,7 +269,7 @@ public class DemoMongo implements
     public List<Sorts> buildSorts() {
         try {
             return Objects.isNull(getSorts()) || getSorts().isEmpty()
-                    ? null // Collections.singletonList(OrderBy.id.desc) // 若排序字段为空，这里可以设置默认按 id 倒序
+                    ? Collections.singletonList(OrderBy.createTime.desc) // Collections.singletonList(OrderBy.id.desc) // 若排序字段为空，这里可以设置默认按 id 倒序
                     : getSorts().stream().map(by -> OrderBy.valueOf(by.getName()).get(by.getDirection())).collect(Collectors.toList());
         } catch (Exception e) {
             throw ORDER_BY.exception("排序字段可选范围：".concat(JSON.toJSONString(OrderBy.names())));

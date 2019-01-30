@@ -143,7 +143,7 @@
     <logger name="org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor" level="INFO"/>
     <logger name="org.apache.commons.beanutils.converters.AbstractConverter" level="INFO"/>
     <logger name="org.mongodb.driver" level="INFO"/>
-    <logger name="org.springframework.data.redis.core.RedisConnectionUtils" level="INFO"/>
+    <!--<logger name="org.springframework.data.redis.core.RedisConnectionUtils" level="INFO"/>-->
 
     <!--
     - 1.将级别为“INFO”及大于“INFO”的日志信息交给此logger指定的名为“STDOUT”的appender处理，在控制台中打出日志，

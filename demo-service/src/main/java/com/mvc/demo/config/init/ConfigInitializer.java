@@ -38,7 +38,7 @@ public class ConfigInitializer implements InitConfig.Initializer {
                         .replace("${catalina.home}", catalinaHome)
                 )
         );
-        log.info("{}", properties.entrySet().stream()
+        log.info("\n{}", properties.entrySet().stream()
                 .map(entry -> String.format("%s:%s", entry.getKey().toString(), entry.getValue().toString()))
                 .collect(Collectors.joining("\n"))
         );

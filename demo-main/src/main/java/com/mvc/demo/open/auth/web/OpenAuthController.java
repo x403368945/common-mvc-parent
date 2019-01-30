@@ -5,6 +5,7 @@ import com.mvc.demo.business.user.entity.TabUser;
 import com.mvc.demo.config.init.AppConfig.URL;
 import com.mvc.demo.enums.Session;
 import com.mvc.demo.open.auth.entity.AuthLogin;
+import com.mvc.demo.open.auth.entity.AuthLogin.Props;
 import com.mvc.demo.open.auth.service.AuthService;
 import com.support.mvc.entity.base.Param;
 import com.support.mvc.entity.base.Result;
@@ -66,7 +67,7 @@ public class OpenAuthController {
 //            log.debug("request.getServletContext().getVirtualServerName()"+request.getServletContext().getVirtualServerName());
             result
                     .version(this.getClass(), builder -> builder
-                            .props(AuthLogin.Props.list())
+                            .props(Props.list())
                             .notes(Arrays.asList(
                                     "会话模式登录，有效期30分钟"
                             ))
@@ -110,7 +111,7 @@ public class OpenAuthController {
             HttpServletRequest request) {
         return new Result<TabUser>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
-                        .props(AuthLogin.Props.list())
+                        .props(Props.list())
                         .notes(Arrays.asList(
                                 "会话模式登录，有效期30分钟"
                         ))

@@ -157,7 +157,7 @@ public class TabUserLogin implements ITable, IWhere<JPAUpdateClause, QdslWhere> 
 
     @Override
     public QdslWhere where() {
-        final com.mvc.demo.business.user.entity.QTabUserLogin q = tabUserLogin;
+        final QTabUserLogin q = tabUserLogin;
         return QdslWhere.of()
                 .and(timestampRange, () -> {
                     timestampRange.rebuild();
