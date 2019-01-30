@@ -1,8 +1,8 @@
 package com.boot.demo.config;
 
+import com.boot.demo.config.init.AppConfig;
 import com.boot.demo.config.interceptor.LogUserInterceptor;
 import com.support.config.AbstractMvcConfig;
-import com.boot.demo.config.init.AppConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

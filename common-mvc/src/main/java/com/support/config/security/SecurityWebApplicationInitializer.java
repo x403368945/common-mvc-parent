@@ -1,7 +1,5 @@
 package com.support.config.security;
 
-import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
-
 /**
  * Spring Security 权限控制
  * <pre>

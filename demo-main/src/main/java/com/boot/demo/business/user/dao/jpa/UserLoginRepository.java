@@ -4,18 +4,20 @@ import com.boot.demo.business.user.entity.QTabUser;
 import com.boot.demo.business.user.entity.QTabUserLogin;
 import com.boot.demo.business.user.entity.TabUser;
 import com.boot.demo.business.user.entity.TabUserLogin;
-import com.support.mvc.dao.IRepository;
-import com.support.mvc.entity.base.Pager;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.support.mvc.dao.IRepository;
+import com.support.mvc.entity.base.Pager;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.boot.demo.business.user.entity.QTabUser.tabUser;
+import static com.boot.demo.business.user.entity.QTabUserLogin.tabUserLogin;
 import static com.boot.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 
 
@@ -28,7 +30,7 @@ import static com.boot.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 public interface UserLoginRepository extends
         JpaRepository<TabUserLogin, Long>,
         IRepository<TabUserLogin, Long> {
-    QTabUserLogin q = QTabUserLogin.tabUserLogin;
+    QTabUserLogin q = tabUserLogin;
 
     @Query
     @Override
@@ -55,7 +57,7 @@ public interface UserLoginRepository extends
 //                        q,
 //                        Projections.bean(TabUser.class, user.id, user.username, user.nickname, user.role, user.deleted).as("user"))
 //                );
-        final QTabUser user = QTabUser.tabUser;
+        final QTabUser user = tabUser;
         final QueryResults<Tuple> results = jpaQueryFactory.<JPAQueryFactory>get()
                 .select(q, Projections.bean(TabUser.class, user.id, user.username, user.nickname, user.role, user.deleted))
                 .from(q)

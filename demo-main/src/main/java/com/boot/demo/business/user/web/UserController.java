@@ -1,7 +1,7 @@
 package com.boot.demo.business.user.web;
 
 import com.boot.demo.business.user.entity.TabUser;
-import com.boot.demo.business.user.entity.extend.ITabUser.Props;
+import com.boot.demo.business.user.entity.extend.ITabUser;
 import com.boot.demo.business.user.service.UserService;
 import com.boot.demo.config.init.AppConfig.URL;
 import com.boot.demo.support.web.IAuthController;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 
-import static com.boot.demo.business.user.entity.extend.ITabUser.Props.nickname;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
 
@@ -42,7 +41,7 @@ public class UserController implements IAuthController<Long> {
                         .url("/user/{version}/current")
                         .markdown(this.getClass().getSimpleName().concat("/current.md"))
                         .method(GET)
-                        .props(Props.list())
+                        .props(ITabUser.Props.list())
                         .notes(Arrays.asList(
                                 "获取当前登录用户信息"
                         ))
@@ -65,7 +64,7 @@ public class UserController implements IAuthController<Long> {
                         .url("/demo-list/{version}/nickname") // 当前请求接口
                         .markdown(this.getClass().getSimpleName().concat("/updateNickname.md")) // 接口说明文档地址
                         .method(PATCH) // 当前接口请求方式
-                        .props(TabUser.Props.list(nickname)) // 当前返回对象属性说明
+                        .props(TabUser.Props.list(ITabUser.Props.nickname)) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
                                 "修改当前登录用户昵称",
                                 "1.初始化"

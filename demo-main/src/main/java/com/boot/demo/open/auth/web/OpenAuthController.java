@@ -2,7 +2,7 @@ package com.boot.demo.open.auth.web;
 
 
 import com.boot.demo.business.user.entity.TabUser;
-import com.boot.demo.config.init.AppConfig;
+import com.boot.demo.config.init.AppConfig.URL;
 import com.boot.demo.enums.Session;
 import com.boot.demo.open.auth.entity.AuthLogin;
 import com.boot.demo.open.auth.entity.AuthLogin.Props;
@@ -73,7 +73,7 @@ public class OpenAuthController {
                             ))
                             .build()
                             .demo(v -> v.setDemo(
-                                    AppConfig.URL.SERVER.append(v.formatUrl()),
+                                    URL.SERVER.append(v.formatUrl()),
                                     BeanMap.create(new AuthLogin()
                                             .setUsername("admin")
                                             .setPassword("admin")
@@ -117,7 +117,7 @@ public class OpenAuthController {
                         ))
                         .build()
                         .demo(v -> v.setDemo(
-                                AppConfig.URL.SERVER.append(v.formatUrl()),
+                                URL.SERVER.append(v.formatUrl()),
                                 BeanMap.create(new AuthLogin()
                                         .setUsername("admin")
                                         .setPassword("admin")

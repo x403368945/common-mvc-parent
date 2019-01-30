@@ -1,10 +1,11 @@
 package com.boot.demo.support.entity;
 
 import com.boot.demo.business.user.dao.jpa.UserRepository;
-import com.boot.demo.config.init.BeanInitializer;
 import com.querydsl.core.annotations.QueryTransient;
 
 import java.util.Optional;
+
+import static com.boot.demo.config.init.BeanInitializer.Beans.userRepository;
 
 /**
  * 所有实体类，跟用户相关的可以实现此接口；此接口自带获取创建者和修改者的获取方法
@@ -28,7 +29,7 @@ public interface IUser {
      */
     @QueryTransient
     default String getCreateUserName() {
-        return Optional.ofNullable(getCreateUserId()).map(id -> BeanInitializer.Beans.userRepository.<UserRepository>get().getNickame(id)).orElse(null);
+        return Optional.ofNullable(getCreateUserId()).map(id -> userRepository.<UserRepository>get().getNickame(id)).orElse(null);
     }
 
     /**
@@ -47,7 +48,7 @@ public interface IUser {
      */
     @QueryTransient
     default String getModifyUserName() {
-        return Optional.ofNullable(getModifyUserId()).map(id -> BeanInitializer.Beans.userRepository.<UserRepository>get().getNickame(id)).orElse(null);
+        return Optional.ofNullable(getModifyUserId()).map(id -> userRepository.<UserRepository>get().getNickame(id)).orElse(null);
     }
 
 //    /**

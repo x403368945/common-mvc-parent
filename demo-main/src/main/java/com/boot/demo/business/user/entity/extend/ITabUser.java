@@ -1,14 +1,13 @@
 package com.boot.demo.business.user.entity.extend;
 
 import com.alibaba.fastjson.JSON;
-import com.boot.demo.business.user.entity.QTabUser;
 import com.boot.demo.business.user.entity.TabUser;
 import com.boot.demo.enums.Radio;
 import com.boot.demo.enums.RegisterSource;
 import com.boot.demo.enums.Role;
+import com.querydsl.core.types.OrderSpecifier;
 import com.support.mvc.entity.base.Prop;
 import com.support.mvc.entity.base.Sorts;
-import com.querydsl.core.types.OrderSpecifier;
 import org.springframework.data.domain.Sort;
 
 import java.util.Collections;
@@ -18,6 +17,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.boot.demo.business.user.entity.QTabUser.tabUser;
 import static com.support.mvc.entity.base.Prop.Type.*;
 import static com.support.mvc.enums.Code.ORDER_BY;
 
@@ -72,10 +72,10 @@ public interface ITabUser {
      * 枚举：定义排序字段
      */
     enum OrderBy {
-        id(QTabUser.tabUser.id.asc(), QTabUser.tabUser.id.desc()),
+        id(tabUser.id.asc(), tabUser.id.desc()),
         // 按 id 排序可替代按创建时间排序
 //        createTime(tabUser.createTime.asc(), tabUser.createTime.desc()),
-        modifyTime(QTabUser.tabUser.modifyTime.asc(), QTabUser.tabUser.modifyTime.desc()),
+        modifyTime(tabUser.modifyTime.asc(), tabUser.modifyTime.desc()),
         ;
         public final Sorts asc;
         public final Sorts desc;

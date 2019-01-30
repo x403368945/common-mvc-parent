@@ -1,13 +1,12 @@
 package com.boot.demo.business.example.entity.extend;
 
 import com.alibaba.fastjson.JSON;
-import com.boot.demo.business.example.entity.QTabDemoList;
 import com.boot.demo.business.example.entity.TabDemoList;
 import com.boot.demo.business.example.enums.DemoStatus;
 import com.boot.demo.enums.Radio;
+import com.querydsl.core.types.OrderSpecifier;
 import com.support.mvc.entity.base.Prop;
 import com.support.mvc.entity.base.Sorts;
-import com.querydsl.core.types.OrderSpecifier;
 import org.springframework.data.domain.Sort;
 
 import java.util.Collections;
@@ -17,6 +16,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.boot.demo.business.example.entity.QTabDemoList.tabDemoList;
 import static com.support.mvc.entity.base.Prop.*;
 import static com.support.mvc.entity.base.Prop.Type.*;
 import static com.support.mvc.enums.Code.ORDER_BY;
@@ -72,7 +72,7 @@ public interface ITabDemoList {
      */
     enum OrderBy {
         // 按 id 排序可替代按创建时间排序
-        id(QTabDemoList.tabDemoList.id.asc(), QTabDemoList.tabDemoList.id.desc()),
+        id(tabDemoList.id.asc(), tabDemoList.id.desc()),
         //		uid(tabDemoList.uid.asc(), tabDemoList.uid.desc()),
 //		name(tabDemoList.name.asc(), tabDemoList.name.desc()),
 //		content(tabDemoList.content.asc(), tabDemoList.content.desc()),
@@ -81,7 +81,7 @@ public interface ITabDemoList {
 //		createTime(tabDemoList.createTime.asc(), tabDemoList.createTime.desc()),
 //		createUserId(tabDemoList.createUserId.asc(), tabDemoList.createUserId.desc()),
 //		createUserName(tabDemoList.createUserName.asc(), tabDemoList.createUserName.desc()),
-        modifyTime(QTabDemoList.tabDemoList.modifyTime.asc(), QTabDemoList.tabDemoList.modifyTime.desc()),
+        modifyTime(tabDemoList.modifyTime.asc(), tabDemoList.modifyTime.desc()),
 //		modifyUserId(tabDemoList.modifyUserId.asc(), tabDemoList.modifyUserId.desc()),
 //		modifyUserName(tabDemoList.modifyUserName.asc(), tabDemoList.modifyUserName.desc()),
 //		deleted(tabDemoList.deleted.asc(), tabDemoList.deleted.desc())

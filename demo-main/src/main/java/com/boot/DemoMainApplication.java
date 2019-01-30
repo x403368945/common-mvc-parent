@@ -1,8 +1,8 @@
 package com.boot;
 
+import com.boot.demo.config.init.AppProperties;
 import com.support.config.BusConfig;
 import com.support.config.InitConfig;
-import com.boot.demo.config.init.AppProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

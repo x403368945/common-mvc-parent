@@ -3,15 +3,15 @@ package com.boot.demo.business.user.entity;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
+import com.querydsl.core.annotations.QueryEntity;
+import com.querydsl.core.annotations.QueryTransient;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.support.mvc.entity.ITable;
 import com.support.mvc.entity.IWhere;
 import com.support.mvc.entity.IWhere.QdslWhere;
 import com.support.mvc.entity.base.Prop;
 import com.support.mvc.entity.base.Sorts;
-import com.querydsl.core.annotations.QueryEntity;
-import com.querydsl.core.annotations.QueryTransient;
-import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.utils.util.Dates;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,6 +28,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.boot.demo.business.user.entity.QTabUserLogin.tabUserLogin;
 import static com.support.mvc.entity.base.Prop.RANGE_DATE;
 import static com.support.mvc.entity.base.Prop.SORTS;
 import static com.support.mvc.entity.base.Prop.Type.*;
@@ -121,8 +122,8 @@ public class TabUserLogin implements ITable, IWhere<JPAUpdateClause, QdslWhere> 
      * 枚举：定义排序字段
      */
     public enum OrderBy {
-        id(com.boot.demo.business.user.entity.QTabUserLogin.tabUserLogin.id.asc(), com.boot.demo.business.user.entity.QTabUserLogin.tabUserLogin.id.desc()),
-        timestamp(com.boot.demo.business.user.entity.QTabUserLogin.tabUserLogin.timestamp.asc(), com.boot.demo.business.user.entity.QTabUserLogin.tabUserLogin.timestamp.desc()),
+        id(tabUserLogin.id.asc(), tabUserLogin.id.desc()),
+        timestamp(tabUserLogin.timestamp.asc(), tabUserLogin.timestamp.desc()),
         ;
         public final Sorts asc;
         public final Sorts desc;
@@ -156,7 +157,7 @@ public class TabUserLogin implements ITable, IWhere<JPAUpdateClause, QdslWhere> 
 
     @Override
     public QdslWhere where() {
-        final com.boot.demo.business.user.entity.QTabUserLogin q = com.boot.demo.business.user.entity.QTabUserLogin.tabUserLogin;
+        final QTabUserLogin q = tabUserLogin;
         return QdslWhere.of()
                 .and(timestampRange, () -> {
                     timestampRange.rebuild();

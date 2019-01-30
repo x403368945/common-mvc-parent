@@ -1,6 +1,7 @@
 package com.boot.demo.open.common.web;
 
 import com.boot.demo.config.init.AppConfig;
+import com.boot.demo.config.init.AppConfig.URL;
 import com.boot.demo.enums.Session;
 import com.support.mvc.entity.base.Result;
 import com.support.mvc.enums.Code;
@@ -44,7 +45,7 @@ public class OpenCodeController implements IController<String> {
                                 "开发环境，将图片验证码放在{extras:{code:验证码}}；方便自动化测试"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl())))
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl())))
                 )
                 .execute(result -> {
                     result.versionAssert(version);
@@ -72,7 +73,7 @@ public class OpenCodeController implements IController<String> {
                                 "验证失败后，将会返回新的验证码，不需要重新调用获取验证码接口"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl())))
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl())))
                 )
                 .execute(result -> {
                     result.versionAssert(version);

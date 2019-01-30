@@ -1,8 +1,8 @@
 package com.boot.security.config;
 
+import com.boot.security.config.init.AppConfig;
 import com.support.config.security.IAdapter;
 import com.support.config.security.SimpleAuthAdapter;
-import com.boot.security.config.init.AppConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,24 +1,21 @@
 package com.boot.socket.ws.handler;
 
 import com.alibaba.fastjson.JSON;
-import com.support.mvc.actions.ICommand;
-import com.support.mvc.entity.base.Message;
 import com.boot.socket.common.service.FormulaService;
 import com.boot.socket.common.service.PushService;
 import com.boot.socket.ws.adapter.IAdapter;
 import com.boot.socket.ws.adapter.RouterAdapter;
+import com.support.mvc.actions.ICommand;
+import com.support.mvc.entity.base.Message;
 import com.utils.util.Util;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.AbstractWebSocketHandler;
-
-import javax.websocket.server.ServerEndpoint;
 
 import static com.support.mvc.actions.ICallback.Event.END;
 import static com.support.mvc.actions.ICallback.Event.ERROR;

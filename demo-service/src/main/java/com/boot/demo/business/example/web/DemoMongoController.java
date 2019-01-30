@@ -1,11 +1,16 @@
 package com.boot.demo.business.example.web;
 
 import com.boot.demo.business.example.entity.DemoMongo;
+import com.boot.demo.business.example.entity.DemoMongo.OrderBy;
 import com.boot.demo.business.example.service.DemoMongoService;
 import com.boot.demo.business.user.entity.TabUser;
 import com.boot.demo.config.init.AppConfig.URL;
 import com.boot.demo.enums.Radio;
 import com.boot.demo.support.web.IAuthController;
+import com.support.mvc.entity.base.Pager;
+import com.support.mvc.entity.base.Param;
+import com.support.mvc.entity.base.Result;
+import com.support.mvc.entity.base.Sorts;
 import com.utils.util.Dates;
 import com.utils.util.Util;
 import lombok.extern.slf4j.Slf4j;
@@ -13,10 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import com.support.mvc.entity.base.Pager;
-import com.support.mvc.entity.base.Param;
-import com.support.mvc.entity.base.Result;
-import com.support.mvc.entity.base.Sorts;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -243,7 +244,7 @@ public class DemoMongoController implements IAuthController<String> {
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl()), // 当前接口参考案例请求地址；
                                 DemoMongo.builder() // 当前接口参考案例请求参数，demo中设置支持查询的字段
                                         .deleted(Radio.NO)
-                                        .sorts(Collections.singletonList(Sorts.Order.builder().name(DemoMongo.OrderBy.createTime.name()).direction(DESC).build()))
+                                        .sorts(Collections.singletonList(Sorts.Order.builder().name(OrderBy.createTime.name()).direction(DESC).build()))
                                         .build()
                         ))
                 )
@@ -276,7 +277,7 @@ public class DemoMongoController implements IAuthController<String> {
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(1, 20)), // 当前接口参考案例请求地址；
                                 DemoMongo.builder() // 当前接口参考案例请求参数，demo中设置支持查询的字段
                                         .deleted(Radio.NO)
-                                        .sorts(Collections.singletonList(Sorts.Order.builder().name(DemoMongo.OrderBy.createTime.name()).direction(DESC).build()))
+                                        .sorts(Collections.singletonList(Sorts.Order.builder().name(OrderBy.createTime.name()).direction(DESC).build()))
                                         .build()
                         ))
                 )

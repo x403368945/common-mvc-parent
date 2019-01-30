@@ -7,14 +7,14 @@ import com.boot.demo.enums.Radio;
 import com.boot.demo.enums.RegisterSource;
 import com.boot.demo.enums.Role;
 import com.boot.demo.support.entity.IUser;
+import com.querydsl.core.annotations.QueryEntity;
+import com.querydsl.core.annotations.QueryTransient;
+import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.support.mvc.entity.ITable;
 import com.support.mvc.entity.IWhere;
 import com.support.mvc.entity.IWhere.QdslWhere;
 import com.support.mvc.entity.base.Sorts;
 import com.support.mvc.entity.validated.ISave;
-import com.querydsl.core.annotations.QueryEntity;
-import com.querydsl.core.annotations.QueryTransient;
-import com.querydsl.jpa.impl.JPAUpdateClause;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -139,7 +139,7 @@ public class TabUser extends UserDetail implements ITabUser, ITable, IUser, IWhe
 
     @Override
     public QdslWhere where() {
-        final com.boot.demo.business.user.entity.QTabUser q = com.boot.demo.business.user.entity.QTabUser.tabUser;
+        final QTabUser q = QTabUser.tabUser;
         return QdslWhere.of()
                 .and(username, () -> q.username.eq(username))
                 .and(phone, () -> q.phone.eq(phone))

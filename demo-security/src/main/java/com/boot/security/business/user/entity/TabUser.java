@@ -2,9 +2,9 @@ package com.boot.security.business.user.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
-import com.support.mvc.entity.base.Prop;
 import com.boot.security.enums.Radio;
 import com.boot.security.enums.Role;
+import com.support.mvc.entity.base.Prop;
 import com.utils.IJson;
 import lombok.*;
 

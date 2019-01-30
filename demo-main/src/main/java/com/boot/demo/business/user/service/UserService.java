@@ -5,11 +5,11 @@ import com.boot.demo.business.user.dao.jpa.UserRepository;
 import com.boot.demo.business.user.entity.TabUser;
 import com.boot.demo.enums.Role;
 import com.google.common.eventbus.EventBus;
+import com.querydsl.core.QueryResults;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.exception.DeleteRowsException;
 import com.support.mvc.exception.UpdateRowsException;
 import com.support.mvc.service.IService;
-import com.querydsl.core.QueryResults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -99,9 +99,14 @@ public class UserService implements IService<TabUser> {
      */
     @Transactional(rollbackFor = Exception.class)
     public void updateNickname(@NotNull(message = "【id】不能为null") @Positive(message = "【id】必须大于0") final Long id,
-                       @NotBlank(message = "【nickname】不能为null") final String nickname,
-                       @NotNull(message = "【userId】不能为null") @Positive(message = "【userId】必须大于0") final Long userId) {
+                               @NotBlank(message = "【nickname】不能为null") final String nickname,
+                               @NotNull(message = "【userId】不能为null") @Positive(message = "【userId】必须大于0") final Long userId) {
         UpdateRowsException.asserts(repository.updateNickname(id, nickname, userId));
+        repository.findById(id).ifPresent(obj -> { // 清除登录查询缓存
+            repository.clearLoginCache(obj.getUsername());
+            repository.clearLoginCache(obj.getPassword());
+            repository.clearLoginCache(obj.getEmail());
+        });
         { // 发送广播
             eventBus.post(IUserEvent.NicknameUpdate.of(TabUser.builder().id(id).nickname(nickname).build()));
         }

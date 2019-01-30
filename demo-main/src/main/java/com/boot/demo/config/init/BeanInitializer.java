@@ -1,9 +1,9 @@
 package com.boot.demo.config.init;
 
 import com.boot.demo.business.user.dao.jpa.UserRepository;
-import com.support.config.InitConfig;
 import com.google.common.eventbus.EventBus;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.support.config.InitConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

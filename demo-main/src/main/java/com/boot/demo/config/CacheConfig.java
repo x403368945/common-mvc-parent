@@ -22,6 +22,10 @@ import java.util.stream.Stream;
 @EnableCaching
 public class CacheConfig {
     /**
+     * 登录查询缓存
+     */
+    public static final String loginCache = "loginCache";
+    /**
      * 用户昵称缓存
      */
     public static final String nicknameCache = "nicknameCache";
@@ -30,6 +34,7 @@ public class CacheConfig {
     public CacheManager cacheManager() {
         final SimpleCacheManager manager = new SimpleCacheManager();
         manager.setCaches(Stream.of(
+                loginCache,
                 nicknameCache
         ).map(ConcurrentMapCache::new).collect(Collectors.toList()));
         return manager;

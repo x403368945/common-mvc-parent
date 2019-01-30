@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
-import static com.support.mvc.actions.ICallback.Event.INFO;
 import static com.boot.socket.config.init.BeanInitializer.Beans.singleThread;
+import static com.support.mvc.actions.ICallback.Event.INFO;
 
 /**
  * 推送服务

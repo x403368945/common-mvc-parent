@@ -1,10 +1,10 @@
 package com.boot.demo.config;
 
+import com.boot.demo.config.init.AppConfig;
 import com.support.config.security.AuthHandler;
 import com.support.config.security.IAdapter;
 import com.support.config.security.JsonUsernamePasswordAuthenticationFilter;
 import com.support.config.security.SimpleAuthAdapter;
-import com.boot.demo.config.init.AppConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

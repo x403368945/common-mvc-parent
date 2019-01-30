@@ -41,12 +41,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.boot.demo.business.example.entity.QDemoMongo.demoMongo;
 import static com.support.mvc.entity.base.Prop.SORTS;
 import static com.support.mvc.entity.base.Prop.Type.*;
 import static com.support.mvc.enums.Code.ORDER_BY;
 
 /**
  * 实体类：
+ *
  *
  * @author 谢长春 on 2019-01-03.
  */
@@ -61,7 +63,7 @@ public class DemoMongo implements
         IMongo, // 所有与数据库表 - 实体类映射的表都实现该接口；方便后续一键查看所有表的实体
         IUser,
         ITimestamp, // 所有需要更新时间戳的实体类
-        IWhere<Update, QdslWhere> // 声明用于实现构建 com.support.mvc.dao.IViewRepository 需要的查询条件
+        IWhere<Update, QdslWhere> // 声明用于实现构建 com.support.mvc.dao.ISearchRepository 需要的查询条件
 {
     /**
      * 数据ID，主键自增
@@ -196,9 +198,9 @@ public class DemoMongo implements
 //        name(demoMongo.name.asc(), demoMongo.name.desc()),
 //        phone(demoMongo.phone.asc(), demoMongo.phone.desc()),
 //        age(demoMongo.age.asc(), demoMongo.age.desc()),
-        createTime(com.boot.demo.business.example.entity.QDemoMongo.demoMongo.createTime.asc(), com.boot.demo.business.example.entity.QDemoMongo.demoMongo.createTime.desc()),
+        createTime(demoMongo.createTime.asc(), demoMongo.createTime.desc()),
         //        createUserId(demoMongo.createUserId.asc(), demoMongo.createUserId.desc()),
-        modifyTime(com.boot.demo.business.example.entity.QDemoMongo.demoMongo.modifyTime.asc(), com.boot.demo.business.example.entity.QDemoMongo.demoMongo.modifyTime.desc()),
+        modifyTime(demoMongo.modifyTime.asc(), demoMongo.modifyTime.desc()),
 //        modifyUserId(demoMongo.modifyUserId.asc(), demoMongo.modifyUserId.desc()),
 //        deleted(demoMongo.deleted.asc(), demoMongo.deleted.desc())
         ;
@@ -244,7 +246,7 @@ public class DemoMongo implements
 
     @Override
     public QdslWhere where() {
-        final com.boot.demo.business.example.entity.QDemoMongo q = com.boot.demo.business.example.entity.QDemoMongo.demoMongo;
+        final QDemoMongo q = demoMongo;
         // 构建查询顺序规则请参考：IWhere#where
         return QdslWhere.of()
                 .and(phone, () -> q.phone.eq(phone))

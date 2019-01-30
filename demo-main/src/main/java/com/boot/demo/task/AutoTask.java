@@ -1,6 +1,6 @@
 package com.boot.demo.task;
 
-import com.boot.demo.config.init.AppConfig;
+import com.boot.demo.config.init.AppConfig.Path;
 import com.utils.util.FPath;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -56,7 +56,7 @@ public class AutoTask {
     public void month() {
         log.info("开始:清除临时文件目录");
         try {
-            FPath.of(AppConfig.Path.TEMP.file()).deleteAll();
+            FPath.of(Path.TEMP.file()).deleteAll();
             FPath.of(System.getProperty("java.io.tmpdir")).deleteAll();
         } catch (Exception e) {
             log.error("异常:清除临时文件目录", e);

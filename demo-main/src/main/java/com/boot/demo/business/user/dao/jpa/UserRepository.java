@@ -2,12 +2,14 @@ package com.boot.demo.business.user.dao.jpa;
 
 import com.boot.demo.business.user.entity.QTabUser;
 import com.boot.demo.business.user.entity.TabUser;
+import com.boot.demo.config.CacheConfig;
 import com.boot.demo.enums.Radio;
-import com.support.mvc.dao.IRepository;
-import com.support.mvc.entity.base.Pager;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.support.mvc.dao.IRepository;
+import com.support.mvc.entity.base.Pager;
+import com.utils.util.Op;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,7 +19,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
-import static com.boot.demo.config.CacheConfig.nicknameCache;
+import static com.boot.demo.business.user.entity.QTabUser.tabUser;
 import static com.boot.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 
 /**
@@ -28,10 +30,10 @@ import static com.boot.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 public interface UserRepository extends
         JpaRepository<TabUser, Long>,
         IRepository<TabUser, Long> {
-    QTabUser q = QTabUser.tabUser;
+    QTabUser q = tabUser;
 
 
-    @Cacheable(cacheNames = nicknameCache, key = "#id")
+    @Cacheable(cacheNames = CacheConfig.nicknameCache, key = "#id")
     @Query
     default String getNickame(final Long id) {
         return jpaQueryFactory.<JPAQueryFactory>get().select(q.nickname).from(q).where(q.id.eq(id)).fetchOne();
@@ -79,23 +81,6 @@ public interface UserRepository extends
     }
 
     /**
-     * 按【登录账户、手机号、邮箱】查找用户
-     *
-     * @param username String 登录账户名
-     * @return Optional<TabUser>
-     */
-    default Optional<TabUser> findUser(final String username) {
-        Optional<TabUser> user = findOne(q.username.eq(username));
-        if (!user.isPresent()) {
-            user = findOne(q.phone.eq(username));
-            if (!user.isPresent()) {
-                user = findOne(q.email.eq(username));
-            }
-        }
-        return user;
-    }
-
-    /**
      * 查询部分字段，这些字段会被缓存到 redis
      *
      * @return List<TabUser>
@@ -119,6 +104,49 @@ public interface UserRepository extends
     }
 
     /**
+     * 按【登录账户、手机号、邮箱】查找用户
+     *
+     * @param username String 登录账户名
+     * @return Optional<TabUser>
+     */
+    @Cacheable(cacheNames = CacheConfig.loginCache, key = "#username")
+    default Optional<TabUser> findUser(final String username) {
+        return Op.of(findOne(q.username.eq(username)))
+                .orElseOf(() -> findOne(q.phone.eq(username)))
+                .orElseOf(() -> findOne(q.email.eq(username)))
+                .optional();
+    }
+
+    /**
+     * 通知清除登录查询缓存，修改密码、修改昵称后都需要触发该方法，清除 {@link UserRepository#findUser(String)} 缓存，
+     * 在 {@link UserRepository} 内方法之间相互调用无法触发 @CacheEvict 代理， 必须在 service 层触发，
+     *
+     * @param username String 登录账户名
+     */
+    @CacheEvict(cacheNames = CacheConfig.loginCache, key = "#username")
+    default void clearLoginCache(final String username) {
+    }
+
+    /**
+     * 修改密码
+     *
+     * @param id       String 用户ID
+     * @param password String 新密码
+     * @param userId   Long 修改者ID
+     * @return long 影响行数
+     */
+    @Modifying
+    @Query
+    default long updatePassword(final Long id, final String password, final Long userId) {
+        return jpaQueryFactory.<JPAQueryFactory>get()
+                .update(q)
+                .set(q.password, password)
+                .set(q.modifyUserId, userId)
+                .where(q.id.eq(id))
+                .execute();
+    }
+
+    /**
      * 修改昵称
      *
      * @param id       Long 用户ID
@@ -126,7 +154,7 @@ public interface UserRepository extends
      * @param userId   Long 修改者ID
      * @return long 影响行数
      */
-    @CacheEvict(cacheNames = nicknameCache, key = "#id")
+    @CacheEvict(cacheNames = CacheConfig.nicknameCache, key = "#id")
     @Modifying
     @Query
     default long updateNickname(final Long id, final String nickname, final Long userId) {

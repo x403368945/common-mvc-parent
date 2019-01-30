@@ -2,9 +2,9 @@ package com.boot.demo.business.example.dao.mongo;
 
 import com.boot.demo.business.example.entity.DemoMongo;
 import com.boot.demo.enums.Radio;
+import com.querydsl.core.QueryResults;
 import com.support.mvc.dao.IRepository;
 import com.support.mvc.entity.base.Pager;
-import com.querydsl.core.QueryResults;
 import org.springframework.data.domain.Example;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
@@ -15,6 +15,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.boot.demo.business.example.entity.DemoMongo.Props.*;
 import static com.boot.demo.config.init.BeanInitializer.Beans.mongoTemplate;
 import static org.springframework.data.mongodb.core.query.Criteria.byExample;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
@@ -61,9 +62,9 @@ public interface DemoMongoRepository extends
                 .updateFirst(
                         new Query(byExample(Example.of(DemoMongo.builder().id(id).createUserId(userId).build()))),
                         new Update()
-                                .set(DemoMongo.Props.deleted.name(), Radio.YES)
-                                .set(DemoMongo.Props.modifyUserId.name(), userId)
-                                .set(DemoMongo.Props.modifyTime.name(), Timestamp.valueOf(LocalDateTime.now()))
+                                .set(deleted.name(), Radio.YES)
+                                .set(modifyUserId.name(), userId)
+                                .set(modifyTime.name(), Timestamp.valueOf(LocalDateTime.now()))
                         ,
                         DemoMongo.class
                 )
@@ -74,11 +75,11 @@ public interface DemoMongoRepository extends
     default long markDeleteByIds(final List<String> ids, final Long userId) {
         return mongoTemplate.<MongoTemplate>get()
                 .updateMulti(
-                        new Query(where(DemoMongo.Props.id.name()).in(ids).and(DemoMongo.Props.createUserId.name()).is(userId)),
+                        new Query(where(id.name()).in(ids).and(createUserId.name()).is(userId)),
                         new Update()
-                                .set(DemoMongo.Props.deleted.name(), Radio.YES)
-                                .set(DemoMongo.Props.modifyUserId.name(), userId)
-                                .set(DemoMongo.Props.modifyTime.name(), Timestamp.valueOf(LocalDateTime.now()))
+                                .set(deleted.name(), Radio.YES)
+                                .set(modifyUserId.name(), userId)
+                                .set(modifyTime.name(), Timestamp.valueOf(LocalDateTime.now()))
                         ,
                         DemoMongo.class
                 )

@@ -38,6 +38,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.boot.demo.business.example.entity.QTabDemoList.tabDemoList;
 import static com.support.mvc.entity.base.Prop.*;
 import static com.support.mvc.entity.base.Prop.Type.*;
 import static com.support.mvc.enums.Code.ORDER_BY;
@@ -225,7 +226,7 @@ public class TabDemoList implements
      */
     public enum OrderBy {
         // 按 id 排序可替代按创建时间排序
-        id(com.boot.demo.business.example.entity.QTabDemoList.tabDemoList.id.asc(), com.boot.demo.business.example.entity.QTabDemoList.tabDemoList.id.desc()),
+        id(tabDemoList.id.asc(), tabDemoList.id.desc()),
         //		uid(tabDemoList.uid.asc(), tabDemoList.uid.desc()),
 //		name(tabDemoList.name.asc(), tabDemoList.name.desc()),
 //		content(tabDemoList.content.asc(), tabDemoList.content.desc()),
@@ -234,7 +235,7 @@ public class TabDemoList implements
 //		createTime(tabDemoList.createTime.asc(), tabDemoList.createTime.desc()),
 //		createUserId(tabDemoList.createUserId.asc(), tabDemoList.createUserId.desc()),
 //		createUserName(tabDemoList.createUserName.asc(), tabDemoList.createUserName.desc()),
-        modifyTime(com.boot.demo.business.example.entity.QTabDemoList.tabDemoList.modifyTime.asc(), com.boot.demo.business.example.entity.QTabDemoList.tabDemoList.modifyTime.desc()),
+        modifyTime(tabDemoList.modifyTime.asc(), tabDemoList.modifyTime.desc()),
 //		modifyUserId(tabDemoList.modifyUserId.asc(), tabDemoList.modifyUserId.desc()),
 //		modifyUserName(tabDemoList.modifyUserName.asc(), tabDemoList.modifyUserName.desc()),
 //		deleted(tabDemoList.deleted.asc(), tabDemoList.deleted.desc())
@@ -265,7 +266,7 @@ public class TabDemoList implements
 
     @Override
     public Then<JPAUpdateClause> update(final JPAUpdateClause jpaUpdateClause) {
-        final com.boot.demo.business.example.entity.QTabDemoList q = com.boot.demo.business.example.entity.QTabDemoList.tabDemoList;
+        final QTabDemoList q = tabDemoList;
         // 动态拼接 update 语句
         // 以下案例中 只有 name 属性 为 null 时才不会加入 update 语句；
         return Then.of(jpaUpdateClause)
@@ -287,7 +288,7 @@ public class TabDemoList implements
 
     @Override
     public QdslWhere where() {
-        final com.boot.demo.business.example.entity.QTabDemoList q = com.boot.demo.business.example.entity.QTabDemoList.tabDemoList;
+        final QTabDemoList q = tabDemoList;
         // 构建查询顺序规则请参考：IWhere#where
         return QdslWhere.of()
                 .and(status, () -> q.status.eq(status))

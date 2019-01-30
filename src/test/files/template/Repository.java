@@ -3,12 +3,12 @@ package com.boot.demo.business.{javaname}.dao.jpa;
 import com.boot.demo.business.{javaname}.entity.{TabName};
 import com.boot.demo.business.{javaname}.entity.Q{TabName};
 import com.boot.demo.enums.Radio;
-import com.support.mvc.dao.IRepository;
-import com.support.mvc.entity.base.Pager;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.support.mvc.dao.IRepository;
+import com.support.mvc.entity.base.Pager;
 import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 

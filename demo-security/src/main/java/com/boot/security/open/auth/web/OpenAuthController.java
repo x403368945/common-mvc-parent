@@ -1,15 +1,14 @@
 package com.boot.security.open.auth.web;
 
 
-import com.support.mvc.entity.base.Param;
-import com.support.mvc.entity.base.Result;
-import com.support.mvc.enums.Code;
 import com.boot.security.business.user.entity.TabUser;
-import com.boot.security.business.user.entity.TabUser.Props;
 import com.boot.security.config.init.AppConfig.URL;
 import com.boot.security.enums.Session;
 import com.boot.security.open.auth.entity.AuthLogin;
 import com.boot.security.open.auth.service.AuthService;
+import com.support.mvc.entity.base.Param;
+import com.support.mvc.entity.base.Result;
+import com.support.mvc.enums.Code;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanMap;
@@ -115,7 +114,7 @@ public class OpenAuthController {
                             .url("/open/auth/{version}/login/SESSION")
                             .markdown(this.getClass().getSimpleName().concat("/loginBySession.md"))
                             .method(POST)
-                            .props(Props.list())
+                            .props(TabUser.Props.list())
                             .notes(Arrays.asList(
                                     "会话模式登录，有效期30分钟"
                             ))

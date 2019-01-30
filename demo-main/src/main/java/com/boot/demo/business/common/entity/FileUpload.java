@@ -1,6 +1,6 @@
 package com.boot.demo.business.common.entity;
 
-import com.boot.demo.config.init.AppConfig;
+import com.boot.demo.config.init.AppConfig.Path;
 import com.utils.util.FPath;
 import com.utils.util.FPath.FileName;
 import com.utils.util.Util;
@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 public class FileUpload<T> {
 
     public static FileUpload<FileInfo> ofTemp() {
-        return of(AppConfig.Path.TEMP.absolute());
+        return of(Path.TEMP.absolute());
     }
 
     public static FileUpload<FileInfo> of(final String absolute) {
