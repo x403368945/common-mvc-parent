@@ -4,9 +4,9 @@ import com.mvc.demo.business.example.entity.TabDemoList;
 import com.mvc.demo.business.example.enums.DemoStatus;
 import com.mvc.demo.business.example.service.DemoListService;
 import com.mvc.demo.business.user.entity.TabUser;
+import com.mvc.demo.config.init.AppConfig.URL;
 import com.mvc.demo.enums.Radio;
 import com.mvc.demo.support.web.IAuthController;
-import com.mvc.demo.config.init.AppConfig;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.entity.base.Param;
 import com.support.mvc.entity.base.Result;
@@ -55,7 +55,7 @@ public class DemoListController implements IAuthController<Long> {
                         ))
                         .build()
                         .demo(v -> v.setDemo(
-                                AppConfig.URL.SERVER.append(v.formatUrl()), // 当前接口参考案例请求地址；
+                                URL.SERVER.append(v.formatUrl()), // 当前接口参考案例请求地址；
                                 TabDemoList.builder() // 当前接口参考案例请求参数，一般demo中存放必填字段或者所有字段
                                         .name("JX")
                                         .build()
@@ -87,7 +87,7 @@ public class DemoListController implements IAuthController<Long> {
                         ))
                         .build()
                         .demo(v -> v.setDemo(
-                                AppConfig.URL.SERVER.append(v.formatUrl(100)), // 当前接口参考案例请求地址；
+                                URL.SERVER.append(v.formatUrl(100)), // 当前接口参考案例请求地址；
                                 TabDemoList.builder() // 当前接口参考案例请求参数，一般demo中存放必填字段或者所有字段
                                         .uid(Util.uuid())
                                         .name("JX")
@@ -122,7 +122,7 @@ public class DemoListController implements IAuthController<Long> {
                                 "1.当前版本变更说明"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl(100)))) // 当前接口参考案例请求地址；
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100)))) // 当前接口参考案例请求地址；
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
@@ -145,7 +145,7 @@ public class DemoListController implements IAuthController<Long> {
                                 "1.当前版本变更说明"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl(100, Util.uuid())))) // 当前接口参考案例请求地址；
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100, Util.uuid())))) // 当前接口参考案例请求地址；
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
@@ -167,7 +167,7 @@ public class DemoListController implements IAuthController<Long> {
                                 "1.当前版本变更说明"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl(100)))) // 当前接口参考案例请求地址；
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100)))) // 当前接口参考案例请求地址；
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
@@ -190,7 +190,7 @@ public class DemoListController implements IAuthController<Long> {
                                 "1.当前版本变更说明"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl(100, Util.uuid())))) // 当前接口参考案例请求地址；
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100, Util.uuid())))) // 当前接口参考案例请求地址；
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
@@ -212,7 +212,7 @@ public class DemoListController implements IAuthController<Long> {
                                 "1.当前版本变更说明"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl()), // 当前接口参考案例请求地址；
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl()), // 当前接口参考案例请求地址；
                                 // 方案1：按 ID 逻辑删除
                                 // Arrays.asList(100, 101, 102)
                                 // 方案2：按 ID 和 UUID 逻辑删除
@@ -270,7 +270,7 @@ public class DemoListController implements IAuthController<Long> {
                                 "1.当前版本变更说明"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl(100, Dates.now().getTimeMillis())))) // 当前接口参考案例请求地址；
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100, Dates.now().getTimeMillis())))) // 当前接口参考案例请求地址；
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
@@ -320,7 +320,7 @@ public class DemoListController implements IAuthController<Long> {
                                 "1.当前版本变更说明"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl(100, Util.uuid(), Dates.now().getTimeMillis())))) // 当前接口参考案例请求地址；
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100, Util.uuid(), Dates.now().getTimeMillis())))) // 当前接口参考案例请求地址；
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
@@ -345,7 +345,7 @@ public class DemoListController implements IAuthController<Long> {
                                 "1.当前版本变更说明"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl()), // 当前接口参考案例请求地址；
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl()), // 当前接口参考案例请求地址；
                                 TabDemoList.builder() // 当前接口参考案例请求参数，demo中设置支持查询的字段
                                         .status(DemoStatus._NONE)
                                         .createUserId(1L)
@@ -385,7 +385,7 @@ public class DemoListController implements IAuthController<Long> {
                                 "1.当前版本变更说明"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl(1, 20)), // 当前接口参考案例请求地址；
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(1, 20)), // 当前接口参考案例请求地址；
                                 TabDemoList.builder() // 当前接口参考案例请求参数，demo中设置支持查询的字段
                                         .status(DemoStatus._NONE)
                                         .createUserId(1L)

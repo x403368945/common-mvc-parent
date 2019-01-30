@@ -6,6 +6,9 @@ import com.alibaba.fastjson.annotation.JSONType;
 import com.mvc.demo.business.example.enums.DemoStatus;
 import com.mvc.demo.enums.Radio;
 import com.mvc.demo.support.entity.IUser;
+import com.querydsl.core.annotations.QueryEntity;
+import com.querydsl.core.annotations.QueryTransient;
+import com.querydsl.core.types.OrderSpecifier;
 import com.support.mvc.actions.IUpdate;
 import com.support.mvc.entity.IMongo;
 import com.support.mvc.entity.ITimestamp;
@@ -15,9 +18,6 @@ import com.support.mvc.entity.base.Prop;
 import com.support.mvc.entity.base.Sorts;
 import com.support.mvc.entity.validated.IMarkDelete;
 import com.support.mvc.entity.validated.ISave;
-import com.querydsl.core.annotations.QueryEntity;
-import com.querydsl.core.annotations.QueryTransient;
-import com.querydsl.core.types.OrderSpecifier;
 import com.utils.util.Dates;
 import com.utils.util.Range;
 import com.utils.util.Then;
@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.mvc.demo.business.example.entity.QDemoMongo.demoMongo;
-import static com.support.mvc.entity.base.Prop.*;
+import static com.support.mvc.entity.base.Prop.SORTS;
 import static com.support.mvc.entity.base.Prop.Type.*;
 import static com.support.mvc.enums.Code.ORDER_BY;
 

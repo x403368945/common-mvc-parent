@@ -3,7 +3,7 @@ package com.mvc.demo.business.common.web;
 import com.mvc.demo.business.common.entity.FileInfo;
 import com.mvc.demo.business.common.entity.FileInfo.Props;
 import com.mvc.demo.business.common.entity.FileUpload;
-import com.mvc.demo.config.init.AppConfig;
+import com.mvc.demo.config.init.AppConfig.URL;
 import com.support.mvc.entity.base.Result;
 import com.utils.util.Util;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +41,7 @@ public class FileController {
                                 "单文件上传接口, body 中 file=单个文件对象"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl())))
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl())))
                 )
                 .execute(result -> {
                     result.versionAssert(version);
@@ -67,7 +67,7 @@ public class FileController {
                                 "文件批量上传接口, body 中 files=[文件对象数组]"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl())))
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl())))
                 )
                 .execute(result -> {
                     result.versionAssert(version);

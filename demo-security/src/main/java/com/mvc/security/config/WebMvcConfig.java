@@ -1,27 +1,14 @@
 package com.mvc.security.config;
 
-import com.alibaba.fastjson.parser.Feature;
-import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.mvc.security.config.init.AppConfig;
 import com.support.config.AbstractMvcConfig;
 import com.support.config.InitConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.*;
-import org.springframework.http.CacheControl;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Charsets.UTF_8;
 

@@ -9,13 +9,7 @@ import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.dao.DataAccessException;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

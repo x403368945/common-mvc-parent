@@ -4,9 +4,13 @@ import com.mvc.demo.business.example.entity.DemoMongo;
 import com.mvc.demo.business.example.entity.DemoMongo.OrderBy;
 import com.mvc.demo.business.example.service.DemoMongoService;
 import com.mvc.demo.business.user.entity.TabUser;
+import com.mvc.demo.config.init.AppConfig.URL;
 import com.mvc.demo.enums.Radio;
 import com.mvc.demo.support.web.IAuthController;
-import com.mvc.demo.config.init.AppConfig;
+import com.support.mvc.entity.base.Pager;
+import com.support.mvc.entity.base.Param;
+import com.support.mvc.entity.base.Result;
+import com.support.mvc.entity.base.Sorts;
 import com.utils.util.Dates;
 import com.utils.util.Util;
 import lombok.extern.slf4j.Slf4j;
@@ -14,10 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import com.support.mvc.entity.base.Pager;
-import com.support.mvc.entity.base.Param;
-import com.support.mvc.entity.base.Result;
-import com.support.mvc.entity.base.Sorts;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -54,7 +54,7 @@ public class DemoMongoController implements IAuthController<String> {
                         ))
                         .build()
                         .demo(v -> v.setDemo(
-                                AppConfig.URL.SERVER.append(v.formatUrl()), // 当前接口参考案例请求地址；
+                                URL.SERVER.append(v.formatUrl()), // 当前接口参考案例请求地址；
                                 DemoMongo.builder() // 当前接口参考案例请求参数，一般demo中存放必填字段或者所有字段
                                         .build()
                         ))
@@ -85,7 +85,7 @@ public class DemoMongoController implements IAuthController<String> {
                         ))
                         .build()
                         .demo(v -> v.setDemo(
-                                AppConfig.URL.SERVER.append(v.formatUrl(Util.uuid())), // 当前接口参考案例请求地址；
+                                URL.SERVER.append(v.formatUrl(Util.uuid())), // 当前接口参考案例请求地址；
                                 DemoMongo.builder() // 当前接口参考案例请求参数，一般demo中存放必填字段或者所有字段
                                         .name("JX")
                                         .modifyTime(Dates.now().timestamp())
@@ -116,7 +116,7 @@ public class DemoMongoController implements IAuthController<String> {
                                 "1.当前版本变更说明"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl(Util.uuid())))) // 当前接口参考案例请求地址；
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(Util.uuid())))) // 当前接口参考案例请求地址；
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
@@ -138,7 +138,7 @@ public class DemoMongoController implements IAuthController<String> {
                                 "1.当前版本变更说明"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl(Util.uuid())))) // 当前接口参考案例请求地址；
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(Util.uuid())))) // 当前接口参考案例请求地址；
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
@@ -160,7 +160,7 @@ public class DemoMongoController implements IAuthController<String> {
                                         "1.当前版本变更说明"
                                 ))
                                 .build()
-                                .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl()), // 当前接口参考案例请求地址；
+                                .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl()), // 当前接口参考案例请求地址；
                                         // 方案1：按 ID 逻辑删除
                                         Arrays.asList(Util.uuid(), Util.uuid())
                                         // 方案2：按 ID 和 UUID 逻辑删除
@@ -218,7 +218,7 @@ public class DemoMongoController implements IAuthController<String> {
                                 "1.当前版本变更说明"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl(Util.uuid(), Dates.now().getTimeMillis())))) // 当前接口参考案例请求地址；
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(Util.uuid(), Dates.now().getTimeMillis())))) // 当前接口参考案例请求地址；
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
@@ -241,7 +241,7 @@ public class DemoMongoController implements IAuthController<String> {
                                 "1.当前版本变更说明"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl()), // 当前接口参考案例请求地址；
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl()), // 当前接口参考案例请求地址；
                                 DemoMongo.builder() // 当前接口参考案例请求参数，demo中设置支持查询的字段
                                         .deleted(Radio.NO)
                                         .sorts(Collections.singletonList(Sorts.Order.builder().name(OrderBy.createTime.name()).direction(DESC).build()))
@@ -274,7 +274,7 @@ public class DemoMongoController implements IAuthController<String> {
                                 "1.当前版本变更说明"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl(1, 20)), // 当前接口参考案例请求地址；
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(1, 20)), // 当前接口参考案例请求地址；
                                 DemoMongo.builder() // 当前接口参考案例请求参数，demo中设置支持查询的字段
                                         .deleted(Radio.NO)
                                         .sorts(Collections.singletonList(Sorts.Order.builder().name(OrderBy.createTime.name()).direction(DESC).build()))

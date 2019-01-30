@@ -1,8 +1,8 @@
 package com.mvc.demo.config.init;
 
-import com.support.config.InitConfig;
 import com.mvc.demo.config.init.AppConfig.App;
 import com.mvc.demo.config.init.AppConfig.Path;
+import com.support.config.InitConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

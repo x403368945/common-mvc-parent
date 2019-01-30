@@ -3,13 +3,12 @@ package com.mvc.demo.business.example.dao.jpa;
 import com.mvc.demo.business.example.entity.QTabDemoList;
 import com.mvc.demo.business.example.entity.TabDemoList;
 import com.mvc.demo.enums.Radio;
-import com.mvc.demo.config.init.BeanInitializer;
-import com.support.mvc.dao.IRepository;
-import com.support.mvc.entity.base.Pager;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.support.mvc.dao.IRepository;
+import com.support.mvc.entity.base.Pager;
 import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -17,6 +16,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
+
+import static com.mvc.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 
 /**
  * 数据操作：
@@ -32,11 +33,11 @@ public interface DemoListRepository extends
     @Modifying
     @Query
     default void updateNickName(final Long userId, final String nickname) {
-        BeanInitializer.Beans.jpaQueryFactory.<JPAQueryFactory>get().update(q)
+        jpaQueryFactory.<JPAQueryFactory>get().update(q)
                 .set(q.createUserName, nickname)
                 .where(q.createUserId.eq(userId))
                 .execute();
-        BeanInitializer.Beans.jpaQueryFactory.<JPAQueryFactory>get().update(q)
+        jpaQueryFactory.<JPAQueryFactory>get().update(q)
                 .set(q.modifyUserName, nickname)
                 .where(q.modifyUserId.eq(userId))
                 .execute();
@@ -44,7 +45,7 @@ public interface DemoListRepository extends
 
     @Override
     default long update(final Long id, final Long userId, final TabDemoList obj) {
-        return obj.update(BeanInitializer.Beans.jpaQueryFactory.<JPAQueryFactory>get().update(q))
+        return obj.update(jpaQueryFactory.<JPAQueryFactory>get().update(q))
                 .get()
                 .where(q.id.eq(id).and(q.uid.eq(obj.getUid())).and(q.createUserId.eq(userId)).and(q.modifyTime.eq(obj.getModifyTime())))
                 .execute();
@@ -79,7 +80,7 @@ public interface DemoListRepository extends
 
     @Override
     default long markDeleteById(final Long id, final Long userId) {
-        return BeanInitializer.Beans.jpaQueryFactory.<JPAQueryFactory>get()
+        return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Radio.YES)
                 .set(q.modifyUserId, userId)
@@ -89,7 +90,7 @@ public interface DemoListRepository extends
 
     @Override
     default long markDeleteByUid(final Long id, final String uid, final Long userId) {
-        return BeanInitializer.Beans.jpaQueryFactory.<JPAQueryFactory>get()
+        return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Radio.YES)
                 .set(q.modifyUserId, userId)
@@ -99,7 +100,7 @@ public interface DemoListRepository extends
 
     @Override
     default long markDeleteByIds(final List<Long> ids, final Long userId) {
-        return BeanInitializer.Beans.jpaQueryFactory.<JPAQueryFactory>get()
+        return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Radio.YES)
                 .set(q.modifyUserId, userId)
@@ -109,7 +110,7 @@ public interface DemoListRepository extends
 
     @Override
     default long markDelete(final List<TabDemoList> list, final Long userId) {
-        return BeanInitializer.Beans.jpaQueryFactory.<JPAQueryFactory>get()
+        return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Radio.YES)
                 .set(q.modifyUserId, userId)
@@ -131,7 +132,7 @@ public interface DemoListRepository extends
 
     @Override
     default List<TabDemoList> findList(final TabDemoList condition) {
-        return BeanInitializer.Beans.jpaQueryFactory.<JPAQueryFactory>get()
+        return jpaQueryFactory.<JPAQueryFactory>get()
                 .selectFrom(q)
                 .where(condition.where().toArray())
                 .orderBy(condition.buildQdslSorts())
@@ -140,7 +141,7 @@ public interface DemoListRepository extends
 
     @Override
     default List<TabDemoList> findList(final TabDemoList condition, final Expression<?>... exps) {
-        return BeanInitializer.Beans.jpaQueryFactory.<JPAQueryFactory>get()
+        return jpaQueryFactory.<JPAQueryFactory>get()
                 .select(Projections.bean(TabDemoList.class, exps))
                 .from(q)
                 .where(condition.where().toArray())
@@ -150,7 +151,7 @@ public interface DemoListRepository extends
 
     @Override
     default QueryResults<TabDemoList> findPage(final TabDemoList condition, final Pager pager) {
-        return BeanInitializer.Beans.jpaQueryFactory.<JPAQueryFactory>get()
+        return jpaQueryFactory.<JPAQueryFactory>get()
                 .selectFrom(q)
                 .where(condition.where().toArray())
                 .offset(pager.offset())
@@ -162,7 +163,7 @@ public interface DemoListRepository extends
 
     @Override
     default QueryResults<TabDemoList> findPage(final TabDemoList condition, final Pager pager, final Expression<?>... exps) {
-        return BeanInitializer.Beans.jpaQueryFactory.<JPAQueryFactory>get()
+        return jpaQueryFactory.<JPAQueryFactory>get()
                 .select(Projections.bean(TabDemoList.class, exps))
                 .from(q)
                 .where(condition.where().toArray())

@@ -2,10 +2,9 @@ package com.mvc.demo.business.example.dao.mongo;
 
 import com.mvc.demo.business.example.entity.DemoMongo;
 import com.mvc.demo.enums.Radio;
-import com.mvc.demo.config.init.BeanInitializer;
+import com.querydsl.core.QueryResults;
 import com.support.mvc.dao.IRepository;
 import com.support.mvc.entity.base.Pager;
-import com.querydsl.core.QueryResults;
 import org.springframework.data.domain.Example;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
@@ -17,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.mvc.demo.business.example.entity.DemoMongo.Props.*;
+import static com.mvc.demo.config.init.BeanInitializer.Beans.mongoTemplate;
 import static org.springframework.data.mongodb.core.query.Criteria.byExample;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -33,7 +33,7 @@ public interface DemoMongoRepository extends
 
     @Override
     default long update(final String id, final Long userId, final DemoMongo obj) {
-        return BeanInitializer.Beans.mongoTemplate.<MongoTemplate>get()
+        return mongoTemplate.<MongoTemplate>get()
                 .updateFirst(
                         // 注意【MongoDB】：如果 modifyTime 在 where 条件中，则日期格式必须精确到毫秒 yyyy-MM-dd HH:mm:ss.SSS，因为 Example 查询使用的是 equals 匹配；MySQL不存在该问题
                         new Query(byExample(Example.of(DemoMongo.builder().id(id).createUserId(userId).modifyTime(obj.getModifyTime()).build()))),
@@ -58,7 +58,7 @@ public interface DemoMongoRepository extends
 
     @Override
     default long markDeleteById(final String id, final Long userId) {
-        return BeanInitializer.Beans.mongoTemplate.<MongoTemplate>get()
+        return mongoTemplate.<MongoTemplate>get()
                 .updateFirst(
                         new Query(byExample(Example.of(DemoMongo.builder().id(id).createUserId(userId).build()))),
                         new Update()
@@ -73,7 +73,7 @@ public interface DemoMongoRepository extends
 
     @Override
     default long markDeleteByIds(final List<String> ids, final Long userId) {
-        return BeanInitializer.Beans.mongoTemplate.<MongoTemplate>get()
+        return mongoTemplate.<MongoTemplate>get()
                 .updateMulti(
                         new Query(where(id.name()).in(ids).and(createUserId.name()).is(userId)),
                         new Update()

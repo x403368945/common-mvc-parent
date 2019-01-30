@@ -1,9 +1,9 @@
 package com.mvc.demo.config.init;
 
-import com.support.config.InitConfig;
-import com.mvc.demo.business.user.dao.jpa.UserRepository;
 import com.google.common.eventbus.EventBus;
+import com.mvc.demo.business.user.dao.jpa.UserRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.support.config.InitConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

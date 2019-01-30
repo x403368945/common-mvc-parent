@@ -1,7 +1,8 @@
 package com.mvc.demo.aop;
 
-import com.support.aop.IControllerAspect;
 import com.mvc.demo.config.init.AppConfig;
+import com.mvc.demo.config.init.AppConfig.Path;
+import com.support.aop.IControllerAspect;
 import com.support.mvc.entity.base.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -49,7 +50,7 @@ public class ControllerAspect implements IControllerAspect {
         log(joinPoint, result, time);
         if (AppConfig.isDev() && result instanceof Result) {
             Optional.ofNullable(((Result) result).getVersion())
-                    .ifPresent(version -> version.write(AppConfig.Path.MD.absolute()));
+                    .ifPresent(version -> version.write(Path.MD.absolute()));
         } else if (AppConfig.isProd()) {
             // 生产环境不返回最详细的版本信息
             Optional.ofNullable(((Result) result)).ifPresent(r -> r.setVersion(null));

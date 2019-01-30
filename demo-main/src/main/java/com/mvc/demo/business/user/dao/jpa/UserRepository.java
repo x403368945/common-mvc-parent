@@ -3,7 +3,6 @@ package com.mvc.demo.business.user.dao.jpa;
 import com.mvc.demo.business.user.entity.QTabUser;
 import com.mvc.demo.business.user.entity.TabUser;
 import com.mvc.demo.config.CacheConfig;
-import com.mvc.demo.config.init.BeanInitializer;
 import com.mvc.demo.enums.Radio;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Projections;
@@ -11,11 +10,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.support.mvc.dao.IRepository;
 import com.support.mvc.entity.base.Pager;
 import com.utils.util.Op;
-import com.utils.util.Then;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -24,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.mvc.demo.business.user.entity.QTabUser.tabUser;
+import static com.mvc.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 
 /**
  * 数据操作：用户表
@@ -39,12 +36,12 @@ public interface UserRepository extends
     @Cacheable(cacheNames = CacheConfig.nicknameCache, key = "#id")
     @Query
     default String getNickame(final Long id) {
-        return BeanInitializer.Beans.jpaQueryFactory.<JPAQueryFactory>get().select(q.nickname).from(q).where(q.id.eq(id)).fetchOne();
+        return jpaQueryFactory.<JPAQueryFactory>get().select(q.nickname).from(q).where(q.id.eq(id)).fetchOne();
     }
 
     @Override
     default long markDeleteById(final Long id, final Long userId) {
-        return BeanInitializer.Beans.jpaQueryFactory.<JPAQueryFactory>get()
+        return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Radio.YES)
                 .set(q.modifyUserId, userId)
@@ -54,7 +51,7 @@ public interface UserRepository extends
 
     @Override
     default long markDeleteByIds(final List<Long> ids, final Long userId) {
-        return BeanInitializer.Beans.jpaQueryFactory.<JPAQueryFactory>get()
+        return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Radio.YES)
                 .set(q.modifyUserId, userId)
@@ -74,7 +71,7 @@ public interface UserRepository extends
 //    }
     @Override
     default QueryResults<TabUser> findPage(final TabUser condition, final Pager pager) {
-        return BeanInitializer.Beans.jpaQueryFactory.<JPAQueryFactory>get()
+        return jpaQueryFactory.<JPAQueryFactory>get()
                 .selectFrom(q)
                 .where(condition.where().toArray())
                 .offset(pager.offset())
@@ -89,7 +86,7 @@ public interface UserRepository extends
      * @return List<TabUser>
      */
     default List<TabUser> getSimpleList() {
-        return BeanInitializer.Beans.jpaQueryFactory.<JPAQueryFactory>get()
+        return jpaQueryFactory.<JPAQueryFactory>get()
                 .select(Projections.bean(TabUser.class, q.id, q.uid, q.username, q.nickname, q.phone, q.email, q.role))
                 .from(q)
                 .fetch();
@@ -141,7 +138,7 @@ public interface UserRepository extends
     @Modifying
     @Query
     default long updatePassword(final Long id, final String password, final Long userId) {
-        return BeanInitializer.Beans.jpaQueryFactory.<JPAQueryFactory>get()
+        return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.password, password)
                 .set(q.modifyUserId, userId)
@@ -161,7 +158,7 @@ public interface UserRepository extends
     @Modifying
     @Query
     default long updateNickname(final Long id, final String nickname, final Long userId) {
-        return BeanInitializer.Beans.jpaQueryFactory.<JPAQueryFactory>get()
+        return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.nickname, nickname)
                 .set(q.modifyUserId, userId)
@@ -207,7 +204,7 @@ public interface UserRepository extends
 
     @Override
     default Optional<TabUser> findById(final Long id, final String uid) {
-        return Optional.ofNullable(BeanInitializer.Beans.jpaQueryFactory.<JPAQueryFactory>get()
+        return Optional.ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
                 .selectFrom(q)
                 .where(q.id.eq(id).and(q.uid.eq(uid)))
                 .fetchOne());

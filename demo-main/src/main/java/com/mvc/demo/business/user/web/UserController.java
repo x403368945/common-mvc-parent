@@ -1,10 +1,10 @@
 package com.mvc.demo.business.user.web;
 
 import com.mvc.demo.business.user.entity.TabUser;
-import com.mvc.demo.business.user.service.UserService;
-import com.mvc.demo.support.web.IAuthController;
 import com.mvc.demo.business.user.entity.extend.ITabUser;
-import com.mvc.demo.config.init.AppConfig;
+import com.mvc.demo.business.user.service.UserService;
+import com.mvc.demo.config.init.AppConfig.URL;
+import com.mvc.demo.support.web.IAuthController;
 import com.support.mvc.entity.base.Param;
 import com.support.mvc.entity.base.Result;
 import com.utils.util.Maps;
@@ -46,7 +46,7 @@ public class UserController implements IAuthController<Long> {
                                 "获取当前登录用户信息"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl())))
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl())))
                 )
                 .execute(result -> result
                         .versionAssert(version)
@@ -70,7 +70,7 @@ public class UserController implements IAuthController<Long> {
                                 "1.初始化"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl()), Maps.bySS("nickname", "新的昵称"))) // 当前接口参考案例请求地址；
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl()), Maps.bySS("nickname", "新的昵称"))) // 当前接口参考案例请求地址；
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号

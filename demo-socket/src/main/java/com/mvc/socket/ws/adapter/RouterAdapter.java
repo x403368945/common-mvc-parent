@@ -4,7 +4,6 @@ import com.support.mvc.actions.ICallback;
 import com.support.mvc.actions.ICommand;
 import com.support.mvc.entity.base.Message;
 import com.support.mvc.entity.base.Param;
-import com.mvc.socket.config.init.BeanInitializer;
 import com.utils.util.Util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.BinaryMessage;
@@ -13,6 +12,8 @@ import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
 import java.util.Objects;
+
+import static com.mvc.socket.config.init.BeanInitializer.Beans.appContext;
 
 /**
  *
@@ -34,7 +35,7 @@ public class RouterAdapter implements IAdapter {
 
     @Override
     public void textMessage(final WebSocketSession session, final String jsonText) throws IOException {
-        final ICommand command = BeanInitializer.Beans.appContext.getAppContext().getBean(serviceClass);
+        final ICommand command = appContext.getAppContext().getBean(serviceClass);
         command.command(Param.of(jsonText), new ICallback.AbstractCallback() {
             @Override
             public Message sendMessage(final Message message) {

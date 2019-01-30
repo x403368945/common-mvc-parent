@@ -5,9 +5,9 @@ import com.mvc.demo.business.user.entity.TabUser;
 import com.mvc.demo.enums.Radio;
 import com.mvc.demo.enums.RegisterSource;
 import com.mvc.demo.enums.Role;
+import com.querydsl.core.types.OrderSpecifier;
 import com.support.mvc.entity.base.Prop;
 import com.support.mvc.entity.base.Sorts;
-import com.querydsl.core.types.OrderSpecifier;
 import org.springframework.data.domain.Sort;
 
 import java.util.Collections;
@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.mvc.demo.business.user.entity.QTabUser.tabUser;
-import static com.support.mvc.entity.base.Prop.*;
 import static com.support.mvc.entity.base.Prop.Type.*;
 import static com.support.mvc.enums.Code.ORDER_BY;
 

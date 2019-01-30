@@ -1,8 +1,8 @@
 package com.mvc.demo.business.user.bordcast;
 
+import com.google.common.eventbus.Subscribe;
 import com.mvc.demo.business.user.entity.TabUser;
 import com.support.config.BusConfig.EventBusListener;
-import com.google.common.eventbus.Subscribe;
 import com.utils.IJson;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -2,13 +2,13 @@ package com.mvc.security.open.auth.web;
 
 
 import com.mvc.security.business.user.entity.TabUser;
-import com.mvc.security.config.init.AppConfig;
+import com.mvc.security.config.init.AppConfig.URL;
 import com.mvc.security.enums.Session;
+import com.mvc.security.open.auth.entity.AuthLogin;
 import com.mvc.security.open.auth.service.AuthService;
 import com.support.mvc.entity.base.Param;
 import com.support.mvc.entity.base.Result;
 import com.support.mvc.enums.Code;
-import com.mvc.security.open.auth.entity.AuthLogin;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanMap;
@@ -119,7 +119,7 @@ public class OpenAuthController {
                                     "会话模式登录，有效期30分钟"
                             ))
                             .build()
-                            .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl()),
+                            .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl()),
                                     BeanMap.create(new AuthLogin()
                                             .setUsername("admin")
                                             .setPassword("admin")

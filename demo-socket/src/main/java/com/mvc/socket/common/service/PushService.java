@@ -1,6 +1,5 @@
 package com.mvc.socket.common.service;
 
-import com.mvc.socket.config.init.BeanInitializer;
 import com.support.mvc.actions.ICallback;
 import com.support.mvc.actions.ICommand;
 import com.support.mvc.entity.base.Message;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
+import static com.mvc.socket.config.init.BeanInitializer.Beans.singleThread;
 import static com.support.mvc.actions.ICallback.Event.INFO;
 
 /**
@@ -30,7 +30,7 @@ public class PushService implements ICommand {
             callback.sendMessage(INFO, "参数", param.parseObject());
             for (int i = 1; i <= 10; i++) {
                 final int id = i;
-                final Future<Message> submit = BeanInitializer.Beans.singleThread.<ExecutorService>get().submit(() -> {
+                final Future<Message> submit = singleThread.<ExecutorService>get().submit(() -> {
                     Thread.sleep(1000);
                     return Message.builder()
                             .event(INFO)

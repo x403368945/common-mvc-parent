@@ -1,10 +1,10 @@
 package com.mvc.demo.business.example.web;
 
+import com.google.common.base.Strings;
 import com.mvc.demo.business.example.entity.TabValid;
 import com.mvc.demo.business.example.service.ValidService;
 import com.mvc.demo.business.user.entity.TabUser;
 import com.mvc.demo.support.web.IAuthController;
-import com.google.common.base.Strings;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.entity.base.Param;
 import com.support.mvc.entity.base.Result;
