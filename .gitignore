@@ -36,4 +36,3 @@ hs_err_pid*
 /log
 /logs
 /.*/logs
-/common-utils
