@@ -4,64 +4,48 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>common-mvc-parent</artifactId>
-        <groupId>com.utils</groupId>
+        <groupId>com.mvc</groupId>
         <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>demo-main</artifactId>
     <version>1.0.0</version>
     <packaging>war</packaging>
 
-    <profiles>
-        <profile> <!-- 打包发布 mvn clean package -Pdeploy -Denv={dev|beta|prod} -->
-            <id>deploy</id>
-            <dependencies>
-                <dependency>
-                    <groupId>com.utils</groupId>
-                    <artifactId>demo-service</artifactId>
-                    <version>1.0.0</version>
-                    <classifier>${env}</classifier>
-                    <exclusions>
-                        <exclusion>
-                            <groupId>com.utils</groupId>
-                            <artifactId>demo-main</artifactId>
-                        </exclusion>
-                    </exclusions>
-                </dependency>
-            </dependencies>
-<!--
-            <build>
-                <plugins>
-                    <plugin> &lt;!&ndash; war 包插件 &ndash;&gt;
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <configuration>
-                            &lt;!&ndash; 参考地址： http://maven.apache.org/plugins-archives/maven-war-plugin-2.4/examples/adding-filtering-webresources.html&ndash;&gt;
-                            <webResources>
-                                <resource>
-                                    <directory>${basedir}/../demo-service/src/main/webapp</directory>
-                                </resource>
-                            </webResources>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
--->
-        </profile>
-    </profiles>
-
     <dependencies>
         <dependency>
-            <groupId>com.utils</groupId>
+            <groupId>com.mvc</groupId>
             <artifactId>common-mvc</artifactId>
             <version>1.0.0</version>
         </dependency>
+<!--
+        &lt;!&ndash; https://mvnrepository.com/artifact/org.springframework.data/spring-data-redis &ndash;&gt;
         <dependency>
-            <groupId>com.utils</groupId>
-            <artifactId>common-mongo</artifactId>
-            <version>1.0.0</version>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
         </dependency>
+        &lt;!&ndash; https://mvnrepository.com/artifact/redis.clients/jedis &ndash;&gt;
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+        </dependency>
+-->
+        <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-mongodb -->
+        <dependency> <!-- Spring mongo 一定要注意版本匹配 -->
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.querydsl/querydsl-mongodb -->
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-mongodb</artifactId>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.mongodb.morphia/morphia -->
+        <!--<dependency>
+            <groupId>org.mongodb.morphia</groupId>
+            <artifactId>morphia</artifactId>
+        </dependency>-->
+
         <!-- https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf -->
         <dependency>
             <groupId>org.thymeleaf</groupId>
@@ -74,6 +58,7 @@
         </dependency>
     </dependencies>
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin> <!-- war 包插件 -->
                 <groupId>org.apache.maven.plugins</groupId>
@@ -86,5 +71,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

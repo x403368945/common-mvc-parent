@@ -16,3 +16,9 @@ Content-Type: application/json
 Authorization: basic YWRtaW46YWRtaW4=
 
 ###
+### 模拟 403
+GET http://localhost:8080/admin-config/1/url
+Content-Type: application/json
+Authorization: basic dXNlcjoxMTExMTE=
+
+###

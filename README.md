@@ -3,15 +3,38 @@
 ## 动态环境打包
 ```
 # 开发环境打包
-mvn clean package
-# mvn clean package -Pdeploy -Denv=dev
+mvn clean package -Pdev
 # 测试环境打包
 mvn clean package -Pbeta
-# mvn clean package -Pdeploy -Denv=beta
 # 生产环境打包
 mvn clean package -Pprod
-# mvn clean package -Pdeploy -Denv=prod
 ```
+
+### 初始化流程
+```
+# 源码下载地址，以下地址2选1
+git clone https://gitee.com/xcc/common-utils.git
+git clone https://github.com/x403368945/common-utils.git
+cd {git代码下载位置}/common-utils/
+mvn clean install # 安装到本地仓库
+
+git clone https://gitee.com/xcc/common-mvc-parent.git
+cd {git代码下载位置}/common-mvc-parent/
+mvn clean install # 安装依赖包到本地仓库，web子项目打成war包
+
+# 需要把以下目录设置为 Generated Sources Root，对着该目录右键 > Mark Directory as > Generated Sources Root  
+demo-main/target/generated-sources/java  
+demo-service/target/generated-sources/java  
+demo-security/target/generated-sources/java  
+demo-socket/target/generated-sources/java  
+```
+* common-utils[jar]：工具类封装
+* common-mvc[jar]：spring mvc 基础配置封装
+* demo-deploy[war]：应用组装部署模块，将所有需要发布的模块组装之后打成 war 包，作为单体应用发布，避免循环依赖打包报错
+* demo-main[war]：应用入口【主模块】
+* demo-service[war]：参考案例【依赖于主模块】
+* demo-security[war]：参考案例【Spring Security 基本应用】
+* demo-socket[war]：参考案例【Spring Socket 基本应用】
 
 ### 注解说明
 ```
@@ -99,31 +122,3 @@ mvn clean package -Pprod
 @Past：过去的时间：必须小于当前时间
 @Future：未来的时间：必须大于当前时间
 ```
-
-### 初始化流程
-```
-# 源码下载地址，以下地址2选1
-git clone https://gitee.com/xcc/common-utils.git
-git clone https://github.com/x403368945/common-utils.git
-cd {git代码下载位置}/common-utils/
-mvn clean install # 安装到本地仓库
-
-git clone https://gitee.com/xcc/common-mvc-parent.git
-cd {git代码下载位置}/common-mvc-parent/
-mvn clean install # 安装依赖包到本地仓库，web子项目打成war包
-
-# 需要把以下目录设置为 Generated Sources Root，对着该目录右键 =》Mark Directory as =》 Generated Sources Root  
-demo-main/target/generated-sources/java  
-demo-service/target/generated-sources/java  
-demo-security/target/generated-sources/java  
-demo-socket/target/generated-sources/java  
-```
-* common-utils[jar]：工具类封装
-* common-mvc[jar]：spring mvc 基础配置封装
-* common-cache[jar]：缓存封装【未实现】，只有pom文件添加了依赖
-* common-mongo[jar]：mongodb封装【未实现】，只有pom文件添加了依赖，JPA已经实现了大多数功能
-* demo-main[war&jar]：应用入口【主模块】
-* demo-service[war&jar]：参考案例【依赖于主模块】
-* demo-security[war]：参考案例【Spring Security 基本应用】，可独立运行
-* demo-socket[war]：参考案例【Spring Socket 基本应用】，可独立运行
-

@@ -4,23 +4,23 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>common-mvc-parent</artifactId>
-        <groupId>com.utils</groupId>
+        <groupId>com.mvc</groupId>
         <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>demo-security</artifactId>
     <version>1.0.0</version>
     <packaging>war</packaging>
 
     <dependencies>
         <dependency>
-            <groupId>com.utils</groupId>
+            <groupId>com.mvc</groupId>
             <artifactId>common-mvc</artifactId>
             <version>1.0.0</version>
         </dependency>
     </dependencies>
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin> <!-- war 包插件 -->
                 <groupId>org.apache.maven.plugins</groupId>
@@ -28,5 +28,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

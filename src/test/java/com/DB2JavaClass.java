@@ -41,8 +41,8 @@ public class DB2JavaClass {
         try {
             Supplier<Module> supplier = () -> {
                 final Module[] modules = new Module[]{
-                        Module.builder().output("demo-main/src/main/java/com/demo/business").source("demo-main/src/main/resources/db/db.sql").build(),
-                        Module.builder().output("demo-service/src/main/java/com/demo/business").source("demo-service/src/main/resources/db-demo-service.sql").build(),
+                        Module.builder().output("demo-main/src/main/java/com/mvc/demo/business").source("demo-main/src/main/resources/db/db.sql").build(),
+                        Module.builder().output("demo-service/src/main/java/com/mvc/demo/business").source("demo-service/src/main/resources/db-demo-service.sql").build(),
                 };
                 System.out.println("请选择输出模块目录，完成之后使用命令编译该模块：mvn clean compile");
                 for (int i = 0; i < modules.length; i++) {
@@ -117,10 +117,10 @@ public class DB2JavaClass {
                                  , \w+ \w+ userId =>
                                 */
                                 /* IService:String id
-                                 (\S+)?IService => com.mvc.service.str.IService
+                                 (\S+)?IService => com.support.mvc.service.str.IService
                                 */
                                 /* ISimpleService:String id
-                                 (\S+)?IService => com.mvc.service.str.ISimpleService
+                                 (\S+)?IService => com.support.mvc.service.str.ISimpleService
                                  , userId => null
                                  , \w+ \w+ userId =>
                                 */
@@ -134,9 +134,9 @@ public class DB2JavaClass {
                                                                         .replaceAll(", \\w+ \\w+ userId", "");
                                                             } else {
                                                                 if (hasIUser)
-                                                                    return text.replaceAll("(\\S+)?IService", "com.mvc.service.str.IService");
+                                                                    return text.replaceAll("(\\S+)?IService", "com.support.mvc.service.str.IService");
                                                                 else
-                                                                    return text.replaceAll("(\\S+)?IService", "com.mvc.service.str.ISimpleService")
+                                                                    return text.replaceAll("(\\S+)?IService", "com.support.mvc.service.str.ISimpleService")
                                                                             .replace(", userId", ", null")
                                                                             .replaceAll(", \\w+ \\w+ userId", "");
                                                             }
@@ -147,7 +147,7 @@ public class DB2JavaClass {
                             // Controller
                             {
                                 /*
-                                 (\S+)?IAuthController          => com.mvc.web.IController
+                                 (\S+)?IAuthController          => com.support.mvc.web.IController
                                 @AuthenticationPrincipal.*\s+   =>
                                 ,\s+user.getId\(\)              =>
                                 */
@@ -156,7 +156,7 @@ public class DB2JavaClass {
                                                 Optional.of(Names.format("Controller.java").replace("{ID}", hasLongId ? "Long" : "String"))
                                                         .map(text -> hasIUser
                                                                 ? text
-                                                                : text.replaceAll("(\\S+)?IAuthController", "com.mvc.web.IController")
+                                                                : text.replaceAll("(\\S+)?IAuthController", "com.support.mvc.web.IController")
                                                                 .replaceAll("@AuthenticationPrincipal.*\\s+", "")
                                                                 .replaceAll(",\\s+user.getId\\(\\)", "")
                                                         )

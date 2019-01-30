@@ -1,13 +1,13 @@
-package com.demo.business.{javaname}.web;
+package com.mvc.demo.business.{javaname}.web;
 
-import com.demo.business.{javaname}.entity.{TabName};
-import com.demo.business.{javaname}.entity.{TabName}.OrderBy;
-import com.demo.business.{javaname}.service.{JavaName}Service;
-import com.demo.business.user.entity.TabUser;
-import com.demo.config.init.AppConfig.URL;
-import com.demo.enums.Radio;
-import com.demo.support.web.IAuthController;
-import com.mvc.entity.base.*;
+import com.mvc.demo.business.{javaname}.entity.{TabName};
+import com.mvc.demo.business.{javaname}.entity.{TabName}.OrderBy;
+import com.mvc.demo.business.{javaname}.service.{JavaName}Service;
+import com.mvc.demo.business.user.entity.TabUser;
+import com.mvc.demo.config.init.AppConfig.URL;
+import com.mvc.demo.enums.Radio;
+import com.mvc.demo.support.web.IAuthController;
+import com.support.mvc.entity.base.*;
 import com.utils.util.Dates;
 import com.utils.util.Util;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static com.mvc.entity.base.Sorts.Direction.DESC;
+import static com.support.mvc.entity.base.Sorts.Direction.DESC;
 
 /**
  * 请求操作响应：案例

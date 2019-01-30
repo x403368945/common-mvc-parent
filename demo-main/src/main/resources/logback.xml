@@ -10,7 +10,7 @@
 <configuration scan="false" scanPeriod="60 second" debug="true">
     <property name="APP_NAME" value="demo-main"/>
     <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
-    <property name="LOG_HOME" value="${CATALINA_HOME}/logs"/>
+    <property name="LOG_HOME" value="${CATALINA_HOME:-.}/logs"/>
     <contextName>${APP_NAME}</contextName>
     <!-- 自定义日志采集参数：[%user] 采集当前登录用户信息 -->
     <conversionRule conversionWord="user" converterClass="com.log.UserConvert"/>
@@ -19,7 +19,7 @@
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- 一是把日志信息转换成字节数组,二是把字节数组写入到输出流 -->
         <encoder>
-            <pattern>%highlight(%d{HH:mm:ss.SSS} %5level [%user] - [%thread] - %caller{1}%m%n)</pattern>
+            <pattern>%highlight(%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%user] : %m%n)</pattern>
             <charset>UTF-8</charset>
         </encoder>
     </appender>
@@ -28,7 +28,7 @@
     <appender name="DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_HOME}/${APP_NAME}.debug.log</file>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %5level [%user] - %caller{2}%m%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%user] : %m%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
@@ -50,7 +50,7 @@
             <level>INFO</level>
         </filter>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %5level [%user] - %caller{1}%m%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%user] : %m%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
@@ -71,7 +71,7 @@
             <level>ERROR</level>
         </filter>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5level [%user] - %caller{5}%m%n</pattern>
+            <pattern>%d %5level [%20thread] %50logger{50} [%user] : %m%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
         <!--
@@ -134,11 +134,13 @@
     -->
     <!-- 打印编译完成的sql语句 -->
     <logger name="org.hibernate.resource.jdbc.internal.ResourceRegistryStandardImpl" level="TRACE"/>
+    <logger name="org.hibernate.engine.internal.TwoPhaseLoad" level="INFO"/>
+    <logger name="org.hibernate.hql.internal.ast.QueryTranslatorImpl" level="INFO"/>
+    <logger name="org.hibernate.loader.Loader" level="INFO"/>
     <!-- 打印 Controller 注册url -->
     <logger name="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" level="TRACE"/>
     <!-- 已经配置AOP拦截了，不需要再打印 Controller 返回的结果 -->
-    <logger name="org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor"
-            level="INFO"/>
+    <logger name="org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor" level="INFO"/>
     <logger name="org.apache.commons.beanutils.converters.AbstractConverter" level="INFO"/>
     <logger name="org.mongodb.driver" level="INFO"/>
     <logger name="org.springframework.data.redis.core.RedisConnectionUtils" level="INFO"/>

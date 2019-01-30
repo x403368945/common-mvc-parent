@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.utils</groupId>
+    <groupId>com.mvc</groupId>
     <artifactId>common-mvc-parent</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
@@ -12,12 +12,11 @@
     <modules>
         <module>common-utils</module><!-- 工具类封装 -->
         <module>common-mvc</module><!-- Spring MVC 封装 -->
-        <module>common-cache</module><!-- 缓存封装【暂为实现】 -->
-        <module>common-mongo</module><!-- MongoDB 封装【JPA已经实现基本需求，不再封装】 -->
         <module>demo-security</module><!-- Spring Security 基本应用【参考案例，独立运行】 -->
         <module>demo-socket</module><!-- Spring Socket 基本应用【参考案例，独立运行】 -->
         <module>demo-main</module><!-- 应用入口【独立运行，可选依赖[demo-service]】 -->
         <module>demo-service</module><!-- 参考案例【必须依赖[demo-main]】 -->
+        <module>demo-deploy</module><!-- 组合打包所有发布模块，避免出现循环依赖 -->
         <!--<module>demo-mvc</module>-->
         <!--<module>jfinal-wechat</module>-->
         <!--<module>lx-server</module>-->
@@ -105,6 +104,7 @@
     </profiles>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
         <spring.version>5.1.3.RELEASE</spring.version>
         <spring.data.version>2.1.3.RELEASE</spring.data.version>
         <spring.security.version>5.1.2.RELEASE</spring.security.version>
@@ -441,14 +441,6 @@
                 <directory>${basedir}/src/main/resources</directory>
                 <targetPath>${basedir}/target/classes</targetPath>
                 <filtering>true</filtering>
-                <includes>
-                    <include>db/**</include>
-                    <include>static/**</include>
-                    <include>templates/**</include>
-                    <include>*.properties</include>
-                    <include>*.sql</include>
-                    <include>*.xml</include>
-                </includes>
             </resource>
             <resource>
                 <directory>${basedir}/src/main/resources</directory>
@@ -459,12 +451,12 @@
                 </includes>
             </resource>
             <resource> <!-- 指定必须编译打包的资源文件 -->
-                <directory>${basedir}/src/main/resources/${env}</directory>
+                <directory>${basedir}/src/main/resources/env/${env}</directory>
                 <targetPath>${basedir}/target/classes</targetPath>
                 <filtering>true</filtering>
             </resource>
             <resource>
-                <directory>${basedir}/src/main/resources/${env}</directory>
+                <directory>${basedir}/src/main/resources/env/${env}</directory>
                 <targetPath>${basedir}/target/test-classes</targetPath>
                 <filtering>true</filtering>
                 <!-- 排除不打包的文件 -->
@@ -488,9 +480,9 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                    <encoding>UTF-8</encoding>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
                     <skip>true</skip>
                     <!--<compilerArgs>
                         <arg>-extdirs</arg>
@@ -524,6 +516,7 @@
         </plugins>
         <pluginManagement>
             <plugins>
+                <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-war-plugin -->
                 <plugin> <!-- war 包插件 -->
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-war-plugin</artifactId>
@@ -535,7 +528,7 @@
                           classesClassifier:指定jar包后缀，默认 -classes
                         -->
                         <attachClasses>true</attachClasses>
-                        <classesClassifier>${env}</classesClassifier>
+                        <!--<classesClassifier>${env}</classesClassifier>-->
                         <!-- 参考地址： http://maven.apache.org/plugins-archives/maven-war-plugin-2.4/examples/adding-filtering-webresources.html-->
                         <!--<webResources>
                             <resource>
