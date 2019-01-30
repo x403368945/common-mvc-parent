@@ -1,6 +1,6 @@
 package com.boot.demo.business.common.entity;
 
-import com.boot.demo.config.init.AppConfig.Path;
+import com.boot.demo.config.init.AppConfig;
 import com.support.mvc.enums.Code;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,7 +24,7 @@ public class Html {
     public static String emailCode(final String name, final String code) {
         Objects.requireNonNull(name, "参数【name】是必须的");
         Objects.requireNonNull(code, "参数【code】是必须的");
-        return Path.HTML.read("email-code.html")
+        return AppConfig.Path.HTML.read("email-code.html")
                 .replace("<%name%>", name) // 用户昵称
                 .replace("<%code%>", code) // 验证码
                 ;
@@ -39,7 +39,7 @@ public class Html {
     public static String resetPassword(final String name, final String url) {
         Objects.requireNonNull(name, "参数【name】是必须的");
         Objects.requireNonNull(url, "参数【url】是必须的");
-        return Path.HTML.read("reset-password.html")
+        return AppConfig.Path.HTML.read("reset-password.html")
                 .replace("<%name%>", name) // 用户昵称
                 .replace("<%url%>", url) // 激活url
                 ;
@@ -53,7 +53,7 @@ public class Html {
      */
     public static String message(Code code, final String message) {
         Objects.requireNonNull(message, "参数【message】是必须的");
-        return Path.HTML.read("message.html")
+        return AppConfig.Path.HTML.read("message.html")
                 .replace("<%code%>", code.name()) // 消息编码
                 .replace("<%message%>", message) // 消息内容
                 ;

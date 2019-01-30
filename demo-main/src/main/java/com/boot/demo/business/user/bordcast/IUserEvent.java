@@ -1,7 +1,7 @@
 package com.boot.demo.business.user.bordcast;
 
-import com.support.config.BusConfig.EventBusListener;
 import com.boot.demo.business.user.entity.TabUser;
+import com.support.config.BusConfig.EventBusListener;
 import com.google.common.eventbus.Subscribe;
 import com.utils.IJson;
 import lombok.AllArgsConstructor;

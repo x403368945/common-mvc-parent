@@ -1,8 +1,9 @@
 package com.boot.demo.business.common.web;
 
 import com.boot.demo.business.common.entity.FileInfo;
+import com.boot.demo.business.common.entity.FileInfo.Props;
 import com.boot.demo.business.common.entity.FileUpload;
-import com.boot.demo.config.init.AppConfig.URL;
+import com.boot.demo.config.init.AppConfig;
 import com.support.mvc.entity.base.Result;
 import com.utils.util.Util;
 import lombok.extern.slf4j.Slf4j;
@@ -35,12 +36,12 @@ public class FileController {
     public Result<?> uploadFile(@PathVariable final int version, @RequestParam(required = false) final MultipartFile file) {
         return new Result<FileInfo>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
-                        .props(FileInfo.Props.list())
+                        .props(Props.list())
                         .notes(Arrays.asList(
                                 "单文件上传接口, body 中 file=单个文件对象"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl())))
+                        .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl())))
                 )
                 .execute(result -> {
                     result.versionAssert(version);
@@ -61,12 +62,12 @@ public class FileController {
     public Result<?> uploadFiles(@PathVariable final int version, @RequestParam(required = false) final MultipartFile[] files) {
         return new Result<FileInfo>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
-                        .props(FileInfo.Props.list())
+                        .props(Props.list())
                         .notes(Arrays.asList(
                                 "文件批量上传接口, body 中 files=[文件对象数组]"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl())))
+                        .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl())))
                 )
                 .execute(result -> {
                     result.versionAssert(version);

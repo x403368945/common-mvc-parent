@@ -43,22 +43,22 @@ public class ServiceAspect implements IServiceAspect {
                 ;
     }
 
-    @Before("execution(* com.boot.demo.business.*.service..*.save(..))")
+    @Before("execution(* com.boot..*.service..*.save(..))")
     public void beforeSave(final JoinPoint joinPoint) {
         save(joinPoint);
     }
 
-    @Before("execution(* com.boot.demo.business.*.service..*.saveAll(..))")
+    @Before("execution(* com.boot..*.service..*.saveAll(..))")
     public void beforeSaveAll(final JoinPoint joinPoint) {
         saveAll(joinPoint);
     }
 
-    @Before("execution(* com.boot.demo.business.*.service..*.update(..))")
+    @Before("execution(* com.boot..*.service..*.update(..))")
     public void beforeUpdate(final JoinPoint joinPoint) {
         update(joinPoint);
     }
 
-    @AfterReturning(pointcut = "execution(* com.boot.demo.business.*.service..*.delete*(..))", returning = "result")
+    @AfterReturning(pointcut = "execution(* com.boot..*.service..*.delete*(..))", returning = "result")
     public void afterDelete(final JoinPoint joinPoint, final Object result) {
         delete(joinPoint, result);
     }

@@ -2,8 +2,7 @@ package com.boot.demo.business.common.web;
 
 
 import com.boot.demo.business.user.entity.TabUser;
-import com.boot.demo.config.init.AppConfig.Path;
-import com.boot.demo.config.init.AppConfig.URL;
+import com.boot.demo.config.init.AppConfig;
 import com.support.mvc.entity.base.Item;
 import com.support.mvc.entity.base.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +20,6 @@ import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.boot.demo.config.init.AppConfig.App;
 
 /**
  * 参数配置
@@ -48,11 +45,11 @@ public class AdminConfigController {
                                 "查看应用全局配置参数"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl())))
+                        .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl())))
                 )
                 .execute(result -> result
                         .versionAssert(version)
-                        .setSuccess(Stream.of(App.values())
+                        .setSuccess(Stream.of(AppConfig.App.values())
                                 .map(key -> Item.builder().label(key.name()).value(key.value()).comment(key.comment).build())
                                 .collect(Collectors.toList())
                         )
@@ -68,11 +65,11 @@ public class AdminConfigController {
                                 "查看应用目录配置参数"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl())))
+                        .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl())))
                 )
                 .execute(result -> result
                         .versionAssert(version)
-                        .setSuccess(Stream.of(Path.values())
+                        .setSuccess(Stream.of(AppConfig.Path.values())
                                 .map(key -> Item.builder().label(key.name()).value(key.absolute()).comment(key.comment).build())
                                 .collect(Collectors.toList())
                         )
@@ -88,11 +85,11 @@ public class AdminConfigController {
                                 "查看应用 URL 配置参数"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl())))
+                        .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl())))
                 )
                 .execute(result -> result
                         .versionAssert(version)
-                        .setSuccess(Stream.of(URL.values())
+                        .setSuccess(Stream.of(AppConfig.URL.values())
                                 .map(key -> Item.builder().label(key.name()).value(key.value()).comment(key.comment).build())
                                 .collect(Collectors.toList())
                         )
@@ -108,11 +105,11 @@ public class AdminConfigController {
                                 "查看指定配置参数"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl())))
+                        .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl())))
                 )
                 .execute(result -> result
                         .versionAssert(version)
-                        .setSuccess(App.valueOf(key).value())
+                        .setSuccess(AppConfig.App.valueOf(key).value())
                 );
     }
 }

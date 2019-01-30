@@ -29,21 +29,7 @@ public class ControllerAspect implements IControllerAspect {
     /**
      * 添加业务逻辑方法切入点
      */
-    @Pointcut(value = "execution(* com.boot.demo.open.*.web..*.*(..))")
-    public void open() {
-    }
-
-    /**
-     * 添加业务逻辑方法切入点
-     */
-    @Pointcut(value = "execution(* com.boot.demo.business.*.web..*.*(..))")
-    public void business() {
-    }
-
-    /**
-     * 添加业务逻辑方法切入点
-     */
-    @Pointcut("open()||business()")
+    @Pointcut("execution(* com.boot..*.web..*.*(..))")
     public void point() {
     }
 

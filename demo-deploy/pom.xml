@@ -31,7 +31,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>demo</finalName>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin> <!-- war 包插件 -->
                 <groupId>org.apache.maven.plugins</groupId>

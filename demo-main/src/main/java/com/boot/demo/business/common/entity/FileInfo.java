@@ -2,8 +2,7 @@ package com.boot.demo.business.common.entity;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
-import com.boot.demo.config.init.AppConfig.Path;
-import com.boot.demo.config.init.AppConfig.URL;
+import com.boot.demo.config.init.AppConfig;
 import com.support.mvc.entity.base.Prop;
 import com.utils.IJson;
 import com.utils.util.Util;
@@ -70,7 +69,7 @@ public class FileInfo implements IJson {
      */
     @JSONField(serialize = false, deserialize = false)
     public String getPath() {
-        return Util.isEmpty(uname) ? null : Path.TEMP.absolute(uname);
+        return Util.isEmpty(uname) ? null : AppConfig.Path.TEMP.absolute(uname);
     }
 
     /**
@@ -79,7 +78,7 @@ public class FileInfo implements IJson {
      * @return String
      */
     public String getUrl() {
-        return Util.isEmpty(uname) ? null : URL.TEMP.append(uname);
+        return Util.isEmpty(uname) ? null : AppConfig.URL.TEMP.append(uname);
     }
 
     public <T> T parse(Class<T> clazz) {
