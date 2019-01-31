@@ -1,3 +1,24 @@
 spring:
+  mvc:
+    throw-exception-if-no-handler-found: true # 出现错误时, 直接抛出异常(便于异常统一处理，否则捕获不到404)
+  resources:
+    add-mappings: false # 404关闭资源映射，否则会去寻找静态资源
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 50MB
+  thymeleaf:
+    enabled: true
+    prefix: "classpath:"
+    suffix: .html
+    encoding: utf-8
+    mode: HTML
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   profiles:
     active: @env@ # 采坑记录，使用 @@ 获取 pom.xml 环境变量时，必须指定 build > resources > resource > <filtering>true</filtering>
