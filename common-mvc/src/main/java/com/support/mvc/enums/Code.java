@@ -26,6 +26,7 @@ public enum Code {
     MAPPING("请求方式不支持"),
     URL_MAPPING("请求不存在"),
     ACCESS_DENIED("无操作权限"),
+    PAGE_MAX_SIZE("分页查询，每页显示数据量超过最大值"),
     USER_PWD("用户名密码错误"),
     USER_DISABLED("账户已禁用"),
     USER_LOCKED("账户已锁定"),
