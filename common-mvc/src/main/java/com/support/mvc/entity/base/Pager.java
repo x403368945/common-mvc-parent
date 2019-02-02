@@ -1,6 +1,7 @@
 package com.support.mvc.entity.base;
 
 import com.querydsl.core.QueryResults;
+import com.support.mvc.enums.Code;
 import lombok.Builder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,7 +12,6 @@ import java.util.Objects;
 
 /**
  * 构建分页对象
- *
  *
  * @author 谢长春 on 2017/10/31.
  */
@@ -42,6 +42,11 @@ public class Pager {
     public Pager init() {
         number = number <= 0 ? 1 : number;
         size = size <= 0 ? 20 : size;
+        return this;
+    }
+
+    public Pager assertSize() {
+        if (size > 10000) throw Code.PAGE_MAX_SIZE.exception("每页最多只能查询 10000 条数据");
         return this;
     }
 
