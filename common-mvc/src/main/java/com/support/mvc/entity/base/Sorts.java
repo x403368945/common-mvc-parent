@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.springframework.data.domain.Sort;
 
+import java.io.Serializable;
 import java.util.stream.Stream;
 
 /**
@@ -21,7 +22,9 @@ import java.util.stream.Stream;
 @Builder
 @Data
 @Accessors(fluent = true)
-public class Sorts {
+public class Sorts implements Serializable {
+
+    private static final long serialVersionUID = -3920676158297540091L;
 
     /**
      * 排序方向
@@ -39,7 +42,8 @@ public class Sorts {
     @Builder
     @Data
     @Accessors(fluent = false)
-    public static class Order {
+    public static class Order implements Serializable {
+        private static final long serialVersionUID = 8760879633278119365L;
         /**
          * 排序字段名
          */

@@ -63,7 +63,7 @@ public class Prop implements IJson {
      */
     public enum Type {
         SHORT,
-        INT,
+        INTEGER,
         LONG,
         DOUBLE,
         STRING,
