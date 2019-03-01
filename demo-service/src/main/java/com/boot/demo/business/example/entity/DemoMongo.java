@@ -8,7 +8,7 @@ import com.boot.demo.enums.Radio;
 import com.boot.demo.support.entity.IUser;
 import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;
-import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import com.support.mvc.actions.IUpdate;
 import com.support.mvc.entity.IMongo;
 import com.support.mvc.entity.ITimestamp;
@@ -26,7 +26,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.query.Update;
@@ -48,7 +47,6 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 
 /**
  * 实体类：
- *
  *
  * @author 谢长春 on 2019-01-03.
  */
@@ -194,15 +192,15 @@ public class DemoMongo implements
      * 枚举：定义排序字段
      */
     public enum OrderBy {
-        //        id(demoMongo.id.asc(), demoMongo.id.desc()),
-//        name(demoMongo.name.asc(), demoMongo.name.desc()),
-//        phone(demoMongo.phone.asc(), demoMongo.phone.desc()),
-//        age(demoMongo.age.asc(), demoMongo.age.desc()),
-        createTime(demoMongo.createTime.asc(), demoMongo.createTime.desc()),
-        //        createUserId(demoMongo.createUserId.asc(), demoMongo.createUserId.desc()),
-        modifyTime(demoMongo.modifyTime.asc(), demoMongo.modifyTime.desc()),
-//        modifyUserId(demoMongo.modifyUserId.asc(), demoMongo.modifyUserId.desc()),
-//        deleted(demoMongo.deleted.asc(), demoMongo.deleted.desc())
+        //        id(demoMongo.id),
+//        name(demoMongo.name),
+//        phone(demoMongo.phone),
+//        age(demoMongo.age),
+        createTime(demoMongo.createTime),
+        //        createUserId(demoMongo.createUserId),
+        modifyTime(demoMongo.modifyTime),
+//        modifyUserId(demoMongo.modifyUserId),
+//        deleted(demoMongo.deleted)
         ;
         public final Sorts asc;
         public final Sorts desc;
@@ -220,9 +218,9 @@ public class DemoMongo implements
             return Stream.of(OrderBy.values()).map(Enum::name).toArray(String[]::new);
         }
 
-        OrderBy(final OrderSpecifier qdslAsc, final OrderSpecifier qdsldesc) {
-            asc = Sorts.builder().qdsl(qdslAsc).jpa(Sort.Order.asc(this.name())).build();
-            desc = Sorts.builder().qdsl(qdsldesc).jpa(Sort.Order.desc(this.name())).build();
+        OrderBy(ComparableExpressionBase qdsl) {
+            asc = Sorts.asc(qdsl, this);
+            desc = Sorts.desc(qdsl, this);
         }
     }
 

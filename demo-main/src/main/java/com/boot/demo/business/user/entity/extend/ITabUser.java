@@ -5,10 +5,9 @@ import com.boot.demo.business.user.entity.TabUser;
 import com.boot.demo.enums.Radio;
 import com.boot.demo.enums.RegisterSource;
 import com.boot.demo.enums.Role;
-import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import com.support.mvc.entity.base.Prop;
 import com.support.mvc.entity.base.Sorts;
-import org.springframework.data.domain.Sort;
 
 import java.util.Collections;
 import java.util.List;
@@ -72,10 +71,10 @@ public interface ITabUser {
      * 枚举：定义排序字段
      */
     enum OrderBy {
-        id(tabUser.id.asc(), tabUser.id.desc()),
+        id(tabUser.id),
         // 按 id 排序可替代按创建时间排序
-//        createTime(tabUser.createTime.asc(), tabUser.createTime.desc()),
-        modifyTime(tabUser.modifyTime.asc(), tabUser.modifyTime.desc()),
+//        createTime(tabUser.createTime),
+        modifyTime(tabUser.modifyTime),
         ;
         public final Sorts asc;
         public final Sorts desc;
@@ -93,15 +92,9 @@ public interface ITabUser {
             return Stream.of(TabUser.OrderBy.values()).map(Enum::name).toArray(String[]::new);
         }
 
-        OrderBy(OrderSpecifier qdslAsc, OrderSpecifier qdsldesc) {
-            asc = Sorts.builder()
-                    .qdsl(qdslAsc)
-                    .jpa(Sort.Order.asc(this.name()))
-                    .build();
-            desc = Sorts.builder()
-                    .qdsl(qdsldesc)
-                    .jpa(Sort.Order.desc(this.name()))
-                    .build();
+        OrderBy(ComparableExpressionBase qdsl) {
+            asc = Sorts.asc(qdsl, this);
+            desc = Sorts.desc(qdsl, this);
         }
     }
 

@@ -5,7 +5,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
 import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;
-import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.support.mvc.entity.ITable;
 import com.support.mvc.entity.IWhere;
@@ -17,7 +17,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Sort;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -122,8 +121,8 @@ public class TabUserLogin implements ITable, IWhere<JPAUpdateClause, QdslWhere> 
      * 枚举：定义排序字段
      */
     public enum OrderBy {
-        id(tabUserLogin.id.asc(), tabUserLogin.id.desc()),
-        timestamp(tabUserLogin.timestamp.asc(), tabUserLogin.timestamp.desc()),
+        id(tabUserLogin.id),
+        timestamp(tabUserLogin.timestamp),
         ;
         public final Sorts asc;
         public final Sorts desc;
@@ -141,15 +140,9 @@ public class TabUserLogin implements ITable, IWhere<JPAUpdateClause, QdslWhere> 
             return Stream.of(OrderBy.values()).map(Enum::name).toArray(String[]::new);
         }
 
-        OrderBy(OrderSpecifier qdslAsc, OrderSpecifier qdsldesc) {
-            asc = Sorts.builder()
-                    .qdsl(qdslAsc)
-                    .jpa(Sort.Order.asc(this.name()))
-                    .build();
-            desc = Sorts.builder()
-                    .qdsl(qdsldesc)
-                    .jpa(Sort.Order.desc(this.name()))
-                    .build();
+        OrderBy(ComparableExpressionBase qdsl) {
+            asc = Sorts.asc(qdsl, this);
+            desc = Sorts.desc(qdsl, this);
         }
     }
 
