@@ -189,7 +189,7 @@ Authorization: basic YWRtaW46YWRtaW4=
 DELETE http://localhost:8080/valid/0/1
 #DELETE http://localhost:8080/valid/1/1
 #DELETE http://localhost:8080/valid/2/1
-DELETE http://localhost:8080/valid/3/1
+#DELETE http://localhost:8080/valid/3/1
 #DELETE http://localhost:8080/valid/4/1
 #DELETE http://localhost:8080/valid/5/1
 Authorization: basic YWRtaW46YWRtaW4=
@@ -200,7 +200,7 @@ DELETE http://localhost:8080/valid/0/1/1
 #DELETE http://localhost:8080/valid/1/1/1
 #DELETE http://localhost:8080/valid/2/1/1
 #DELETE http://localhost:8080/valid/3/1/1
-DELETE http://localhost:8080/valid/4/1/1
+#DELETE http://localhost:8080/valid/4/1/1
 #DELETE http://localhost:8080/valid/5/1/1
 #DELETE http://localhost:8080/valid/6/1/1
 #DELETE http://localhost:8080/valid/7/1/1
@@ -211,7 +211,7 @@ Authorization: basic YWRtaW46YWRtaW4=
 PATCH http://localhost:8080/valid/0/1
 #PATCH http://localhost:8080/valid/1/1
 #PATCH http://localhost:8080/valid/2/1
-PATCH http://localhost:8080/valid/3/1
+#PATCH http://localhost:8080/valid/3/1
 #PATCH http://localhost:8080/valid/4/1
 #PATCH http://localhost:8080/valid/5/1
 Authorization: basic YWRtaW46YWRtaW4=
@@ -222,7 +222,7 @@ PATCH http://localhost:8080/valid/0/1/1
 #PATCH http://localhost:8080/valid/1/1/1
 #PATCH http://localhost:8080/valid/2/1/1
 #PATCH http://localhost:8080/valid/3/1/1
-PATCH http://localhost:8080/valid/4/1/1
+#PATCH http://localhost:8080/valid/4/1/1
 #PATCH http://localhost:8080/valid/5/1/1
 #PATCH http://localhost:8080/valid/6/1/1
 #PATCH http://localhost:8080/valid/7/1/1
@@ -235,7 +235,7 @@ PATCH http://localhost:8080/valid/0
 #PATCH http://localhost:8080/valid/2
 #PATCH http://localhost:8080/valid/3
 #PATCH http://localhost:8080/valid/4
-PATCH http://localhost:8080/valid/5
+#PATCH http://localhost:8080/valid/5
 #PATCH http://localhost:8080/valid/6
 #PATCH http://localhost:8080/valid/7
 #PATCH http://localhost:8080/valid/8

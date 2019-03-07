@@ -1,8 +1,8 @@
-package com.mvc.demo.business.{javaname}.dao.jpa;
+package com.ccx.demo.business.{javaname}.dao.jpa;
 
-import com.mvc.demo.business.{javaname}.entity.{TabName};
-import com.mvc.demo.business.{javaname}.entity.Q{TabName};
-import com.mvc.demo.enums.Radio;
+import com.ccx.demo.business.{javaname}.entity.{TabName};
+import com.ccx.demo.business.{javaname}.entity.Q{TabName};
+import com.ccx.demo.enums.Radio;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
@@ -15,7 +15,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-import static com.mvc.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
+import static com.ccx.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 
 /**
  * 数据操作：

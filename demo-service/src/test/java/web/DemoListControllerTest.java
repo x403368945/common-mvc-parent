@@ -1,9 +1,9 @@
 package web;
 
-import com.mvc.demo.business.example.entity.TabDemoList;
-import com.mvc.demo.business.example.enums.DemoStatus;
-import com.mvc.demo.config.WebMvcConfig;
-import com.mvc.demo.config.init.AppConfig;
+import com.ccx.demo.business.example.entity.TabDemoList;
+import com.ccx.demo.business.example.enums.DemoStatus;
+import com.ccx.demo.config.WebMvcConfig;
+import com.ccx.demo.config.init.AppConfig;
 import com.support.mvc.entity.base.Param;
 import com.utils.util.Dates;
 import com.utils.util.Range;

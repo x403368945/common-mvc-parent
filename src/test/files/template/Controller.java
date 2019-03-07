@@ -1,12 +1,12 @@
-package com.mvc.demo.business.{javaname}.web;
+package com.ccx.demo.business.{javaname}.web;
 
-import com.mvc.demo.business.{javaname}.entity.{TabName};
-import com.mvc.demo.business.{javaname}.entity.{TabName}.OrderBy;
-import com.mvc.demo.business.{javaname}.service.{JavaName}Service;
-import com.mvc.demo.business.user.entity.TabUser;
-import com.mvc.demo.config.init.AppConfig.URL;
-import com.mvc.demo.enums.Radio;
-import com.mvc.demo.support.web.IAuthController;
+import com.ccx.demo.business.{javaname}.entity.{TabName};
+import com.ccx.demo.business.{javaname}.entity.{TabName}.OrderBy;
+import com.ccx.demo.business.{javaname}.service.{JavaName}Service;
+import com.ccx.demo.business.user.entity.TabUser;
+import com.ccx.demo.config.init.AppConfig.URL;
+import com.ccx.demo.enums.Radio;
+import com.ccx.demo.support.web.IAuthController;
 import com.support.mvc.entity.base.*;
 import com.utils.util.Dates;
 import com.utils.util.Util;
