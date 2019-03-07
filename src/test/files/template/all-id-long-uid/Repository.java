@@ -1,7 +1,7 @@
-package com.ccx.demo.business.{javaname}.dao.jpa;
+package com.ccx.business.{javaname}.dao.jpa;
 
-import com.ccx.demo.business.{javaname}.entity.{TabName};
-import com.ccx.demo.business.{javaname}.entity.Q{TabName};
+import com.ccx.business.{javaname}.entity.{TabName};
+import com.ccx.business.{javaname}.entity.Q{TabName};
 import com.ccx.demo.enums.Radio;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Expression;
@@ -18,7 +18,7 @@ import java.util.Optional;
 import static com.ccx.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 
 /**
- * 数据操作：
+ * 数据操作：{comment}
  *
  * @author 谢长春 on {date}
  */

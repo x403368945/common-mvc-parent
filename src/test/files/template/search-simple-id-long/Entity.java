@@ -1,4 +1,4 @@
-package com.ccx.demo.business.{javaname}.entity;
+package com.ccx.business.{javaname}.entity;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
@@ -16,7 +16,7 @@ import com.support.mvc.entity.validated.ISave;
 import com.support.mvc.entity.validated.IUpdate;
 import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;
-import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.utils.util.Then;
 import lombok.AllArgsConstructor;
@@ -25,7 +25,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.data.domain.Sort;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -35,13 +34,13 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.ccx.demo.business.{javaname}.entity.Q{TabName}.{tabName};
+import static com.ccx.business.{javaname}.entity.Q{TabName}.{tabName};
 import static com.support.mvc.entity.base.Prop.*;
 import static com.support.mvc.entity.base.Prop.Type.*;
 import static com.support.mvc.enums.Code.ORDER_BY;
 
 /**
- * 实体类：
+ * 实体类：{comment}
  *
  * @author 谢长春 on {date}
  */
@@ -130,52 +129,54 @@ public class {TabName} implements
             return Stream.of(OrderBy.values()).map(Enum::name).toArray(String[]::new);
         }
 
-        OrderBy(final OrderSpecifier qdslAsc, final OrderSpecifier qdsldesc) {
-            asc = Sorts.builder().qdsl(qdslAsc).jpa(Sort.Order.asc(this.name())).build();
-            desc = Sorts.builder().qdsl(qdsldesc).jpa(Sort.Order.desc(this.name())).build();
+        OrderBy(final ComparableExpressionBase qdsl) {
+            asc = Sorts.asc(qdsl, this);
+            desc = Sorts.desc(qdsl, this);
         }
     }
 
 // Enum End : DB Start *************************************************************************************************
 
-    @Override
-    public Then<JPAUpdateClause> update(final JPAUpdateClause jpaUpdateClause) {
+        @Override
+        public Then<JPAUpdateClause> update(final JPAUpdateClause jpaUpdateClause) {
 //        final Q{TabName} q = {tabName};
 //        // 动态拼接 update 语句
 //        // 以下案例中 只有 name 属性 为 null 时才不会加入 update 语句；
 //        return Then.of(jpaUpdateClause)
-//                // 当 name != null 时更新 name 属性
-//                .then(name, update -> update.set(q.name, name))
-//                .then(update -> update.set(q.modifyUserId, modifyUserId))
-//                // 假设数据库中 content is not null；可以在属性为null时替换为 ""
-//                .then(update -> update.set(q.content, Optional.ofNullable(content).orElse("")))
-//                // 数据库中 amount 可以为 null
-//                .then(update -> update.set(q.amount, amount))
+{update}
+////                // 当 name != null 时更新 name 属性
+////                .then(name, update -> update.set(q.name, name))
+////                .then(update -> update.set(q.modifyUserId, modifyUserId))
+////                // 假设数据库中 content is not null；可以在属性为null时替换为 ""
+////                .then(update -> update.set(q.content, Optional.ofNullable(content).orElse("")))
+////                // 数据库中 amount 可以为 null
+////                .then(update -> update.set(q.amount, amount))
 //                ;
-        return null;
-    }
+            return null;
+        }
 
-    @Override
-    public QdslWhere where() {
+        @Override
+        public QdslWhere where() {
 //        final Q{TabName} q = {tabName};
 //        // 构建查询顺序规则请参考：com.support.mvc.entity.IWhere#where
 //        return QdslWhere.of()
-//                .and(phone, () -> q.phone.eq(phone))
-//                .and(createUserId, () -> q.createUserId.eq(createUserId))
-//                .and(modifyUserId, () -> q.modifyUserId.eq(modifyUserId))
-//                // 强制带默认值的查询字段
-//                .and(q.deleted.eq(Objects.isNull(getDeleted()) ? Radio.NO : deleted))
-//                // 数字区间查询
-//                .and(amountRange, () -> q.amount.between(amountRange.getMin(), amountRange.getMax()))
-//                // 日期区间查询；Range.rebuild() : 先将时间区间重置到 00:00:00.000 - 23:59:59.999 ; 大多数情况都需要重置时间
-//                .and(createTimeRange, () -> q.createTime.between(createTimeRange.rebuild().getBegin(), createTimeRange.getEnd()))
-//                // 模糊匹配查询：后面带 % ；建议优先使用
-//                .and(name, () -> q.name.startsWith(name)) // 模糊匹配查询：后面带 %
+{where}
+////                .and(phone, () -> q.phone.eq(phone))
+////                .and(createUserId, () -> q.createUserId.eq(createUserId))
+////                .and(modifyUserId, () -> q.modifyUserId.eq(modifyUserId))
+////                // 强制带默认值的查询字段
+////                .and(q.deleted.eq(Objects.isNull(getDeleted()) ? Radio.NO : deleted))
+////                // 数字区间查询
+////                .and(amountRange, () -> q.amount.between(amountRange.getMin(), amountRange.getMax()))
+////                // 日期区间查询；Range.rebuild() : 先将时间区间重置到 00:00:00.000 - 23:59:59.999 ; 大多数情况都需要重置时间
+////                .and(createTimeRange, () -> q.createTime.between(createTimeRange.rebuild().getBegin(), createTimeRange.getEnd()))
+////                // 模糊匹配查询：后面带 % ；建议优先使用
+////                .and(name, () -> q.name.startsWith(name)) // 模糊匹配查询：后面带 %
 ////                .and(name, () -> q.name.endsWith(name)) // 模糊匹配查询：前面带 %
 ////                .and(name, () -> q.name.like(MessageFormat.format("%{0}%", name))) // 模糊匹配查询：前后带 %
 //                ;
-        return null;
-    }
+            return null;
+        }
 
     @Override
     public List<Sorts> buildSorts() {

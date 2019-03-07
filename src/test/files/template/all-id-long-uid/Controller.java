@@ -1,8 +1,8 @@
-package com.ccx.demo.business.{javaname}.web;
+package com.ccx.business.{javaname}.web;
 
-import com.ccx.demo.business.{javaname}.entity.{TabName};
-import com.ccx.demo.business.{javaname}.entity.{TabName}.OrderBy;
-import com.ccx.demo.business.{javaname}.service.{JavaName}Service;
+import com.ccx.business.{javaname}.entity.{TabName};
+import com.ccx.business.{javaname}.entity.{TabName}.OrderBy;
+import com.ccx.business.{javaname}.service.{JavaName}Service;
 import com.ccx.demo.business.user.entity.TabUser;
 import com.ccx.demo.config.init.AppConfig.URL;
 import com.ccx.demo.enums.Radio;
@@ -22,7 +22,7 @@ import java.util.Collections;
 import static com.support.mvc.entity.base.Sorts.Direction.DESC;
 
 /**
- * 请求操作响应：案例
+ * 请求操作响应：{comment}
  *
  * @author 谢长春 on {date}
  */
@@ -45,8 +45,8 @@ public class {JavaName}Controller implements IAuthController<{ID}> {
                 .version(this.getClass(), builder -> builder
                         .props({TabName}.Props.list()) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
-                                "保存数据",
-                                "1.当前版本变更说明"
+                                "保存数据，url带参说明:/{version【response.version.id】}",
+                                "1. {comment}"
                         ))
                         .build()
                         .demo(v -> v.setDemo(
@@ -76,8 +76,8 @@ public class {JavaName}Controller implements IAuthController<{ID}> {
                 .version(this.getClass(), builder -> builder
                         .props({TabName}.Props.list()) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
-                            "更新数据，不带 uid 强校验，但可能会带当前操作人校验",
-                            "1.当前版本变更说明"
+                            "更新数据，不带 uid 强校验，但可能会带当前操作人校验，url带参说明:/{version【response.version.id】}/{id【response.data[*].id】}",
+                            "1. {comment}"
                         ))
                         .build()
                         .demo(v -> v.setDemo(
@@ -108,8 +108,8 @@ public class {JavaName}Controller implements IAuthController<{ID}> {
                 .version(this.getClass(), builder -> builder
                         .props({TabName}.Props.list()) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
-                            "物理删除数据，不带 uid 强校验，但可能会带当前操作人校验",
-                            "1.当前版本变更说明"
+                            "物理删除数据，不带 uid 强校验，但可能会带当前操作人校验，url带参说明:/{version【response.version.id】}/{id【response.data[*].id】}",
+                            "1. {comment}"
                         ))
                         .build()
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100)))) // 当前接口参考案例请求地址；
@@ -131,8 +131,8 @@ public class {JavaName}Controller implements IAuthController<{ID}> {
                 .version(this.getClass(), builder -> builder
                         .props({TabName}.Props.list()) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
-                            "物理删除数据，带 uid 强校验，也可能会带当前操作人校验",
-                            "1.当前版本变更说明"
+                            "物理删除数据，带 uid 强校验，也可能会带当前操作人校验，url带参说明:/{version【response.version.id】}/{id【response.data[*].id】}/{id【response.data[*].uid】}",
+                            "1. {comment}"
                         ))
                         .build()
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100, Util.uuid())))) // 当前接口参考案例请求地址；
@@ -153,8 +153,8 @@ public class {JavaName}Controller implements IAuthController<{ID}> {
                 .version(this.getClass(), builder -> builder
                         .props({TabName}.Props.list()) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
-                            "逻辑删除数据，不带 uid 强校验，但可能会带当前操作人校验",
-                            "1.当前版本变更说明"
+                            "逻辑删除数据，不带 uid 强校验，但可能会带当前操作人校验，url带参说明:/{version【response.version.id】}/{id【response.data[*].id】}",
+                            "1. {comment}"
                         ))
                         .build()
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100)))) // 当前接口参考案例请求地址；
@@ -176,8 +176,8 @@ public class {JavaName}Controller implements IAuthController<{ID}> {
                 .version(this.getClass(), builder -> builder
                         .props({TabName}.Props.list()) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
-                            "逻辑删除数据，带 uid 强校验，也可能会带当前操作人校验",
-                            "1.当前版本变更说明"
+                            "逻辑删除数据，带 uid 强校验，也可能会带当前操作人校验，url带参说明:/{version【response.version.id】}/{id【response.data[*].id】}/{id【response.data[*].uid】}",
+                            "1. {comment}"
                         ))
                         .build()
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100, Util.uuid())))) // 当前接口参考案例请求地址；
@@ -198,8 +198,8 @@ public class {JavaName}Controller implements IAuthController<{ID}> {
                 .version(this.getClass(), builder -> builder
                         .props({TabName}.Props.list()) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
-                            "逻辑删除数据，带 uid 强校验，也可能会带当前操作人校验",
-                            "1.当前版本变更说明"
+                            "逻辑删除数据，带 uid 强校验，也可能会带当前操作人校验，url带参说明:/{version【response.version.id】}",
+                            "1. {comment}"
                         ))
                         .build()
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl()), // 当前接口参考案例请求地址；
@@ -231,8 +231,8 @@ public class {JavaName}Controller implements IAuthController<{ID}> {
                 .version(this.getClass(), builder -> builder
                         .props({TabName}.Props.list()) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
-                                "按ID查询详细信息",
-                                "1.当前版本变更说明"
+                                "按ID查询详细信息，url带参说明:/{version【response.version.id】}/{id【response.data[*].id】}",
+                                "1. {comment}"
                         ))
                         .build()
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100)))) // 当前接口参考案例请求地址；
@@ -256,8 +256,8 @@ public class {JavaName}Controller implements IAuthController<{ID}> {
                 .version(this.getClass(), builder -> builder
                         .props({TabName}.Props.list()) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
-                            "按ID查询 + 最后一次更新时间戳查询数据",
-                            "1.当前版本变更说明"
+                            "按ID查询 + 最后一次更新时间戳查询数据，url带参说明:/{version【response.version.id】}/{id【response.data[*].id】}/{id【response.data[*].timestamp】}",
+                            "1. {comment}"
                         ))
                         .build()
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100, Dates.now().getTimeMillis())))) // 当前接口参考案例请求地址；
@@ -281,8 +281,8 @@ public class {JavaName}Controller implements IAuthController<{ID}> {
                 .version(this.getClass(), builder -> builder
                         .props({TabName}.Props.list()) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
-                                "按ID + uid 查询单条数据",
-                                "1.当前版本变更说明"
+                                "按ID + uid 查询单条数据，url带参说明:/{version【response.version.id】}/{id【response.data[*].id】}/{id【response.data[*].uid】}",
+                                "1. {comment}"
                         ))
                         .build()
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100, Util.uuid())))) // 当前接口参考案例请求地址；
@@ -306,8 +306,8 @@ public class {JavaName}Controller implements IAuthController<{ID}> {
                 .version(this.getClass(), builder -> builder
                         .props({TabName}.Props.list()) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
-                            "按ID查询 + uid + 最后一次更新时间戳查询数据",
-                            "1.当前版本变更说明"
+                            "按ID查询 + uid + 最后一次更新时间戳查询数据，url带参说明:/{version【response.version.id】}/{id【response.data[*].id】}/{id【response.data[*].uid】}/{id【response.data[*].timestamp】}",
+                            "1. {comment}"
                         ))
                         .build()
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100, Util.uuid(), Dates.now().getTimeMillis())))) // 当前接口参考案例请求地址；
@@ -331,8 +331,8 @@ public class {JavaName}Controller implements IAuthController<{ID}> {
                 .version(this.getClass(), builder -> builder
                         .props({TabName}.Props.list()) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
-                            "查询多条数据，不分页，url带参必须使用 encodeURI 格式化【?json=encodeURI(JSON.stringify({}))】",
-                            "1.当前版本变更说明"
+                            "查询多条数据，不分页，url带参必须使用 encodeURI 格式化【?json=encodeURI(JSON.stringify({}))】，url带参说明:/{version【response.version.id】}",
+                            "1. {comment}"
                         ))
                         .build()
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl()), // 当前接口参考案例请求地址；
@@ -364,8 +364,8 @@ public class {JavaName}Controller implements IAuthController<{ID}> {
                 .version(this.getClass(), builder -> builder
                         .props({TabName}.Props.list()) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
-                            "分页查询数据，url带参必须使用 encodeURI 格式化【?json=encodeURI(JSON.stringify({}))】",
-                            "1.当前版本变更说明"
+                            "分页查询数据，url带参必须使用 encodeURI 格式化【?json=encodeURI(JSON.stringify({}))】，url带参说明:/{version【response.version.id】}/page/{number【当前页码】}/{size【每页显示条数】}",
+                            "1. {comment}"
                         ))
                         .build()
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(1, 20)), // 当前接口参考案例请求地址；

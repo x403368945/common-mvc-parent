@@ -124,7 +124,7 @@ public class AppConfig {
      * @return boolean true：线上生产环境
      */
     public static boolean isProd() {
-        return "env/prod".equals(ENV.value());
+        return "prod".equals(ENV.value());
     }
 
     /**
