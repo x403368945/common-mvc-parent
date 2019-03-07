@@ -1,10 +1,10 @@
-package com.boot.demo.business.{javaname}.entity;
+package com.ccx.demo.business.{javaname}.entity;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
-import com.boot.demo.enums.Radio;
-import com.boot.demo.support.entity.IUser;
+import com.ccx.demo.enums.Radio;
+import com.ccx.demo.support.entity.IUser;
 import com.support.mvc.entity.ITable;
 import com.support.mvc.entity.ITimestamp;
 import com.support.mvc.entity.IWhere;
@@ -34,7 +34,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.boot.demo.business.{javaname}.entity.Q{TabName}.{tabName};
+import static com.ccx.demo.business.{javaname}.entity.Q{TabName}.{tabName};
 import static com.support.mvc.entity.base.Prop.*;
 import static com.support.mvc.entity.base.Prop.Type.*;
 import static com.support.mvc.enums.Code.ORDER_BY;

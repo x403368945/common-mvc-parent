@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>common-mvc-parent</artifactId>
-        <groupId>com.boot</groupId>
+        <groupId>com.ccx</groupId>
         <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -13,7 +13,7 @@
     <packaging>war</packaging>
     <dependencies>
         <dependency>
-            <groupId>com.boot</groupId>
+            <groupId>com.ccx</groupId>
             <artifactId>common-mvc</artifactId>
             <version>1.0.0</version>
         </dependency>
@@ -29,7 +29,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.boot.Application</mainClass>
+                    <mainClass>com.ccx.Application</mainClass>
                 </configuration>
             </plugin>
         </plugins>

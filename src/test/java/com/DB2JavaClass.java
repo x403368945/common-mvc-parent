@@ -46,7 +46,7 @@ public class DB2JavaClass {
                                 "rd-data",
                                 "rd-task"
                         )
-                        .map(name -> Module.builder().source(name + "/src/main/resources/db/db.sql").output(name + "/src/main/java/com/boot/rd/business").build())
+                        .map(name -> Module.builder().source(name + "/src/main/resources/db/db.sql").output(name + "/src/main/java/com/ccx/business").build())
                         .toArray(Module[]::new);
                 System.out.println("请选择输出模块目录，完成之后使用命令编译该模块：mvn clean compile");
                 for (int i = 0; i < modules.length; i++) {
