@@ -1,6 +1,7 @@
 package com.support.mvc.entity.base;
 
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,11 +9,11 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.springframework.data.domain.Sort;
 
+import java.io.Serializable;
 import java.util.stream.Stream;
 
 /**
  * 查询排序对象
- *
  *
  * @author 谢长春 on 2017/12/21.
  */
@@ -21,7 +22,9 @@ import java.util.stream.Stream;
 @Builder
 @Data
 @Accessors(fluent = true)
-public class Sorts {
+public class Sorts implements Serializable {
+
+    private static final long serialVersionUID = -3920676158297540091L;
 
     /**
      * 排序方向
@@ -39,7 +42,8 @@ public class Sorts {
     @Builder
     @Data
     @Accessors(fluent = false)
-    public static class Order {
+    public static class Order implements Serializable {
+        private static final long serialVersionUID = 8760879633278119365L;
         /**
          * 排序字段名
          */
@@ -49,6 +53,28 @@ public class Sorts {
          */
         @Builder.Default
         private Direction direction = Direction.ASC;
+    }
+
+    /**
+     * 构造正序排序对象
+     *
+     * @param qdsl {@link ComparableExpressionBase} QueryDSL模式
+     * @param jpa  {@link Enum} JPA模式使用 OrderBy 枚举名作为排除字段
+     * @return {@link Sorts}
+     */
+    public static Sorts asc(final ComparableExpressionBase qdsl, final Enum jpa) {
+        return Sorts.builder().qdsl(qdsl.asc()).jpa(Sort.Order.asc(jpa.name())).build();
+    }
+
+    /**
+     * 构造正序排序对象
+     *
+     * @param qdsl {@link ComparableExpressionBase} QueryDSL模式
+     * @param jpa  {@link Enum} JPA模式使用 OrderBy 枚举名作为排除字段
+     * @return {@link Sorts}
+     */
+    public static Sorts desc(final ComparableExpressionBase qdsl, final Enum jpa) {
+        return Sorts.builder().qdsl(qdsl.desc()).jpa(Sort.Order.desc(jpa.name())).build();
     }
 
     /**

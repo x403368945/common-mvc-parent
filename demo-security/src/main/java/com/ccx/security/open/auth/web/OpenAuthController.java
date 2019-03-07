@@ -1,11 +1,11 @@
 package com.ccx.security.open.auth.web;
 
 
-import com.ccx.security.config.init.AppConfig;
-import com.ccx.security.open.auth.service.AuthService;
 import com.ccx.security.business.user.entity.TabUser;
+import com.ccx.security.config.init.AppConfig.URL;
 import com.ccx.security.enums.Session;
 import com.ccx.security.open.auth.entity.AuthLogin;
+import com.ccx.security.open.auth.service.AuthService;
 import com.support.mvc.entity.base.Param;
 import com.support.mvc.entity.base.Result;
 import com.support.mvc.enums.Code;
@@ -119,7 +119,7 @@ public class OpenAuthController {
                                     "会话模式登录，有效期30分钟"
                             ))
                             .build()
-                            .demo(v -> v.setDemo(AppConfig.URL.SERVER.append(v.formatUrl()),
+                            .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl()),
                                     BeanMap.create(new AuthLogin()
                                             .setUsername("admin")
                                             .setPassword("admin")

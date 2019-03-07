@@ -1,10 +1,10 @@
 package com.ccx.demo.business.user.service;
 
-import com.ccx.demo.enums.Role;
-import com.google.common.eventbus.EventBus;
 import com.ccx.demo.business.user.bordcast.IUserEvent;
 import com.ccx.demo.business.user.dao.jpa.UserRepository;
 import com.ccx.demo.business.user.entity.TabUser;
+import com.ccx.demo.enums.Role;
+import com.google.common.eventbus.EventBus;
 import com.querydsl.core.QueryResults;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.exception.DeleteRowsException;

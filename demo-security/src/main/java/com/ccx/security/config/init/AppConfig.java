@@ -186,7 +186,11 @@ public class AppConfig {
      */
     public enum Path {
         ROOT("文件存储根目录:(d:/files | /root/files)", "          /"),
-
+        CONFIG("配置文件路径", "                                   /config/"),
+        EXCEL("Excel模板文件目录", "                               /excel/"),
+        JSON("json配置文件目录", "                                 /json/"),
+        HTML("html模板文件目录", "                                 /html/"),
+        MD("markdown文件目录", "                                   /md/"),
         TEMP("文件上传及临时文件存储目录", "                       /temp/"),
         ;
         /**
@@ -265,8 +269,10 @@ public class AppConfig {
      * @author 谢长春 on 2018-10-2
      */
     public enum URL {
-        SERVER("后端接口访问url前缀", "                 /server/"),
+        //        SERVER("后端接口访问url前缀", "                 /server/"),
+        SERVER("后端接口访问url前缀", "                 /"),
 
+        CONFIG("配置文件访问路径", "                    /files/config/"),
         TEMP("临时文件访问路径", "                      /files/temp/"),
         ;
         /**

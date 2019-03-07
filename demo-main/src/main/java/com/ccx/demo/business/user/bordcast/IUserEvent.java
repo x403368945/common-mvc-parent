@@ -1,7 +1,7 @@
 package com.ccx.demo.business.user.bordcast;
 
-import com.google.common.eventbus.Subscribe;
 import com.ccx.demo.business.user.entity.TabUser;
+import com.google.common.eventbus.Subscribe;
 import com.support.config.BusConfig.EventBusListener;
 import com.utils.IJson;
 import lombok.AllArgsConstructor;

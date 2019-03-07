@@ -4,10 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.ccx.demo.business.example.entity.TabDemoList;
 import com.ccx.demo.business.example.enums.DemoStatus;
 import com.ccx.demo.enums.Radio;
-import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import com.support.mvc.entity.base.Prop;
 import com.support.mvc.entity.base.Sorts;
-import org.springframework.data.domain.Sort;
 
 import java.util.Collections;
 import java.util.List;
@@ -23,7 +22,6 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 
 /**
  * 扩展 {@link TabDemoList}；可以通过接口扩展的形式减少实体类的代码量
- *
  *
  * @author 谢长春 2018/12/20
  */
@@ -72,19 +70,19 @@ public interface ITabDemoList {
      */
     enum OrderBy {
         // 按 id 排序可替代按创建时间排序
-        id(tabDemoList.id.asc(), tabDemoList.id.desc()),
-        //		uid(tabDemoList.uid.asc(), tabDemoList.uid.desc()),
-//		name(tabDemoList.name.asc(), tabDemoList.name.desc()),
-//		content(tabDemoList.content.asc(), tabDemoList.content.desc()),
-//		amount(tabDemoList.amount.asc(), tabDemoList.amount.desc()),
-//		status(tabDemoList.status.asc(), tabDemoList.status.desc()),
-//		createTime(tabDemoList.createTime.asc(), tabDemoList.createTime.desc()),
-//		createUserId(tabDemoList.createUserId.asc(), tabDemoList.createUserId.desc()),
-//		createUserName(tabDemoList.createUserName.asc(), tabDemoList.createUserName.desc()),
-        modifyTime(tabDemoList.modifyTime.asc(), tabDemoList.modifyTime.desc()),
-//		modifyUserId(tabDemoList.modifyUserId.asc(), tabDemoList.modifyUserId.desc()),
-//		modifyUserName(tabDemoList.modifyUserName.asc(), tabDemoList.modifyUserName.desc()),
-//		deleted(tabDemoList.deleted.asc(), tabDemoList.deleted.desc())
+        id(tabDemoList.id),
+        //		uid(tabDemoList.uid),
+//		name(tabDemoList.name),
+//		content(tabDemoList.content),
+//		amount(tabDemoList.amount),
+//		status(tabDemoList.status),
+//		createTime(tabDemoList.createTime),
+//		createUserId(tabDemoList.createUserId),
+//		createUserName(tabDemoList.createUserName),
+        modifyTime(tabDemoList.modifyTime),
+//		modifyUserId(tabDemoList.modifyUserId),
+//		modifyUserName(tabDemoList.modifyUserName),
+//		deleted(tabDemoList.deleted)
         ;
         public final Sorts asc;
         public final Sorts desc;
@@ -102,15 +100,9 @@ public interface ITabDemoList {
             return Stream.of(OrderBy.values()).map(Enum::name).toArray(String[]::new);
         }
 
-        OrderBy(OrderSpecifier qdslAsc, OrderSpecifier qdsldesc) {
-            asc = Sorts.builder()
-                    .qdsl(qdslAsc)
-                    .jpa(Sort.Order.asc(this.name()))
-                    .build();
-            desc = Sorts.builder()
-                    .qdsl(qdsldesc)
-                    .jpa(Sort.Order.desc(this.name()))
-                    .build();
+        OrderBy(ComparableExpressionBase qdsl) {
+            asc = Sorts.asc(qdsl, this);
+            desc = Sorts.desc(qdsl, this);
         }
     }
 

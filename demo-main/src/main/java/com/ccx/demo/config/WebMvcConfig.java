@@ -74,8 +74,6 @@ public class WebMvcConfig extends AbstractMvcConfig implements ApplicationContex
 
     /**
      * 添加自定义拦截器
-     *
-     * @param registry
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

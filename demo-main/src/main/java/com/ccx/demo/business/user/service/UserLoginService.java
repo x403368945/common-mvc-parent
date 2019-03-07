@@ -1,7 +1,7 @@
 package com.ccx.demo.business.user.service;
 
-import com.ccx.demo.business.user.entity.TabUserLogin;
 import com.ccx.demo.business.user.dao.jpa.UserLoginRepository;
+import com.ccx.demo.business.user.entity.TabUserLogin;
 import com.querydsl.core.QueryResults;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.service.IService;

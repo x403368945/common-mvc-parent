@@ -44,6 +44,7 @@ public class CacheConfig {
      * 缓存服务接口基础方法定义
      *
      * @author 谢长春 on 2018/2/8 .
+     * @deprecated 暂不起作用
      */
     public interface ICache<V> {
         /**
@@ -77,110 +78,110 @@ public class CacheConfig {
          * @return {@link DBInfo}
          */
         DBInfo getDB();
+
+//    /**
+//     * 获取 Redis 操作模板
+//     *
+//     * @return RedisTemplate
+//     */
+//    RedisTemplate<String, V> getRedisTemplate();
 //
-//        /**
-//         * 获取 Redis 操作模板
-//         *
-//         * @return RedisTemplate
-//         */
-//        RedisTemplate<String, V> getRedisTemplate();
+//    /**
+//     * 初始化数据
+//     */
+//    default void init() {
+//        setDB();
+//    }
 //
-//        /**
-//         * 初始化数据
-//         */
-//        default void init() {
-//            setDB();
-//        }
+//    /**
+//     * 是否启用 redis 缓存
+//     */
+//    default Optional<Boolean> use() {
+//        return Optional.of(Objects.nonNull(getRedisTemplate()));
+//    }
 //
-//        /**
-//         * 是否启用 redis 缓存
-//         */
-//        default Optional<Boolean> use() {
-//            return Optional.of(Objects.nonNull(getRedisTemplate()));
-//        }
+//    /**
+//     * 初始化数据
+//     */
+//    default void setDB() {
+//        final DBInfo db = getDB();
+//        final BoundHashOperations<String, Object, Object> hash = getRedisTemplate().boundHashOps("db");
+//        hash.put("index", Objects.toString(db.getIndex()));
+//        hash.put("name", db.getName());
+//        hash.put("comment", db.getComment());
+//        hash.put("clazz", db.getClazz());
+//    }
 //
-//        /**
-//         * 初始化数据
-//         */
-//        default void setDB() {
-//            final DBInfo db = getDB();
-//            final BoundHashOperations<String, Object, Object> hash = getRedisTemplate().boundHashOps("db");
-//            hash.put("index", Objects.toString(db.getIndex()));
-//            hash.put("name", db.getName());
-//            hash.put("comment", db.getComment());
-//            hash.put("clazz", db.getClazz());
-//        }
+//    /**
+//     * 检测 key 是否存在
+//     *
+//     * @param key String
+//     * @return boolean, true存在，false不存在
+//     */
+//    default boolean hasKey(final String key) {
+//        return getRedisTemplate().hasKey(key);
+//    }
 //
-//        /**
-//         * 检测 key 是否存在
-//         *
-//         * @param key String
-//         * @return boolean, true存在，false不存在
-//         */
-//        default boolean hasKey(final String key) {
-//            return getRedisTemplate().hasKey(key);
-//        }
+//    /**
+//     * 设置过期时间
+//     *
+//     * @param key     String
+//     * @param timeout long
+//     * @param unit    TimeUnit
+//     * @return boolean
+//     */
+//    default boolean expire(final String key, final long timeout, final TimeUnit unit) {
+//        return getRedisTemplate().expire(key, timeout, unit);
+//    }
 //
-//        /**
-//         * 设置过期时间
-//         *
-//         * @param key     String
-//         * @param timeout long
-//         * @param unit    TimeUnit
-//         * @return boolean
-//         */
-//        default boolean expire(final String key, final long timeout, final TimeUnit unit) {
-//            return getRedisTemplate().expire(key, timeout, unit);
-//        }
+//    /**
+//     * 设置过期时间
+//     *
+//     * @param key  String
+//     * @param date Date
+//     * @return boolean
+//     */
+//    default boolean expireAt(final String key, final Date date) {
+//        return getRedisTemplate().expireAt(key, date);
+//    }
 //
-//        /**
-//         * 设置过期时间
-//         *
-//         * @param key  String
-//         * @param date Date
-//         * @return boolean
-//         */
-//        default boolean expireAt(final String key, final Date date) {
-//            return getRedisTemplate().expireAt(key, date);
-//        }
+//    /**
+//     * 删除缓存
+//     *
+//     * @param keys String[]
+//     */
+//    default void delete(final String... keys) {
+//        getRedisTemplate().delete(Arrays.asList(keys));
+//    }
 //
-//        /**
-//         * 删除缓存
-//         *
-//         * @param keys String[]
-//         */
-//        default void delete(final String... keys) {
-//            getRedisTemplate().delete(Arrays.asList(keys));
-//        }
+//    /**
+//     * 清除数据库
+//     */
+//    default void clear() {
+//        getRedisTemplate().execute(new RedisCallback<Object>() {
+//            @Override
+//            public Object doInRedis(final RedisConnection conn) throws DataAccessException {
+//                conn.flushDb();
+//                return conn;
+//            }
+//        });
+//    }
 //
-//        /**
-//         * 清除数据库
-//         */
-//        default void clear() {
-//            getRedisTemplate().execute(new RedisCallback<Object>() {
-//                @Override
-//                public Object doInRedis(final RedisConnection conn) throws DataAccessException {
-//                    conn.flushDb();
-//                    return conn;
-//                }
-//            });
-//        }
+//    /**
+//     * 检测缓存是否需要刷新
+//     *
+//     * @return boolean true需要刷新，false不需要刷新
+//     */
+//    default boolean hasRefresh() {
+//        return !getRedisTemplate().opsForHash().hasKey("db", "status");
+//    }
 //
-//        /**
-//         * 检测缓存是否需要刷新
-//         *
-//         * @return boolean true需要刷新，false不需要刷新
-//         */
-//        default boolean hasRefresh() {
-//            return !getRedisTemplate().opsForHash().hasKey("db", "status");
-//        }
-//
-//        /**
-//         * 设置缓存刷新完成
-//         */
-//        default void refreshEnd() {
-//            getRedisTemplate().boundHashOps("db").put("status", "true");
-//        }
+//    /**
+//     * 设置缓存刷新完成
+//     */
+//    default void refreshEnd() {
+//        getRedisTemplate().boundHashOps("db").put("status", "true");
+//    }
     }
 
 }

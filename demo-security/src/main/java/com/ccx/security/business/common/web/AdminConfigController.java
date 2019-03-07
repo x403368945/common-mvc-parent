@@ -1,25 +1,30 @@
 package com.ccx.security.business.common.web;
 
 
-import com.alibaba.fastjson.JSONObject;
-import com.ccx.security.config.init.AppConfig;
+import com.ccx.security.business.user.entity.TabUser;
+import com.ccx.security.config.init.AppConfig.App;
+import com.ccx.security.config.init.AppConfig.Path;
+import com.ccx.security.config.init.AppConfig.URL;
+import com.support.mvc.entity.base.Item;
 import com.support.mvc.entity.base.Result;
-import com.support.mvc.enums.Code;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import static com.utils.util.Util.isEmpty;
+import java.util.Arrays;
+import java.util.concurrent.ExecutorService;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 参数配置
- *
  *
  * @author 谢长春 2017年7月21日 上午10:19:28
  */
@@ -28,43 +33,85 @@ import static com.utils.util.Util.isEmpty;
 @RequestMapping("/admin-config/{version}")
 @Slf4j
 public class AdminConfigController {
+    @Autowired
+    ApplicationContext applicationContext;
+    @Autowired
+    ExecutorService multiThread;
 
-    @GetMapping
+    @GetMapping("/app")
     @ResponseBody
-    public Result<?> getList(
-            @AuthenticationPrincipal final User user,
-            @PathVariable final int version) {
-        final Result<JSONObject> result = new Result<>(1);
-        try {
+    public Result<?> getApp(@AuthenticationPrincipal final TabUser user, @PathVariable final int version) {
+        return new Result<Item>(1) // 指定接口最新版本号
+                .version(this.getClass(), builder -> builder
+                        .notes(Arrays.asList(
+                                "查看应用全局配置参数"
+                        ))
+                        .build()
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl())))
+                )
+                .execute(result -> result
+                        .versionAssert(version)
+                        .setSuccess(Stream.of(App.values())
+                                .map(key -> Item.builder().label(key.name()).value(key.value()).comment(key.comment).build())
+                                .collect(Collectors.toList())
+                        )
+                );
+    }
 
-            final JSONObject obj =  new JSONObject(true);
-            for (AppConfig.App key : AppConfig.App.values()) {
-                obj.put(key.name(), key.value());
-            }
-            return result.setSuccess(obj);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            result.setException(e);
-        }
-        return result;
+    @GetMapping("/path")
+    @ResponseBody
+    public Result<?> getPath(@AuthenticationPrincipal final TabUser user, @PathVariable final int version) {
+        return new Result<Item>(1) // 指定接口最新版本号
+                .version(this.getClass(), builder -> builder
+                        .notes(Arrays.asList(
+                                "查看应用目录配置参数"
+                        ))
+                        .build()
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl())))
+                )
+                .execute(result -> result
+                        .versionAssert(version)
+                        .setSuccess(Stream.of(Path.values())
+                                .map(key -> Item.builder().label(key.name()).value(key.absolute()).comment(key.comment).build())
+                                .collect(Collectors.toList())
+                        )
+                );
+    }
+
+    @GetMapping("/url")
+    @ResponseBody
+    public Result<?> getUrl(@AuthenticationPrincipal final TabUser user, @PathVariable final int version) {
+        return new Result<Item>(1) // 指定接口最新版本号
+                .version(this.getClass(), builder -> builder
+                        .notes(Arrays.asList(
+                                "查看应用 URL 配置参数"
+                        ))
+                        .build()
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl())))
+                )
+                .execute(result -> result
+                        .versionAssert(version)
+                        .setSuccess(Stream.of(URL.values())
+                                .map(key -> Item.builder().label(key.name()).value(key.value()).comment(key.comment).build())
+                                .collect(Collectors.toList())
+                        )
+                );
     }
 
     @GetMapping("/{key}")
     @ResponseBody
-    public Result<?> getByKey(
-            @AuthenticationPrincipal final User user,
-            @PathVariable final int version, @PathVariable String key) {
-        final Result<String> result = new Result<>(1);
-        try {
-            final AppConfig.App keys = AppConfig.App.valueOf(key);
-            if (isEmpty(keys)) {
-                throw Code.VALIDATED.exception("key不存在");
-            }
-            result.setSuccess(keys.value());
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            result.setException(e);
-        }
-        return result;
+    public Result<?> getByKey(@PathVariable final int version, @PathVariable String key) {
+        return new Result<String>(1) // 指定接口最新版本号
+                .version(this.getClass(), builder -> builder
+                        .notes(Arrays.asList(
+                                "查看指定配置参数"
+                        ))
+                        .build()
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl())))
+                )
+                .execute(result -> result
+                        .versionAssert(version)
+                        .setSuccess(App.valueOf(key).value())
+                );
     }
 }

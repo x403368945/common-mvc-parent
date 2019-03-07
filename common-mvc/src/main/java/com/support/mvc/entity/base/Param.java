@@ -22,7 +22,6 @@ import java.util.Optional;
 /**
  * 参数对象
  *
- *
  * @author 谢长春 2017-9-20
  */
 @Slf4j
@@ -76,6 +75,15 @@ public class Param implements Serializable {
     public static Param of(final Param param) {
         Assert.notNull(param, "参数集合为空，必须指定参数:{json:【{对象}|[数组]】}");
         return param;
+    }
+
+    /**
+     * 当 Param 为 null 时默认为空对象
+     *
+     * @param param {@link Param}
+     */
+    public static Param ofNullable(final Param param) {
+        return Objects.isNull(param) ? new Param() : param;
     }
 
 //    /**

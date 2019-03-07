@@ -2,8 +2,8 @@ package com.ccx.demo.business.user.dao.jpa;
 
 import com.ccx.demo.business.user.entity.QTabUser;
 import com.ccx.demo.business.user.entity.TabUser;
-import com.ccx.demo.enums.Radio;
 import com.ccx.demo.config.CacheConfig;
+import com.ccx.demo.enums.Radio;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -19,6 +19,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
+import static com.ccx.demo.business.user.entity.QTabUser.tabUser;
 import static com.ccx.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 
 /**
@@ -29,7 +30,7 @@ import static com.ccx.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 public interface UserRepository extends
         JpaRepository<TabUser, Long>,
         IRepository<TabUser, Long> {
-    QTabUser q = QTabUser.tabUser;
+    QTabUser q = tabUser;
 
 
     @Cacheable(cacheNames = CacheConfig.nicknameCache, key = "#id")

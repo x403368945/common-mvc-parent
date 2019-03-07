@@ -1,9 +1,9 @@
 package com.ccx.demo.business.example.service;
 
-import com.google.common.eventbus.Subscribe;
 import com.ccx.demo.business.example.dao.jpa.DemoListRepository;
 import com.ccx.demo.business.example.entity.TabDemoList;
 import com.ccx.demo.business.user.bordcast.IUserEvent;
+import com.google.common.eventbus.Subscribe;
 import com.querydsl.core.QueryResults;
 import com.support.aop.annotations.ServiceAspect;
 import com.support.config.BusConfig.EventBusListener;

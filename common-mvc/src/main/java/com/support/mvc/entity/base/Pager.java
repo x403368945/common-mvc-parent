@@ -26,6 +26,11 @@ public class Pager {
     }
 
     /**
+     * 上一页[最大|最小]的 ID 用于优化排序；谨慎使用：只能在使用 ID 排序时使用
+     */
+    private Long id;
+
+    /**
      * 当前页码
      */
     private int number;

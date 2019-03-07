@@ -1,15 +1,13 @@
 package com.ccx.demo.business.user.entity.extend;
 
 import com.alibaba.fastjson.JSON;
-import com.ccx.demo.business.user.entity.QTabUser;
+import com.ccx.demo.business.user.entity.TabUser;
 import com.ccx.demo.enums.Radio;
 import com.ccx.demo.enums.RegisterSource;
 import com.ccx.demo.enums.Role;
-import com.ccx.demo.business.user.entity.TabUser;
-import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import com.support.mvc.entity.base.Prop;
 import com.support.mvc.entity.base.Sorts;
-import org.springframework.data.domain.Sort;
 
 import java.util.Collections;
 import java.util.List;
@@ -18,6 +16,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.ccx.demo.business.user.entity.QTabUser.tabUser;
 import static com.support.mvc.entity.base.Prop.Type.*;
 import static com.support.mvc.enums.Code.ORDER_BY;
 
@@ -72,10 +71,10 @@ public interface ITabUser {
      * 枚举：定义排序字段
      */
     enum OrderBy {
-        id(QTabUser.tabUser.id.asc(), QTabUser.tabUser.id.desc()),
+        id(tabUser.id),
         // 按 id 排序可替代按创建时间排序
-//        createTime(tabUser.createTime.asc(), tabUser.createTime.desc()),
-        modifyTime(QTabUser.tabUser.modifyTime.asc(), QTabUser.tabUser.modifyTime.desc()),
+//        createTime(tabUser.createTime),
+        modifyTime(tabUser.modifyTime),
         ;
         public final Sorts asc;
         public final Sorts desc;
@@ -93,15 +92,9 @@ public interface ITabUser {
             return Stream.of(TabUser.OrderBy.values()).map(Enum::name).toArray(String[]::new);
         }
 
-        OrderBy(OrderSpecifier qdslAsc, OrderSpecifier qdsldesc) {
-            asc = Sorts.builder()
-                    .qdsl(qdslAsc)
-                    .jpa(Sort.Order.asc(this.name()))
-                    .build();
-            desc = Sorts.builder()
-                    .qdsl(qdsldesc)
-                    .jpa(Sort.Order.desc(this.name()))
-                    .build();
+        OrderBy(ComparableExpressionBase qdsl) {
+            asc = Sorts.asc(qdsl, this);
+            desc = Sorts.desc(qdsl, this);
         }
     }
 

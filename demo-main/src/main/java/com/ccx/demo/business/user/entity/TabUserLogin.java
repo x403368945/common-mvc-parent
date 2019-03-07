@@ -5,7 +5,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
 import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;
-import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.support.mvc.entity.ITable;
 import com.support.mvc.entity.IWhere;
@@ -17,7 +17,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Sort;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -28,6 +27,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.ccx.demo.business.user.entity.QTabUserLogin.tabUserLogin;
 import static com.support.mvc.entity.base.Prop.RANGE_DATE;
 import static com.support.mvc.entity.base.Prop.SORTS;
 import static com.support.mvc.entity.base.Prop.Type.*;
@@ -121,8 +121,8 @@ public class TabUserLogin implements ITable, IWhere<JPAUpdateClause, QdslWhere> 
      * 枚举：定义排序字段
      */
     public enum OrderBy {
-        id(QTabUserLogin.tabUserLogin.id.asc(), QTabUserLogin.tabUserLogin.id.desc()),
-        timestamp(QTabUserLogin.tabUserLogin.timestamp.asc(), QTabUserLogin.tabUserLogin.timestamp.desc()),
+        id(tabUserLogin.id),
+        timestamp(tabUserLogin.timestamp),
         ;
         public final Sorts asc;
         public final Sorts desc;
@@ -140,15 +140,9 @@ public class TabUserLogin implements ITable, IWhere<JPAUpdateClause, QdslWhere> 
             return Stream.of(OrderBy.values()).map(Enum::name).toArray(String[]::new);
         }
 
-        OrderBy(OrderSpecifier qdslAsc, OrderSpecifier qdsldesc) {
-            asc = Sorts.builder()
-                    .qdsl(qdslAsc)
-                    .jpa(Sort.Order.asc(this.name()))
-                    .build();
-            desc = Sorts.builder()
-                    .qdsl(qdsldesc)
-                    .jpa(Sort.Order.desc(this.name()))
-                    .build();
+        OrderBy(ComparableExpressionBase qdsl) {
+            asc = Sorts.asc(qdsl, this);
+            desc = Sorts.desc(qdsl, this);
         }
     }
 
@@ -156,7 +150,7 @@ public class TabUserLogin implements ITable, IWhere<JPAUpdateClause, QdslWhere> 
 
     @Override
     public QdslWhere where() {
-        final QTabUserLogin q = QTabUserLogin.tabUserLogin;
+        final QTabUserLogin q = tabUserLogin;
         return QdslWhere.of()
                 .and(timestampRange, () -> {
                     timestampRange.rebuild();

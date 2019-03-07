@@ -1,8 +1,8 @@
 package com.ccx.demo.business.example.dao.jpa;
 
+import com.ccx.demo.business.example.entity.QTabDemoList;
 import com.ccx.demo.business.example.entity.TabDemoList;
 import com.ccx.demo.enums.Radio;
-import com.ccx.demo.business.example.entity.QTabDemoList;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
