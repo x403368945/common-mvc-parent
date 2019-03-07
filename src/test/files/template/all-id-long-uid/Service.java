@@ -1,13 +1,13 @@
-package com.ccx.demo.business.{javaname}.service;
+package com.ccx.business.{javaname}.service;
 
-import com.ccx.demo.business.{javaname}.dao.jpa.{JavaName}Repository;
-import com.ccx.demo.business.{javaname}.entity.{TabName};
+import com.ccx.business.{javaname}.dao.jpa.{JavaName}Repository;
+import com.ccx.business.{javaname}.entity.{TabName};
 import com.querydsl.core.QueryResults;
 import com.support.aop.annotations.ServiceAspect;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.exception.DeleteRowsException;
 import com.support.mvc.exception.UpdateRowsException;
-import com.support.mvc.service.*;
+import com.support.mvc.service.IService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * 服务接口实现类：{comment}
+ * 服务接口实现类：
  *
  * @author 谢长春 on {date}
  */

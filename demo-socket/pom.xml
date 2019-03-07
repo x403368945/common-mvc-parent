@@ -11,6 +11,7 @@
     <artifactId>demo-socket</artifactId>
     <version>1.0.0</version>
     <packaging>war</packaging>
+    <!-- spring-boot 特殊处理：pom 相差比较大 -->
     <dependencies>
         <dependency>
             <groupId>com.ccx</groupId>

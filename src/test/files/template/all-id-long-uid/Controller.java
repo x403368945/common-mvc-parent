@@ -1,8 +1,8 @@
-package com.ccx.demo.business.{javaname}.web;
+package com.ccx.business.{javaname}.web;
 
-import com.ccx.demo.business.{javaname}.entity.{TabName};
-import com.ccx.demo.business.{javaname}.entity.{TabName}.OrderBy;
-import com.ccx.demo.business.{javaname}.service.{JavaName}Service;
+import com.ccx.business.{javaname}.entity.{TabName};
+import com.ccx.business.{javaname}.entity.{TabName}.OrderBy;
+import com.ccx.business.{javaname}.service.{JavaName}Service;
 import com.ccx.demo.business.user.entity.TabUser;
 import com.ccx.demo.config.init.AppConfig.URL;
 import com.ccx.demo.enums.Radio;

@@ -36,15 +36,14 @@ public class DB2JavaClass {
     public static void main(String[] args) {
         try {
             final IAdapter adapter = // TODO 这里切换不同的适配器
-//                    new IAdapter.DefaultAdapter();
-                    new IAdapter.RdAdapter();
+                    new IAdapter.DefaultAdapter();
+//                    new IAdapter.RdAdapter();
 
             Supplier<Module> supplier = () -> {
                 final Module[] modules = Stream
                         .of(
-                                "rd-main",
-                                "rd-data",
-                                "rd-task"
+                                "demo-main",
+                                "demo-service"
                         )
                         .map(name -> Module.builder().source(name + "/src/main/resources/db/db.sql").output(name + "/src/main/java/com/ccx/business").build())
                         .toArray(Module[]::new);

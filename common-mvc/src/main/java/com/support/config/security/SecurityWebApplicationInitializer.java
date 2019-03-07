@@ -1,6 +1,7 @@
 package com.support.config.security;
 
 /**
+ * spring-boot 特殊处理： 不需要这个文件
  * Spring Security 权限控制
  * <pre>
  *     中文文档：https://springcloud.cc/spring-security-zhcn.html

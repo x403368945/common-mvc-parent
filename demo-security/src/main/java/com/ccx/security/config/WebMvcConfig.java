@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 /**
+ * spring-boot 特殊处理：简化配置
  * Spring MVC 配置
  * 参考 ： https://linesh.gitbooks.io/spring-mvc-documentation-linesh-translation/content/
  * Spring Thymeleaf 配置

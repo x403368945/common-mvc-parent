@@ -27,6 +27,7 @@ hs_err_pid*
 /demo-mvc
 /financial-report-server
 /jfinal-wechat
+/lx-server
 /mq-server
 /CATALINA_HOME_IS_UNDEFINED
 /.*/CATALINA_HOME_IS_UNDEFINED
@@ -35,4 +36,3 @@ hs_err_pid*
 /log
 /logs
 /.*/logs
-/lx-server

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
+ * spring-boot 特殊处理：继承 {@link ErrorController} 处理异常
  * @author 谢长春
  */
 @Controller

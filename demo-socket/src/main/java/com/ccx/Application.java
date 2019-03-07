@@ -7,6 +7,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Import;
 
 /**
+ * spring-boot 特殊处理：只有 spring-boot 需要该文件
  * <pre>
  * 参考配置：
  *   https://docs.spring.io/spring-boot/docs/2.1.1.RELEASE/reference/htmlsingle/

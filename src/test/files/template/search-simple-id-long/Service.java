@@ -1,7 +1,7 @@
-package com.ccx.demo.business.{javaname}.service;
+package com.ccx.business.{javaname}.service;
 
-import com.ccx.demo.business.{javaname}.dao.jpa.{JavaName}Repository;
-import com.ccx.demo.business.{javaname}.entity.{TabName};
+import com.ccx.business.{javaname}.dao.jpa.{JavaName}Repository;
+import com.ccx.business.{javaname}.entity.{TabName};
 import com.querydsl.core.QueryResults;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.service.*;

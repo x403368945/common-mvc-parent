@@ -3,6 +3,7 @@ package com.ccx;
 import org.springframework.boot.SpringApplication;
 
 /**
+ * spring-boot 特殊处理：mvc模式不需要该文件
  * 组合打包所有发布模块，避免出现循环依赖
  *
  * @author 谢长春 2019/1/25

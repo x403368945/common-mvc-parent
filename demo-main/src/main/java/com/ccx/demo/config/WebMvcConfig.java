@@ -9,6 +9,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 /**
+ * spring-boot 特殊处理：大部分配置在 application.yml 文件中，简化配置
  * <pre>
  * Spring Core，参考：
  * https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html

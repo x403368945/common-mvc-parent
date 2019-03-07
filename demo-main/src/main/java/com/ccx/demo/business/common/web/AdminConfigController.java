@@ -2,7 +2,8 @@ package com.ccx.demo.business.common.web;
 
 
 import com.ccx.demo.business.user.entity.TabUser;
-import com.ccx.demo.config.init.AppConfig;
+import com.ccx.demo.config.init.AppConfig.App;
+import com.ccx.demo.config.init.AppConfig.Path;
 import com.ccx.demo.config.init.AppConfig.URL;
 import com.support.mvc.entity.base.Item;
 import com.support.mvc.entity.base.Result;
@@ -50,7 +51,7 @@ public class AdminConfigController {
                 )
                 .execute(result -> result
                         .versionAssert(version)
-                        .setSuccess(Stream.of(AppConfig.App.values())
+                        .setSuccess(Stream.of(App.values())
                                 .map(key -> Item.builder().label(key.name()).value(key.value()).comment(key.comment).build())
                                 .collect(Collectors.toList())
                         )
@@ -70,7 +71,7 @@ public class AdminConfigController {
                 )
                 .execute(result -> result
                         .versionAssert(version)
-                        .setSuccess(Stream.of(AppConfig.Path.values())
+                        .setSuccess(Stream.of(Path.values())
                                 .map(key -> Item.builder().label(key.name()).value(key.absolute()).comment(key.comment).build())
                                 .collect(Collectors.toList())
                         )
@@ -110,7 +111,7 @@ public class AdminConfigController {
                 )
                 .execute(result -> result
                         .versionAssert(version)
-                        .setSuccess(AppConfig.App.valueOf(key).value())
+                        .setSuccess(App.valueOf(key).value())
                 );
     }
 }

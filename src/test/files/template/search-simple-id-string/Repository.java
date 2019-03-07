@@ -1,7 +1,7 @@
-package com.ccx.demo.business.{javaname}.dao.jpa;
+package com.ccx.business.{javaname}.dao.jpa;
 
-import com.ccx.demo.business.{javaname}.entity.{TabName};
-import com.ccx.demo.business.{javaname}.entity.Q{TabName};
+import com.ccx.business.{javaname}.entity.{TabName};
+import com.ccx.business.{javaname}.entity.Q{TabName};
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;

@@ -8,15 +8,15 @@
     <artifactId>common-mvc-parent</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
-
+    <!-- spring-boot 特殊处理：pom 文件与mvc差别较大 -->
     <modules>
         <module>common-utils</module><!-- 工具类封装 -->
         <module>common-mvc</module><!-- Spring MVC 封装 -->
         <module>demo-security</module><!-- Spring Security 基本应用【参考案例，独立运行】 -->
+        <module>demo-socket</module><!-- Spring Socket 基本应用【参考案例，独立运行】 -->
         <module>demo-main</module><!-- 应用入口【独立运行，可选依赖[demo-service]】 -->
         <module>demo-service</module><!-- 参考案例【必须依赖[demo-main]】 -->
         <module>demo-deploy</module><!-- 组合打包所有发布模块，避免出现循环依赖 -->
-        <module>demo-socket</module><!-- Spring Socket 基本应用【参考案例，独立运行】 -->
     </modules>
 
     <profiles>

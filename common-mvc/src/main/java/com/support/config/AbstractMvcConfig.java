@@ -51,6 +51,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @Slf4j
 public class AbstractMvcConfig implements WebMvcConfigurer {
     /**
+     * spring-boot 特殊处理：添加异常处理
      * 服务端 500 异常处理
      * 需要自定义 Controller 继承 {@link AbstractMvcConfig.ErrorController}
      * spring security 需要添加 http.antMatchers("/error").permitAll()
@@ -160,7 +161,7 @@ public class AbstractMvcConfig implements WebMvcConfigurer {
 
     /**
      * 500 异常
-     * 这里配置不起作用，现在是按照继承 {@link AbstractErrorController} 方案实现
+     * spring-boot 特殊处理：这里配置不起作用，现在是按照继承 {@link AbstractErrorController} 方案实现
      */
 //    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(value = {Exception.class})
@@ -183,7 +184,7 @@ public class AbstractMvcConfig implements WebMvcConfigurer {
 
     /**
      * 启用 FastJson
-     * spring-ccx 需要在 pom 文件中移除 com.fasterxml.jackson.core 包
+     * spring-boot 需要在 pom 文件中移除 com.fasterxml.jackson.core 包
      */
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {

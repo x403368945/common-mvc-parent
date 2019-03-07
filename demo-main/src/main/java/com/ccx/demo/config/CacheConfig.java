@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 @EnableCaching
 public class CacheConfig {
     /**
-     * 登录查询缓存
+     * 登录用户信息查询缓存
      */
     public static final String loginCache = "loginCache";
     /**
@@ -39,7 +39,6 @@ public class CacheConfig {
         ).map(ConcurrentMapCache::new).collect(Collectors.toList()));
         return manager;
     }
-
 
     /**
      * 缓存服务接口基础方法定义

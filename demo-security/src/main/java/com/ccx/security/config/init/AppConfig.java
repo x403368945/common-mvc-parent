@@ -89,7 +89,7 @@ public class AppConfig {
      * @return boolean true：本地开发环境
      */
     public static boolean isDev() {
-        return "env/dev".equals(properties.getEnv());
+        return "dev".equals(properties.getEnv());
     }
 
     /**
@@ -98,7 +98,7 @@ public class AppConfig {
      * @return boolean true：云开发测试环境
      */
     public static boolean isBeta() {
-        return "env/beta".equals(properties.getEnv());
+        return "beta".equals(properties.getEnv());
     }
 
     /**
@@ -107,7 +107,7 @@ public class AppConfig {
      * @return boolean true：线上生产环境
      */
     public static boolean isProd() {
-        return "env/prod".equals(properties.getEnv());
+        return "prod".equals(properties.getEnv());
     }
 
     /**

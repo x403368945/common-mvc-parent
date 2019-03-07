@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.Date;
 
 /**
+ * spring-boot 特殊处理：大多数配置都在 application.yml 文件中完成，简化了数据库配置
  * JPA + MongoDB 部分自定义配置
  * <pre>
  * Spring Data JPA 配置
