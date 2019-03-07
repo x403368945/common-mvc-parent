@@ -42,7 +42,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.ccx.DemoMainApplication</mainClass>
+                    <mainClass>com.ccx.demo.DemoMainApplication</mainClass>
                 </configuration>
             </plugin>
             <!--<plugin> &lt;!&ndash; war 包插件 &ndash;&gt;

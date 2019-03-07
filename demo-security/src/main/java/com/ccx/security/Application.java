@@ -1,4 +1,4 @@
-package com.ccx;
+package com.ccx.security;
 
 import com.ccx.security.config.init.AppProperties;
 import com.support.config.InitConfig;

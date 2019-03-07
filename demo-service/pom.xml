@@ -29,7 +29,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.ccx.DemoServiceApplication</mainClass>
+                    <mainClass>com.ccx.demo.DemoServiceApplication</mainClass>
                 </configuration>
             </plugin>
             <!-- https://mvnrepository.com/artifact/com.mysema.maven/apt-maven-plugin -->

@@ -1,4 +1,4 @@
-package com.ccx;
+package com.ccx.demo;
 
 import org.springframework.boot.SpringApplication;
 
