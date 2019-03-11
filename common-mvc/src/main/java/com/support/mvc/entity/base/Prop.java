@@ -31,7 +31,7 @@ import static com.support.mvc.entity.base.Prop.Type.*;
 @JSONType(orders = {"name", "type", "required", "comment", "props"})
 public class Prop implements IJson {
     private static final List<Prop> RANGE_NUM_CHILDS = Arrays.asList(
-            Prop.builder().name("mix").comment("最小值，这里兼容[SHORT|INT|LONG|FLOAT|DOUBLE]，所以不指定 type 属性").build(),
+            Prop.builder().name("min").comment("最小值，这里兼容[SHORT|INT|LONG|FLOAT|DOUBLE]，所以不指定 type 属性").build(),
             Prop.builder().name("max").comment("最大值，这里兼容[SHORT|INT|LONG|FLOAT|DOUBLE]，所以不指定 type 属性").build()
     );
     public static final Function<String, Prop> RANGE_NUM = comment -> Prop.builder().type(OBJECT).comment(comment).props(RANGE_NUM_CHILDS).build();
