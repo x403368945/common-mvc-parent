@@ -1,5 +1,6 @@
 package com.ccx.demo.business.user.entity;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
 import com.ccx.demo.business.user.entity.extend.ITabUser;
@@ -22,8 +23,13 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+
+import static com.ccx.demo.business.user.entity.QTabUser.tabUser;
+import static com.support.mvc.enums.Code.ORDER_BY;
 
 /**
  * 用户实体
@@ -135,11 +141,12 @@ public class TabUser extends UserDetail implements ITabUser, ITable, IUser, IWhe
         return json();
     }
 
-// DB Start ************************************************************************************************************
+
+// DB Start *************************************************************************************************
 
     @Override
     public QdslWhere where() {
-        final QTabUser q = QTabUser.tabUser;
+        final QTabUser q = tabUser;
         return QdslWhere.of()
                 .and(username, () -> q.username.eq(username))
                 .and(phone, () -> q.phone.eq(phone))
@@ -153,8 +160,17 @@ public class TabUser extends UserDetail implements ITabUser, ITable, IUser, IWhe
     }
 
     @Override
-    public List<Sorts> buildSorts() {
-        return buildSorts(sorts);
+    public List<Sorts> defaultSorts() {
+        return Collections.singletonList(OrderBy.id.desc);
+    }
+
+    @Override
+    public List<Sorts> parseSorts() {
+        try {
+            return Objects.isNull(sorts) ? null : sorts.stream().map(by -> OrderBy.valueOf(by.getName()).get(by.getDirection())).collect(Collectors.toList());
+        } catch (Exception e) {
+            throw ORDER_BY.exception("排序字段可选范围：".concat(JSON.toJSONString(OrderBy.names())));
+        }
     }
 
 // DB End **************************************************************************************************************

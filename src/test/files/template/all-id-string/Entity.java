@@ -109,7 +109,7 @@ public class {TabName} implements
     /**
      * 枚举：定义排序字段
      */
-    public enum OrderBy {
+    public enum OrderBy implements Sorts.IOrderBy {
         // 按 id 排序可替代按创建时间排序
 {orderBy}
         ;
@@ -178,16 +178,20 @@ public class {TabName} implements
         return null;
     }
 
+//    @Override
+//    public List<Sorts> defaultSorts() {
+//        return Collections.singletonList(OrderBy.id.desc); // 这里可以指定默认排序字段
+//    }
+
     @Override
-    public List<Sorts> buildSorts() {
+    public List<Sorts> parseSorts() {
         try {
-            return Objects.isNull(getSorts()) || getSorts().isEmpty()
-                    ? null // Collections.singletonList(OrderBy.id.desc) // 若排序字段为空，这里可以设置默认按 id 倒序
-                    : getSorts().stream().map(by -> OrderBy.valueOf(by.getName()).get(by.getDirection())).collect(Collectors.toList());
+            return Objects.isNull(sorts) ? null : sorts.stream().map(by -> OrderBy.valueOf(by.getName()).get(by.getDirection())).collect(Collectors.toList());
         } catch (Exception e) {
             throw ORDER_BY.exception("排序字段可选范围：".concat(JSON.toJSONString(OrderBy.names())));
         }
     }
+
 
 // DB End **************************************************************************************************************
 

@@ -11,16 +11,15 @@ import com.utils.util.Then;
 import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
  * 动态查询条件规范接口
  * 用于实现构建 {@link ISearchRepository} 需要的查询条件
- *
  *
  * @author 谢长春 2018-1-12
  */
@@ -54,11 +53,20 @@ public interface IWhere<U, W> {
     W where();
 
     /**
-     * 构建排序
+     * 配置默认排序字段
      *
      * @return {@link List<Sorts>}
      */
-    default List<Sorts> buildSorts() {
+    default List<Sorts> defaultSorts() {
+        return Collections.emptyList();
+    }
+
+    /**
+     * 排序字段集合
+     *
+     * @return {@link List<Sorts>}
+     */
+    default List<Sorts> parseSorts() {
         return null;
     }
 
@@ -68,9 +76,14 @@ public interface IWhere<U, W> {
      * @return {@link OrderSpecifier[]}
      */
     default OrderSpecifier[] buildQdslSorts() {
-        return Optional.ofNullable(buildSorts())
-                .map(sorts -> sorts.stream().map(Sorts::qdsl).collect(Collectors.toList()).toArray(new OrderSpecifier[]{}))
-                .orElseGet(() -> new OrderSpecifier[]{});
+        final List<Sorts> sorts = parseSorts();
+        if (Objects.isNull(sorts) || sorts.isEmpty()) {
+            // 按默认字段排序
+            return defaultSorts().stream().map(Sorts::qdsl).collect(Collectors.toList()).toArray(new OrderSpecifier[]{});
+        }
+        // 按指定字段排序
+        return sorts.stream().map(Sorts::qdsl).collect(Collectors.toList()).toArray(new OrderSpecifier[]{});
+
     }
 
     /**
@@ -79,9 +92,12 @@ public interface IWhere<U, W> {
      * @return {@link Sort}
      */
     default Sort buildJpaSort() {
-        return Optional.ofNullable(buildSorts())
-                .map(sorts -> Sort.by(sorts.stream().map(Sorts::jpa).collect(Collectors.toList())))
-                .orElse(Sort.unsorted());
+        final List<Sorts> sorts = parseSorts();
+        if (Objects.isNull(sorts) || sorts.isEmpty()) { // 按默认字段排序
+            return Sort.by(defaultSorts().stream().map(Sorts::jpa).collect(Collectors.toList()));
+        }
+        // 按指定字段排序
+        return Sort.by(sorts.stream().map(Sorts::jpa).collect(Collectors.toList()));
     }
 
     /**

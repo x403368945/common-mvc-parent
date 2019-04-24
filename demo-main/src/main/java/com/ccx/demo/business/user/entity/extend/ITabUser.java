@@ -1,6 +1,5 @@
 package com.ccx.demo.business.user.entity.extend;
 
-import com.alibaba.fastjson.JSON;
 import com.ccx.demo.business.user.entity.TabUser;
 import com.ccx.demo.enums.Radio;
 import com.ccx.demo.enums.RegisterSource;
@@ -9,16 +8,13 @@ import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import com.support.mvc.entity.base.Prop;
 import com.support.mvc.entity.base.Sorts;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.ccx.demo.business.user.entity.QTabUser.tabUser;
 import static com.support.mvc.entity.base.Prop.Type.*;
-import static com.support.mvc.enums.Code.ORDER_BY;
 
 /**
  * 实体类扩展延伸
@@ -70,7 +66,7 @@ public interface ITabUser {
     /**
      * 枚举：定义排序字段
      */
-    enum OrderBy {
+    enum OrderBy implements Sorts.IOrderBy {
         id(tabUser.id),
         // 按 id 排序可替代按创建时间排序
 //        createTime(tabUser.createTime),
@@ -98,22 +94,4 @@ public interface ITabUser {
         }
     }
 
-    /**
-     * 构建排序集合
-     *
-     * @param sorts {@link List<Sorts.Order>}
-     * @return {@link List<Sorts>}
-     */
-    default List<Sorts> buildSorts(final List<Sorts.Order> sorts) {
-        try {
-            return Optional.ofNullable(sorts)
-                    .map(list -> list.stream()
-                            .map(by -> OrderBy.valueOf(by.getName()).get(by.getDirection()))
-                            .collect(Collectors.toList())
-                    )
-                    .orElse(Collections.singletonList(OrderBy.id.desc)); // 若排序字段为空，这里可以设置默认按 id 倒序
-        } catch (Exception e) {
-            throw ORDER_BY.exception("排序字段可选范围：".concat(JSON.toJSONString(OrderBy.names())));
-        }
-    }
 }
