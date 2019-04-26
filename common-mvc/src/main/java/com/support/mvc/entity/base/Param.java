@@ -330,7 +330,7 @@ public class Param implements Serializable {
 //         * @param value   Number 判断值
 //         * @param message String 异常消息内容
 //         */
-//        public static void gtZore(final Number value, final String message) {
+//        public static void gtZero(final Number value, final String message) {
 //            if (Objects.isNull(value) || value.doubleValue() <= 0) {
 //                throw Code.VALIDATED.exception(message);
 //            }
@@ -363,8 +363,8 @@ public class Param implements Serializable {
 //                e.printStackTrace();
 //            }
 //            try {
-//                Asserts.gtZore(1, "断言：结果 必须大于0 > 不抛异常");
-//                Asserts.gtZore(0, "断言：结果 必须大于0 > 抛异常");
+//                Asserts.gtZero(1, "断言：结果 必须大于0 > 不抛异常");
+//                Asserts.gtZero(0, "断言：结果 必须大于0 > 抛异常");
 //            } catch (Exception e) {
 //                e.printStackTrace();
 //            }
