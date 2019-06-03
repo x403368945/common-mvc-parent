@@ -61,6 +61,7 @@ public class DB2JavaClass {
 
             Supplier<String> templateSupplier = () -> {
                 final Module[] modules = new Module[]{
+                        Module.builder().source("all-id-long").output("全部 CRUD 代码[id:Long]").build(),
                         Module.builder().source("all-id-long-uid").output("全部 CRUD 代码[id:Long,uid:String]").build(),
                         Module.builder().source("all-id-string").output("全部 CRUD 代码[id:String]").build(),
                         Module.builder().source("search-simple-id-long").output("仅支持查询代码[id:Long]").build(),
@@ -77,6 +78,11 @@ public class DB2JavaClass {
                 return modules[index].source;
             };
             final String templateDir = templateSupplier.get();
+            Supplier<String> packageSupplier = () -> {
+                System.out.println("请输入包目录，例：com.ccx.demo");
+                return new Scanner(System.in).nextLine();
+            };
+            final String pkg = packageSupplier.get();
 
             final List<Row> rows = new ArrayList<>();
             System.out.println(Paths.get(module.source).toAbsolutePath().toString());
@@ -102,6 +108,7 @@ public class DB2JavaClass {
                                 FWrite.of(module.output, Names.javaname, "entity", Names.TabName.concat(".java"))
                                         .write( // Tab.java
                                                 Names.format(templateDir, "Entity.java")
+                                                        .replace("{pkg}", pkg)
                                                         .replace("{comment}", tableComment)
                                                         .replace("{IUser}", hasIUser ? "IUser," : "")
                                                         .replace("{ITimestamp}", hasModifyTime ? "ITimestamp, // 所有需要更新时间戳的实体类" : "")
@@ -126,6 +133,7 @@ public class DB2JavaClass {
                                         .write( // Repository.java
                                                 Optional
                                                         .of(Names.format(templateDir, "Repository.java")
+                                                                .replace("{pkg}", pkg)
                                                                 .replace("{comment}", tableComment)
                                                                 .replace("{ID}", hasLongId ? "Long" : "String")
                                                         )
@@ -158,6 +166,7 @@ public class DB2JavaClass {
                                         .write( // Service.java
                                                 Optional
                                                         .of(Names.format(templateDir, "Service.java")
+                                                                .replace("{pkg}", pkg)
                                                                 .replace("{comment}", tableComment)
                                                                 .replace("{ID}", hasLongId ? "Long" : "String")
                                                         )
@@ -189,6 +198,7 @@ public class DB2JavaClass {
                                         .write( // Controller.java
                                                 Optional
                                                         .of(Names.format(templateDir, "Controller.java")
+                                                                .replace("{pkg}", pkg)
                                                                 .replace("{comment}", tableComment)
                                                                 .replace("{ID}", hasLongId ? "Long" : "String")
                                                         )

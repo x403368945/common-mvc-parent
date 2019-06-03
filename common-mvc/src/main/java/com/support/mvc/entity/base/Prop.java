@@ -36,7 +36,7 @@ public class Prop implements IJson {
     );
     public static final Function<String, Prop> RANGE_NUM = comment -> Prop.builder().type(OBJECT).comment(comment).props(RANGE_NUM_CHILDS).build();
 
-    private static final List<Prop> RANGE_DATE_CHILDS = Arrays.asList(
+    public static final List<Prop> RANGE_DATE_CHILDS = Arrays.asList(
             Prop.builder().name("begin").type(TIMESTAMP).comment("开始时间").build(),
             Prop.builder().name("end").type(TIMESTAMP).comment("截止时间").build()
     );

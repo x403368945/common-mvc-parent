@@ -48,12 +48,14 @@ public class ControllerAspect implements IControllerAspect {
     @AfterReturning(value = "point()", returning = "result")
     public void afterReturn(JoinPoint joinPoint, Object result) {
         log(joinPoint, result, time);
-        if (AppConfig.isDev() && result instanceof Result) {
-            Optional.ofNullable(((Result) result).getVersion())
-                    .ifPresent(version -> version.write(Path.MD.absolute()));
-        } else if (AppConfig.isProd()) {
-            // 生产环境不返回最详细的版本信息
-            Optional.ofNullable(((Result) result)).ifPresent(r -> r.setVersion(null));
+        if (result instanceof Result) {
+            if (AppConfig.isDev()) {
+                Optional.of(((Result) result).getVersion())
+                        .ifPresent(version -> version.write(Path.MD.absolute()));
+            } else if (AppConfig.isProd()) {
+                // 生产环境不返回最详细的版本信息
+                Optional.of(((Result) result)).ifPresent(r -> r.setVersion(null));
+            }
         }
     }
 }

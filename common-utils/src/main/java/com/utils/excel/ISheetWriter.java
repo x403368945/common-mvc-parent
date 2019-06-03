@@ -598,10 +598,23 @@ public interface ISheetWriter<T extends ISheetWriter> extends ISheet<T>, ICellWr
      *
      * @param fromRowIndex int 起始行索引，包含
      * @param toRowIndex   int 结束行索引，包含
+     * @param collapse boolean true:收起，false：展开
+     * @return <T extends ISheetWriter>
+     */
+    default T groupRow(final int fromRowIndex, final int toRowIndex, final boolean collapse) {
+        getSheet().groupRow(fromRowIndex, toRowIndex);
+        if (collapse) getSheet().setRowGroupCollapsed(fromRowIndex, collapse);
+        return (T) this;
+    }
+    /**
+     * 设置行分组
+     *
+     * @param fromRowIndex int 起始行索引，包含
+     * @param toRowIndex   int 结束行索引，包含
      * @return <T extends ISheetWriter>
      */
     default T groupRow(final int fromRowIndex, final int toRowIndex) {
-        getSheet().groupRow(fromRowIndex, toRowIndex);
+        groupRow(fromRowIndex, toRowIndex, false);
         return (T) this;
     }
 
@@ -612,7 +625,7 @@ public interface ISheetWriter<T extends ISheetWriter> extends ISheet<T>, ICellWr
      * @return <T extends ISheetWriter>
      */
     default T groupRow(final RangeInt range) {
-        groupRow(range.getMin(), range.getMax());
+        groupRow(range.getMin(), range.getMax(), false);
         return (T) this;
     }
 

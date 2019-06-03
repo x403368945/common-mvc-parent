@@ -48,6 +48,12 @@ public interface ISheet<T> {
      */
     Sheet getSheet();
 
+//    /**
+//     * 记住指定区间
+//     * @return {@link Map}{@link Map<String:自定义key, RangeInt:记忆区间>}
+//     */
+//    Map<String, RangeInt> rememberRangeInt();
+
     /**
      * 判断sheet是否存在
      *

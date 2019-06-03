@@ -191,7 +191,7 @@ public class DemoMongo implements
     /**
      * 枚举：定义排序字段
      */
-    public enum OrderBy implements Sorts.IOrderBy {
+    public enum OrderBy {
         //        id(demoMongo.id),
 //        name(demoMongo.name),
 //        phone(demoMongo.phone),
@@ -207,6 +207,12 @@ public class DemoMongo implements
 
         public Sorts get(final Sorts.Direction direction) {
             return Objects.equals(direction, Sorts.Direction.ASC) ? asc : desc;
+        }
+        public Sorts.Order asc() {
+            return Sorts.Order.builder().name(this.name()).direction(Sorts.Direction.ASC).build();
+        }
+        public Sorts.Order desc() {
+            return Sorts.Order.builder().name(this.name()).direction(Sorts.Direction.DESC).build();
         }
 
         /**

@@ -66,7 +66,7 @@ public interface ITabUser {
     /**
      * 枚举：定义排序字段
      */
-    enum OrderBy implements Sorts.IOrderBy {
+    enum OrderBy {
         id(tabUser.id),
         // 按 id 排序可替代按创建时间排序
 //        createTime(tabUser.createTime),
@@ -77,6 +77,12 @@ public interface ITabUser {
 
         public Sorts get(final Sorts.Direction direction) {
             return Objects.equals(direction, Sorts.Direction.DESC) ? desc : asc;
+        }
+        public Sorts.Order asc() {
+            return Sorts.Order.builder().name(this.name()).direction(Sorts.Direction.ASC).build();
+        }
+        public Sorts.Order desc() {
+            return Sorts.Order.builder().name(this.name()).direction(Sorts.Direction.DESC).build();
         }
 
         /**

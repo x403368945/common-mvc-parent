@@ -48,23 +48,23 @@ public class Version implements IJson {
      */
     private RequestMethod method;
     /**
+     * 接口使用标准，markdown 地址
+     */
+    private String markdown;
+    /**
      * 接口详细说明
      * 接口版本变更说明
      */
     private List<String> notes;
     /**
-     * 接口使用标准，markdown 地址
-     */
-    private String markdown;
-    /**
-     * 实体类属性说明
-     */
-    private List<Prop> props;
-    /**
      * 请求参考案例
      */
     @Builder.Default
     private Map<String, Object> demo = new LinkedHashMap<>();
+    /**
+     * 实体类属性说明
+     */
+    private List<Prop> props;
 
 //    /**
 //     * 返回 markdown 文件 URL

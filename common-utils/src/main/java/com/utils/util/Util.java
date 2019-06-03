@@ -474,6 +474,25 @@ public final class Util {
     }
 
     /**
+     * 合并list
+     *
+     * @param lists List<T>[] 需要切割的集合
+     * @return {@link List}{@link List<T>}
+     */
+    @SafeVarargs
+    public static <T> List<T> merge(final List<T>... lists) {
+        if (lists.length == 1) return lists[0];
+        if (lists.length > 1) {
+            final List<T> result = new ArrayList<>();
+            for (List<T> list : lists) {
+                result.addAll(list);
+            }
+            return result;
+        }
+        return Collections.emptyList();
+    }
+
+    /**
      * unicode 字符串编码
      *
      * @param value {@link String} 需要编码的字符串
@@ -649,5 +668,6 @@ public final class Util {
         log.info(Util.decodeUnicode("\\u5fc5\\u987b\\u662f\\u0020\\u0075\\u006e\\u0069\\u0063\\u006f\\u0064\\u0065\\u0020\\u7f16\\u7801"));
         log.info(Util.encodeUnicodeStrict("*.编Ma./*"));
         log.info(Util.decodeUnicode("\\u002a\\u002e\\u7f16\\u004d\\u0061\\u002e\\u002f\\u002a"));
+        log.info(JSON.toJSONString(merge(Arrays.asList("a", "b"), Arrays.asList("C", "D"))));
     }
 }

@@ -3,8 +3,8 @@ package com.ccx.business.{javaname}.entity;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
-import com.ccx.demo.enums.Radio;
-import com.ccx.demo.support.entity.IUser;
+import {pkg}.enums.Radio;
+import {pkg}.support.entity.IUser;
 import com.support.mvc.entity.ITable;
 import com.support.mvc.entity.ITimestamp;
 import com.support.mvc.entity.IWhere;
@@ -109,7 +109,7 @@ public class {TabName} implements
     /**
      * 枚举：定义排序字段
      */
-    public enum OrderBy implements Sorts.IOrderBy {
+    public enum OrderBy {
         // 按 id 排序可替代按创建时间排序
 {orderBy}
         ;
@@ -119,7 +119,12 @@ public class {TabName} implements
         public Sorts get(final Sorts.Direction direction) {
             return Objects.equals(direction, Sorts.Direction.ASC) ? asc : desc;
         }
-
+        public Sorts.Order asc() {
+            return Sorts.Order.builder().name(this.name()).direction(Sorts.Direction.ASC).build();
+        }
+        public Sorts.Order desc() {
+            return Sorts.Order.builder().name(this.name()).direction(Sorts.Direction.DESC).build();
+        }
         /**
          * 获取所有排序字段名
          *

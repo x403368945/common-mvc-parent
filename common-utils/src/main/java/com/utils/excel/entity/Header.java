@@ -2,6 +2,7 @@ package com.utils.excel.entity;
 
 import com.alibaba.fastjson.annotation.JSONType;
 import com.utils.IJson;
+import com.utils.excel.enums.Column;
 import com.utils.excel.enums.DataType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,10 +13,13 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * 数据表格头部<br>
  * {index: 0, label: '房租', type: 'Number', group: "固定成本",tag:"标签"}<br>
+ *
  * @author 谢长春 on 2017/10/15 .
  */
 @NoArgsConstructor
@@ -23,17 +27,25 @@ import java.util.List;
 @Builder
 @Data
 @Accessors(chain = true)
-@JSONType(orders = {"index", "label", "type", "sindex", "group", "tag", "hidden", "required"})
+@JSONType(orders = {"column", "index", "label", "alias", "type", "sindex", "group", "tag", "hidden", "required"})
 @Slf4j
 public class Header implements IJson {
     /**
      * 数据列索引
      */
-    private int index;
+    private Column column;
+    /**
+     * 数据列索引
+     */
+    private Integer index;
     /**
      * 数据列名
      */
     private String label;
+    /**
+     * 数据列别名，可将实体类或数据库字段设置为别名
+     */
+    private String alias;
     /**
      * 数据类型
      */
@@ -58,6 +70,20 @@ public class Header implements IJson {
      * 是否必填
      */
     private Boolean required;
+
+    public Integer index() {
+        if (Objects.nonNull(index)) return index;
+        if (Objects.nonNull(column)) return column.ordinal();
+        return null;
+    }
+
+    public Column column() {
+        if (Objects.nonNull(column)) return column;
+        if (Objects.nonNull(index)) return Optional.of(Column.values())
+                .map(arr -> index < arr.length ? arr[index] : null)
+                .orElse(null);
+        return null;
+    }
 
     @Override
     public String toString() {

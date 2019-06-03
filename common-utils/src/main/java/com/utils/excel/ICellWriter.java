@@ -21,7 +21,7 @@ import static com.utils.util.Dates.Pattern.yyyy_MM_dd;
  *
  * @author 谢长春 on 2018-8-8 .
  */
-interface ICellWriter<T extends ICellWriter> {
+public interface ICellWriter<T extends ICellWriter> {
     /**
      * 获取当前操作单元格
      *

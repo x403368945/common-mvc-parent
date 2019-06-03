@@ -64,7 +64,7 @@ public interface ITabDemoList {
     /**
      * 枚举：定义排序字段
      */
-    enum OrderBy implements Sorts.IOrderBy {
+    enum OrderBy {
         // 按 id 排序可替代按创建时间排序
         id(tabDemoList.id),
         //		uid(tabDemoList.uid),
@@ -85,6 +85,12 @@ public interface ITabDemoList {
 
         public Sorts get(final Sorts.Direction direction) {
             return Objects.equals(direction, Sorts.Direction.ASC) ? asc : desc;
+        }
+        public Sorts.Order asc() {
+            return Sorts.Order.builder().name(this.name()).direction(Sorts.Direction.ASC).build();
+        }
+        public Sorts.Order desc() {
+            return Sorts.Order.builder().name(this.name()).direction(Sorts.Direction.DESC).build();
         }
 
         /**

@@ -15,14 +15,24 @@
     <!-- 自定义日志采集参数：[%user] 采集当前登录用户信息 -->
     <conversionRule conversionWord="user" converterClass="com.log.UserConvert"/>
 
-    <!-- 负责写日志,控制台日志 -->
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <!-- 一是把日志信息转换成字节数组,二是把字节数组写入到输出流 -->
-        <encoder>
-            <pattern>%highlight(%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%user] : %m%n)</pattern>
-            <charset>UTF-8</charset>
-        </encoder>
-    </appender>
+    <springProfile name="dev"><!-- springboot 动态环境配置：开发环境 -->
+        <!-- 负责写日志,控制台日志 -->
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <!-- 一是把日志信息转换成字节数组,二是把字节数组写入到输出流 -->
+            <encoder>
+                <pattern>%highlight(%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%user] : %m%n)</pattern>
+                <charset>UTF-8</charset>
+            </encoder>
+        </appender>
+    </springProfile>
+    <springProfile name="beta,prod"><!-- springboot 动态环境配置：测试、生产环境 -->
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>%highlight(%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%user] : %m%n)</pattern>
+                <charset>UTF-8</charset>
+            </encoder>
+        </appender>
+    </springProfile>
 
     <!-- 文件日志 -->
     <appender name="DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -140,7 +150,8 @@
     <!-- 打印 Controller 注册url -->
     <logger name="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" level="TRACE"/>
     <!-- 已经配置AOP拦截了，不需要再打印 Controller 返回的结果 -->
-    <logger name="org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor" level="INFO"/>
+    <logger name="org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor"
+            level="INFO"/>
     <logger name="org.apache.commons.beanutils.converters.AbstractConverter" level="INFO"/>
     <logger name="com.zaxxer.hikari.pool.HikariPool" level="INFO"/>
     <logger name="org.mongodb.driver" level="INFO"/>

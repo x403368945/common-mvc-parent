@@ -175,9 +175,9 @@ public final class ExcelReader implements ISheetReader<ExcelReader> {
     public com.utils.excel.entity.Row rowObject(final List<Header> headers) {
 //        final LinkedHashMap<String, String> map = new LinkedHashMap<>();
         final com.utils.excel.entity.Row row = com.utils.excel.entity.Row.build();
-        headers.forEach(header -> row.addCell(header.getIndex(),
+        headers.forEach(header -> row.addCell(header.index(),
                 com.utils.excel.entity.Cell.builder()
-                        .text(cell(header.getIndex()).stringValue())
+                        .text(cell(header.index()).stringValue())
 //                        .type()
 //                        .value()
 //                        .formula()

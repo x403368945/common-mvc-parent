@@ -7,7 +7,10 @@ import com.utils.excel.enums.DataType;
 import com.utils.util.Dates;
 import com.utils.util.Num;
 import com.utils.util.Util;
+import lombok.NoArgsConstructor;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,9 +19,17 @@ import java.util.Objects;
  *
  * @author 谢长春 on 2017/11/3 .
  */
+@NoArgsConstructor
 public class Row extends JSONObject {
+    /**
+     * 指定是否使用 {@link LinkedHashMap}
+     * @param ordered {@link Boolean} true:{@link LinkedHashMap}, false:{@link HashMap}
+     */
+    public Row(final boolean ordered){
+        super(ordered);
+    }
     public static Row build() {
-        return new Row();
+        return new Row(true);
     }
 
     /**

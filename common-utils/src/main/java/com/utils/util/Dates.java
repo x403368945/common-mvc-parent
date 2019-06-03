@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -214,6 +215,46 @@ public final class Dates {
             }
             if (Objects.nonNull(end)) {
                 end = Dates.of(end).endTimeOfDay().timestamp();
+            }
+            return this;
+        }
+
+        /**
+         * 校验开始时间必须小于结束时间
+         *
+         * @return {@link Boolean}
+         */
+        public boolean check() {
+            try {
+                check(null);
+                return true;
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+                return false;
+            }
+        }
+
+        /**
+         * 校验开始时间必须小于结束时间
+         *
+         * @return {@link Range}
+         */
+        public Range check(final Supplier<? extends RuntimeException> exSupplier) {
+            if (Objects.isNull(begin)) {
+                if (Objects.isNull(exSupplier))
+                    throw new NullPointerException("begin is null");
+                else
+                    throw exSupplier.get();
+            }
+            if (Objects.nonNull(end)) {
+                if (Dates.of(begin).gt(Dates.of(end))) {
+                    if (Objects.isNull(exSupplier))
+                        throw new RuntimeException("begin > end");
+                    else
+                        throw exSupplier.get();
+                }
+            } else {
+                end = Dates.now().timestamp();
             }
             return this;
         }

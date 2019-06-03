@@ -3,9 +3,10 @@ package com.support.mvc.exception;
 
 import com.support.mvc.enums.Code;
 
+import java.util.function.Consumer;
+
 /**
  * 自定义异常:指定返回编码异常,禁止指定Code.SUCCESS
- *
  *
  * @author 谢长春 2017年7月21日 下午1:02:04
  */
@@ -18,7 +19,7 @@ public class CodeException extends RuntimeException {
     private Code code;
 
     public CodeException(CodeException e) {
-        super(e.getMessage(), e);
+        super(String.format("%s:%s", e.getCode(), e.getMessage()), e);
         this.code = e.getCode();
         if (Code.SUCCESS == this.code) {
             this.code = Code.FAILURE;
@@ -26,7 +27,7 @@ public class CodeException extends RuntimeException {
     }
 
     public CodeException(Code code, String message) {
-        super(message);
+        super(String.format("%s:%s", code.name(), message));
         this.code = code;
         if (Code.SUCCESS == this.code) {
             this.code = Code.FAILURE;
@@ -34,7 +35,7 @@ public class CodeException extends RuntimeException {
     }
 
     public CodeException(Code code, String message, Throwable cause) {
-        super(message, cause);
+        super(String.format("%s:%s", code.name(), message), cause);
         this.code = code;
         if (Code.SUCCESS == this.code) {
             this.code = Code.FAILURE;
@@ -45,4 +46,8 @@ public class CodeException extends RuntimeException {
         return code;
     }
 
+    public CodeException go(final Consumer<CodeException> consumer) {
+        consumer.accept(this);
+        return this;
+    }
 }

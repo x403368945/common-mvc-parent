@@ -118,7 +118,7 @@ public class TabUserLogin implements ITable, IWhere<JPAUpdateClause, QdslWhere> 
     /**
      * 枚举：定义排序字段
      */
-    public enum OrderBy implements Sorts.IOrderBy {
+    public enum OrderBy {
         id(tabUserLogin.id),
         timestamp(tabUserLogin.timestamp),
         ;
@@ -128,7 +128,12 @@ public class TabUserLogin implements ITable, IWhere<JPAUpdateClause, QdslWhere> 
         public Sorts get(final Sorts.Direction direction) {
             return Objects.equals(direction, Sorts.Direction.DESC) ? desc : asc;
         }
-
+        public Sorts.Order asc() {
+            return Sorts.Order.builder().name(this.name()).direction(Sorts.Direction.ASC).build();
+        }
+        public Sorts.Order desc() {
+            return Sorts.Order.builder().name(this.name()).direction(Sorts.Direction.DESC).build();
+        }
         /**
          * 获取所有排序字段名
          *

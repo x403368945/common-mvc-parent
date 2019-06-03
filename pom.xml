@@ -150,6 +150,29 @@
                 <directory>${basedir}/src/main/resources</directory>
                 <targetPath>${basedir}/target/classes</targetPath>
                 <filtering>true</filtering>
+                <excludes> <!-- 经过maven的filter，会破坏font文件的二进制文件格式，到前台解析出错 -->
+                    <exclude>static/**</exclude>
+                    <!--<exclude>*-web/**</exclude>-->
+                    <exclude>*.eot</exclude>
+                    <exclude>*.ttf</exclude>
+                    <exclude>*.woff</exclude>
+                    <exclude>*.woff2</exclude>
+                    <exclude>*.svg</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+                <targetPath>${basedir}/target/classes</targetPath>
+                <filtering>false</filtering>
+                <includes> <!-- 单独处理字体文件 -->
+                    <include>static/**</include>
+                    <!--<include>*-web/**</include>-->
+                    <include>*.eot</include>
+                    <include>*.ttf</include>
+                    <include>*.woff</include>
+                    <include>*.woff2</include>
+                    <include>*.svg</include>
+                </includes>
             </resource>
             <resource>
                 <directory>${basedir}/src/main/resources</directory>
@@ -184,20 +207,20 @@
             </resource>-->
         </resources>
         <plugins>
-<!--
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.1</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>org.springframework.ccx.loader.PropertiesLauncher</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
--->
+            <!--
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-jar-plugin</artifactId>
+                            <version>3.1.1</version>
+                            <configuration>
+                                <archive>
+                                    <manifest>
+                                        <mainClass>org.springframework.ccx.loader.PropertiesLauncher</mainClass>
+                                    </manifest>
+                                </archive>
+                            </configuration>
+                        </plugin>
+            -->
             <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-maven-plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>

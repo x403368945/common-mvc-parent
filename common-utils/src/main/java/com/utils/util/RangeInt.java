@@ -17,6 +17,7 @@ import java.util.stream.Stream;
 
 /**
  * 数字区间操作类
+ *
  * @author 谢长春 2018/12/10 .
  */
 @NoArgsConstructor
@@ -28,6 +29,16 @@ import java.util.stream.Stream;
 public class RangeInt implements Num.IRange<Integer> {
     private Integer min;
     private Integer max;
+
+    public RangeInt min(final Integer min) {
+        this.min = min;
+        return this;
+    }
+
+    public RangeInt max(final Integer max) {
+        this.max = max;
+        return this;
+    }
 
     /**
      * 构造数字区间
