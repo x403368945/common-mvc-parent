@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>demo</artifactId>
     <version>1.0.0</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <!-- spring-boot 特殊处理：pom 文件差别较大 -->
     <dependencies>
         <dependency>
@@ -33,15 +33,15 @@
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
-            <plugin> <!-- war 包插件 -->
+            <!--<plugin> &lt;!&ndash; war 包插件 &ndash;&gt;
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.ccx.socket.Application</mainClass>
+                    <mainClass>com.ccx.demo.Application</mainClass>
                 </configuration>
             </plugin>
         </plugins>

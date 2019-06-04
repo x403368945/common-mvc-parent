@@ -1,5 +1,5 @@
-DROP DATABASE IF EXISTS demo_main_db;
-CREATE DATABASE demo_main_db CHARACTER SET 'utf8' COLLATE 'utf8_general_ci';
+-- DROP DATABASE IF EXISTS demo_main_db;
+-- CREATE DATABASE demo_main_db CHARACTER SET 'utf8' COLLATE 'utf8_general_ci';
 -- 用户表
 DROP TABLE IF EXISTS tab_user;
 CREATE TABLE tab_user (
