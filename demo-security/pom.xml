@@ -29,7 +29,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.ccx.socket.Application</mainClass>
+                    <mainClass>com.ccx.security.Application</mainClass>
                 </configuration>
             </plugin>
         </plugins>
