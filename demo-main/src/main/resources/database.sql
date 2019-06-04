@@ -32,30 +32,6 @@ CREATE TABLE tab_user_login (
   KEY (`timestamp`)
 ) ENGINE InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '用户登录记录表';
 
--- 初始化超级管理员账户，密码：admin
-INSERT INTO tab_user(id, uid, username, password, nickname, role, createUserId, modifyUserId)
-VALUES (1, replace(uuid(), '-', ''), 'admin', '$2a$10$VQ.Rj7bc73B.WwU99k7R.eEAwqXBNmvihobk3SZ4m30b9tCR6..h2', '超级管理员',0, 1, 1);
-
--- user:111111
-INSERT INTO tab_user(uid, username, password, nickname, role, createUserId, modifyUserId)
-VALUES (replace(uuid(), '-', ''), 'user', '$2a$10$6unbpf74Dc7NEBywaCHl..FzzprMb69gA.Qi09U7ud7vlKHP9PXfu', '普通用户',2, 1, 1);
-
--- 查询所有视图
-SHOW TABLE STATUS WHERE Comment = 'view';
-
-/*
-CREATE OR REPLACE VIEW view_vip AS
-  SELECT
-    u.id, -- 用户ID
-    u.email, -- 用户邮箱
-    u.nickname, -- 用户昵称
-    u.role, -- ROLE_ADMIN【0】:超级管理员,ROLE_SYS_ADMIN【1】:系统管理员,ROLE_USER【2】:普通用户,ROLE_VIP【3】:VIP用户
-    u.phone -- 手机号
-  FROM tab_user u
-  WHERE u.role = 3
-;
-SELECT * FROM view_vip;
-*/
 -- mysql + mongo 镜像
 -- DROP TABLE IF EXISTS tab_demo_jpa_mongo;
 -- CREATE TABLE tab_demo_jpa_mongo (
@@ -89,4 +65,28 @@ CREATE TABLE tab_demo_list (
   `deleted`        TINYINT(1) UNSIGNED               NOT NULL DEFAULT 0 COMMENT '是否逻辑删除（1、已删除， 0、未删除）',
   KEY (`uid`)
 ) ENGINE InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '测试案例表';
+
+-- 查询所有视图
+SHOW TABLE STATUS WHERE Comment = 'view';
+
+/*
+CREATE OR REPLACE VIEW view_vip AS
+  SELECT
+    u.id, -- 用户ID
+    u.email, -- 用户邮箱
+    u.nickname, -- 用户昵称
+    u.role, -- ROLE_ADMIN【0】:超级管理员,ROLE_SYS_ADMIN【1】:系统管理员,ROLE_USER【2】:普通用户,ROLE_VIP【3】:VIP用户
+    u.phone -- 手机号
+  FROM tab_user u
+  WHERE u.role = 3
+;
+SELECT * FROM view_vip;
+*/
+-- 初始化超级管理员账户，密码：admin
+INSERT INTO tab_user(id, uid, username, password, nickname, role, createUserId, modifyUserId)
+VALUES (1, replace(uuid(), '-', ''), 'admin', '$2a$10$VQ.Rj7bc73B.WwU99k7R.eEAwqXBNmvihobk3SZ4m30b9tCR6..h2', '超级管理员',0, 1, 1);
+
+-- user:111111
+INSERT INTO tab_user(uid, username, password, nickname, role, createUserId, modifyUserId)
+VALUES (replace(uuid(), '-', ''), 'user', '$2a$10$6unbpf74Dc7NEBywaCHl..FzzprMb69gA.Qi09U7ud7vlKHP9PXfu', '普通用户',2, 1, 1);
 
