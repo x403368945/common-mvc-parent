@@ -6,11 +6,17 @@
         <artifactId>common-mvc-parent</artifactId>
         <groupId>com.ccx</groupId>
         <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>demo-socket</artifactId>
     <version>1.0.0</version>
     <packaging>war</packaging>
+
+    <properties>
+        <main.class>com.ccx.socket.Application</main.class>
+    </properties>
+
     <!-- spring-boot 特殊处理：pom 相差比较大 -->
     <dependencies>
         <dependency>
@@ -43,7 +49,10 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.ccx.socket.Application</mainClass>
+                    <fork>true</fork> <!-- devtools 热启动配置 -->
+                    <addResources>true</addResources>
+                    <mainClass>${main.class}</mainClass>
+                    <layout>ZIP</layout>
                 </configuration>
             </plugin>
         </plugins>

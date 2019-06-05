@@ -1,6 +1,5 @@
 package com.ccx.demo;
 
-import com.ccx.demo.DemoMainApplication;
 import org.springframework.boot.SpringApplication;
 
 /**

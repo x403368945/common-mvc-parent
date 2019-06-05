@@ -6,17 +6,33 @@
         <artifactId>common-mvc-parent</artifactId>
         <groupId>com.ccx</groupId>
         <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>demo-security</artifactId>
     <version>1.0.0</version>
     <packaging>war</packaging>
+
+    <properties>
+        <main.class>com.ccx.security.Application</main.class>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.ccx</groupId>
             <artifactId>common-mvc</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <!--
+               打 war 包部署到外部 tomcat ：
+               打包的时候可以不用包进去，别的设施会提供。事实上该依赖理论上可以参与编译，测试，运行等周期。
+               相当于compile，但是打包阶段做了exclude操作
+        -->
+        <!--<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>-->
     </dependencies>
     <build>
         <finalName>${project.artifactId}</finalName>
@@ -29,7 +45,10 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.ccx.security.Application</mainClass>
+                    <fork>true</fork> <!-- devtools 热启动配置 -->
+                    <addResources>true</addResources>
+                    <mainClass>${main.class}</mainClass>
+                    <layout>ZIP</layout>
                 </configuration>
             </plugin>
         </plugins>

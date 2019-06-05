@@ -2,12 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ccx</groupId>
     <artifactId>common-mvc-parent</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
+
     <!-- spring-boot 特殊处理：pom 文件与mvc差别较大 -->
     <modules>
         <module>common-utils</module><!-- 工具类封装 -->
@@ -16,7 +16,9 @@
         <module>demo-socket</module><!-- Spring Socket 基本应用【参考案例，独立运行】 -->
         <module>demo-main</module><!-- 应用入口【独立运行，可选依赖[demo-service]】 -->
         <module>demo-service</module><!-- 参考案例【必须依赖[demo-main]】 -->
-        <module>demo-deploy</module><!-- 组合打包所有发布模块，避免出现循环依赖 -->
+        <module>app-demo</module><!-- 组合打包所有发布模块，避免出现循环依赖 -->
+        <module>app-demo-main</module><!-- 单独打包发布 -->
+        <module>app-demo-service</module><!-- 单独打包发布 -->
     </modules>
 
     <profiles>
@@ -48,7 +50,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+        <springboot.version>2.1.5.RELEASE</springboot.version>
         <querydsl.version>4.2.1</querydsl.version>
     </properties>
 
@@ -58,7 +62,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>2.1.2.RELEASE</version>
+                <version>${springboot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -93,7 +97,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.4</version>
-            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -102,6 +106,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -207,38 +212,6 @@
             </resource>-->
         </resources>
         <plugins>
-            <!--
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-jar-plugin</artifactId>
-                            <version>3.1.1</version>
-                            <configuration>
-                                <archive>
-                                    <manifest>
-                                        <mainClass>org.springframework.ccx.loader.PropertiesLauncher</mainClass>
-                                    </manifest>
-                                </archive>
-                            </configuration>
-                        </plugin>
-            -->
-            <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-maven-plugin -->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.1.2.RELEASE</version>
-                <configuration>
-                    <skip>true</skip>
-                    <fork>true</fork> <!-- devtools 热启动配置 -->
-                    <addResources>true</addResources>
-                </configuration>
-                <!--<executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>&lt;!&ndash;可以把依赖的包都打包到生成的Jar包中&ndash;&gt;
-                        </goals>
-                    </execution>
-                </executions>-->
-            </plugin>
             <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-failsafe-plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -281,6 +254,12 @@
         </plugins>
         <pluginManagement>
             <plugins>
+                <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-maven-plugin -->
+                <plugin> <!-- war 包插件 -->
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${springboot.version}</version>
+                </plugin>
                 <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-war-plugin -->
                 <plugin> <!-- war 包插件 -->
                     <groupId>org.apache.maven.plugins</groupId>
@@ -289,12 +268,6 @@
                     <configuration>
                         <failOnMissingWebXml>false</failOnMissingWebXml>
                     </configuration>
-                </plugin>
-                <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-jar-plugin -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.1.2</version>
                 </plugin>
                 <!-- https://mvnrepository.com/artifact/com.mysema.maven/apt-maven-plugin -->
                 <plugin>

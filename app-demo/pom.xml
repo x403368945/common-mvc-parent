@@ -9,24 +9,40 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>demo-service</artifactId>
+    <artifactId>app-demo</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <properties>
-        <main.class>com.ccx.demo.DemoServiceApplication</main.class>
+        <main.class>com.ccx.demo.Application</main.class>
     </properties>
 
-    <!-- spring-boot 特殊处理：pom 文件不一样 -->
+    <!-- spring-boot 特殊处理：pom 文件差别较大 -->
     <dependencies>
         <dependency>
             <groupId>com.ccx</groupId>
             <artifactId>demo-main</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.ccx</groupId>
+            <artifactId>demo-service</artifactId>
+            <version>1.0.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.ccx</groupId>
+                    <artifactId>demo-main</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
+            <!--<plugin> &lt;!&ndash; war 包插件 &ndash;&gt;
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+            </plugin>-->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -36,23 +52,15 @@
                     <mainClass>${main.class}</mainClass>
                     <layout>ZIP</layout>
                 </configuration>
-                <!--<executions>
-                    &lt;!&ndash;
-                        repackage 之后jar包内部结构会改变，其他模块依赖该模块之后会打包失败，找不到依赖，所以这里必须注释
-                        如果需要单独打包发布该模块，需要再建一个用于发布的模块，依赖该模块打包成可运行的springboot.jar
-                     &ndash;&gt;
+                <executions>
                     <execution>
                         <goals>
                             <goal>repackage</goal>
                         </goals>
                     </execution>
-                </executions>-->
+                </executions>
             </plugin>
-            <!-- https://mvnrepository.com/artifact/com.mysema.maven/apt-maven-plugin -->
-            <plugin> <!-- 该插件可以生成 querydsl 需要的查询对象，执行 mvn compile 即可-->
-                <groupId>com.mysema.maven</groupId>
-                <artifactId>apt-maven-plugin</artifactId>
-            </plugin>
+
         </plugins>
     </build>
 </project>

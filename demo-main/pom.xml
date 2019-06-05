@@ -6,11 +6,16 @@
         <artifactId>common-mvc-parent</artifactId>
         <groupId>com.ccx</groupId>
         <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>demo-main</artifactId>
     <version>1.0.0</version>
-    <packaging>jar</packaging>
+    <!--<packaging>jar</packaging>-->
+
+    <properties>
+        <main.class>com.ccx.demo.DemoMainApplication</main.class>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -42,8 +47,23 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.ccx.demo.DemoMainApplication</mainClass>
+                    <!--<skip>true</skip>-->
+                    <fork>true</fork> <!-- devtools 热启动配置 -->
+                    <addResources>true</addResources>
+                    <mainClass>${main.class}</mainClass>
+                    <layout>ZIP</layout>
                 </configuration>
+                <!--<executions>
+                    &lt;!&ndash;
+                        repackage 之后jar包内部结构会改变，其他模块依赖该模块之后会打包失败，找不到依赖，所以这里必须注释
+                        如果需要单独打包发布该模块，需要再建一个用于发布的模块，依赖该模块打包成可运行的springboot.jar
+                     &ndash;&gt;
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>-->
             </plugin>
             <!--<plugin> &lt;!&ndash; war 包插件 &ndash;&gt;
                 <groupId>org.apache.maven.plugins</groupId>
@@ -55,17 +75,18 @@
                 <artifactId>apt-maven-plugin</artifactId>
             </plugin>
             <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-jar-plugin -->
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.ccx.demo.DemoMainApplication</mainClass>
+                            &lt;!&ndash;<addClasspath>true</addClasspath>&ndash;&gt;
+                            <mainClass>${main.class}</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
 

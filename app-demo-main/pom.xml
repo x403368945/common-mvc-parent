@@ -6,28 +6,23 @@
         <artifactId>common-mvc-parent</artifactId>
         <groupId>com.ccx</groupId>
         <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>demo</artifactId>
+    <artifactId>app-demo-main</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
+
+    <properties>
+        <main.class>com.ccx.demo.Application</main.class>
+    </properties>
+
     <!-- spring-boot 特殊处理：pom 文件差别较大 -->
     <dependencies>
         <dependency>
             <groupId>com.ccx</groupId>
             <artifactId>demo-main</artifactId>
             <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.ccx</groupId>
-            <artifactId>demo-service</artifactId>
-            <version>1.0.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.ccx</groupId>
-                    <artifactId>demo-main</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
     </dependencies>
     <build>
@@ -41,9 +36,20 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.ccx.demo.Application</mainClass>
+                    <fork>true</fork> <!-- devtools 热启动配置 -->
+                    <addResources>true</addResources>
+                    <mainClass>${main.class}</mainClass>
+                    <layout>ZIP</layout>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
+
         </plugins>
     </build>
 </project>

@@ -4,6 +4,7 @@ import com.ccx.security.config.init.AppProperties;
 import com.support.config.InitConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
@@ -23,6 +24,14 @@ public class Application extends SpringBootServletInitializer {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
+
+//    /**
+//     * 打 war 包部署到外部 tomcat ：运行时需要改变启动方式
+//     */
+//    @Override
+//    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+//        return application.sources(Application.class);
+//    }
 
 //    @Bean
 //    public CommandLineRunner commandLineRunner(ApplicationContext context) {
