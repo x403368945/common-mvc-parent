@@ -11,8 +11,8 @@
 
 # 执行生产环境打包命令
 # 加上 -X 参数打印详细日志
-mvnw.cmd clean install -Dmaven.test.skip=true -Pprod
-# mvnw.cmd clean install -Dmaven.test.skip=true -Pprod
-# mvnw.cmd clean install -Dmaven.test.skip=true -Pprod -X
+mvn clean install -Dmaven.test.skip=true -Pprod
+# mvn clean install -Dmaven.test.skip=true -Pprod
+# mvn clean install -Dmaven.test.skip=true -Pprod -X
 
 cp app-demo/target/app-demo.jar app-demo.jar
