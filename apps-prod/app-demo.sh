@@ -6,13 +6,15 @@
 APP_HOME=~/git-repository/common-mvc-parent/apps-prod
 # 应用名称(jar包名称)：{APP_NAME}.jar
 APP_NAME=app-demo
+# 启动端口
+SERVER_PORT=3366
 # LOG_PATH=$APP_HOME/logs/$APP_NAME.log
 #JVM参数
 # JVM_OPTS="-Dname=$SpringBoot  -Duser.timezone=Asia/Shanghai -Xms512M -Xmx512M -XX:PermSize=256M -XX:MaxPermSize=512M -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDateStamps  -XX:+PrintGCDetails -XX:NewRatio=1 -XX:SurvivorRatio=30 -XX:+UseParallelGC -XX:+UseParallelOldGC"
 JVM_OPTS=""
 #启动参数
 # START_OPTS="--spring.profiles.active=prod"
-START_OPTS="--APP_NAME=$APP_NAME"
+START_OPTS="-Dapp.name=$APP_NAME --server.port=$SERVER_PORT"
 echo $APP_HOME
 echo $APP_NAME
 

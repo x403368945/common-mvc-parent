@@ -1,6 +1,3 @@
-server:
-  port: 3366
-
 app: # 测试环境 todo 编辑时注意，请同时变更其他环境对应的参数
   env: beta # 当前环境：[dev:本地|beta:测试|prod:生产]
   admin-user-id: 1 # 管理员用户ID
