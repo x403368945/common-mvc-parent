@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# 生产环境发布脚本,linux
+# 生产环境发布脚本，linux
+cd ..
 
 # 删除 demo-main 模块下的静态资源文件
 # rm-rf demo-main/src/main/resources/demo-web
@@ -15,6 +16,6 @@ mvn clean install -Dmaven.test.skip=true -Pprod
 # mvn clean install -Dmaven.test.skip=true -Pprod
 # mvn clean install -Dmaven.test.skip=true -Pprod -X
 
-cp app-demo/target/app-demo.jar apps/app-demo.jar
-cp app-demo-main/target/app-demo-main.jar apps/app-demo-main.jar
-cp app-demo-service/target/app-demo-service.jar apps/app-demo-service.jar
+cp app-demo/target/app-demo.jar apps-prod/app-demo.jar
+cp app-demo-main/target/app-demo-main.jar apps-prod/app-demo-main.jar
+cp app-demo-service/target/app-demo-service.jar apps-prod/app-demo-service.jar
