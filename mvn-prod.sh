@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 生产环境发布脚本
+# 生产环境发布脚本,linux
 
 # 删除 demo-main 模块下的静态资源文件
 # rm-rf demo-main/src/main/resources/demo-web
