@@ -23,12 +23,6 @@ then
     exit 1
 fi
 
-if [ "$APP_NAME" = "" ];
-then
-    echo -e "未输入应用名 "
-    exit 1
-fi
-
 function start()
 {
     count=`ps -ef |grep java|grep $APP_NAME|grep -v grep|wc -l`
@@ -87,3 +81,5 @@ case $1 in
 Example: 
       sh $APP_NAME.sh start $APP_NAME.jar "
 esac
+
+tail -f LOG_PATH
