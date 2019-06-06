@@ -4,10 +4,8 @@
 
 # 应用运行目录
 APP_HOME=~/git-repository/common-mvc-parent/apps-prod
-# 应用名称(jar包名称)：{APP_NAME}.j
-# ar
+# 应用名称(jar包名称)：{APP_NAME}.jar
 APP_NAME=app-demo
-mkdir $APP_HOME/logs
 LOG_PATH=$APP_HOME/logs/$APP_NAME.log
 #JVM参数
 # JVM_OPTS="-Dname=$SpringBoot  -Duser.timezone=Asia/Shanghai -Xms512M -Xmx512M -XX:PermSize=256M -XX:MaxPermSize=512M -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDateStamps  -XX:+PrintGCDetails -XX:NewRatio=1 -XX:SurvivorRatio=30 -XX:+UseParallelGC -XX:+UseParallelOldGC"
@@ -15,13 +13,13 @@ JVM_OPTS=""
 #启动参数
 # START_OPTS="--spring.profiles.active=prod"
 START_OPTS=""
-echo $APP_HOME
-echo $APP_NAME
-echo $LOG_PATH
+echo $APP_HOME > $LOG_PATH
+echo $APP_NAME > $LOG_PATH
+echo $LOG_PATH > $LOG_PATH
 
 if [ "$1" = "" ];
 then
-    echo -e "未输入操作名 {start|stop|restart|status} "
+    echo -e "未输入操作名 {start|stop|restart|status} " > $LOG_PATH
     exit 1
 fi
 
@@ -29,16 +27,16 @@ function start()
 {
     count=`ps -ef |grep java|grep $APP_NAME|grep -v grep|wc -l`
     if [ $count != 0 ];then
-        echo "$APP_NAME is running..."
+        echo "$APP_NAME is running..." > $LOG_PATH
     else
-        echo "Start $APP_NAME success..."
+        echo "Start $APP_NAME success..." > $LOG_PATH
         nohup java -jar  $JVM_OPTS $APP_NAME.jar  $START_OPTS > /dev/null 2>&1 &
     fi
 }
 
 function stop()
 {
-    echo "Stop $APP_NAME"
+    echo "Stop $APP_NAME" > $LOG_PATH
     boot_id=`ps -ef |grep java|grep $APP_NAME|grep -v grep|awk '{print $APP_NAME.sh}'`
     count=`ps -ef |grep java|grep $APP_NAME|grep -v grep|wc -l`
 
@@ -62,9 +60,9 @@ function status()
 {
     count=`ps -ef |grep java|grep $APP_NAME|grep -v grep|wc -l`
     if [ $count != 0 ];then
-        echo "$APP_NAME is running..."
+        echo "$APP_NAME is running..." > $LOG_PATH
     else
-        echo "$APP_NAME is not running..."
+        echo "$APP_NAME is not running..." > $LOG_PATH
     fi
 }
 
@@ -79,9 +77,7 @@ case $1 in
     status;;
     *)
 
-    echo -e "Usage: sh $APP_NAME.sh {start|stop|restart|status}
-Example: 
-      sh $APP_NAME.sh start"
+    echo -e "Usage: sh $APP_NAME.sh {start|stop|restart|status} \nExample: \nsh $APP_NAME.sh start" > $LOG_PATH
 
 tail -f LOG_PATH
 
