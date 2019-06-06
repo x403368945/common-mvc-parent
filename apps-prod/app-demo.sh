@@ -4,8 +4,10 @@
 
 # 应用运行目录
 APP_HOME=~/git-repository/common-mvc-parent/apps-prod
-# 应用名称
-APP_NAME=app-demo.jar
+# 应用名称(jar包名称)：{APP_NAME}.j
+# ar
+APP_NAME=app-demo
+mkdir $APP_HOME/logs
 LOG_PATH=$APP_HOME/logs/$APP_NAME.log
 #JVM参数
 # JVM_OPTS="-Dname=$SpringBoot  -Duser.timezone=Asia/Shanghai -Xms512M -Xmx512M -XX:PermSize=256M -XX:MaxPermSize=512M -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDateStamps  -XX:+PrintGCDetails -XX:NewRatio=1 -XX:SurvivorRatio=30 -XX:+UseParallelGC -XX:+UseParallelOldGC"
@@ -30,7 +32,7 @@ function start()
         echo "$APP_NAME is running..."
     else
         echo "Start $APP_NAME success..."
-        nohup java -jar  $JVM_OPTS $APP_NAME  $START_OPTS > /dev/null 2>&1 &
+        nohup java -jar  $JVM_OPTS $APP_NAME.jar  $START_OPTS > /dev/null 2>&1 &
     fi
 }
 
@@ -77,9 +79,10 @@ case $1 in
     status;;
     *)
 
-    echo -e "Usage: sh $APP_NAME.sh {start|stop|restart|status} $APP_NAME.jar
+    echo -e "Usage: sh $APP_NAME.sh {start|stop|restart|status}
 Example: 
-      sh $APP_NAME.sh start $APP_NAME.jar "
-esac
+      sh $APP_NAME.sh start"
 
 tail -f LOG_PATH
+
+esac
