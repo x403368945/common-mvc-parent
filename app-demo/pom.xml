@@ -47,6 +47,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <executable>true</executable><!-- executable：在jar包中内置shell脚本，用于 linux 服务启动模式 -->
                     <fork>true</fork> <!-- devtools 热启动配置 -->
                     <addResources>true</addResources>
                     <mainClass>${main.class}</mainClass>

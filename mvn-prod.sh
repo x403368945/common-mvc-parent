@@ -15,4 +15,6 @@ mvn clean install -Dmaven.test.skip=true -Pprod
 # mvn clean install -Dmaven.test.skip=true -Pprod
 # mvn clean install -Dmaven.test.skip=true -Pprod -X
 
-cp app-demo/target/app-demo.jar app-demo.jar
+cp app-demo/target/app-demo.jar apps/app-demo.jar
+cp app-demo-main/target/app-demo-main.jar apps/app-demo-main.jar
+cp app-demo-service/target/app-demo-service.jar apps/app-demo-service.jar

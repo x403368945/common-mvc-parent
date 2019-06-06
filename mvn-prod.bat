@@ -14,6 +14,8 @@ call mvn clean install -Dmaven.test.skip=true -Pprod
 :: call mvn clean install -Dmaven.test.skip=true -Pprod
 :: call mvn clean install -Dmaven.test.skip=true -Pprod -X
 
-copy app-demo\target\app-demo.jar app-demo.jar
+copy app-demo\target\app-demo.jar apps\app-demo.jar
+copy app-demo-main\target\app-demo-main.jar apps\app-demo-main.jar
+copy app-demo-service\target\app-demo-service.jar apps\app-demo-service.jar
 
 pause
