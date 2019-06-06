@@ -32,6 +32,7 @@ function start()
         echo "Start $APP_NAME success..."
         nohup java -jar  $JVM_OPTS $APP_NAME.jar  $START_OPTS > /dev/null 2>&1 &
     fi
+    echo "tail -f $APP_HOME/logs/$APP_NAME/"
 }
 
 function stop()
