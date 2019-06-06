@@ -37,7 +37,8 @@ function start()
 function stop()
 {
     echo "Stop $APP_NAME" > $LOG_PATH
-    echo `Stop $APP_NAME`
+    echo `ps -ef |grep java|grep $APP_NAME|grep -v grep`
+    echo `ps -ef |grep java|grep $APP_NAME|grep -v grep|wc -l`
     boot_id=`ps -ef |grep java|grep $APP_NAME|grep -v grep`
     count=`ps -ef |grep java|grep $APP_NAME|grep -v grep|wc -l`
 
