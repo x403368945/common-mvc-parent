@@ -12,7 +12,7 @@ APP_NAME=app-demo
 JVM_OPTS=""
 #启动参数
 # START_OPTS="--spring.profiles.active=prod"
-START_OPTS=""
+START_OPTS="--APP_NAME=$APP_NAME"
 echo $APP_HOME
 echo $APP_NAME
 
@@ -29,7 +29,7 @@ function start()
         echo "$APP_NAME is running..."
     else
         echo "Start $APP_NAME success..."
-        nohup java -jar  $JVM_OPTS $APP_NAME.jar  $START_OPTS > /dev/null 2>&1 &
+        nohup java -jar $JVM_OPTS $APP_NAME.jar $START_OPTS > /dev/null 2>&1 &
     fi
     echo "tail -f $APP_HOME/logs/$APP_NAME."
 }

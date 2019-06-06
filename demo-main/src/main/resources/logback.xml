@@ -8,7 +8,7 @@
 - configuration 子节点为 appender、logger、root
 -->
 <configuration scan="false" scanPeriod="60 second" debug="true">
-    <property name="APP_NAME" value="demo-main"/>
+    <property name="APP_NAME" value="${APP_NAME:-demo-main}"/>
     <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
     <property name="LOG_HOME" value="${CATALINA_HOME:-.}/logs"/>
     <contextName>${APP_NAME}</contextName>
