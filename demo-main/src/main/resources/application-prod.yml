@@ -8,7 +8,7 @@ app: # 生产环境 todo 编辑时注意，请同时变更其他环境对应的�
   ip: 127.0.0.1 # 当前主机 IP 地址；可使用 frp 服务器IP
   domain: http://demo.cctable.com # 应用路径，域名；可使用 frp 服务器域名
   markdown: http://demo.cctable.com/md/ # markdown 文档地址
-  path-root: D:/nginx/html/files # 应用文件根目录
+  path-root: /var/www/demo/files # 应用文件根目录
   debug: false # 调试模式开关：true开启调试模式，false关闭调试模式
   junit: false # 单元测试开关：true开启单元测试模式，false关闭单元测试模式
 
