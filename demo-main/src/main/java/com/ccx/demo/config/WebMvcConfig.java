@@ -1,7 +1,6 @@
 package com.ccx.demo.config;
 
 import com.ccx.demo.config.init.AppConfig;
-import com.ccx.demo.config.interceptor.LogUserInterceptor;
 import com.support.config.AbstractMvcConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
@@ -40,7 +39,7 @@ public class WebMvcConfig extends AbstractMvcConfig {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 拦截器先截取将要记录到日志的用户信息
-        registry.addInterceptor(new LogUserInterceptor()).addPathPatterns("/**");
+//        registry.addInterceptor(new LogUserInterceptor()).addPathPatterns("/**");
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.support.config.security;
 
+import com.log.Reqid;
+import com.utils.util.Util;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -7,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
@@ -71,10 +74,19 @@ public class SimpleAuthAdapter extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         final AuthHandler authHandler = new AuthHandler();
+//        /**
+//         * {@link HeaderWriterFilter.java}
+//         */
+//        final HeaderWriter headerWriter = (request, response) -> {
+//            final String uuid = Util.uuid();
+//            response.addHeader("uuid", uuid);
+//        };
         http
                 .csrf().disable()
                 // 允许跨域
                 .cors().and()
+                // http 响应头追加请求唯一标记
+                .headers().addHeaderWriter((req, res) -> res.addHeader("uid", Reqid.remove())).and()
                 // 用户访问未经授权的rest API，返回错误码401（未经授权）
                 .exceptionHandling().authenticationEntryPoint(authHandler).accessDeniedHandler(authHandler)
                 .and().authorizeRequests()
@@ -99,11 +111,14 @@ public class SimpleAuthAdapter extends WebSecurityConfigurerAdapter {
         }
         { // 自定义过滤器
             // token 校验前置过滤器
-//                http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
             http.addFilterBefore(
                     new JsonUsernamePasswordAuthenticationFilter(authenticationManager(), authHandler, authHandler),
                     UsernamePasswordAuthenticationFilter.class
             );
+            http.addFilterBefore((req, res, chain) -> {
+                Reqid.set(Util.uuid()); // 设置请求唯一标记
+                chain.doFilter(req, res);
+            }, ChannelProcessingFilter.class);
         }
     }
 
