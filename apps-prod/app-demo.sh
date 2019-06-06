@@ -37,14 +37,15 @@ function start()
 function stop()
 {
     echo "Stop $APP_NAME" > $LOG_PATH
-    boot_id=`ps -ef |grep java|grep $APP_NAME|grep -v grep|awk '{print $APP_NAME.sh}'`
+    echo `Stop $APP_NAME`
+    boot_id=`ps -ef |grep java|grep $APP_NAME|grep -v grep`
     count=`ps -ef |grep java|grep $APP_NAME|grep -v grep|wc -l`
 
     if [ $count != 0 ];then
         kill $boot_id
         count=`ps -ef |grep java|grep $APP_NAME|grep -v grep|wc -l`
 
-        boot_id=`ps -ef |grep java|grep $APP_NAME|grep -v grep|awk '{print $APP_NAME.sh}'`
+        boot_id=`ps -ef |grep java|grep $APP_NAME|grep -v grep`
         kill -9 $boot_id
     fi
 }
