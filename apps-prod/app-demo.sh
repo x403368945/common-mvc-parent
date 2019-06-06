@@ -2,10 +2,6 @@
 # 启动|停止 app-demo.jar 文件；  chmod +x app-demo.sh
 # 注意：在sh文件中=赋值，左右两侧不能有空格
 
-#启动参数
-START_OPTS=$2
-echo $START_OPTS
-
 # 应用运行目录
 APP_HOME=~/git-repository/common-mvc-parent/apps-prod
 # 应用名称
@@ -14,6 +10,9 @@ LOG_PATH=$APP_HOME/logs/$APP_NAME.log
 #JVM参数
 # JVM_OPTS="-Dname=$SpringBoot  -Duser.timezone=Asia/Shanghai -Xms512M -Xmx512M -XX:PermSize=256M -XX:MaxPermSize=512M -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDateStamps  -XX:+PrintGCDetails -XX:NewRatio=1 -XX:SurvivorRatio=30 -XX:+UseParallelGC -XX:+UseParallelOldGC"
 JVM_OPTS=""
+#启动参数
+# START_OPTS="--spring.profiles.active=prod"
+START_OPTS=""
 echo $APP_HOME
 echo $APP_NAME
 echo $LOG_PATH
@@ -44,14 +43,14 @@ function start()
 function stop()
 {
     echo "Stop $APP_NAME"
-    boot_id=`ps -ef |grep java|grep $APP_NAME|grep -v grep|awk '{print $APP_NAME}'`
+    boot_id=`ps -ef |grep java|grep $APP_NAME|grep -v grep|awk '{print $APP_NAME.sh}'`
     count=`ps -ef |grep java|grep $APP_NAME|grep -v grep|wc -l`
 
     if [ $count != 0 ];then
         kill $boot_id
         count=`ps -ef |grep java|grep $APP_NAME|grep -v grep|wc -l`
 
-        boot_id=`ps -ef |grep java|grep $APP_NAME|grep -v grep|awk '{print $APP_NAME}'`
+        boot_id=`ps -ef |grep java|grep $APP_NAME|grep -v grep|awk '{print $APP_NAME.sh}'`
         kill -9 $boot_id
     fi
 }
@@ -84,7 +83,7 @@ case $1 in
     status;;
     *)
 
-    echo -e "Usage:  sh  $0  {start|stop|restart|status}  {SpringBootJarName} 
+    echo -e "Usage: sh $APP_NAME.sh {start|stop|restart|status} $APP_NAME.jar
 Example: 
-      sh  $0  start esmart-test.jar "
+      sh $APP_NAME.sh start $APP_NAME.jar "
 esac
