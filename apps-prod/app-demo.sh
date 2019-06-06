@@ -6,7 +6,7 @@
 APP_HOME=~/git-repository/common-mvc-parent/apps-prod
 # 应用名称(jar包名称)：{APP_NAME}.jar
 APP_NAME=app-demo
-LOG_PATH=$APP_HOME/logs/$APP_NAME/$APP_NAME.log
+# LOG_PATH=$APP_HOME/logs/$APP_NAME.log
 #JVM参数
 # JVM_OPTS="-Dname=$SpringBoot  -Duser.timezone=Asia/Shanghai -Xms512M -Xmx512M -XX:PermSize=256M -XX:MaxPermSize=512M -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDateStamps  -XX:+PrintGCDetails -XX:NewRatio=1 -XX:SurvivorRatio=30 -XX:+UseParallelGC -XX:+UseParallelOldGC"
 JVM_OPTS=""
@@ -15,7 +15,6 @@ JVM_OPTS=""
 START_OPTS=""
 echo $APP_HOME
 echo $APP_NAME
-echo $LOG_PATH
 
 if [ "$1" = "" ];
 then
@@ -32,7 +31,7 @@ function start()
         echo "Start $APP_NAME success..."
         nohup java -jar  $JVM_OPTS $APP_NAME.jar  $START_OPTS > /dev/null 2>&1 &
     fi
-    echo "tail -f $APP_HOME/logs/$APP_NAME/"
+    echo "tail -f $APP_HOME/logs/$APP_NAME."
 }
 
 function stop()
