@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# 启动|停止 app-demo.jar 文件；  chmod +x app-demo.sh
+# chmod +x app-demo.sh
+# 启动|停止 app-demo.jar 文件
 # 注意：在sh文件中=赋值，左右两侧不能有空格
 
 # 应用运行目录
