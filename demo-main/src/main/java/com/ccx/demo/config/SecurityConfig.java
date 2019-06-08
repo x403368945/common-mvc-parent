@@ -126,6 +126,7 @@ public class SecurityConfig {
             final AuthHandler authHandler = new AuthHandler();
             http
                     .csrf().disable()
+//                    .csrf().ignoringAntMatchers("/druid/*").and()
 //                    .cors().and()
                     // http 响应头追加请求唯一标记
                     .headers().addHeaderWriter((req, res) -> res.addHeader("uid", Reqid.remove())).and()
