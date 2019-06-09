@@ -9,33 +9,29 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>demo-socket</artifactId>
+    <artifactId>app-security</artifactId>
     <version>1.0.0</version>
     <packaging>war</packaging>
 
     <properties>
-        <main.class>com.ccx.socket.Application</main.class>
+        <main.class>com.ccx.security.Application</main.class>
     </properties>
 
-    <!-- spring-boot 特殊处理：pom 相差比较大 -->
     <dependencies>
         <dependency>
             <groupId>com.ccx</groupId>
             <artifactId>common-mvc</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <dependency>
+        <!--
+               打 war 包部署到外部 tomcat ：
+               打包的时候可以不用包进去，别的设施会提供。事实上该依赖理论上可以参与编译，测试，运行等周期。
+               相当于compile，但是打包阶段做了exclude操作
+        -->
+        <!--<dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-websocket</artifactId>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-websocket -->
-        <!--<dependency> &lt;!&ndash; 解决启用 WebSocket之后，单元测试报错&ndash;&gt;
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-websocket</artifactId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
         </dependency>-->
     </dependencies>
     <build>

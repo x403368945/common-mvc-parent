@@ -12,10 +12,10 @@
     <modules>
         <module>common-utils</module><!-- 工具类封装 -->
         <module>common-mvc</module><!-- Spring MVC 封装 -->
-        <module>demo-security</module><!-- Spring Security 基本应用【参考案例，独立运行】 -->
-        <module>demo-socket</module><!-- Spring Socket 基本应用【参考案例，独立运行】 -->
         <module>demo-main</module><!-- 应用入口【独立运行，可选依赖[demo-service]】 -->
         <module>demo-service</module><!-- 参考案例【必须依赖[demo-main]】 -->
+        <module>app-security</module><!-- Spring Security 基本应用【参考案例，独立运行】 -->
+        <module>app-socket</module><!-- Spring Socket 基本应用【参考案例，独立运行】 -->
         <module>app-demo</module><!-- 组合打包所有发布模块，避免出现循环依赖 -->
         <module>app-demo-main</module><!-- 单独打包发布 -->
         <module>app-demo-service</module><!-- 单独打包发布 -->
@@ -154,7 +154,7 @@
             <resource>
                 <directory>${basedir}/src/main/resources</directory>
                 <targetPath>${basedir}/target/classes</targetPath>
-                <filtering>true</filtering>
+                <filtering>true</filtering> <!-- 开启 filtering 会替换静态资源（html|js|...）中使用 ${key:属性名} 占位的属性，可以定义在 pom.xml -> properties -> key  -->
                 <excludes> <!-- 经过maven的filter，会破坏font文件的二进制文件格式，到前台解析出错 -->
                     <exclude>static/**</exclude>
                     <!--<exclude>*-web/**</exclude>-->

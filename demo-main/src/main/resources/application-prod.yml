@@ -44,7 +44,7 @@ spring:
       web-stat-filter:
         enabled: true
         url-pattern: "/*"
-        exclusions: "*.html,*.htm,*.js,*.css,*.gif,*.jpg,*.bmp,*.png,*.ico,*.svg,*.ttf,*.woff,*.woff2,/druid/*"
+        exclusions: "/druid/*,*.html,*.htm,*.js,*.css,*.gif,*.jpg,*.bmp,*.png,*.ico,*.svg,*.ttf,*.woff,*.woff2"
       # 配置DruidStatViewServlet
       stat-view-servlet:
         enabled: true
