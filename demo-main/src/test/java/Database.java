@@ -14,8 +14,8 @@ import java.util.List;
 public class Database {
     @SneakyThrows
     public static void main(String[] args) {
-        String dir = System.getProperty("user.dir"); // "D:/git-repository/xh-server/";
-        //        @Cleanup FileWriter writer = new FileWriter(dir + "xh-main/src/main/resources/database.sql");
+        String dir = System.getProperty("user.dir"); // "D:/git-repository/common-mvc-server/";
+        //        @Cleanup FileWriter writer = new FileWriter(dir + "common-mvc-server/src/main/resources/database.sql");
         @Cleanup final OutputStream writer = Files.newOutputStream(Paths.get(dir, "demo-main/src/main/resources/database.sql"));
         final List<String> pkgs = Arrays.asList(
                 "demo-main",
