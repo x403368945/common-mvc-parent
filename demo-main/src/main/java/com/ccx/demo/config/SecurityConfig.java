@@ -129,7 +129,7 @@ public class SecurityConfig {
 //                    .csrf().ignoringAntMatchers("/druid/*").and()
 //                    .cors().and()
                     // http 响应头追加请求唯一标记
-                    .headers().addHeaderWriter((req, res) -> res.addHeader("uid", Reqid.remove())).and()
+                    .headers().addHeaderWriter((req, res) -> res.addHeader("uid", Reqid.getAndRemove())).and()
                     //用户访问未经授权的rest API，返回错误码401（未经授权）
                     .exceptionHandling().authenticationEntryPoint(authHandler).accessDeniedHandler(authHandler)
 //                    // 指定会话策略；ALWAYS:总是创建HttpSession, IF_REQUIRED:只会在需要时创建一个HttpSession, NEVER:不会创建HttpSession，但如果它已经存在，将可以使用HttpSession, STATELESS:永远不会创建HttpSession，它不会使用HttpSession来获取SecurityContext

@@ -86,7 +86,7 @@ public class SimpleAuthAdapter extends WebSecurityConfigurerAdapter {
                 // 允许跨域
                 .cors().and()
                 // http 响应头追加请求唯一标记
-                .headers().addHeaderWriter((req, res) -> res.addHeader("uid", Reqid.remove())).and()
+                .headers().addHeaderWriter((req, res) -> res.addHeader("uid", Reqid.getAndRemove())).and()
                 // 用户访问未经授权的rest API，返回错误码401（未经授权）
                 .exceptionHandling().authenticationEntryPoint(authHandler).accessDeniedHandler(authHandler)
                 .and().authorizeRequests()

@@ -1,0 +1,96 @@
+### 保存
+POST http://localhost:8080/demo-list/1
+Content-Type: application/json
+Authorization: basic YWRtaW46YWRtaW4=
+
+{
+  "json": {
+    "name": "JX",
+    "content": "mMCqBHZnIEzvmYh",
+    "status": "WATING",
+    "amount": 1000
+  }
+}
+
+###
+### 修改
+PUT http://localhost:8080/demo-list/1/1
+Content-Type: application/json
+Authorization: basic YWRtaW46YWRtaW4=
+
+{
+  "json": {
+    "uid": "b2e8918e010940828446c0d73e1bd134",
+    "name": "PeXImPsqeI",
+    "content": "OyTlwNFavgqaHgc",
+    "status": "RUNNING",
+    "amount": 7871.0,
+    "modifyTime": "2018-12-27 22:59:05"
+  }
+}
+
+###
+### 物理删除:id
+DELETE http://localhost:8080/demo-list/1/20
+Authorization: basic YWRtaW46YWRtaW4=
+
+###
+### 物理删除:id+uid
+DELETE http://localhost:8080/demo-list/1/21/f87e219e1e0844549821a87be7975558
+Authorization: basic YWRtaW46YWRtaW4=
+
+###
+### 逻辑删除:id
+PATCH http://localhost:8080/demo-list/1/8
+Authorization: basic YWRtaW46YWRtaW4=
+
+###
+### 逻辑删除:id+uid
+PATCH http://localhost:8080/demo-list/1/9/9f34621b6238423f96367366dfe3140b
+Authorization: basic YWRtaW46YWRtaW4=
+
+###
+### 批量逻辑删除:id+uid
+PATCH http://localhost:8080/demo-list/1
+Content-Type: application/json
+Authorization: basic YWRtaW46YWRtaW4=
+
+{
+  "json": [
+    {
+      "id": 12,
+      "uid": "026022addcfe45d88cf1433509f3774f"
+    },
+    {
+      "id": 13,
+      "uid": "be26e4e834c4410fa01150308c7f38c3"
+    }
+  ]
+}
+
+###
+### 查询:id+timestamp
+GET http://localhost:8080/demo-list/1/2/1545100853000
+Authorization: basic YWRtaW46YWRtaW4=
+
+###
+### 查询:id+uid+timestamp
+GET http://localhost:8080/demo-list/1/4/1aa143904ceb4f2092735c9a98287ff3/1560092206000
+Authorization: basic YWRtaW46YWRtaW4=
+
+###
+### 查询:不分页
+GET http://localhost:8080/demo-list/1?json={"createTimeRange":{"begin":"2018-12-27"}}
+Authorization: basic YWRtaW46YWRtaW4=
+
+###
+### 查询:分页
+GET http://localhost:8080/demo-list/1/page/1/10?json={"amountRange":{"min":0.0,"max":2000.0}}
+Authorization: basic YWRtaW46YWRtaW4=
+
+###
+### 查询:分页 + 排序
+GET http://localhost:8080/demo-list/1/page/1/10?json={"amountRange":{"min":0.0,"max":2000.0}, sorts:[{name:"modifyTime", direction:"DESC"}]}
+Authorization: basic YWRtaW46YWRtaW4=
+
+###

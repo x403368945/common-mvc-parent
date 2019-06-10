@@ -30,7 +30,16 @@ public class Reqid {
     /**
      * 移除 ThreadLocal 值
      */
-    public static String remove() {
+    public static void remove() {
+        TL.remove();
+    }
+
+    /**
+     * 移除 ThreadLocal 值
+     *
+     * @return {@link String}
+     */
+    public static String getAndRemove() {
         final String v = TL.get();
         TL.remove();
         return v;
