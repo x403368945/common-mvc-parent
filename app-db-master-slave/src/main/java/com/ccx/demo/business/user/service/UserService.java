@@ -1,10 +1,8 @@
 package com.ccx.demo.business.user.service;
 
-import com.ccx.demo.business.user.bordcast.IUserEvent;
 import com.ccx.demo.business.user.dao.jpa.UserRepository;
 import com.ccx.demo.business.user.entity.TabUser;
 import com.ccx.demo.enums.Role;
-import com.google.common.eventbus.EventBus;
 import com.querydsl.core.QueryResults;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.exception.DeleteRowsException;
@@ -32,8 +30,6 @@ public class UserService implements IService<TabUser> {
 
     @Autowired
     private UserRepository repository;
-    @Autowired
-    private EventBus eventBus;
 
 //    @Autowired
 //    private UserCache userCache;
@@ -44,9 +40,6 @@ public class UserService implements IService<TabUser> {
     public TabUser save(final TabUser obj, final Long userId) {
         obj.setRole(Role.ROLE_USER);
         final TabUser user = repository.save(obj);
-        { // 发送广播
-            eventBus.post(IUserEvent.UserNew.of(user));
-        }
         return user;
     }
 
@@ -107,9 +100,6 @@ public class UserService implements IService<TabUser> {
             repository.clearLoginCache(obj.getPassword());
             repository.clearLoginCache(obj.getEmail());
         });
-        { // 发送广播
-            eventBus.post(IUserEvent.NicknameUpdate.of(TabUser.builder().id(id).nickname(nickname).build()));
-        }
     }
 
 }

@@ -1,7 +1,6 @@
 package com.ccx.demo;
 
 import com.ccx.demo.config.init.AppProperties;
-import com.support.config.BusConfig;
 import com.support.config.InitConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,7 +17,7 @@ import org.springframework.context.annotation.Import;
  * @author 谢长春 2019/1/21
  */
 @SpringBootApplication
-@Import(value = {InitConfig.class, BusConfig.class})
+@Import(value = {InitConfig.class})
 @EnableConfigurationProperties(value = {AppProperties.class})
 public class Application extends SpringBootServletInitializer {
     public static void main(String[] args) {

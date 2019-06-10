@@ -2,11 +2,8 @@ package com.ccx.demo.business.example.service;
 
 import com.ccx.demo.business.example.dao.jpa.DemoListRepository;
 import com.ccx.demo.business.example.entity.TabDemoList;
-import com.ccx.demo.business.user.bordcast.IUserEvent;
-import com.google.common.eventbus.Subscribe;
 import com.querydsl.core.QueryResults;
 import com.support.aop.annotations.ServiceAspect;
-import com.support.config.BusConfig.EventBusListener;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.exception.DeleteRowsException;
 import com.support.mvc.exception.UpdateRowsException;
@@ -27,20 +24,9 @@ import java.util.Optional;
 @Slf4j
 @Service
 @ServiceAspect
-@EventBusListener
 public class DemoListService implements IService<TabDemoList> {
     @Autowired
     private DemoListRepository repository;
-
-    /**
-     * 监听用户昵称变更广播
-     *
-     * @param obj {@link IUserEvent.NicknameUpdate}
-     */
-    @Subscribe
-    public void listener(final IUserEvent.NicknameUpdate obj) {
-        repository.updateNickName(obj.getId(), obj.getNickname());
-    }
 
     @Override
     public TabDemoList save(final TabDemoList obj, final Long userId) {
