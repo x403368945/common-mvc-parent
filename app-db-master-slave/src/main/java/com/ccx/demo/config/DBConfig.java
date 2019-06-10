@@ -1,12 +1,10 @@
 package com.ccx.demo.config;
 
+import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
 import com.ccx.demo.tl.DBContext;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,8 +43,7 @@ import static com.ccx.demo.enums.DBRoute.*;
  * @author 谢长春 2019/1/23
  */
 @Configuration
-@EnableJpaRepositories(value = "com.ccx.**.dao.jpa")
-@EnableConfigurationProperties(JpaProperties.class)
+@EnableJpaRepositories(value = "com.ccx.**.dao")
 public class DBConfig {
 
     /**
@@ -58,7 +55,8 @@ public class DBConfig {
     @Bean("masterDataSource")
     @ConfigurationProperties("spring.datasource.master")
     public DataSource masterDataSource() {
-        return DataSourceBuilder.create().build();
+//        return DataSourceBuilder.create().build();
+        return DruidDataSourceBuilder.create().build();
     }
 
     /**
@@ -69,7 +67,8 @@ public class DBConfig {
     @Bean("secondDataSource")
     @ConfigurationProperties("spring.datasource.second")
     public DataSource secondDataSource() {
-        return DataSourceBuilder.create().build();
+//        return DataSourceBuilder.create().build();
+        return DruidDataSourceBuilder.create().build();
     }
 
     /**
@@ -80,7 +79,8 @@ public class DBConfig {
     @Bean("thirdDataSource")
     @ConfigurationProperties("spring.datasource.third")
     public DataSource thirdDataSource() {
-        return DataSourceBuilder.create().build();
+//        return DataSourceBuilder.create().build();
+        return DruidDataSourceBuilder.create().build();
     }
 
     /**
@@ -115,27 +115,25 @@ public class DBConfig {
      * 管理主从策略配置注入
      *
      * @param builder           {@link EntityManagerFactoryBuilder} springboot 简化配置时，用于自动装配，必须在 {@link DBConfig#masterDataSource()} 头上指定 @Primary，该对象才有效
-     * @param jpaProperties     {@link JpaProperties} 默认的 jpa 参数，在 yml 文件中配置
      * @param routingDataSource {@link DBConfig#routingDataSource(DataSource, DataSource, DataSource)} 主从路由数据源
      * @return {@link LocalContainerEntityManagerFactoryBean}
      */
     @Bean("entityManagerFactoryBean")
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean(
             EntityManagerFactoryBuilder builder,
-            JpaProperties jpaProperties,
             @Qualifier("routingDataSource") DataSource routingDataSource) {
         return builder
                 .dataSource(routingDataSource)
-                .properties(jpaProperties.getProperties())
-                .packages("com.ccx") //设置实体类所在位置
-                .persistenceUnit("persistenceUnit")
+//                .properties(jpaProperties.getProperties())
+                .packages("com.ccx") // 设置实体类扫描包
+//                .persistenceUnit("multiPersistenceUnit")
                 .build();
     }
 
     /**
      * 自定义实体管理，覆盖 springboot 自动装配
      *
-     * @param entityManagerFactoryBean {@link DBConfig#entityManagerFactoryBean(EntityManagerFactoryBuilder, JpaProperties, DataSource)}
+     * @param entityManagerFactoryBean {@link DBConfig#entityManagerFactoryBean(EntityManagerFactoryBuilder, DataSource)}
      * @return {@link EntityManagerFactory}
      */
     @Primary
