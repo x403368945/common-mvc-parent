@@ -27,7 +27,7 @@ import java.util.Optional;
 @Builder
 @Data
 @Accessors(chain = true)
-@JSONType(orders = {"column", "index", "label", "alias", "type", "sindex", "group", "tag", "hidden", "required"})
+@JSONType(orders = {"column", "index", "label", "alias", "type", "sindex", "group", "tag", "hidden", "required", "format"})
 @Slf4j
 public class Header implements IJson {
     /**
@@ -70,6 +70,10 @@ public class Header implements IJson {
      * 是否必填
      */
     private Boolean required;
+    /**
+     * 列在页面展示时需要格式化：金额、数字、日期
+     */
+    private String format;
 
     public Integer index() {
         if (Objects.nonNull(index)) return index;
