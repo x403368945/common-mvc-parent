@@ -20,3 +20,4 @@ copy app-demo-main\target\app-demo-main.jar apps-prod\app-demo-main.jar
 copy app-demo-service\target\app-demo-service.jar apps-prod\app-demo-service.jar
 
 pause
+exit

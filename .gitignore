@@ -36,3 +36,14 @@ hs_err_pid*
 /log
 /logs
 /.*/logs
+# Project exclude paths
+/app-db-master-slave/target/
+/app-demo/target/
+/app-demo-main/target/
+/app-demo-service/target/
+/app-security/target/
+/app-socket/target/
+/common-mvc/target/
+/common-utils/target/
+/demo-main/target/
+/demo-service/target/

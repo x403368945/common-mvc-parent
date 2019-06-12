@@ -1,5 +1,6 @@
 package com.support.config.security;
 
+import com.google.common.collect.Sets;
 import com.log.Reqid;
 import com.utils.util.Util;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Spring Security 简单的授权认证配置；<br>
@@ -66,9 +70,31 @@ public class SimpleAuthAdapter extends WebSecurityConfigurerAdapter {
         return false;
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    /**
+     * <pre>
+     * Security 忽略静态资源
+     * 默认值："/static/**", "/files/**", "/druid/**"
+     * 如需要追加静态资源路径，重写 {@link SimpleAuthAdapter}.{@link SimpleAuthAdapter#ignores()} 方法即可
+     * 若需需覆盖静态资源路径，重写 {@link SimpleAuthAdapter}.{@link SimpleAuthAdapter#configure(WebSecurity)} 方法即可
+     *
+     * @return {@link List<String>}
+     */
+    protected List<String> ignores() {
+        return Collections.emptyList();
+    }
+
+    /**
+     * 配置Spring Security的Filter链
+     */
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        // 解决静态资源被拦截的问题
+        web.ignoring().antMatchers(
+                Sets.union(
+                        Sets.newHashSet("/static/**", "/files/**", "/druid/**"),
+                        Sets.newHashSet(ignores())
+                ).toArray(new String[]{})
+        );
     }
 
     @Override
@@ -122,13 +148,9 @@ public class SimpleAuthAdapter extends WebSecurityConfigurerAdapter {
         }
     }
 
-    /**
-     * 配置Spring Security的Filter链
-     */
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        // 解决静态资源被拦截的问题
-        web.ignoring().antMatchers("/static/**", "/files/**", "/druid/**");
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean

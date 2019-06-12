@@ -10,6 +10,12 @@ mvn clean package -Dmaven.test.skip=true -Pbeta
 mvn clean package -Dmaven.test.skip=true -Pprod
 ```
 
+## 清除 .iml 文件
+```
+# 直接运行只要一个 % 定义变量，bat 文件运行需要两个 %% 定义变量
+for /r ./ %f in (*.iml) do del /a /f "%f"
+```
+
 ### 初始化流程
 ```
 # 源码下载地址，以下地址2选1
