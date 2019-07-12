@@ -51,7 +51,7 @@ public class DB2JavaClass {
                 for (int i = 0; i < modules.length; i++) {
                     System.out.println(String.format("%d:%s【%s】", i, modules[i].output, modules[i].source));
                 }
-                final int index = Integer.valueOf(new Scanner(System.in).nextLine());
+                final int index = new Scanner(System.in).nextInt();
                 if (index < 0 || index >= modules.length) {
                     throw new NullPointerException("请选择有效的模块输出目录");
                 }
@@ -71,7 +71,7 @@ public class DB2JavaClass {
                 for (int i = 0; i < modules.length; i++) {
                     System.out.println(String.format("%d:%s【%s】", i, modules[i].output, modules[i].source));
                 }
-                final int index = Integer.valueOf(new Scanner(System.in).nextLine());
+                final int index = new Scanner(System.in).nextInt();
                 if (index < 0 || index >= modules.length) {
                     throw new NullPointerException("请选择有效的模板目录");
                 }
@@ -243,7 +243,7 @@ public class DB2JavaClass {
         }
 
         private static String format(final String dir, final String filename) {
-            return FPath.of(Paths.get("src/test/files/template", dir, filename)).read() // TODO 读取模板文件，替换占位参数
+            return Objects.requireNonNull(FPath.of(Paths.get("src/test/files/template", dir, filename)).read()) // TODO 读取模板文件，替换占位参数
                     .replace("{date}", date)
                     .replace("{tab_name}", tab_name)
                     .replace("{TabName}", TabName)
@@ -485,7 +485,7 @@ public class DB2JavaClass {
         }
 
         public String orderBy() {
-            return String.format("\t\t%s({tabName}.%s)", name, name, name);
+            return String.format("\t\t%s({tabName}.%s)", name, name);
         }
 
         public String update() {

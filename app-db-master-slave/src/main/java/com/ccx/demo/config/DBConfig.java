@@ -14,6 +14,7 @@ import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -43,7 +44,8 @@ import static com.ccx.demo.enums.DBRoute.*;
  * @author 谢长春 2019/1/23
  */
 @Configuration
-@EnableJpaRepositories(value = "com.ccx.**.dao")
+//@EnableTransactionManagement(order=2)
+@EnableJpaRepositories(basePackages = {"com.ccx.**.dao"})
 public class DBConfig {
 
     /**
