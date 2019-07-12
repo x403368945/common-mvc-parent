@@ -3,7 +3,6 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.ccx</groupId>
     <artifactId>common-mvc-parent</artifactId>
     <version>1.0.0</version>
@@ -12,16 +11,11 @@
     <modules>
         <module>common-utils</module><!-- 工具类封装 -->
         <module>common-mvc</module><!-- Spring MVC 封装 -->
-        <module>demo-security</module><!-- Spring Security 基本应用【参考案例，独立运行】 -->
-        <module>demo-socket</module><!-- Spring Socket 基本应用【参考案例，独立运行】 -->
         <module>demo-main</module><!-- 应用入口【独立运行，可选依赖[demo-service]】 -->
         <module>demo-service</module><!-- 参考案例【必须依赖[demo-main]】 -->
-        <module>demo-deploy</module><!-- 组合打包所有发布模块，避免出现循环依赖 -->
-        <!--<module>demo-mvc</module>-->
-        <!--<module>jfinal-wechat</module>-->
-        <!--<module>lx-server</module>-->
-        <!--<module>mq-server</module>-->
-        <!-- <module>financial-report-server</module> -->
+        <module>app-security</module><!-- Spring Security 基本应用【参考案例，独立运行】 -->
+        <module>app-socket</module><!-- Spring Socket 基本应用【参考案例，独立运行】 -->
+        <module>app-demo</module><!-- 组合打包所有发布模块，避免出现循环依赖 -->
     </modules>
 
     <profiles>
@@ -401,7 +395,7 @@
                 <version>${thymeleaf.version}</version>
             </dependency>
             <!-- https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf-spring5 -->
-            <dependency>
+        <dependency>
                 <groupId>org.thymeleaf</groupId>
                 <artifactId>thymeleaf-spring5</artifactId>
                 <version>${thymeleaf.version}</version>
@@ -417,8 +411,8 @@
                 <groupId>org.apache.tomcat.embed</groupId>
                 <artifactId>tomcat-embed-websocket</artifactId>
                 <version>9.0.14</version>
-                <scope>test</scope>
-            </dependency>
+            <scope>test</scope>
+        </dependency>
             <!-- 打包发布时起作用：支付宝 sdk 集成；需要手动安装支付宝 sdk jar包到 maven 仓库，参考: /src/test/files/libs/README.md -->
             <!--<dependency>
                 <groupId>com.alipay.api</groupId>
@@ -433,14 +427,38 @@
                 <scope>system</scope>
                 <systemPath>${project.basedir}/src/test/files/libs/alipay-sdk-java20180104135026.jar</systemPath>
             </dependency>-->
-        </dependencies>
+    </dependencies>
     </dependencyManagement>
     <build>
+        <!--<finalName>${artifactId}</finalName>--> <!--build目标文件的文件名，默认情况下为${artifactId}-${version}；-->
         <resources>
             <resource>
                 <directory>${basedir}/src/main/resources</directory>
                 <targetPath>${basedir}/target/classes</targetPath>
-                <filtering>true</filtering>
+                <filtering>true</filtering> <!-- 开启 filtering 会替换静态资源（html|js|...）中使用 ${key:属性名} 占位的属性，可以定义在 pom.xml -> properties -> key  -->
+                <excludes> <!-- 经过maven的filter，会破坏font文件的二进制文件格式，到前台解析出错 -->
+                    <exclude>static/**</exclude>
+                    <!--<exclude>*-web/**</exclude>-->
+                    <exclude>*.eot</exclude>
+                    <exclude>*.ttf</exclude>
+                    <exclude>*.woff</exclude>
+                    <exclude>*.woff2</exclude>
+                    <exclude>*.svg</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+                <targetPath>${basedir}/target/classes</targetPath>
+                <filtering>false</filtering>
+                <includes> <!-- 单独处理字体文件 -->
+                    <include>static/**</include>
+                    <!--<include>*-web/**</include>-->
+                    <include>*.eot</include>
+                    <include>*.ttf</include>
+                    <include>*.woff</include>
+                    <include>*.woff2</include>
+                    <include>*.svg</include>
+                </includes>
             </resource>
             <resource>
                 <directory>${basedir}/src/main/resources</directory>
@@ -448,6 +466,7 @@
                 <filtering>true</filtering>
                 <includes>
                     <include>*.properties</include>
+                    <include>*.yml</include>
                 </includes>
             </resource>
             <resource> <!-- 指定必须编译打包的资源文件 -->
@@ -474,6 +493,15 @@
             </resource>-->
         </resources>
         <plugins>
+            <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-failsafe-plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.22.1</version>
+                <configuration>
+                    <skip>true</skip><!-- 跳过单元测试 -->
+                </configuration>
+            </plugin>
             <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -490,26 +518,23 @@
                     </compilerArgs>-->
                 </configuration>
             </plugin>
-            <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin -->
-            <plugin> <!-- 打包的时候跳过单元测试-->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.1</version>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-            <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-source-plugin -->
-            <plugin> <!-- 默认打包源码 -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.1</version>
+            <!-- https://mvnrepository.com/artifact/org.codehaus.mojo/build-helper-maven-plugin -->
+            <plugin> <!-- 解决 IDEA 需要手动标记 target/generated-sources/java 目录问题 -->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.0.0</version>
                 <executions>
                     <execution>
-                        <id>attach-sources</id>
+                        <phase>generate-sources</phase>
                         <goals>
-                            <goal>jar</goal>
+                            <goal>add-source</goal>
                         </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.build.directory}/generated-sources/java</source>
+                                <source>${project.build.directory}/*/generated-sources/java</source>
+                            </sources>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -536,6 +561,20 @@
                             </resource>
                         </webResources>-->
                     </configuration>
+                </plugin>
+                <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-source-plugin -->
+                <plugin> <!-- 打包源码 -->
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.1.0</version>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 <!-- https://mvnrepository.com/artifact/com.mysema.maven/apt-maven-plugin -->
                 <plugin>

@@ -1,6 +1,8 @@
 package com.support.config;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.Feature;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.support.mvc.entity.base.Result;
@@ -45,6 +47,7 @@ import static com.google.common.base.Charsets.UTF_8;
 @Slf4j
 public class AbstractMvcConfig implements WebMvcConfigurer {
 //    /**
+//     * spring-boot 特殊处理：添加异常处理
 //     * 服务端 500 异常处理
 //     * 需要自定义 Controller 继承 {@link AbstractMvcConfig.ErrorController}
 //     * spring security 需要添加 http.antMatchers("/error").permitAll()
@@ -154,6 +157,7 @@ public class AbstractMvcConfig implements WebMvcConfigurer {
 
     /**
      * 500 异常
+     * spring-boot 特殊处理：这里配置不起作用，现在是按照继承 {@link AbstractErrorController} 方案实现
      */
 //    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(value = {Exception.class})
@@ -181,6 +185,7 @@ public class AbstractMvcConfig implements WebMvcConfigurer {
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         final Charset encoding = UTF_8;
+        JSON.DEFAULT_GENERATE_FEATURE |= SerializerFeature.DisableCircularReferenceDetect.getMask(); // 解决循环引用问题
         {
             StringHttpMessageConverter converter = new StringHttpMessageConverter(encoding);
             converter.setSupportedMediaTypes(

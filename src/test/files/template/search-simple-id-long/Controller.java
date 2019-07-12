@@ -3,7 +3,7 @@ package com.ccx.business.{javaname}.web;
 import com.ccx.business.{javaname}.entity.{TabName};
 import com.ccx.business.{javaname}.entity.{TabName}.OrderBy;
 import com.ccx.business.{javaname}.service.{JavaName}Service;
-import com.ccx.demo.config.init.AppConfig.URL;
+import {pkg}.config.init.AppConfig.URL;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.entity.base.Param;
 import com.support.mvc.entity.base.Result;

@@ -52,11 +52,11 @@ public class Item implements IJson {
     }
 
     public int intValue(final Number defaultValue) {
-        return Num.of(Objects.toString(value), defaultValue).intValue();
+        return Num.of(Objects.toString(value, null), defaultValue).intValue();
     }
 
     public String stringValue() {
-        return Objects.toString(value);
+        return Objects.toString(value, "");
     }
 
     public String stringValue(final String defaultValue) {

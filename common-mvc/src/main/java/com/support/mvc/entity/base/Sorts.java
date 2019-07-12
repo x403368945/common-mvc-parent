@@ -27,6 +27,18 @@ public class Sorts implements Serializable {
     private static final long serialVersionUID = -3920676158297540091L;
 
     /**
+     * OrderBy 枚举规范接口
+     */
+    public interface IOrderBy {
+        /**
+         * 按排序方向获取字段对应的排序对象
+         * @param direction {@link Sorts.Direction}
+         * @return {@link Sorts}
+         */
+        Sorts get(final Sorts.Direction direction);
+    }
+
+    /**
      * 排序方向
      */
     public enum Direction {

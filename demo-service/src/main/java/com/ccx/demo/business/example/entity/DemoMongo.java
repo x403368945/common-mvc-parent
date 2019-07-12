@@ -208,6 +208,12 @@ public class DemoMongo implements
         public Sorts get(final Sorts.Direction direction) {
             return Objects.equals(direction, Sorts.Direction.ASC) ? asc : desc;
         }
+        public Sorts.Order asc() {
+            return Sorts.Order.builder().name(this.name()).direction(Sorts.Direction.ASC).build();
+        }
+        public Sorts.Order desc() {
+            return Sorts.Order.builder().name(this.name()).direction(Sorts.Direction.DESC).build();
+        }
 
         /**
          * 获取所有排序字段名
@@ -264,16 +270,18 @@ public class DemoMongo implements
     }
 
     @Override
-    public List<Sorts> buildSorts() {
+    public List<Sorts> defaultSorts() {
+        return Collections.singletonList(OrderBy.createTime.desc);
+    }
+
+    @Override
+    public List<Sorts> parseSorts() {
         try {
-            return Objects.isNull(getSorts()) || getSorts().isEmpty()
-                    ? Collections.singletonList(OrderBy.createTime.desc) // Collections.singletonList(OrderBy.id.desc) // 若排序字段为空，这里可以设置默认按 id 倒序
-                    : getSorts().stream().map(by -> OrderBy.valueOf(by.getName()).get(by.getDirection())).collect(Collectors.toList());
+            return Objects.isNull(sorts) ? null : sorts.stream().map(by -> OrderBy.valueOf(by.getName()).get(by.getDirection())).collect(Collectors.toList());
         } catch (Exception e) {
             throw ORDER_BY.exception("排序字段可选范围：".concat(JSON.toJSONString(OrderBy.names())));
         }
     }
-
 // DB End **************************************************************************************************************
 
 }

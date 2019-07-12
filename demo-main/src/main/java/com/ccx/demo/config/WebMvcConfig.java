@@ -1,7 +1,7 @@
 package com.ccx.demo.config;
 
 import com.ccx.demo.config.init.AppConfig;
-import com.ccx.demo.config.interceptor.LogUserInterceptor;
+import com.ccx.demo.config.interceptor.RequestIdInterceptor;
 import com.support.config.AbstractMvcConfig;
 import com.support.config.BusConfig;
 import com.support.config.InitConfig;
@@ -23,6 +23,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 import static com.google.common.base.Charsets.UTF_8;
 
 /**
+ * spring-boot 特殊处理：大部分配置在 application.yml 文件中，简化配置
  * <pre>
  * Spring Core，参考：
  * https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html
@@ -41,7 +42,6 @@ import static com.google.common.base.Charsets.UTF_8;
  * https://juejin.im/entry/5b5a94d2f265da0f7c4fd2b2
  * https://www.cnblogs.com/mr-yang-localhost/p/7812038.html
  *
- *
  * @author 谢长春 2018-10-3
  */
 @Configuration
@@ -56,7 +56,6 @@ public class WebMvcConfig extends AbstractMvcConfig implements ApplicationContex
 
     @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        // 这里执行在 Spring 初始化成功后的操作；因为在 Spring 未初始化完成之前，部分依赖注入的服务是不可用的
         this.applicationContext = applicationContext;
     }
 
@@ -77,8 +76,8 @@ public class WebMvcConfig extends AbstractMvcConfig implements ApplicationContex
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // 拦截器先截取将要记录到日志的用户信息
-        registry.addInterceptor(new LogUserInterceptor()).addPathPatterns("/**");
+        // 没有使用 security 时，可以使用拦截器拦截请求，设置请求唯一标记
+        registry.addInterceptor(new RequestIdInterceptor()).addPathPatterns("/**");
     }
 
     @Override

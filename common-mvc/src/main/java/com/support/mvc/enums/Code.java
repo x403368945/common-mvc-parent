@@ -44,9 +44,8 @@ public enum Code {
     EMAIL("邮件发送失败，请检查邮箱是否正确"),
     OLD_PASSWORD("原密码输入错误"),
     ORDER_BY("排序字段不在可选范围"),
-    PAY("订单支付初始化失败"),
-    REPAY("订单重新支付加载失败"),
-    OPEN_ID_INVALID("用户 OPEN_ID 过期"),
+    FILE_COPY("文件复制失败"),
+
     ;
     /**
      * 枚举属性说明

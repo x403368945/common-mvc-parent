@@ -12,9 +12,8 @@ Authorization: basic YWRtaW46YWRtaW4=
   }
 }
 
-###
 ### 修改
-PUT http://localhost:8080/demo-mongo/1/0899cdda57ca44e58e3505cbb6f60cb1
+PUT http://localhost:8080/demo-mongo/1/e157a8b7edc5453381041946026e621a
 Content-Type: application/json
 Authorization: basic YWRtaW46YWRtaW4=
 
@@ -24,21 +23,18 @@ Authorization: basic YWRtaW46YWRtaW4=
     "content": "OyTlwNFavgqaHgc",
     "status": "RUNNING",
     "age": 150,
-    "modifyTime": "2019-01-04 23:03:45.857"
+    "modifyTime": "2019-07-12 18:13:11.838"
   }
 }
 
-###
 ### 物理删除:id
-DELETE http://localhost:8080/demo-mongo/1/e3de48f859854bc6974d84e4a5620d68
+DELETE http://localhost:8080/demo-mongo/1/feb518709d1c4194b34b0e32683c04a9
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### 逻辑删除:id
 PATCH http://localhost:8080/demo-mongo/1/d7529587c3e94f8a8385bc14c16b1020
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### 批量逻辑删除:id
 PATCH http://localhost:8080/demo-mongo/1
 Content-Type: application/json
@@ -51,17 +47,18 @@ Authorization: basic YWRtaW46YWRtaW4=
   ]
 }
 
-###
 ### 查询:id+timestamp
-GET http://localhost:8080/demo-mongo/1/0899cdda57ca44e58e3505cbb6f60cb1/1545100853000
+GET http://localhost:8080/demo-mongo/1/feb518709d1c4194b34b0e32683c04a9/1562926387285
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
+### 查询:不分页
+GET http://localhost:8080/demo-mongo/1
+Authorization: basic YWRtaW46YWRtaW4=
+
 ### 查询:不分页
 GET http://localhost:8080/demo-mongo/1?json={"createTimeRange":{"begin":"2019-01-04", "end":"2019-01-04"}}
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### 查询:分页
 GET http://localhost:8080/demo-mongo/1/page/1/10?json={"ageRange":{"min":1,"max":20}}
 Authorization: basic YWRtaW46YWRtaW4=

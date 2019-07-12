@@ -3,38 +3,36 @@
 ## 动态环境打包
 ```
 # 开发环境打包
-mvn clean package -Pdev
+mvn clean install -Dmaven.test.skip=true -Pdev
 # 测试环境打包
-mvn clean package -Pbeta
+mvn clean install -Dmaven.test.skip=true -Pbeta
 # 生产环境打包
-mvn clean package -Pprod
+mvn clean install -Dmaven.test.skip=true -Pprod
+```
+
+## 清除 .iml 文件
+```
+# 直接运行只要一个 % 定义变量，bat 文件运行需要两个 %% 定义变量
+for /r ./ %f in (*.iml) do del /a /f "%f"
 ```
 
 ### 初始化流程
 ```
 # 源码下载地址，以下地址2选1
-git clone https://gitee.com/xcc/common-utils.git
 git clone https://github.com/x403368945/common-utils.git
-cd {git代码下载位置}/common-utils/
-mvn clean install # 安装到本地仓库
-
 git clone https://gitee.com/xcc/common-mvc-parent.git
+
 cd {git代码下载位置}/common-mvc-parent/
 mvn clean install # 安装依赖包到本地仓库，web子项目打成war包
 
-# 需要把以下目录设置为 Generated Sources Root，对着该目录右键 > Mark Directory as > Generated Sources Root  
-demo-main/target/generated-sources/java  
-demo-service/target/generated-sources/java  
-demo-security/target/generated-sources/java  
-demo-socket/target/generated-sources/java  
 ```
 * common-utils[jar]：工具类封装
 * common-mvc[jar]：spring mvc 基础配置封装
-* demo-deploy[war]：应用组装部署模块，将所有需要发布的模块组装之后打成 war 包，作为单体应用发布，避免循环依赖打包报错
-* demo-main[war]：应用入口【主模块】
-* demo-service[war]：参考案例【依赖于主模块】
-* demo-security[war]：参考案例【Spring Security 基本应用】
-* demo-socket[war]：参考案例【Spring Socket 基本应用】
+* demo-main[jar]：应用入口【主模块】
+* demo-service[jar]：参考案例【依赖于主模块】
+* app-demo[jar]：应用组装部署模块，将所有需要发布的模块组装之后打成 war 包，作为单体应用发布，避免循环依赖打包报错
+* app-demo-security[war]：参考案例【Spring Security 基本应用】
+* app-demo-socket[war]：参考案例【Spring Socket 基本应用】
 
 ### 注解说明
 ```

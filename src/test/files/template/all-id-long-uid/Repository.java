@@ -2,7 +2,7 @@ package com.ccx.business.{javaname}.dao.jpa;
 
 import com.ccx.business.{javaname}.entity.{TabName};
 import com.ccx.business.{javaname}.entity.Q{TabName};
-import com.ccx.demo.enums.Radio;
+import {pkg}.enums.Radio;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
@@ -15,7 +15,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-import static com.ccx.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
+import static {pkg}.config.init.BeanInitializer.Beans.jpaQueryFactory;
 
 /**
  * 数据操作：{comment}
@@ -68,7 +68,7 @@ public interface {JavaName}Repository extends
                 .update(q)
                 .set(q.deleted, Radio.YES)
                 .set(q.modifyUserId, userId)
-                .where(q.id.eq(id).and(q.createUserId.eq(userId)))
+                .where(q.id.eq(id).and(q.createUserId.eq(userId)).and(q.deleted.eq(Radio.NO)))
                 .execute();
     }
 
@@ -78,7 +78,7 @@ public interface {JavaName}Repository extends
                 .update(q)
                 .set(q.deleted, Radio.YES)
                 .set(q.modifyUserId, userId)
-                .where(q.id.eq(id).and(q.uid.eq(uid).and(q.createUserId.eq(userId))))
+                .where(q.id.eq(id).and(q.uid.eq(uid).and(q.createUserId.eq(userId))).and(q.deleted.eq(Radio.NO)))
                 .execute();
     }
 
@@ -88,7 +88,7 @@ public interface {JavaName}Repository extends
                 .update(q)
                 .set(q.deleted, Radio.YES)
                 .set(q.modifyUserId, userId)
-                .where(q.id.in(ids).and(q.createUserId.eq(userId)))
+                .where(q.id.in(ids).and(q.createUserId.eq(userId)).and(q.deleted.eq(Radio.NO)))
                 .execute();
     }
 
@@ -99,7 +99,7 @@ public interface {JavaName}Repository extends
                 .set(q.deleted, Radio.YES)
                 .set(q.modifyUserId, userId)
                 .where(q.id.in(list.stream().map({TabName}::getId).toArray(Long[]::new))
-                        .and(q.createUserId.eq(userId))
+                        .and(q.createUserId.eq(userId)).and(q.deleted.eq(Radio.NO))
                         .and(q.uid.in(list.stream().map({TabName}::getUid).toArray(String[]::new)))
                 )
                 .execute();

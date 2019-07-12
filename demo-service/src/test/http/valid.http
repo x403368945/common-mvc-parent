@@ -3,20 +3,17 @@
 GET http://localhost:8080/valid/1/hasNull
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### notNull
 #GET http://localhost:8080/valid/0/notNull
 GET http://localhost:8080/valid/1/notNull
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### notBlank
 #GET http://localhost:8080/valid/0/notBlank
 #GET http://localhost:8080/valid/1/notBlank
 GET http://localhost:8080/valid/2/notBlank
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### size
 #GET http://localhost:8080/valid/0/size
 #GET http://localhost:8080/valid/1/size
@@ -25,7 +22,6 @@ Authorization: basic YWRtaW46YWRtaW4=
 GET http://localhost:8080/valid/4/size
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### pattern
 #GET http://localhost:8080/valid/0/pattern
 #GET http://localhost:8080/valid/1/pattern
@@ -33,7 +29,6 @@ Authorization: basic YWRtaW46YWRtaW4=
 GET http://localhost:8080/valid/3/pattern
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### notEmpty
 #GET http://localhost:8080/valid/0/notEmpty
 #GET http://localhost:8080/valid/1/notEmpty
@@ -41,92 +36,77 @@ Authorization: basic YWRtaW46YWRtaW4=
 GET http://localhost:8080/valid/3/notEmpty
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### min
 #GET http://localhost:8080/valid/0/min
 GET http://localhost:8080/valid/1/min
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### max
 #GET http://localhost:8080/valid/0/max
 GET http://localhost:8080/valid/1/max
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### decimalMin
 #GET http://localhost:8080/valid/0/decimalMin
 GET http://localhost:8080/valid/1/decimalMin
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### decimalMax
 #GET http://localhost:8080/valid/0/decimalMax
 GET http://localhost:8080/valid/1/decimalMax
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### digits
 #GET http://localhost:8080/valid/0/digits
 GET http://localhost:8080/valid/1/digits
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### negative
 #GET http://localhost:8080/valid/0/negative
 GET http://localhost:8080/valid/1/negative
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### negativeOrZero
 #GET http://localhost:8080/valid/0/negativeOrZero
 GET http://localhost:8080/valid/1/negativeOrZero
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### positive
 #GET http://localhost:8080/valid/0/positive
 GET http://localhost:8080/valid/1/positive
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### positiveOrZero
 #GET http://localhost:8080/valid/0/positiveOrZero
 GET http://localhost:8080/valid/1/positiveOrZero
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### assertTrue
 GET http://localhost:8080/valid/0/assertTrue
 #GET http://localhost:8080/valid/1/assertTrue
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### assertFalse
 #GET http://localhost:8080/valid/0/assertFalse
 GET http://localhost:8080/valid/1/assertFalse
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### email
 #GET http://localhost:8080/valid/0/email
 #GET http://localhost:8080/valid/1/email
 GET http://localhost:8080/valid/2/email
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### past
 #GET http://localhost:8080/valid/0/past
 GET http://localhost:8080/valid/1/past
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### future
 #GET http://localhost:8080/valid/0/future
 GET http://localhost:8080/valid/1/future
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### save
 POST http://localhost:8080/valid/0
 #POST http://localhost:8080/valid/1
@@ -166,7 +146,6 @@ POST http://localhost:8080/valid/0
 #POST http://localhost:8080/valid/35
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### update
 PUT http://localhost:8080/valid/0/1
 #PUT http://localhost:8080/valid/1/1
@@ -184,7 +163,6 @@ PUT http://localhost:8080/valid/0/1
 #PUT http://localhost:8080/valid/13/1
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### deleteById
 DELETE http://localhost:8080/valid/0/1
 #DELETE http://localhost:8080/valid/1/1
@@ -194,7 +172,6 @@ DELETE http://localhost:8080/valid/0/1
 #DELETE http://localhost:8080/valid/5/1
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### deleteByUid
 DELETE http://localhost:8080/valid/0/1/1
 #DELETE http://localhost:8080/valid/1/1/1
@@ -206,7 +183,6 @@ DELETE http://localhost:8080/valid/0/1/1
 #DELETE http://localhost:8080/valid/7/1/1
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### markDeleteById
 PATCH http://localhost:8080/valid/0/1
 #PATCH http://localhost:8080/valid/1/1
@@ -216,7 +192,6 @@ PATCH http://localhost:8080/valid/0/1
 #PATCH http://localhost:8080/valid/5/1
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### markDeleteByUid
 PATCH http://localhost:8080/valid/0/1/1
 #PATCH http://localhost:8080/valid/1/1/1
@@ -228,7 +203,6 @@ PATCH http://localhost:8080/valid/0/1/1
 #PATCH http://localhost:8080/valid/7/1/1
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### markDelete
 PATCH http://localhost:8080/valid/0
 #PATCH http://localhost:8080/valid/1
@@ -242,28 +216,24 @@ PATCH http://localhost:8080/valid/0
 #PATCH http://localhost:8080/valid/9
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### findByIdTimestamp
 GET http://localhost:8080/valid/0/1/1
 #GET http://localhost:8080/valid/1/1/1
 #GET http://localhost:8080/valid/2/1/1
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### findByUidTimestamp
 GET http://localhost:8080/valid/0/1/1/1
 #GET http://localhost:8080/valid/1/1/1/1
 #GET http://localhost:8080/valid/2/1/1/1
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### search
 GET http://localhost:8080/valid/0
 #GET http://localhost:8080/valid/1
 #GET http://localhost:8080/valid/2
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### page
 #GET http://localhost:8080/valid/0/page/1/1
 GET http://localhost:8080/valid/1/page/1/1

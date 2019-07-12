@@ -51,7 +51,7 @@ public class DB2JavaClass {
                 for (int i = 0; i < modules.length; i++) {
                     System.out.println(String.format("%d:%s【%s】", i, modules[i].output, modules[i].source));
                 }
-                final int index = Integer.valueOf(new Scanner(System.in).nextLine());
+                final int index = new Scanner(System.in).nextInt();
                 if (index < 0 || index >= modules.length) {
                     throw new NullPointerException("请选择有效的模块输出目录");
                 }
@@ -61,6 +61,7 @@ public class DB2JavaClass {
 
             Supplier<String> templateSupplier = () -> {
                 final Module[] modules = new Module[]{
+                        Module.builder().source("all-id-long").output("全部 CRUD 代码[id:Long]").build(),
                         Module.builder().source("all-id-long-uid").output("全部 CRUD 代码[id:Long,uid:String]").build(),
                         Module.builder().source("all-id-string").output("全部 CRUD 代码[id:String]").build(),
                         Module.builder().source("search-simple-id-long").output("仅支持查询代码[id:Long]").build(),
@@ -70,13 +71,18 @@ public class DB2JavaClass {
                 for (int i = 0; i < modules.length; i++) {
                     System.out.println(String.format("%d:%s【%s】", i, modules[i].output, modules[i].source));
                 }
-                final int index = Integer.valueOf(new Scanner(System.in).nextLine());
+                final int index = new Scanner(System.in).nextInt();
                 if (index < 0 || index >= modules.length) {
                     throw new NullPointerException("请选择有效的模板目录");
                 }
                 return modules[index].source;
             };
             final String templateDir = templateSupplier.get();
+            Supplier<String> packageSupplier = () -> {
+                System.out.println("请输入包目录，例：com.ccx.demo");
+                return new Scanner(System.in).nextLine();
+            };
+            final String pkg = packageSupplier.get();
 
             final List<Row> rows = new ArrayList<>();
             System.out.println(Paths.get(module.source).toAbsolutePath().toString());
@@ -102,6 +108,7 @@ public class DB2JavaClass {
                                 FWrite.of(module.output, Names.javaname, "entity", Names.TabName.concat(".java"))
                                         .write( // Tab.java
                                                 Names.format(templateDir, "Entity.java")
+                                                        .replace("{pkg}", pkg)
                                                         .replace("{comment}", tableComment)
                                                         .replace("{IUser}", hasIUser ? "IUser," : "")
                                                         .replace("{ITimestamp}", hasModifyTime ? "ITimestamp, // 所有需要更新时间戳的实体类" : "")
@@ -126,6 +133,7 @@ public class DB2JavaClass {
                                         .write( // Repository.java
                                                 Optional
                                                         .of(Names.format(templateDir, "Repository.java")
+                                                                .replace("{pkg}", pkg)
                                                                 .replace("{comment}", tableComment)
                                                                 .replace("{ID}", hasLongId ? "Long" : "String")
                                                         )
@@ -158,6 +166,7 @@ public class DB2JavaClass {
                                         .write( // Service.java
                                                 Optional
                                                         .of(Names.format(templateDir, "Service.java")
+                                                                .replace("{pkg}", pkg)
                                                                 .replace("{comment}", tableComment)
                                                                 .replace("{ID}", hasLongId ? "Long" : "String")
                                                         )
@@ -189,6 +198,7 @@ public class DB2JavaClass {
                                         .write( // Controller.java
                                                 Optional
                                                         .of(Names.format(templateDir, "Controller.java")
+                                                                .replace("{pkg}", pkg)
                                                                 .replace("{comment}", tableComment)
                                                                 .replace("{ID}", hasLongId ? "Long" : "String")
                                                         )
@@ -233,7 +243,7 @@ public class DB2JavaClass {
         }
 
         private static String format(final String dir, final String filename) {
-            return FPath.of(Paths.get("src/test/files/template", dir, filename)).read() // TODO 读取模板文件，替换占位参数
+            return Objects.requireNonNull(FPath.of(Paths.get("src/test/files/template", dir, filename)).read()) // TODO 读取模板文件，替换占位参数
                     .replace("{date}", date)
                     .replace("{tab_name}", tab_name)
                     .replace("{TabName}", TabName)
@@ -475,7 +485,7 @@ public class DB2JavaClass {
         }
 
         public String orderBy() {
-            return String.format("\t\t%s({tabName}.%s)", name, name, name);
+            return String.format("\t\t%s({tabName}.%s)", name, name);
         }
 
         public String update() {

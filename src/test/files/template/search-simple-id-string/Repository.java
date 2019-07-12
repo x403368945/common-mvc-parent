@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-import static com.ccx.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
+import static {pkg}.config.init.BeanInitializer.Beans.jpaQueryFactory;
 
 /**
  * 数据操作：{comment}

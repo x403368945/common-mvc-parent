@@ -1,6 +1,7 @@
 package com.utils.util;
 
 import com.alibaba.fastjson.JSON;
+import com.utils.enums.Regs;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
@@ -8,6 +9,7 @@ import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -20,7 +22,7 @@ import static com.utils.util.Num.Pattern.*;
  * @author 谢长春 on 2017/10/26 .
  */
 @Slf4j
-public class Num {
+public final class Num {
     /**
      * 枚举：定义数字格式
      */
@@ -57,7 +59,7 @@ public class Num {
                 case "AUTO":
                 case "SAUTO":
                     this.fixed = (v, fixed) ->
-                            new DecimalFormat((fixed <= 0) ? this.pattern : this.pattern.concat(".").concat(String.format("%0{fixed}d".replace("{fixed}", Objects.toString(fixed)), 0))).format(v);
+                            new DecimalFormat((fixed <= 0) ? this.pattern : this.pattern.concat(".").concat(String.format("%0{fixed}d".replace("{fixed}", Objects.toString(fixed, "")), 0))).format(v);
                     break;
                 default:
                     this.fixed = null;
@@ -200,10 +202,7 @@ public class Num {
      * @return {@link Num}
      */
     public static Num of(Object value) {
-        if (Objects.isNull(value) || Objects.equals(value, "")) {
-            return new Num();
-        }
-        return of(Objects.toString(value));
+        return of(value, null);
     }
 
     /**
@@ -213,25 +212,13 @@ public class Num {
      * @return {@link Num}
      */
     public static Num of(Object value, Number defaultValue) {
-        if (Objects.isNull(value)) {
+        if (Objects.isNull(value) || Objects.equals(value, "")) {
             return new Num(defaultValue);
         }
-        if (value instanceof Integer) {
-            of((Integer) value);
-        } else if (value instanceof Long) {
-            of((Long) value);
-        } else if (value instanceof Double) {
-            of((Double) value);
-        } else if (value instanceof Short) {
-            of((Short) value);
-        } else if (value instanceof Float) {
-            of((Float) value);
-        } else if (value instanceof BigInteger) {
-            of((BigInteger) value);
-        } else if (value instanceof BigDecimal) {
-            of((BigDecimal) value);
+        if (value instanceof Number) {
+            return of((Number) value);
         }
-        return of(Objects.toString(value), defaultValue);
+        return of(Objects.toString(value, null), defaultValue);
     }
 
     /**
@@ -251,7 +238,11 @@ public class Num {
      * @return {@link Num}
      */
     public static Num of(String value) {
-        return new Num(Double.valueOf(value.trim().replace(",", "")));
+        value = Optional.ofNullable(value).map(v -> v.trim().replace(",", "")).orElse("");
+        if (Regs.NUMBER.test(value)) {
+            return new Num(Double.valueOf(value));
+        }
+        return new Num();
     }
 
     /**
@@ -263,11 +254,14 @@ public class Num {
      */
     public static Num of(String value, Number defaultValue) {
         try {
-            return Objects.isNull(value) ? new Num() : new Num(Double.valueOf(value.trim().replace(",", "")));
+            value = Optional.ofNullable(value).map(v -> v.trim().replace(",", "")).orElse("");
+            if (Regs.NUMBER.test(value)) {
+                return new Num(Double.valueOf(value));
+            }
         } catch (NumberFormatException e) {
             log.info("value=" + value);
-            return Objects.isNull(defaultValue) ? new Num() : new Num(defaultValue.doubleValue());
         }
+        return Objects.isNull(defaultValue) ? new Num() : new Num(defaultValue.doubleValue());
     }
 
     /**
@@ -319,7 +313,7 @@ public class Num {
         set(value);
     }
 
-    private Double value;
+    private Number value;
     /**
      * 调用format时，默认的格式
      */
@@ -345,11 +339,11 @@ public class Num {
         }
     }
 
-    public Num set(Number value) {
+    public Num set(final Number value) {
         if (value instanceof Integer || value instanceof Long || value instanceof Short) {
             defaultPattern = LONG; // 设置默认的格式
         }
-        this.value = value.doubleValue();
+        this.value = value;
         return this;
     }
 
@@ -398,7 +392,7 @@ public class Num {
      * @return Double
      */
     public Double toDouble() {
-        return value;
+        return Optional.ofNullable(value).map(Number::doubleValue).orElse(null);
     }
 
     /**
@@ -407,7 +401,7 @@ public class Num {
      * @return double
      */
     public double doubleValue() {
-        return (Objects.isNull(value)) ? 0D : value;
+        return Optional.ofNullable(value).map(Number::doubleValue).orElse(0D);
     }
 
     /**
@@ -488,7 +482,7 @@ public class Num {
      * @return BigDecimal
      */
     public BigDecimal toBigDecimal() {
-        return (Objects.isNull(value)) ? null : new BigDecimal(value);
+        return (Objects.isNull(value)) ? null : new BigDecimal(value.doubleValue());
     }
 
     /**
@@ -497,7 +491,7 @@ public class Num {
      * @return BigDecimal
      */
     public BigDecimal bigDecimalValue() {
-        return (Objects.isNull(value)) ? BigDecimal.ZERO : new BigDecimal(value);
+        return (Objects.isNull(value)) ? BigDecimal.ZERO : new BigDecimal(value.doubleValue());
     }
 
     /**
@@ -663,5 +657,6 @@ public class Num {
         log.info("range long array: {}", RangeLong.of(new Long[]{9L, 8L, 1L, 5L, 4L}));
         log.info("range int list: {}", RangeInt.of(JSON.parseArray("[9, 8, 1, 5, 4]", Integer.class)));
         log.info("range long list: {}", RangeLong.of(JSON.parseArray("[9, 8, 1, 5, 4]", Long.class)));
+
     }
 }

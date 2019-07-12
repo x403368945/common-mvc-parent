@@ -23,7 +23,6 @@ import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -35,7 +34,6 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 
 /**
  * 实体：用户登录记录表
- *
  *
  * @author 谢长春 on 2018/2/2.
  */
@@ -130,7 +128,12 @@ public class TabUserLogin implements ITable, IWhere<JPAUpdateClause, QdslWhere> 
         public Sorts get(final Sorts.Direction direction) {
             return Objects.equals(direction, Sorts.Direction.DESC) ? desc : asc;
         }
-
+        public Sorts.Order asc() {
+            return Sorts.Order.builder().name(this.name()).direction(Sorts.Direction.ASC).build();
+        }
+        public Sorts.Order desc() {
+            return Sorts.Order.builder().name(this.name()).direction(Sorts.Direction.DESC).build();
+        }
         /**
          * 获取所有排序字段名
          *
@@ -159,14 +162,14 @@ public class TabUserLogin implements ITable, IWhere<JPAUpdateClause, QdslWhere> 
     }
 
     @Override
-    public List<Sorts> buildSorts() {
+    public List<Sorts> defaultSorts() {
+        return Collections.singletonList(OrderBy.id.desc);
+    }
+
+    @Override
+    public List<Sorts> parseSorts() {
         try {
-            return Optional.ofNullable(getSorts())
-                    .map(list -> list.stream()
-                            .map(by -> OrderBy.valueOf(by.getName()).get(by.getDirection()))
-                            .collect(Collectors.toList())
-                    )
-                    .orElse(Collections.singletonList(OrderBy.id.desc));
+            return Objects.isNull(sorts) ? null : sorts.stream().map(by -> OrderBy.valueOf(by.getName()).get(by.getDirection())).collect(Collectors.toList());
         } catch (Exception e) {
             throw ORDER_BY.exception("排序字段可选范围：".concat(JSON.toJSONString(OrderBy.names())));
         }
@@ -174,5 +177,7 @@ public class TabUserLogin implements ITable, IWhere<JPAUpdateClause, QdslWhere> 
 
 // DB End **************************************************************************************************************
 
-
+    public static void main(String[] args) {
+        System.out.println(OrderBy.id.get(Sorts.Direction.DESC));
+    }
 }
