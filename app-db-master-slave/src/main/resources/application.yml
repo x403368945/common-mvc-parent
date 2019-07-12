@@ -23,3 +23,6 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   profiles:
     active: @env@ # 采坑记录，使用 @@ 获取 pom.xml 环境变量时，必须指定 build > resources > resource > <filtering>true</filtering>
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration

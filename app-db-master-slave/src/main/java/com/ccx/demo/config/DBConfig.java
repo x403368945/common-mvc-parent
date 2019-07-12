@@ -43,8 +43,9 @@ import static com.ccx.demo.enums.DBRoute.*;
  *
  * @author 谢长春 2019/1/23
  */
+//https://blog.csdn.net/zhaocuit/article/details/83092746
 @Configuration
-//@EnableTransactionManagement(order=2)
+@EnableTransactionManagement(order=2)
 @EnableJpaRepositories(
         basePackages = {"com.ccx.**.dao"}
         )
