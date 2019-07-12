@@ -1,7 +1,7 @@
 package com.support.config.security;
 
 import com.google.common.collect.Sets;
-import com.log.Reqid;
+import com.log.RequestId;
 import com.utils.util.Util;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,10 +10,14 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.security.web.header.writers.HstsHeaderWriter;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -100,6 +104,7 @@ public class SimpleAuthAdapter extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         final AuthHandler authHandler = new AuthHandler();
+        final RequestIdFilter requestIdFilter = new RequestIdFilter();
 //        /**
 //         * {@link HeaderWriterFilter.java}
 //         */
@@ -112,7 +117,7 @@ public class SimpleAuthAdapter extends WebSecurityConfigurerAdapter {
                 // 允许跨域
                 .cors().and()
                 // http 响应头追加请求唯一标记
-                .headers().addHeaderWriter((req, res) -> res.addHeader("uid", Reqid.getAndRemove())).and()
+                .headers().addHeaderWriter(requestIdFilter::writeHeaders).and()
                 // 用户访问未经授权的rest API，返回错误码401（未经授权）
                 .exceptionHandling().authenticationEntryPoint(authHandler).accessDeniedHandler(authHandler)
                 .and().authorizeRequests()
@@ -141,10 +146,8 @@ public class SimpleAuthAdapter extends WebSecurityConfigurerAdapter {
                     new JsonUsernamePasswordAuthenticationFilter(authenticationManager(), authHandler, authHandler),
                     UsernamePasswordAuthenticationFilter.class
             );
-            http.addFilterBefore((req, res, chain) -> {
-                Reqid.set(Util.uuid()); // 设置请求唯一标记
-                chain.doFilter(req, res);
-            }, ChannelProcessingFilter.class);
+            // 添加请求唯一标记处理
+            requestIdFilter.setRequestIdFilter(http);
         }
     }
 

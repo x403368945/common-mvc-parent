@@ -106,11 +106,13 @@ public interface ICellReader<T extends ICellReader> {
                         return Optional.of(getCell().getNumericCellValue());
                     case STRING:
                         return Optional.of(getCell().getStringCellValue());
-                    case _NONE:
-                    case FORMULA:
-                    case BLANK:
                     case BOOLEAN:
+                        return Optional.of(getCell().getBooleanCellValue());
+                    case _NONE:
+                    case BLANK:
                     case ERROR:
+                        return Optional.empty();
+                    case FORMULA:
                     default:
                         break;
                 }
@@ -118,7 +120,6 @@ public interface ICellReader<T extends ICellReader> {
             default:
                 break;
         }
-        getCell().setCellType(CellType.STRING);
         return Optional.of(getCell().getStringCellValue());
     }
 
@@ -161,18 +162,21 @@ public interface ICellReader<T extends ICellReader> {
 //                        : Num.of(getCell().getNumericCellValue()).toBigDecimal().setScale(4, ROUND_HALF_UP).toPlainString(); // 解决科学计数法 toString()问题
 //                        : Optional.ofNullable(Num.of(getCell().getNumericCellValue()).toBigDecimal()).map(bigDecimal -> bigDecimal.setScale(4, ROUND_HALF_UP).toPlainString() /* 解决科学计数法 toString()问题*/).orElse(null);
             case BOOLEAN:
-                return Objects.toString(getCell().getBooleanCellValue());
+                return Objects.toString(getCell().getBooleanCellValue(), null);
             case FORMULA:
                 // Cell.getCachedFormulaResultTypeEnum() 可以判断公式计算结果得出的数据类型；前置条件必须是 Cell.getCellTypeEnum() = CellType.FORMULA
                 switch (getCell().getCachedFormulaResultType()) {
                     case NUMERIC:
-                        return Objects.toString(getCell().getNumericCellValue());
-                    case _NONE:
+                        return Objects.toString(getCell().getNumericCellValue(), null);
                     case STRING:
-                    case FORMULA:
-                    case BLANK:
+                        return getCell().getStringCellValue();
                     case BOOLEAN:
+                        return Objects.toString(getCell().getBooleanCellValue(), null);
+                    case _NONE:
+                    case BLANK:
                     case ERROR:
+                        return null;
+                    case FORMULA:
                     default:
                         break;
                 }
@@ -180,7 +184,6 @@ public interface ICellReader<T extends ICellReader> {
             default:
                 break;
         }
-        getCell().setCellType(CellType.STRING);
         return getCell().getStringCellValue();
     }
 
@@ -227,12 +230,15 @@ public interface ICellReader<T extends ICellReader> {
                 switch (getCell().getCachedFormulaResultType()) {
                     case NUMERIC:
                         return Num.of(getCell().getNumericCellValue());
-                    case _NONE:
                     case STRING:
-                    case FORMULA:
-                    case BLANK:
+                        return Num.of(getCell().getStringCellValue());
                     case BOOLEAN:
+                        return Num.of(getCell().getBooleanCellValue() ? 1 : 0);
+                    case _NONE:
+                    case BLANK:
                     case ERROR:
+                        return null;
+                    case FORMULA:
                     default:
                         break;
                 }
@@ -240,7 +246,6 @@ public interface ICellReader<T extends ICellReader> {
             default:
                 break;
         }
-        getCell().setCellType(CellType.NUMERIC);
         return Num.of(getCell().getNumericCellValue());
     }
 

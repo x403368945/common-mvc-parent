@@ -8,6 +8,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -27,33 +28,33 @@ import java.util.Objects;
 @Component
 @Aspect
 @Slf4j
-//@Order(-1) // todo 保证该 AOP 在 @Transactional 之前执行，避免事务永远落在主库；目前没发现问题，暂时不添加 @Order 注解
+@Order(0) // todo 保证该 AOP 在 @Transactional 之前执行，避免事务永远落在主库；目前没发现问题，暂时不添加 @Order 注解
 public class DBAspect {
     /**
      * 主库操作拦截
      */
-//    @Before("execution(* com.ccx..*.service..*.save*(..)) " +
-//            "||execution(* com.ccx..*.service..*.update*(..)) " +
-//            "||execution(* com.ccx..*.service..*.markDelete*(..)) " +
-//            "||execution(* com.ccx..*.service..*.delete*(..)) " +
-//
-//            "||@annotation(com.support.aop.annotations.Master) " +
-//            "||execution(* com.ccx..*.service..*.add*(..)) " +
-//            "||execution(* com.ccx..*.service..*.insert*(..)) " +
-//            "||execution(* com.ccx..*.service..*.edit*(..)) " +
-//            "||execution(* com.ccx..*.service..*.remove*(..)) "
-//    )
-    @Around("execution(* com.ccx..*.dao.jpa..*.save*(..))" +
-            "||execution(* com.ccx..*.dao.jpa..*.update*(..))" +
-            "||execution(* com.ccx..*.dao.jpa..*.markDelete*(..))" +
-            "||execution(* com.ccx..*.dao.jpa..*.delete*(..))" +
+    @Around("execution(* com.ccx..*.service..*.save*(..)) " +
+            "||execution(* com.ccx..*.service..*.update*(..)) " +
+            "||execution(* com.ccx..*.service..*.markDelete*(..)) " +
+            "||execution(* com.ccx..*.service..*.delete*(..)) " +
 
-            "||@annotation(com.support.aop.annotations.Master)" +
-            "||execution(* com.ccx..*.dao.jpa..*.add*(..))" +
-            "||execution(* com.ccx..*.dao.jpa..*.insert*(..))" +
-            "||execution(* com.ccx..*.dao.jpa..*.edit*(..))" +
-            "||execution(* com.ccx..*.dao.jpa..*.remove*(..))"
+            "||@annotation(com.support.aop.annotations.Master) " +
+            "||execution(* com.ccx..*.service..*.add*(..)) " +
+            "||execution(* com.ccx..*.service..*.insert*(..)) " +
+            "||execution(* com.ccx..*.service..*.edit*(..)) " +
+            "||execution(* com.ccx..*.service..*.remove*(..)) "
     )
+//    @Around("execution(* com.ccx..*.dao.jpa..*.save*(..))" +
+//            "||execution(* com.ccx..*.dao.jpa..*.update*(..))" +
+//            "||execution(* com.ccx..*.dao.jpa..*.markDelete*(..))" +
+//            "||execution(* com.ccx..*.dao.jpa..*.delete*(..))" +
+//
+//            "||@annotation(com.support.aop.annotations.Master)" +
+//            "||execution(* com.ccx..*.dao.jpa..*.add*(..))" +
+//            "||execution(* com.ccx..*.dao.jpa..*.insert*(..))" +
+//            "||execution(* com.ccx..*.dao.jpa..*.edit*(..))" +
+//            "||execution(* com.ccx..*.dao.jpa..*.remove*(..))"
+//    )
     @SneakyThrows
     public Object masterAround(final ProceedingJoinPoint joinPoint) {
         try {
@@ -68,19 +69,20 @@ public class DBAspect {
     /**
      * 从库操作拦截
      */
-//    @Before("(execution(* com.ccx..*.service..*.find*(..)) " +
-//            "||execution(* com.ccx..*.service..*.get*(..)) " +
-//            "||execution(* com.ccx..*.service..*.search*(..)) " +
-//            "||execution(* com.ccx..*.service..*.load*(..)) " +
-//            ")&&!@annotation(com.support.aop.annotations.Master) "
-//    )
-    @Around("execution(* com.ccx..*.dao.jpa..*.find*(..))" +
-            "||execution(* com.ccx..*.dao.jpa..*.get*(..))" +
-            "||execution(* com.ccx..*.dao.jpa..*.count*(..))" +
-            "||execution(* com.ccx..*.dao.jpa..*.exist*(..))" +
-            "||execution(* com.ccx..*.dao.jpa..*.search*(..))" +
-            "||execution(* com.ccx..*.dao.jpa..*.load*(..))"
+    @Around("execution(* com.ccx..*.service..*.find*(..))" +
+            "||execution(* com.ccx..*.service..*.get*(..))" +
+            "||execution(* com.ccx..*.service..*.count*(..))" +
+            "||execution(* com.ccx..*.service..*.exist*(..))" +
+            "||execution(* com.ccx..*.service..*.search*(..))" +
+            "||execution(* com.ccx..*.service..*.load*(..))"
     )
+//    @Around("execution(* com.ccx..*.dao.jpa..*.find*(..))" +
+//            "||execution(* com.ccx..*.dao.jpa..*.get*(..))" +
+//            "||execution(* com.ccx..*.dao.jpa..*.count*(..))" +
+//            "||execution(* com.ccx..*.dao.jpa..*.exist*(..))" +
+//            "||execution(* com.ccx..*.dao.jpa..*.search*(..))" +
+//            "||execution(* com.ccx..*.dao.jpa..*.load*(..))"
+//    )
 //    @Around("execution(* com.ccx..*.dao.jpa..*.find*(..)) && !@annotation(com.support.aop.annotations.Master)")
     @SneakyThrows
     public Object slaveAround(final ProceedingJoinPoint joinPoint) {

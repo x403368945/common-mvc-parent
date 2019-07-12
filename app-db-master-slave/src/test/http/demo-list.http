@@ -12,44 +12,38 @@ Authorization: basic YWRtaW46YWRtaW4=
   }
 }
 
-###
 ### 修改
-PUT http://localhost:8080/demo-list/1/1
+PUT http://localhost:8080/demo-list/1/2
 Content-Type: application/json
 Authorization: basic YWRtaW46YWRtaW4=
 
 {
   "json": {
-    "uid": "b2e8918e010940828446c0d73e1bd134",
+    "uid": "8dbdec428e9547d8b11b7253774a674f",
     "name": "PeXImPsqeI",
     "content": "OyTlwNFavgqaHgc",
     "status": "RUNNING",
     "amount": 7871.0,
-    "modifyTime": "2018-12-27 22:59:05"
+    "modifyTime": "2019-07-11 10:58:08"
   }
 }
 
-###
 ### 物理删除:id
 DELETE http://localhost:8080/demo-list/1/20
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### 物理删除:id+uid
 DELETE http://localhost:8080/demo-list/1/21/f87e219e1e0844549821a87be7975558
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### 逻辑删除:id
 PATCH http://localhost:8080/demo-list/1/8
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### 逻辑删除:id+uid
 PATCH http://localhost:8080/demo-list/1/9/9f34621b6238423f96367366dfe3140b
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### 批量逻辑删除:id+uid
 PATCH http://localhost:8080/demo-list/1
 Content-Type: application/json
@@ -68,27 +62,26 @@ Authorization: basic YWRtaW46YWRtaW4=
   ]
 }
 
-###
 ### 查询:id+timestamp
-GET http://localhost:8080/demo-list/1/2/1545100853000
+GET http://localhost:8080/demo-list/1/4/1562813813000
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### 查询:id+uid+timestamp
-GET http://localhost:8080/demo-list/1/4/1aa143904ceb4f2092735c9a98287ff3/1560092206000
+GET http://localhost:8080/demo-list/1/1/1ec365fd461b44769e61a5c4425b06d3/1562813802000
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### 查询:不分页
-GET http://localhost:8080/demo-list/1?json={"createTimeRange":{"begin":"2018-12-27"}}
+GET http://localhost:8080/demo-list/1
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
+### 查询:不分页
+GET http://localhost:8080/demo-list/1?json={"createTimeRange":{"begin":"2018-12-27", "end":"2018-12-27"}}
+Authorization: basic YWRtaW46YWRtaW4=
+
 ### 查询:分页
 GET http://localhost:8080/demo-list/1/page/1/10?json={"amountRange":{"min":0.0,"max":2000.0}}
 Authorization: basic YWRtaW46YWRtaW4=
 
-###
 ### 查询:分页 + 排序
 GET http://localhost:8080/demo-list/1/page/1/10?json={"amountRange":{"min":0.0,"max":2000.0}, sorts:[{name:"modifyTime", direction:"DESC"}]}
 Authorization: basic YWRtaW46YWRtaW4=

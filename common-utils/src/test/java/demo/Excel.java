@@ -13,7 +13,6 @@ public class Excel {
         wb.forEach(sheet -> {
             sheet.forEach(row->{
                 row.forEach(cell -> {
-                    cell.setCellType(CellType.STRING);
                     System.out.println(cell.getStringCellValue());
                 });
             });

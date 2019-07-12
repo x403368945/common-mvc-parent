@@ -24,26 +24,8 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 .*/target/.*
-/demo-mvc
-/financial-report-server
-/jfinal-wechat
-/lx-server
-/mq-server
-/CATALINA_HOME_IS_UNDEFINED
-/.*/CATALINA_HOME_IS_UNDEFINED
 /.idea
 /.*/.idea
 /log
 /logs
 /.*/logs
-# Project exclude paths
-/app-db-master-slave/target/
-/app-demo/target/
-/app-demo-main/target/
-/app-demo-service/target/
-/app-security/target/
-/app-socket/target/
-/common-mvc/target/
-/common-utils/target/
-/demo-main/target/
-/demo-service/target/

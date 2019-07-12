@@ -68,7 +68,7 @@ public interface {JavaName}Repository extends
                 .update(q)
                 .set(q.deleted, Radio.YES)
                 .set(q.modifyUserId, userId)
-                .where(q.id.eq(id).and(q.createUserId.eq(userId)))
+                .where(q.id.eq(id).and(q.createUserId.eq(userId)).and(q.deleted.eq(Radio.NO)))
                 .execute();
     }
 
@@ -78,7 +78,7 @@ public interface {JavaName}Repository extends
 //                .update(q)
 //                .set(q.deleted, Radio.YES)
 //                .set(q.modifyUserId, userId)
-//                .where(q.id.eq(id).and(q.uid.eq(uid).and(q.createUserId.eq(userId))))
+//                .where(q.id.eq(id).and(q.uid.eq(uid).and(q.createUserId.eq(userId))).and(q.deleted.eq(Radio.NO)))
 //                .execute();
 //    }
 
@@ -88,7 +88,7 @@ public interface {JavaName}Repository extends
                 .update(q)
                 .set(q.deleted, Radio.YES)
                 .set(q.modifyUserId, userId)
-                .where(q.id.in(ids).and(q.createUserId.eq(userId)))
+                .where(q.id.in(ids).and(q.createUserId.eq(userId)).and(q.deleted.eq(Radio.NO)))
                 .execute();
     }
 
@@ -99,7 +99,7 @@ public interface {JavaName}Repository extends
                 .set(q.deleted, Radio.YES)
                 .set(q.modifyUserId, userId)
                 .where(q.id.in(list.stream().map({TabName}::getId).toArray(Long[]::new))
-                        .and(q.createUserId.eq(userId))
+                        .and(q.createUserId.eq(userId)).and(q.deleted.eq(Radio.NO))
 //                        .and(q.uid.in(list.stream().map({TabName}::getUid).toArray(String[]::new)))
                 )
                 .execute();

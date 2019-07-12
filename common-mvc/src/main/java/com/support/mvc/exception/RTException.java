@@ -2,6 +2,7 @@ package com.support.mvc.exception;
 
 import com.support.mvc.actions.ICall;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -9,7 +10,7 @@ import java.util.function.Consumer;
  *
  * @author 谢长春 2019-5-30
  */
-public class RTException extends RuntimeException {
+public final class RTException extends RuntimeException {
 
     public static void call(final ICall call) {
         call.call();
@@ -23,8 +24,27 @@ public class RTException extends RuntimeException {
         super(msg);
     }
 
+    /**
+     * 在异常抛出前，可通过该方法收集异常消息
+     *
+     * @param consumer {@link Consumer}{@link Consumer<String:异常消息>}
+     * @return {@link RTException}
+     */
     public RTException go(final Consumer<String> consumer) {
         consumer.accept(this.getMessage());
         return this;
     }
+
+    /**
+     * 在异常抛出前，可通过该方法收集异常消息；
+     * 判断当异常消息为空时，不执行该方法
+     *
+     * @param consumer {@link Consumer}{@link Consumer<String:异常消息>}
+     * @return {@link RTException}
+     */
+    public RTException goNonNull(final Consumer<String> consumer) {
+        if (Objects.nonNull(this.getMessage())) consumer.accept(this.getMessage());
+        return this;
+    }
+
 }

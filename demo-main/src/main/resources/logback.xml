@@ -12,15 +12,15 @@
     <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
     <property name="LOG_HOME" value="${CATALINA_HOME:-.}/logs"/>
     <contextName>${APP_NAME}</contextName>
-    <!-- 自定义日志采集参数：[%uid] 采集请求唯一标记 -->
-    <conversionRule conversionWord="uid" converterClass="com.log.UidConvert"/>
+    <!-- 自定义日志采集参数：[%rid] 采集请求唯一标记 -->
+    <conversionRule conversionWord="rid" converterClass="com.log.RidConvert"/>
 
     <springProfile name="dev"><!-- springboot 动态环境配置：开发环境 -->
         <!-- 负责写日志,控制台日志 -->
         <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
             <!-- 一是把日志信息转换成字节数组,二是把字节数组写入到输出流 -->
             <encoder>
-                <pattern>%highlight(%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%uid] : %m%n)</pattern>
+                <pattern>%highlight(%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%rid] : %m%n)</pattern>
                 <charset>UTF-8</charset>
             </encoder>
         </appender>
@@ -28,7 +28,7 @@
     <springProfile name="beta,prod"><!-- springboot 动态环境配置：测试、生产环境 -->
         <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
             <encoder>
-                <pattern>%highlight(%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%uid] : %m%n)</pattern>
+                <pattern>%highlight(%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%rid] : %m%n)</pattern>
                 <charset>UTF-8</charset>
             </encoder>
         </appender>
@@ -38,7 +38,7 @@
     <appender name="DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_HOME}/${APP_NAME}.debug.log</file>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%uid] : %m%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%rid] : %m%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
@@ -60,7 +60,7 @@
             <level>INFO</level>
         </filter>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%uid] : %m%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%rid] : %m%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
@@ -81,7 +81,7 @@
             <level>ERROR</level>
         </filter>
         <encoder>
-            <pattern>%d %5level [%20thread] %50logger{50} [%uid] : %m%n</pattern>
+            <pattern>%d %5level [%20thread] %50logger{50} [%rid] : %m%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
         <!--

@@ -1,6 +1,5 @@
 package com.utils.excel.entity;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONType;
 import com.utils.IJson;
@@ -46,7 +45,7 @@ public class Table implements IJson {
      * {index: 1, label: '工资', type: 'NUMBER', group: "固定成本",tag:"标签"}
      * ]
      */
-    private List<Header> header;
+    private List<Cell> header;
     /**
      * <pre>
      * 表格行集合, （0.1.....）表示表头中的index，取值时，可以通过遍历表头的index字段获取值
@@ -83,16 +82,7 @@ public class Table implements IJson {
      * @return {@link List}{@link List<Map<String, String>>}
      */
     public List<Map<String, String>> toObjects() {
-        return body.stream().map(row -> header.stream()
-                .map(head -> Optional.ofNullable(row.getCellText(head.index()))
-                        .map(v -> Maps.bySS(Optional.ofNullable(head.getAlias()).orElseGet(head::getLabel), v))
-                        .orElse(Collections.emptyMap())
-                )
-                .reduce(new LinkedHashMap<>(), (s, v) -> {
-                    s.putAll(v);
-                    return s;
-                })
-        ).collect(Collectors.toList());
+        return body.stream().map(row -> row.toMapString(header)).collect(Collectors.toList());
     }
 
 }

@@ -1,11 +1,15 @@
 package com.log;
 
+import com.utils.util.Util;
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 将请求唯一标志存入 ThreadLocal
  *
  * @author 谢长春 2019/6/6
  */
-public class Reqid {
+@Slf4j
+public class RequestId {
     private static final ThreadLocal<String> TL = ThreadLocal.withInitial(() -> "");
 
     /**
@@ -14,6 +18,9 @@ public class Reqid {
      * @return {@link String}
      */
     public static String get() {
+//        if (Objects.equals("", TL.get())){
+//            return RequestId.setUUID();
+//        }
         return TL.get();
     }
 
@@ -25,6 +32,16 @@ public class Reqid {
     public static String set(final String v) {
         TL.set(v);
         return v;
+    }
+
+    /**
+     * 设置 uuid 到 ThreadLocal
+     *
+     * @return {@link String}
+     */
+    public static String setUUID() {
+        TL.set(Util.uuid());
+        return TL.get();
     }
 
     /**

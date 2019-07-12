@@ -43,6 +43,8 @@ public interface DemoListRepository extends
                 .execute();
     }
 
+    @Modifying
+    @Query
     @Override
     default long update(final Long id, final Long userId, final TabDemoList obj) {
         return obj.update(jpaQueryFactory.<JPAQueryFactory>get().update(q))

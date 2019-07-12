@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 @Data
 @JSONType(orders = {"min", "max"})
 @Slf4j
-public class RangeInt implements Num.IRange<Integer> {
+public final class RangeInt implements Num.IRange<Integer> {
     private Integer min;
     private Integer max;
 
