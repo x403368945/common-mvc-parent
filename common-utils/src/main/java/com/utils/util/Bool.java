@@ -95,16 +95,16 @@ public final class Bool<T> {
     public static void main(String[] args) {
         final AtomicInteger counter = new AtomicInteger(1);
         Bool.of(true)
-                .hasTrue(() -> System.out.println(counter.getAndIncrement() + " => TRUE"))
+                .hasTrue((v) -> System.out.println(counter.getAndIncrement() + " => TRUE"))
                 .hasFalse(() -> System.out.println(counter.getAndIncrement() + " => FALSE"));
         Bool.of(false)
-                .hasTrue(() -> System.out.println(counter.getAndIncrement() + " => TRUE"))
+                .hasTrue((v) -> System.out.println(counter.getAndIncrement() + " => TRUE"))
                 .hasFalse(() -> System.out.println(counter.getAndIncrement() + " => FALSE"));
         Bool.of(Optional.empty())
-                .hasTrue(() -> System.out.println(counter.getAndIncrement() + " => nonEmpty"))
+                .hasTrue((v) -> System.out.println(counter.getAndIncrement() + " => nonEmpty"))
                 .hasFalse(() -> System.out.println(counter.getAndIncrement() + " => empty"));
         Bool.of(Optional.of("nonEmpty"))
-                .hasTrue(() -> System.out.println(counter.getAndIncrement() + " => nonEmpty"))
+                .hasTrue((v) -> System.out.println(counter.getAndIncrement() + " => nonEmpty"))
                 .hasFalse(() -> System.out.println(counter.getAndIncrement() + " => empty"));
         Bool.of(Optional.of("nonEmpty")).hasTrue((value) -> System.out.println(value));
         Bool.of(Optional.of(new String[]{"1", "a"})).hasTrue((value) -> System.out.println(value.length));

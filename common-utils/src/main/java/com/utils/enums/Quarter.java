@@ -1,6 +1,7 @@
-package com.utils.excel.enums;
+package com.utils.enums;
 
 import com.utils.excel.entity.Cell;
+import com.utils.excel.enums.DataType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +26,8 @@ public enum Quarter {
 
     /**
      * 按季度分组构建表格头部
-     * @param headers {@link List}{@link List< Cell >}
-     * @return {@link List}{@link List< Cell >}
+     * @param headers {@link List}{@link List<Cell>}
+     * @return {@link List}{@link List<Cell>}
      */
     public static List<Cell> buildHeaders(List<Cell> headers) {
         if (Objects.isNull(headers)) {
@@ -36,9 +37,9 @@ public enum Quarter {
     }
     /**
      * 按季度分组构建表格头部
-     * @param headers {@link List}{@link List< Cell >}
+     * @param headers {@link List}{@link List<Cell>}
      * @param startIndex int index 起始值
-     * @return {@link List}{@link List< Cell >}
+     * @return {@link List}{@link List<Cell>}
      */
     public static List<Cell> buildHeaders(List<Cell> headers, int startIndex) {
         if (Objects.isNull(headers)) {

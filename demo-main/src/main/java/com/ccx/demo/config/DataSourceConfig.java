@@ -24,6 +24,9 @@ import java.util.Properties;
  *   参考配置：https://docs.spring.io/spring-data/jpa/docs/current/reference/html/
  * QueryDSL
  *   参考配置：http://www.querydsl.com/static/querydsl/4.1.3/reference/html_single/#jpa_integration
+ * Hibernate 命名策略可自定义
+ *   参考配置：https://www.baeldung.com/hibernate-naming-strategy
+ *
  * @author 谢长春
  */
 @Configuration

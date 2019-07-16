@@ -592,16 +592,16 @@ public class Result<E> implements IJson {
             log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 声明data集合中只能是 Item <<<<<<<<<<<<<<<<<<");
             Result<Item> result = new Result<>();
             // 设置单一对象，必须是泛型声明的类型
-            result.setSuccess(Item.builder().label("key").value(111).build());
+            result.setSuccess(Item.builder().key("key").value(111).build());
             log.info(result.toString());
             // 设置多个对象，必须是泛型声明的类型
-            result.setSuccess(Item.builder().label("key").value(222).build(), Item.builder().label("key").value(333).build());
+            result.setSuccess(Item.builder().key("key").value(222).build(), Item.builder().key("key").value(333).build());
             log.info(result.toString());
             // 设置对象对象数组，必须是泛型声明的类型
-            result.setSuccess(new Item[]{Item.builder().label("key").value(444).build(), Item.builder().label("key").value(555).build()});
+            result.setSuccess(new Item[]{Item.builder().key("key").value(444).build(), Item.builder().key("key").value(555).build()});
             log.info(result.toString());
             // 设置对象集合，必须是泛型声明的类型
-            result.setSuccess(Arrays.asList(Item.builder().label("key").value(666).build(), Item.builder().label("key").value(777).build()));
+            result.setSuccess(Arrays.asList(Item.builder().key("key").value(666).build(), Item.builder().key("key").value(777).build()));
             // 带有附加属性(扩展属性),可以链式调用
             result.addExtras("name", "JX").addExtras("amount", 100).addExtras("roles", new String[]{"ROLE_USER"});
             log.info(result.toString());

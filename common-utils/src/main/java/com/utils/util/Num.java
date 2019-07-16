@@ -2,10 +2,10 @@ package com.utils.util;
 
 import com.alibaba.fastjson.JSON;
 import com.utils.enums.Regs;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Objects;
@@ -313,11 +313,8 @@ public final class Num {
         set(value);
     }
 
+    @Getter
     private Number value;
-    /**
-     * 调用format时，默认的格式
-     */
-    private Pattern defaultPattern = DOUBLE;
 
     public boolean isNull() {
         return Objects.isNull(value);
@@ -340,9 +337,9 @@ public final class Num {
     }
 
     public Num set(final Number value) {
-        if (value instanceof Integer || value instanceof Long || value instanceof Short) {
-            defaultPattern = LONG; // 设置默认的格式
-        }
+//        if (value instanceof Integer || value instanceof Long || value instanceof Short) {
+//            defaultPattern = LONG; // 设置默认的格式
+//        }
         this.value = value;
         return this;
     }
@@ -504,67 +501,39 @@ public final class Num {
     }
 
     /**
-     * 将 value 按格式取对应的值；不建议使用此方法，因为得到的Number对象还得继续取值；但在某些情况，数字类型不明确时可以使用
-     *
-     * @param pattern Pattern
-     * @return Number
-     */
-    public Number getNumber(Pattern pattern) {
-        switch (pattern) {
-            case LONG:
-            case SLONG:
-                return longValue();
-            case FLOAT:
-            case SFLOAT:
-                return floatValue();
-            case DOUBLE:
-            case SDOUBLE:
-                return doubleValue();
-            default:
-                break;
-        }
-        return value;
-    }
-
-    /**
-     * 格式化数字，默认格式：0000.00保留两位小数,不含千位符
+     * 格式化数字，默认格式：按数据类型判断
+     * Double => 0.00 保留两位小数,不含千位符
+     * BigDecimal => 0.00 保留两位小数,不含千位符
+     * Float => 0.0 保留 1 位小数,不含千位符
+     * Long|Integer|Short|Integer => 0 无小数,不含千位符
      *
      * @return String 格式化后的字符串
      */
     public String format() {
-        return format(defaultPattern);
+        if (Objects.isNull(value)) return null;
+        if (value instanceof Double || value instanceof BigDecimal) return format(DOUBLE);
+        if (value instanceof Float) return format(FLOAT);
+        return format(LONG);
     }
 
     /**
-     * 格式化数字，默认格式：0000.00保留两位小数,不含千位符
+     * 格式化数字
      *
      * @param pattern String 格式
      * @return String 格式化后的字符串
      */
     public String format(String pattern) {
-        if (Objects.isNull(value)) {
-            return null;
-        }
-        if (Objects.isNull(pattern)) {
-            return Pattern.DOUBLE.format(value);
-        }
-        return new DecimalFormat(pattern).format(value);
+        return Optional.ofNullable(pattern).map(p -> new DecimalFormat(p).format(value)).orElseGet(this::format);
     }
 
     /**
-     * 格式化数字，默认格式：0000.00保留两位小数,不含千位符
+     * 格式化数字
      *
      * @param pattern String 格式
      * @return String 格式化后的字符串
      */
     public String format(Pattern pattern) {
-        if (Objects.isNull(value)) {
-            return null;
-        }
-        if (Objects.isNull(pattern)) {
-            return Pattern.DOUBLE.format(value);
-        }
-        return pattern.format(value);
+        return Optional.ofNullable(pattern).map(p -> p.format(this.value)).orElseGet(this::format);
     }
 
     /**
@@ -573,10 +542,7 @@ public final class Num {
      * @return String 格式化后的字符串
      */
     public String formatAmount() {
-        if (Objects.isNull(value)) {
-            return null;
-        }
-        return SDOUBLE.format(value);
+        return Optional.ofNullable(value).map(SDOUBLE::format).orElse(null);
     }
 
     @Override

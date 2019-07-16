@@ -31,8 +31,8 @@ mvn clean install # 安装依赖包到本地仓库，web子项目打成war包
 * demo-main[jar]：应用入口【主模块】
 * demo-service[jar]：参考案例【依赖于主模块】
 * app-demo[jar]：应用组装部署模块，将所有需要发布的模块组装之后打成 war 包，作为单体应用发布，避免循环依赖打包报错
-* app-demo-security[war]：参考案例【Spring Security 基本应用】
-* app-demo-socket[war]：参考案例【Spring Socket 基本应用】
+* app-security[war]：参考案例【Spring Security 基本应用】
+* app-socket[war]：参考案例【Spring Socket 基本应用】
 
 ### 注解说明
 ```

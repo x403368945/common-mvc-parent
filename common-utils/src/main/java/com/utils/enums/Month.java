@@ -1,6 +1,7 @@
-package com.utils.excel.enums;
+package com.utils.enums;
 
 import com.utils.excel.entity.Cell;
+import com.utils.excel.enums.DataType;
 
 import java.util.ArrayList;
 import java.util.List;

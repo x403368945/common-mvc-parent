@@ -62,7 +62,7 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 //   优点：更灵活，场景可适配；大部分场景下，只有ID作为更新匹配条件无法满足需求
 //   缺点：代码量增加
 @NoArgsConstructor // 生成无参构造函数
-@AllArgsConstructor // 生成全参构造函数
+@AllArgsConstructor
 @Builder // 生成链式类构造器
 @Data // 生成 get & set & toString & hashCode & equals 方法
 // @JSONType(orders ={})：声明实体类属性在 JSON 序列化时的排序；警告：必须声明所有返回字段的顺序，否则此声明不起作用；版本升级后再次测试发现该 bug 有修正，会对 orders 的字段优先，orders 不存在的字段才会乱序

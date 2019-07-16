@@ -14,7 +14,7 @@ import java.util.stream.Stream;
  */
 public enum DataType {
     SEQ("序列：特殊处理预留项", CellType.NUMERIC),
-    /** 数值*/
+    // 数值 ************************************************************************************************************
     NUMBER("数值", CellType.NUMERIC),
     BIGDECIMAL("数值", CellType.NUMERIC),
     DOUBLE("数值", CellType.NUMERIC),
@@ -22,12 +22,11 @@ public enum DataType {
     LONG("数值", CellType.NUMERIC),
     INTEGER("数值", CellType.NUMERIC),
     SHORT("数值", CellType.NUMERIC),
-    /** 文本*/
+    // 文本 *************************************************************************************************************
     STRING("文本", CellType.STRING),
     TEXT("文本", CellType.STRING),
-    /** 日期*/
+    // *****************************************************************************************************************
     DATE("日期", CellType.NUMERIC),
-    /** 百分比*/
     PERCENT("百分比", CellType.NUMERIC),
     FORMULA("公式", CellType.FORMULA),
     ;

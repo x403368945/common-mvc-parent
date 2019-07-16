@@ -1,6 +1,7 @@
 package com.support.mvc.exception;
 
-import com.support.mvc.actions.ICall;
+
+import com.utils.ICall;
 
 import java.util.Objects;
 import java.util.function.Consumer;

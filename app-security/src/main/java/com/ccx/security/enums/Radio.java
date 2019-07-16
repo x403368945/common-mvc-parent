@@ -13,7 +13,6 @@ import java.util.stream.Stream;
 /**
  * 选择状态，只有两种状态，YES or NO
  *
- *
  * @author 谢长春 2017年7月4日 下午5:19:22
  */
 public enum Radio {
@@ -51,8 +50,8 @@ public enum Radio {
      */
     public static List<Item> options(final String yes, final String no) {
         return Arrays.asList(
-                Item.builder().value(Radio.YES.name()).label(yes).comment(Radio.YES.comment).build(),
-                Item.builder().value(Radio.NO.name()).label(no).comment(Radio.NO.comment).build()
+                Item.builder().key(Radio.YES.name()).value(Radio.YES.ordinal()).comment(yes).build(),
+                Item.builder().key(Radio.NO.name()).value(Radio.NO.ordinal()).comment(no).build()
         );
     }
 

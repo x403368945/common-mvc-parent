@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @NoArgsConstructor
-@AllArgsConstructor
 @Data
 @PropertySource(value = "classpath:application.properties", encoding = "UTF-8")
 public class AppProperties implements IJson {

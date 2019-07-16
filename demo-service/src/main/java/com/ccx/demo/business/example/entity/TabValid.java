@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import javax.validation.constraints.*;
 
 /**
- *
  * @author 谢长春 2018/12/20
  */
 @NoArgsConstructor

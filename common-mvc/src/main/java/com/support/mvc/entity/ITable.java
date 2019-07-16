@@ -12,13 +12,4 @@ import java.io.Serializable;
  */
 public interface ITable extends Serializable, IJson {
 
-    //    @NoArgsConstructor
-//    @AllArgsConstructor
-//    @Builder
-//    @Data
-//    @Accessors(chain = true)
-//    class OrderBy{
-//
-//    }
-
 }

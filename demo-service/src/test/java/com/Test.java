@@ -44,7 +44,6 @@ public class Test {
     }
 
     @NoArgsConstructor
-    @AllArgsConstructor
     @Builder
     @Data
     static class User {

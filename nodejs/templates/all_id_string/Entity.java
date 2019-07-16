@@ -50,7 +50,6 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 @DynamicInsert
 @DynamicUpdate
 @NoArgsConstructor
-@AllArgsConstructor
 @Builder
 @Data
 @JSONType(orders = {<%=orders%>})

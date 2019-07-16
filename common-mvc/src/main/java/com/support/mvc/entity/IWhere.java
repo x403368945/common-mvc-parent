@@ -10,10 +10,7 @@ import com.support.mvc.entity.base.Sorts;
 import com.utils.util.Then;
 import org.springframework.data.domain.Sort;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -180,6 +177,61 @@ public interface IWhere<U, W> {
                 expressions.add(supplier.get()); // Optional.ofNullable(supplier.get()).map(v -> expressions.add(v));
             }
             return this;
+        }
+
+        /**
+         * where 条件拼接
+         *
+         * @param value    Object value非空时，执行supplier.value()获得查询条件
+         * @param supplier {@link Supplier<BooleanExpression>}
+         * @return {@link QdslWhere}
+         */
+        public QdslWhere andIfNull(final Object value, final Supplier<BooleanExpression> supplier) {
+            return and(Objects.isNull(value), supplier);
+        }
+
+        /**
+         * where 条件拼接，同 {@link IWhere.QdslWhere}#{@link IWhere.QdslWhere#and(Object, Supplier)}
+         *
+         * @param value    Object value非空时，执行supplier.value()获得查询条件
+         * @param supplier {@link Supplier<BooleanExpression>}
+         * @return {@link QdslWhere}
+         */
+        public QdslWhere andIfNonNull(final Object value, final Supplier<BooleanExpression> supplier) {
+            return and(value, supplier);
+        }
+
+//        /**
+//         * where 条件拼接
+//         *
+//         * @param value    String value非空时，执行supplier.value()获得查询条件
+//         * @param supplier {@link Supplier<BooleanExpression>}
+//         * @return {@link QdslWhere}
+//         */
+//        public QdslWhere andIfBlank(final String value, final Supplier<BooleanExpression> supplier) {
+//            return and(Optional.ofNullable(value).filter(v -> Objects.equals("", value.trim())).isPresent(), supplier);
+//        }
+
+        /**
+         * where 条件拼接
+         *
+         * @param value    String value非空，且非空字符串时，执行supplier.value()获得查询条件
+         * @param supplier {@link Supplier<BooleanExpression>}
+         * @return {@link QdslWhere}
+         */
+        public QdslWhere andIfNonBlank(final String value, final Supplier<BooleanExpression> supplier) {
+            return and(Optional.ofNullable(value).filter(v -> !Objects.equals("", value.trim())).isPresent(), supplier);
+        }
+
+        /**
+         * where 条件拼接
+         *
+         * @param collection Collection value非空且集合大小必须大于 0 ，执行supplier.value()获得查询条件
+         * @param supplier   {@link Supplier<BooleanExpression>}
+         * @return {@link QdslWhere}
+         */
+        public QdslWhere andIfNonEmpty(final Collection collection, final Supplier<BooleanExpression> supplier) {
+            return and(Objects.nonNull(collection) && !collection.isEmpty(), supplier);
         }
 
         public boolean isEmpty() {

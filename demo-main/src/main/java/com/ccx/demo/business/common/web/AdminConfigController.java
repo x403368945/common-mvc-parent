@@ -52,7 +52,7 @@ public class AdminConfigController {
                 .execute(result -> result
                         .versionAssert(version)
                         .setSuccess(Stream.of(App.values())
-                                .map(key -> Item.builder().label(key.name()).value(key.value()).comment(key.comment).build())
+                                .map(key -> Item.builder().key(key.name()).value(key.value()).comment(key.comment).build())
                                 .collect(Collectors.toList())
                         )
                 );
@@ -72,7 +72,7 @@ public class AdminConfigController {
                 .execute(result -> result
                         .versionAssert(version)
                         .setSuccess(Stream.of(Path.values())
-                                .map(key -> Item.builder().label(key.name()).value(key.absolute()).comment(key.comment).build())
+                                .map(key -> Item.builder().key(key.name()).value(key.absolute()).comment(key.comment).build())
                                 .collect(Collectors.toList())
                         )
                 );
@@ -92,7 +92,7 @@ public class AdminConfigController {
                 .execute(result -> result
                         .versionAssert(version)
                         .setSuccess(Stream.of(URL.values())
-                                .map(key -> Item.builder().label(key.name()).value(key.value()).comment(key.comment).build())
+                                .map(key -> Item.builder().key(key.name()).value(key.value()).comment(key.comment).build())
                                 .collect(Collectors.toList())
                         )
                 );

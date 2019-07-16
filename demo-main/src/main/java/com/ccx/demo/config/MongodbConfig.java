@@ -109,7 +109,6 @@ public class MongodbConfig extends AbstractMongoConfiguration {
         final MappingMongoConverter converter = super.mappingMongoConverter();
         converter.setTypeMapper(new DefaultMongoTypeMapper(null)); // typeKey为null的时候，插入mongodb 不会产生 _class 属性
         return converter;
-
     }
 
 //    @Bean

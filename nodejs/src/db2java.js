@@ -123,8 +123,8 @@ export class Table {
                 comment: this.comment,
                 date: new Date().formatDate(),
                 orders: this.columns.map(({name}) => `"${name}"`).join(', '),
-                IUser: this.columns.some(({name}) => ['createUserId', 'modifyUserId'].includes(name)) && 'IUser,',
-                ITimestamp: this.columns.some(({name}) => name === 'modifyTime') && 'ITimestamp, // 所有需要更新时间戳的实体类',
+                IUser: this.columns.some(({name}) => ['createUserId', 'modifyUserId'].includes(name)) && 'IUser,' || '',
+                ITimestamp: this.columns.some(({name}) => name === 'modifyTime') && 'ITimestamp, // 所有需要更新时间戳的实体类' || '',
                 fields: this.columns.map(column => column.field(this.adapters)).filter(Boolean).join('\n'),
                 props: this.columns.map(column => column.prop(this.adapters)).filter(Boolean).join(',\n'),
                 orderBy: this.columns.map(column => column.orderBy(this)).filter(Boolean).join(',\n'),
@@ -226,10 +226,15 @@ export class Column {
      */
     constructor({Field, Type, Collation, Null, Default, Comment}) {
         /**
-         * 字段名
+         * 实体属性名，驼峰命名法
          * @type {string}
          */
-        this.name = Field;
+        this.name = Field.replace(/_([a-zA-Z])/g, (m, $1) => $1.toUpperCase());
+        /**
+         * 数据库字段名，带下划线
+         * @type {string}
+         */
+        this.db_name = Field;
         const [_matchFull, type, _matchLength, length, fixed] = Type.match(/^(\w+)(\((\d+),?(\d+)?\))?.*/);
         /**
          * 数据类型
