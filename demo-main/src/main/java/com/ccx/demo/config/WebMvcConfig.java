@@ -77,7 +77,7 @@ public class WebMvcConfig extends AbstractMvcConfig implements ApplicationContex
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 没有使用 security 时，可以使用拦截器拦截请求，设置请求唯一标记
-        registry.addInterceptor(new RequestIdInterceptor()).addPathPatterns("/**");
+//        registry.addInterceptor(new RequestIdInterceptor()).addPathPatterns("/**");
     }
 
     @Override
