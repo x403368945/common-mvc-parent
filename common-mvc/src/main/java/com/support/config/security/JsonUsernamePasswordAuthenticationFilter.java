@@ -23,7 +23,7 @@ import java.util.Optional;
  * 自定义登录过滤器，扩展 {@link UsernamePasswordAuthenticationFilter}; 支持 json 参数登录
  * <pre>
  *     json 登录请求:
- *     Header -> Content-Type: application/json
+ *     header -> Content-Type: application/json
  *     body -> {"json":{"username":"admin", "password":"admin"}}
  *
  *

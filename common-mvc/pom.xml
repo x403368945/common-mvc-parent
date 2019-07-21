@@ -13,7 +13,7 @@
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <!-- spring-boot 特殊处理：依赖库 -->
+    <!-- // spring-boot start >> spring-boot 特殊处理：依赖库 -->
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -92,6 +92,7 @@
             -->
         </dependency>
     </dependencies>
+    <!-- // spring-boot end <<<< -->
     <build>
         <plugins>
             <plugin> <!-- 打包源码 -->

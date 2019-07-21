@@ -2,7 +2,6 @@ package com.ccx.security.config.init;
 
 import com.utils.util.FPath;
 import com.utils.util.FWrite;
-import com.utils.util.Util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,7 +12,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import static com.ccx.security.config.init.AppConfig.App.*;
+import static com.ccx.security.config.init.AppConfig.App.DOMAIN;
+import static com.ccx.security.config.init.AppConfig.App.PATH_ROOT;
 
 /**
  * 初始化 application.properties 中的应用配置参数；
@@ -42,7 +42,7 @@ public class AppConfig {
      * @return boolean true：调试模式，false：非调试模式
      */
     public static boolean isDebug() {
-        return Util.booleanValue(DEBUG.value());
+        return properties.isDebug();
     }
 
     /**
@@ -65,7 +65,7 @@ public class AppConfig {
      * @return boolean true：单元测试模式
      */
     public static boolean isJunit() {
-        return Util.booleanValue(JUNIT.value());
+        return properties.isJunit();
     }
 
     /**

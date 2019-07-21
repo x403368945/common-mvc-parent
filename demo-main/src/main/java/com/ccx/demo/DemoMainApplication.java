@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Import;
  *
  * @author 谢长春 2019/1/21
  */
+// spring-boot start >>
 @SpringBootApplication
 @Import(value = {InitConfig.class, BusConfig.class})
 @EnableConfigurationProperties(value = {AppProperties.class})
@@ -33,3 +34,4 @@ public class DemoMainApplication extends SpringBootServletInitializer {
 //        };
 //    }
 }
+// spring-boot end <<<<

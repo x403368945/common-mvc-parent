@@ -51,7 +51,8 @@ spring:
       # 初始化大小，最小，最大
       initial-size: 2
       min-idle: 2
-      max-active: 20
+      # 最大连接数建议 （CPU核核数 * 2 + 1）
+      max-active: 5
       # 配置获取连接等待超时的时间
       max-wait: 6000
       # 打开PSCache，并且指定每个连接上PSCache的大小，是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。
@@ -83,7 +84,8 @@ spring:
       # 初始化大小，最小，最大
       initial-size: 2
       min-idle: 2
-      max-active: 20
+      # 最大连接数建议 （CPU核核数 * 2 + 1）
+      max-active: 5
       # 配置获取连接等待超时的时间
       max-wait: 6000
       # 打开PSCache，并且指定每个连接上PSCache的大小，是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。
@@ -115,7 +117,8 @@ spring:
       # 初始化大小，最小，最大
       initial-size: 2
       min-idle: 2
-      max-active: 20
+      # 最大连接数建议 （CPU核核数 * 2 + 1）
+      max-active: 5
       # 配置获取连接等待超时的时间
       max-wait: 6000
       # 打开PSCache，并且指定每个连接上PSCache的大小，是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。

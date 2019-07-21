@@ -1,4 +1,4 @@
-package com.ccx.demo.config.interceptor;
+package com.support.config.interceptor;
 //
 //import com.ccx.demo.business.user.entity.TabUser;
 //import com.ccx.demo.tl.LogUser;

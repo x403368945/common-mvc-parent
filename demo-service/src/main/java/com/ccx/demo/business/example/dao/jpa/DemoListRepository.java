@@ -22,7 +22,6 @@ import static com.ccx.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 /**
  * 数据操作：
  *
- *
  * @author 谢长春 on 2018-12-17
  */
 public interface DemoListRepository extends
@@ -54,7 +53,12 @@ public interface DemoListRepository extends
     @Override
     default TabDemoList deleteById(final Long id, final Long userId) {
         // 只能删除自己创建的数据
-        return findOne(Example.of(TabDemoList.builder().id(id).createUserId(userId).build()))
+        return Optional
+                .ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
+                        .selectFrom(q)
+                        .where(q.id.eq(id).and(q.createUserId.eq(userId)))
+                        .fetchOne()
+                )
                 .map(obj -> {
                     delete(obj);
                     return obj;
@@ -68,7 +72,12 @@ public interface DemoListRepository extends
     default TabDemoList deleteByUid(final Long id, final String uid, final Long userId) {
         // 只能删除自己创建的数据，且使用 UUID 强校验；
         // userId 为可选校验，一般业务场景，能获取到 UUID 已经表示已经加强校验了
-        return findOne(Example.of(TabDemoList.builder().id(id).uid(uid).createUserId(userId).build()))
+        return Optional
+                .ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
+                        .selectFrom(q)
+                        .where(q.id.eq(id).and(q.uid.eq(uid)).and(q.createUserId.eq(userId)))
+                        .fetchOne()
+                )
                 .map(obj -> {
                     delete(obj);
                     return obj;

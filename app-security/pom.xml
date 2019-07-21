@@ -6,16 +6,22 @@
         <artifactId>common-mvc-parent</artifactId>
         <groupId>com.ccx</groupId>
         <version>1.0.0</version>
+        <!-- // spring-boot start >> -->
         <relativePath>../pom.xml</relativePath>
+        <!-- // spring-boot end <<<< -->
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>app-security</artifactId>
     <version>1.0.0</version>
-    <packaging>war</packaging>
-
+    <!-- // spring-mvc start >> -->
+    <!--<packaging>war</packaging>-->
+    <!-- // spring-mvc end <<<< -->
+    <!-- // spring-boot start >> -->
+    <packaging>jar</packaging>
     <properties>
         <main.class>com.ccx.security.Application</main.class>
     </properties>
+    <!-- // spring-boot end <<<< -->
 
     <dependencies>
         <dependency>
@@ -37,20 +43,32 @@
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
-            <plugin> <!-- war 包插件 -->
+            <!-- // spring-mvc start >> -->
+            <!--<plugin> &lt;!&ndash; war 包插件 &ndash;&gt;
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-            </plugin>
+            </plugin>-->
+            <!-- // spring-mvc end <<<< -->
+            <!-- // spring-boot start >> -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <executable>true</executable><!-- executable：在jar包中内置shell脚本，用于 linux 服务启动模式 -->
                     <fork>true</fork> <!-- devtools 热启动配置 -->
                     <addResources>true</addResources>
                     <mainClass>${main.class}</mainClass>
                     <layout>ZIP</layout>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
+            <!-- // spring-boot end <<<< -->
         </plugins>
     </build>
 </project>

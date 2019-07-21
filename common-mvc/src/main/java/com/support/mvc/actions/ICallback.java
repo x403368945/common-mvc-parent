@@ -12,7 +12,6 @@ import static com.support.mvc.actions.ICallback.Event.*;
 /**
  * 回调接口
  *
- *
  * @author 谢长春 2018-10-11
  */
 public interface ICallback {

@@ -8,10 +8,10 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
  *
  * @author 谢长春 2018-10-5
  */
-public class UidConvert extends ClassicConverter {
+public class RidConvert extends ClassicConverter {
 
     @Override
     public String convert(final ILoggingEvent event) {
-        return Reqid.get();
+        return RequestId.get();
     }
 }

@@ -33,19 +33,72 @@
                 <env>dev</env>
             </properties>
         </profile>
+        <!--
+                <profile> &lt;!&ndash; 本地 windows 开发环境 &ndash;&gt;
+                    <id>windows</id>
+                    <properties>
+                        <env>windows</env>
+                    </properties>
+                    &lt;!&ndash; 设置 windows 环境激活这个配置 &ndash;&gt;
+                    <activation>
+                        <os>
+                            <name>Windows</name>
+                            <family>Windows</family>
+                        </os>
+                    </activation>
+                </profile>
+        -->
         <profile> <!-- 测试环境 -->
             <id>beta</id>
-            <!--<activation><activeByDefault>true</activeByDefault></activation>-->
             <properties>
                 <env>beta</env>
             </properties>
+            <!-- build -> plugins 可以写在 project ，但是开发环境不需要挂起 antrun 插件，只有在按环境打包时需要 -->
+            <!--<build>
+                <plugins>
+                    &lt;!&ndash; 使用AntRun插件，因为此插件能绑定Maven生命周期阶段，并通过Ant的标签即可输出信息、复制文件等&ndash;&gt;
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.8</version>
+                        <executions>
+                            <execution>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <tasks>
+                                        <echo>Using Environment : ${env}</echo> &lt;!&ndash; 复制文件文件夹 &ndash;&gt;
+                                        <copy todir="${project.build.outputDirectory}" overwrite="true">
+                                            <fileset dir="src/demo/resources/${env}"/>
+                                        </copy>
+                                        &lt;!&ndash;
+                                        <echo>Using ${env}/application.properties</echo> &lt;!&ndash; 复制单个文件 &ndash;&gt;
+                                        <copy file="src/demo/resources/${env}/application.properties" tofile="${project.build.outputDirectory}/application.properties" overwrite="true"/>
+                                        &ndash;&gt;
+                                    </tasks>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>-->
         </profile>
         <profile> <!-- 生产环境 -->
             <id>prod</id>
-            <!--<activation><activeByDefault>true</activeByDefault></activation>-->
             <properties>
                 <env>prod</env>
             </properties>
+            <!-- build -> plugins 可以写在 project ，但是开发环境不需要挂起 antrun 插件，只有在按环境打包时需要 -->
+            <!--<build>
+                <plugins>
+                    &lt;!&ndash; 使用AntRun插件，因为此插件能绑定Maven生命周期阶段，并通过Ant的标签即可输出信息、复制文件等&ndash;&gt;
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                </plugins>
+            </build>-->
         </profile>
     </profiles>
 
@@ -97,7 +150,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.4</version>
+            <version>1.18.8</version>
             <optional>true</optional>
         </dependency>
         <dependency>
@@ -148,6 +201,20 @@
             <version>5.1.2.RELEASE</version>
             <scope>test</scope>
         </dependency>
+            <!-- 打包发布时起作用：支付宝 sdk 集成；需要手动安装支付宝 sdk jar包到 maven 仓库，参考: /src/test/files/libs/README.md -->
+            <!--<dependency>
+                <groupId>com.alipay.api</groupId>
+                <artifactId>alipay-sdk</artifactId>
+                <version>20180104135026</version>
+            </dependency>-->
+            <!-- 编译时起作用：支付宝 sdk 集成；由于mvn install:install-file 命令安装 sdk jar包之后，maven 打包时可以检测到依赖，但编译时检测不到依赖，所以编译时使用这个依赖，打包时使用上面的依赖 -->
+            <!--<dependency>
+                <groupId>com.alipay.api</groupId>
+                <artifactId>sdk</artifactId>
+                <version>20180104135026</version>
+                <scope>system</scope>
+                <systemPath>${project.basedir}/src/test/files/libs/alipay-sdk-java20180104135026.jar</systemPath>
+            </dependency>-->
     </dependencies>
     <build>
         <!--<finalName>${artifactId}</finalName>--> <!--build目标文件的文件名，默认情况下为${artifactId}-${version}；-->
@@ -252,6 +319,7 @@
                         <configuration>
                             <sources>
                                 <source>${project.build.directory}/generated-sources/java</source>
+                                <source>${project.build.directory}/*/generated-sources/java</source>
                             </sources>
                         </configuration>
                     </execution>
@@ -279,7 +347,7 @@
                 <plugin> <!-- 打包源码 -->
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
-                    <version>3.0.1</version>
+                    <version>3.1.0</version>
                     <executions>
                         <execution>
                             <id>attach-sources</id>

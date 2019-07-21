@@ -8,6 +8,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
+ * 全局应用配置
+ * // spring-boot start >> spring-boot 使用 yml 文件，可以通过 @ConfigurationProperties 注解，然后在 Application.java 依赖之后，不在需要 @Value 注解
+ * // spring-mvc start >> spring-mvc 需要依赖 @Value 注解声明 application.properties 中的属性
+ *
  * @author 谢长春 2019/1/22
  */
 @Component

@@ -7,6 +7,7 @@ import lombok.SneakyThrows;
  *
  * @author 谢长春 2018-10-11
  */
+@Deprecated
 public interface ICall {
     /**
      * 执行代码

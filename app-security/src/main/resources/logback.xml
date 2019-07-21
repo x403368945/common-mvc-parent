@@ -12,12 +12,13 @@
     <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
     <property name="LOG_HOME" value="${CATALINA_HOME:-.}/logs"/>
     <contextName>${APP_NAME}</contextName>
-
+    <!-- 自定义日志采集参数：[%rid] 采集请求唯一标记 -->
+    <conversionRule conversionWord="rid" converterClass="com.log.RidConvert"/>
     <!-- 负责写日志,控制台日志 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- 一是把日志信息转换成字节数组,二是把字节数组写入到输出流 -->
         <encoder>
-            <pattern>%highlight(%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} : %m%n)</pattern>
+            <pattern>%highlight(%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%rid] : %m%n)</pattern>
             <charset>UTF-8</charset>
         </encoder>
     </appender>
@@ -26,7 +27,7 @@
     <appender name="DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_HOME}/${APP_NAME}.debug.log</file>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} : %m%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%rid]: %m%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
@@ -48,7 +49,7 @@
             <level>INFO</level>
         </filter>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} : %m%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%rid]: %m%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
@@ -69,7 +70,7 @@
             <level>ERROR</level>
         </filter>
         <encoder>
-            <pattern>%d %5level [%20thread] %50logger{50} : %m%n</pattern>
+            <pattern>%d %5level [%20thread] %50logger{50} [%rid]: %m%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
         <!--
@@ -135,7 +136,8 @@
     <!-- 打印 Controller 注册url -->
     <logger name="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" level="TRACE"/>
     <!-- 已经配置AOP拦截了，不需要再打印 Controller 返回的结果 -->
-    <logger name="org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor" level="INFO"/>
+    <logger name="org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor"
+            level="INFO"/>
     <logger name="org.apache.commons.beanutils.converters.AbstractConverter" level="INFO"/>
     <logger name="org.mongodb.driver" level="INFO"/>
     <logger name="org.springframework.data.redis.core.RedisConnectionUtils" level="INFO"/>

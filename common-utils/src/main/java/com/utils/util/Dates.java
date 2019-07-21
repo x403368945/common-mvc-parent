@@ -2,7 +2,7 @@ package com.utils.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
-import com.utils.excel.enums.Week;
+import com.utils.enums.Week;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -125,6 +125,16 @@ public final class Dates {
         public String format(final LocalDateTime value) {
             return value.format(formatter);
         }
+
+        /**
+         * 格式化日期
+         *
+         * @param value {@link Date} or {@link Timestamp}
+         * @return {@link String}
+         */
+        public String format(final Date value) {
+            return format.format(value);
+        }
     }
 
     /**
@@ -148,7 +158,7 @@ public final class Dates {
         private Timestamp end;
 
         /**
-         * 以当天时间初始化区间 yyyy-MM-dd 00:00:00.00 - yyyy-MM-dd 23:59:59.999
+         * 以当天时间初始化区间 yyyy-MM-dd 00:00:00.000 - yyyy-MM-dd 23:59:59.999
          *
          * @return {@link Range}
          */

@@ -1,12 +1,7 @@
 package com.ccx.demo.config;
 
 import com.ccx.demo.config.init.AppConfig;
-import com.log.Reqid;
-import com.support.config.security.AuthHandler;
-import com.support.config.security.IAdapter;
-import com.support.config.security.JsonUsernamePasswordAuthenticationFilter;
-import com.support.config.security.SimpleAuthAdapter;
-import com.utils.util.Util;
+import com.support.config.security.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +10,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.cors.CorsConfiguration;
@@ -124,12 +118,13 @@ public class SecurityConfig {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             final AuthHandler authHandler = new AuthHandler();
+            final RequestIdFilter requestIdFilter = new RequestIdFilter();
             http
                     .csrf().disable()
 //                    .csrf().ignoringAntMatchers("/druid/*").and()
 //                    .cors().and()
                     // http 响应头追加请求唯一标记
-                    .headers().addHeaderWriter((req, res) -> res.addHeader("uid", Reqid.getAndRemove())).and()
+                    .headers().addHeaderWriter(requestIdFilter::writeHeaders).and()
                     //用户访问未经授权的rest API，返回错误码401（未经授权）
                     .exceptionHandling().authenticationEntryPoint(authHandler).accessDeniedHandler(authHandler)
 //                    // 指定会话策略；ALWAYS:总是创建HttpSession, IF_REQUIRED:只会在需要时创建一个HttpSession, NEVER:不会创建HttpSession，但如果它已经存在，将可以使用HttpSession, STATELESS:永远不会创建HttpSession，它不会使用HttpSession来获取SecurityContext
@@ -172,10 +167,8 @@ public class SecurityConfig {
                         UsernamePasswordAuthenticationFilter.class
                 );
 //                http.addFilterAfter(authTokenFilter, BasicAuthenticationFilter.class);
-                http.addFilterBefore((req, res, chain) -> {
-                    Reqid.set(Util.uuid()); // 设置请求唯一标记
-                    chain.doFilter(req, res);
-                }, ChannelProcessingFilter.class);
+                // 添加请求唯一标记处理
+                requestIdFilter.setRequestIdFilter(http);
             }
         }
 

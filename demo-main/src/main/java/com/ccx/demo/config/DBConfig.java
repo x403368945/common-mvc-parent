@@ -34,6 +34,7 @@ import java.util.Date;
  *
  * @author 谢长春 2019/1/23
  */
+// spring-boot start >> spring-boot 在 yml 文件简化了配置，所以将 MySQL 和 MongoDB 配置合并
 @Configuration
 public class DBConfig {
 
@@ -70,3 +71,4 @@ public class DBConfig {
         return new MongoTemplate(dbFactory, converter);
     }
 }
+// spring-boot end <<<<

@@ -346,7 +346,7 @@ public class Param implements Serializable {
         log.info(JSON.toJSONString(Param.of("[\"123\",\"456\"]").parseArray(String.class)));
         log.info(JSON.toJSONString(Param.of("[\"789\",\"456\"]").parseObject(List.class)));
 
-        log.info("{}", Param.of(Item.builder().label("选项").value("10").build()));
+        log.info("{}", Param.of(Item.builder().comment("选项").value("10").build()));
         log.info("{}", Param.of("[\"d:\\\\project\"]"));
 
 //        {

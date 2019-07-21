@@ -6,7 +6,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.log.Reqid;
+import com.log.RequestId;
 import com.querydsl.core.QueryResults;
 import com.support.mvc.actions.IExecute;
 import com.support.mvc.enums.Code;
@@ -42,7 +42,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
  */
 @Slf4j
 @Accessors(chain = true)
-@JSONType(orders = {"v", "code", "message", "rowCount", "pageCount", "totalCount", "uid", "exception", "data", "extras", "version"})
+@JSONType(orders = {"v", "code", "message", "rowCount", "pageCount", "totalCount", "rid", "exception", "data", "extras", "version"})
 public class Result<E> implements IJson {
     public interface Call {
 
@@ -162,8 +162,8 @@ public class Result<E> implements IJson {
      * 本次请求唯一标记
      * @return {@link String}
      */
-    public String getUid() {
-        return Reqid.get();
+    public String getRid() {
+        return RequestId.get();
     }
 
 //    /**
@@ -404,7 +404,7 @@ public class Result<E> implements IJson {
      * @return {@link Result}{@link Result<E>}
      */
     public Result<E> versionAssert(final int version, final boolean exception) {
-        if (!Objects.equals(this.v, version)) {
+        if (Util.nonEquals(this.v, version)) {
             if (exception) {
                 throw Code.VERSION.exception("当前请求版本号与接口最新版本号不匹配");
             } else {
@@ -592,16 +592,16 @@ public class Result<E> implements IJson {
             log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 声明data集合中只能是 Item <<<<<<<<<<<<<<<<<<");
             Result<Item> result = new Result<>();
             // 设置单一对象，必须是泛型声明的类型
-            result.setSuccess(Item.builder().label("key").value(111).build());
+            result.setSuccess(Item.builder().key("key").value(111).build());
             log.info(result.toString());
             // 设置多个对象，必须是泛型声明的类型
-            result.setSuccess(Item.builder().label("key").value(222).build(), Item.builder().label("key").value(333).build());
+            result.setSuccess(Item.builder().key("key").value(222).build(), Item.builder().key("key").value(333).build());
             log.info(result.toString());
             // 设置对象对象数组，必须是泛型声明的类型
-            result.setSuccess(new Item[]{Item.builder().label("key").value(444).build(), Item.builder().label("key").value(555).build()});
+            result.setSuccess(new Item[]{Item.builder().key("key").value(444).build(), Item.builder().key("key").value(555).build()});
             log.info(result.toString());
             // 设置对象集合，必须是泛型声明的类型
-            result.setSuccess(Arrays.asList(Item.builder().label("key").value(666).build(), Item.builder().label("key").value(777).build()));
+            result.setSuccess(Arrays.asList(Item.builder().key("key").value(666).build(), Item.builder().key("key").value(777).build()));
             // 带有附加属性(扩展属性),可以链式调用
             result.addExtras("name", "JX").addExtras("amount", 100).addExtras("roles", new String[]{"ROLE_USER"});
             log.info(result.toString());

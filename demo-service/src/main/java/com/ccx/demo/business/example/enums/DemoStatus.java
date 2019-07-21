@@ -39,7 +39,7 @@ public enum DemoStatus {
      */
     public static List<Item> options() {
         return Stream.of(DemoStatus.values())
-                .map(item -> Item.builder().value(item.name()).label(item.comment).build())
+                .map(item -> Item.builder().key(item.name()).value(item.ordinal()).comment(item.comment).build())
                 .collect(Collectors.toList());
     }
 

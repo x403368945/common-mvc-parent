@@ -4,7 +4,6 @@ import com.ccx.security.config.init.AppProperties;
 import com.support.config.InitConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
@@ -17,6 +16,7 @@ import org.springframework.context.annotation.Import;
  *
  * @author 谢长春 2019/1/29
  */
+// spring-boot start >>
 @SpringBootApplication
 @Import(value = {InitConfig.class})
 @EnableConfigurationProperties(value = {AppProperties.class})
@@ -41,3 +41,4 @@ public class Application extends SpringBootServletInitializer {
 //        };
 //    }
 }
+// spring-boot end <<<<
