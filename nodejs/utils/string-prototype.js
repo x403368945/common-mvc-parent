@@ -1,11 +1,12 @@
 /**
  * 字符串原型扩展
+ * @author 谢长春 2019-7-28
  */
 (() => {
   /**
    * 字符串格式化,使用{}占位，{}内可以为空，替换顺序为参数顺序
    * console.log('test/{d}/{ab}/{}/{123}'.format(1, 2, 3, 0));
-   * @param args {Array}
+   * @param args {Array|*}
    * @return {String}
    */
   String.prototype.format = function (...args) {

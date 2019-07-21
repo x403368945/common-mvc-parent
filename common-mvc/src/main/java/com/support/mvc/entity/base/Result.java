@@ -12,6 +12,7 @@ import com.support.mvc.actions.IExecute;
 import com.support.mvc.enums.Code;
 import com.support.mvc.exception.CodeException;
 import com.support.mvc.exception.UserSessionException;
+import com.utils.ICall;
 import com.utils.IJson;
 import com.utils.util.FWrite;
 import com.utils.util.Maps;
@@ -140,7 +141,7 @@ public class Result<E> implements IJson {
     @Setter
     private long totalCount;
     /**
-     * 本次响应数据总行数
+     * 本次响应数据总行数FAILURE
      */
     @Getter
     @Setter
@@ -160,6 +161,7 @@ public class Result<E> implements IJson {
 
     /**
      * 本次请求唯一标记
+     *
      * @return {@link String}
      */
     public String getRid() {
@@ -413,21 +415,21 @@ public class Result<E> implements IJson {
         }
         return this;
     }
-
-    /**
-     * 设置版本信息
-     *
-     * @return {@link Result}{@link Result<E>}
-     */
-    public Result<E> version(final Function<Version.VersionBuilder, Version> version) {
-        try {
-            Assert.isTrue(v > 0, "指定版本前先指定【v】字段，当前接口最新版本号，版本号最小值为1");
-            this.version = Objects.requireNonNull(version, "参数【version】不能为null").apply(Version.builder().id(v));
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
-        return this;
-    }
+//
+//    /**
+//     * 设置版本信息
+//     *
+//     * @return {@link Result}{@link Result<E>}
+//     */
+//    public Result<E> version(final Function<Version.VersionBuilder, Version> version) {
+//        try {
+//            Assert.isTrue(v > 0, "指定版本前先指定【v】字段，当前接口最新版本号，版本号最小值为1");
+//            this.version = Objects.requireNonNull(version, "参数【version】不能为null").apply(Version.builder().id(v));
+//        } catch (Exception e) {
+//            log.error(e.getMessage(), e);
+//        }
+//        return this;
+//    }
 
     /**
      * 设置版本信息
@@ -495,14 +497,14 @@ public class Result<E> implements IJson {
     }
 
     /**
-     * 执行 execute 代码逻辑；如果 execute 不抛异常，则调用 {@link Result#setCode}({@link Code#SUCCESS})
+     * 执行 call 代码逻辑；如果 call 不抛异常，则调用 {@link Result#setCode}({@link Code#SUCCESS})
      *
-     * @param execute {@link IExecute}
+     * @param call {@link ICall}
      * @return {@link Result}{@link Result<E>}
      */
-    public Result<E> execute(final IExecute execute) {
+    public Result<E> call(final ICall call) {
         try {
-            execute.execute();
+            call.call();
             setCode(Code.SUCCESS);
         } catch (Exception e) {
             log.error(e.getMessage(), e);

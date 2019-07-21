@@ -308,7 +308,7 @@ public class ValidController implements IAuthController<Long> {
                             @PathVariable final Long id,
                             // required = false 可以让请求先过来，如果参数为空再抛出异常，保证本次请求能得到响应
                             @RequestBody(required = false) final Param param) {
-        return new Result<TabValid>(1).execute(() -> {
+        return new Result<TabValid>(1).call(() -> {
             {
                 if (0 == version)
                     service.update(1L, user.getId(), TabValid.builder().uid(Util.uuid()).label(Strings.repeat("测试", 5)).value((short) 1).content(Strings.repeat("内容", 15)).build());
@@ -342,7 +342,7 @@ public class ValidController implements IAuthController<Long> {
     public Result<?> deleteById(@AuthenticationPrincipal final TabUser user,
                                 @PathVariable final int version,
                                 @PathVariable final Long id) {
-        return new Result<>(1).execute(() -> {
+        return new Result<>(1).call(() -> {
             {
                 if (0 == version) service.deleteById(id, user.getId());
                 if (1 == version) service.deleteById(null, null);
@@ -363,7 +363,7 @@ public class ValidController implements IAuthController<Long> {
                                  @PathVariable final int version,
                                  @PathVariable final Long id,
                                  @PathVariable final String uid) {
-        return new Result<>(1).execute(() -> {
+        return new Result<>(1).call(() -> {
             {
                 if (0 == version) service.deleteByUid(id, Util.uuid(), user.getId());
                 if (1 == version) service.deleteByUid(null, null, null);
@@ -385,7 +385,7 @@ public class ValidController implements IAuthController<Long> {
     public Result<?> markDeleteById(@AuthenticationPrincipal final TabUser user,
                                     @PathVariable final int version,
                                     @PathVariable final Long id) {
-        return new Result<>(1).execute(() -> {
+        return new Result<>(1).call(() -> {
             {
                 if (0 == version) service.markDeleteById(id, user.getId());
                 if (1 == version) service.markDeleteById(null, null);
@@ -406,7 +406,7 @@ public class ValidController implements IAuthController<Long> {
                                      @PathVariable final int version,
                                      @PathVariable final Long id,
                                      @PathVariable final String uid) {
-        return new Result<>(1).execute(() -> {
+        return new Result<>(1).call(() -> {
             {
                 if (0 == version) service.markDeleteByUid(id, Util.uuid(), user.getId());
                 if (1 == version) service.markDeleteByUid(null, null, null);
@@ -429,7 +429,7 @@ public class ValidController implements IAuthController<Long> {
     public Result<?> markDelete(@AuthenticationPrincipal final TabUser user,
                                 @PathVariable final int version,
                                 @RequestBody(required = false) final Param param) {
-        return new Result<>(1).execute(() -> {
+        return new Result<>(1).call(() -> {
             {
                 if (0 == version)
                     service.markDelete(Collections.singletonList(TabValid.builder().id(1L).uid(Util.uuid()).build()), user.getId());

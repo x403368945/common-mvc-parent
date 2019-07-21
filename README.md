@@ -1,5 +1,17 @@
 # common-mvc-parent
 ## 分支合并注意事项
+Application.java
+HomeController.java
+AppProperties.java
+WebInitializer.java
+WebMvcConfig.java
+AbstractMvcConfig.java
+SecurityWebApplicationInitializer.java
+DataSourceConfig.java
+DBConfig.java
+MongodbConfig.java
+ScheduleConfig.java
+
 spring-mvc <= spring-boot  
 删除 *.yml  
 恢复 *.properties  

@@ -111,9 +111,6 @@ public class OpenAuthController {
         try {
             result
                     .version(builder -> builder
-                            .url("/open/auth/{version}/login/SESSION")
-                            .markdown(this.getClass().getSimpleName().concat("/loginBySession.md"))
-                            .method(POST)
                             .props(TabUser.Props.list())
                             .notes(Arrays.asList(
                                     "会话模式登录，有效期30分钟"

@@ -2,9 +2,10 @@ package com.support.config.security;
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
+import java.util.Optional;
+
 /**
  * Spring Security 配置
- *
  *
  * @author 谢长春 2018/12/4
  */
@@ -34,10 +35,15 @@ public interface IAdapter {
             return "/cors/**";
         }
 
+        default RequestIdFilter getRequestIdFilter() {
+            return null;
+        }
+
         default void config(final HttpSecurity http) throws Exception {
             http
                     .antMatcher(matcher())
                     .csrf().disable()
+                    .headers().addHeaderWriter((req, res) -> Optional.ofNullable(getRequestIdFilter()).ifPresent(requestIdFilter -> requestIdFilter.writeHeaders(req, res))).and()
                     .cors().and()
                     .anonymous().and()
                     .servletApi().and()
@@ -45,6 +51,7 @@ public interface IAdapter {
                     .authorizeRequests()
                     .anyRequest().permitAll()
             ;
+            Optional.ofNullable(getRequestIdFilter()).ifPresent(requestIdFilter -> requestIdFilter.setRequestIdFilter(http));
         }
     }
 
@@ -58,10 +65,15 @@ public interface IAdapter {
             return "/open/**";
         }
 
+        default RequestIdFilter getRequestIdFilter() {
+            return null;
+        }
+
         default void config(final HttpSecurity http) throws Exception {
             http
                     .antMatcher(matcher())
                     .csrf().disable()
+                    .headers().addHeaderWriter((req, res) -> Optional.ofNullable(getRequestIdFilter()).ifPresent(requestIdFilter -> requestIdFilter.writeHeaders(req, res))).and()
                     .anonymous().and()
                     .servletApi().and()
                     .headers().and()
@@ -69,6 +81,7 @@ public interface IAdapter {
                     .anyRequest().permitAll()
             ;
             if (cors()) http.cors().and();
+            Optional.ofNullable(getRequestIdFilter()).ifPresent(requestIdFilter -> requestIdFilter.setRequestIdFilter(http));
         }
 
         /**

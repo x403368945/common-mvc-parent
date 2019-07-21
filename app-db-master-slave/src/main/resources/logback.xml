@@ -15,37 +15,14 @@
     <!-- 自定义日志采集参数：[%rid] 采集请求唯一标记 -->
     <conversionRule conversionWord="rid" converterClass="com.log.RidConvert"/>
 
-    <!-- // spring-mvc start >> -->
     <!-- 负责写日志,控制台日志 -->
-    <!--<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        &lt;!&ndash; 一是把日志信息转换成字节数组,二是把字节数组写入到输出流 &ndash;&gt;
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 一是把日志信息转换成字节数组,二是把字节数组写入到输出流 -->
         <encoder>
             <pattern>%highlight(%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%rid] : %m%n)</pattern>
-            <charset>GBK</charset>
+            <charset>UTF-8</charset>
         </encoder>
-    </appender>-->
-    <!-- // spring-mvc end <<<< -->
-    <!-- // spring-boot start >> mvc 不支持以下配置 -->
-    <springProfile name="dev"><!-- springboot 动态环境配置：开发环境 -->
-        <!-- 负责写日志,控制台日志 -->
-        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-            <!-- 一是把日志信息转换成字节数组,二是把字节数组写入到输出流 -->
-            <encoder>
-                <pattern>%highlight(%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%rid] : %m%n)</pattern>
-                <charset>UTF-8</charset>
-            </encoder>
-        </appender>
-    </springProfile>
-    <springProfile name="beta,prod"><!-- springboot 动态环境配置：测试、生产环境 -->
-        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-            <encoder>
-                <pattern>%highlight(%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%rid] : %m%n)</pattern>
-                <charset>UTF-8</charset>
-            </encoder>
-        </appender>
-    </springProfile>
-    <!-- // spring-boot end <<<< -->
-
+    </appender>
 
     <!-- 文件日志 -->
     <appender name="DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">

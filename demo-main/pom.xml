@@ -28,9 +28,6 @@
             <groupId>com.ccx</groupId>
             <artifactId>common-mvc</artifactId>
             <version>1.0.0</version>
-            <!-- // spring-mvc start >> -->
-            <!--<classifier>classes</classifier>-->
-            <!-- // spring-mvc end <<<< -->
         </dependency>
         <!--<dependency>
             <groupId>com.ccx</groupId>

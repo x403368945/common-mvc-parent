@@ -1,6 +1,7 @@
 package com.support.mvc.entity.base;
 
 import com.querydsl.core.QueryResults;
+import com.querydsl.core.Tuple;
 import com.support.mvc.enums.Code;
 import lombok.Builder;
 import org.springframework.data.domain.Page;
@@ -9,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 构建分页对象
@@ -103,9 +106,25 @@ public class Pager {
     public <T> QueryResults<T> toQueryResults(final Page<T> page) {
         return new QueryResults<>(
                 page.getContent(),
-                (long) limit(),
+                (long) page.getSize(),
                 (long) offset(),
                 page.getTotalElements()
+        );
+    }
+
+    /**
+     * 将分页查询结果中的投影对象转换为新的分页对象
+     *
+     * @param results  {@link QueryResults}
+     * @param function {@link Function<Tuple, T>} 将投影对象转换为 T
+     * @return {@link QueryResults}
+     */
+    public static <T> QueryResults<T> toQueryResults(final QueryResults<Tuple> results, final Function<Tuple, T> function) {
+        return new QueryResults<>(
+                results.getResults().stream().map(function).collect(Collectors.toList()),
+                results.getLimit(),
+                results.getOffset(),
+                results.getTotal()
         );
     }
 

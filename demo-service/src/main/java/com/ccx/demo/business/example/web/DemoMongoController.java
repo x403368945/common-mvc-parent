@@ -94,7 +94,7 @@ public class DemoMongoController implements IAuthController<String> {
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
-                        .execute(() -> service.update(
+                       .call(() -> service.update(
                                 id,
                                 user.getId(),
                                 Param.of(param).required().parseObject(DemoMongo.class)
@@ -142,7 +142,7 @@ public class DemoMongoController implements IAuthController<String> {
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
-                        .execute(() -> service.markDeleteById(id, user.getId()))
+                       .call(() -> service.markDeleteById(id, user.getId()))
                 );
     }
 
@@ -172,8 +172,8 @@ public class DemoMongoController implements IAuthController<String> {
                 )
                 .execute(result -> result
                                 .versionAssert(version, false) // 弱校验版本号
-                                .execute(() -> service.markDeleteByIds(Param.of(param).required().hasArray().parseArray(String.class), user.getId())) // 方案1：按 ID 逻辑删除
-//                        .execute(() -> service.markDelete(Param.of(param).required().hasArray().parseArray(DemoMongo.class), user.getId())) // 方案2：按 ID 和 UUID 逻辑删除
+                               .call(() -> service.markDeleteByIds(Param.of(param).required().hasArray().parseArray(String.class), user.getId())) // 方案1：按 ID 逻辑删除
+//                       .call(() -> service.markDelete(Param.of(param).required().hasArray().parseArray(DemoMongo.class), user.getId())) // 方案2：按 ID 和 UUID 逻辑删除
                 );
     }
 

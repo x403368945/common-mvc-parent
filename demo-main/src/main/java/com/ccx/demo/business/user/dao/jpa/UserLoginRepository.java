@@ -5,7 +5,6 @@ import com.ccx.demo.business.user.entity.QTabUserLogin;
 import com.ccx.demo.business.user.entity.TabUser;
 import com.ccx.demo.business.user.entity.TabUserLogin;
 import com.querydsl.core.QueryResults;
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.support.mvc.dao.IRepository;
@@ -14,7 +13,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.ccx.demo.business.user.entity.QTabUser.tabUser;
 import static com.ccx.demo.business.user.entity.QTabUserLogin.tabUserLogin;
@@ -23,7 +21,6 @@ import static com.ccx.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 
 /**
  * 数据操作：用户登录记录表
- *
  *
  * @author 谢长春 on 2017/10/26
  */
@@ -58,31 +55,23 @@ public interface UserLoginRepository extends
 //                        Projections.bean(TabUser.class, user.id, user.username, user.nickname, user.role, user.deleted).as("user"))
 //                );
         final QTabUser user = tabUser;
-        final QueryResults<Tuple> results = jpaQueryFactory.<JPAQueryFactory>get()
-                .select(q, Projections.bean(TabUser.class, user.id, user.username, user.nickname, user.role, user.deleted))
-                .from(q)
-                .leftJoin(user).on(user.id.eq(q.userId))
-                .where(condition.where().toArray())
-                .offset(pager.offset())
-                .limit(pager.limit())
-                .orderBy(condition.buildQdslSorts())
-                .fetchResults();
-        return new QueryResults<>(
-                results.getResults()
-                        .stream()
-                        .map(tuple -> Optional
-                                .ofNullable(tuple.get(0, TabUserLogin.class))
-                                .map(o -> {
-                                    o.setUser(tuple.get(1, TabUser.class));
-                                    return o;
-                                })
-                                .orElse(null)
-                        )
-                        .collect(Collectors.toList())
-                ,
-                results.getLimit(),
-                results.getOffset(),
-                results.getTotal()
+        return Pager.toQueryResults(
+                jpaQueryFactory.<JPAQueryFactory>get()
+                        .select(q, Projections.bean(TabUser.class, user.id, user.username, user.nickname, user.role, user.deleted))
+                        .from(q)
+                        .leftJoin(user).on(user.id.eq(q.userId))
+                        .where(condition.where().toArray())
+                        .offset(pager.offset())
+                        .limit(pager.limit())
+                        .orderBy(condition.buildQdslSorts())
+                        .fetchResults(),
+                tuple -> Optional
+                        .ofNullable(tuple.get(0, TabUserLogin.class))
+                        .map(o -> {
+                            o.setUser(tuple.get(1, TabUser.class));
+                            return o;
+                        })
+                        .orElse(null)
         );
     }
 }

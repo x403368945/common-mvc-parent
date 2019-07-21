@@ -90,7 +90,7 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
-                        .execute(() -> service.update(
+                        .call(() -> service.update(
                                 id,
                                 user.getId(),
                                 Param.of(param).required().parseObject(<%=TabName%>.class)
@@ -161,7 +161,7 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
-                        .execute(() -> service.markDeleteById(id, user.getId()))
+                        .call(() -> service.markDeleteById(id, user.getId()))
                 );
     }
 
@@ -184,7 +184,7 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
 //                )
 //                .execute(result -> result
 //                        .versionAssert(version, false) // 弱校验版本号
-//                        .execute(() -> service.markDeleteByUid(id, uid, user.getId()))
+//                        .call(() -> service.markDeleteByUid(id, uid, user.getId()))
 //                );
 //    }
 
@@ -214,8 +214,8 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
-                        // .execute(()->service.markDeleteByIds(Param.of(param).required().hasArray().parseArray(Long.class), user.getId())) // 方案1：按 ID 逻辑删除
-                        .execute(() -> service.markDelete(Param.of(param).required().hasArray().parseArray(<%=TabName%>.class), user.getId())) // 方案2：按 ID 和 UUID 逻辑删除
+                        // .call(()->service.markDeleteByIds(Param.of(param).required().hasArray().parseArray(Long.class), user.getId())) // 方案1：按 ID 逻辑删除
+                        .call(() -> service.markDelete(Param.of(param).required().hasArray().parseArray(<%=TabName%>.class), user.getId())) // 方案2：按 ID 和 UUID 逻辑删除
                 );
     }
 

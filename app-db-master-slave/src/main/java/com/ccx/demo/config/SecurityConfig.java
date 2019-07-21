@@ -34,6 +34,8 @@ import java.util.Collections;
 // @EnableGlobalMethodSecurity(prePostEnabled = true) // 启用注解：@PreAuthorize；[@PreAuthorize("hasAuthority('ROLE_USER')"), @PreAuthorize("isAnonymous()")]
 @Slf4j
 public class SecurityConfig {
+    private static final RequestIdFilter requestIdFilter = new RequestIdFilter();
+
 //    /**
 //     * 自定义校验规则
 //     */
@@ -82,6 +84,11 @@ public class SecurityConfig {
     @Order(1)
     public static class CorsSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter implements IAdapter.Cors {
         @Override
+        public RequestIdFilter getRequestIdFilter() {
+            return requestIdFilter;
+        }
+
+        @Override
         protected void configure(HttpSecurity http) throws Exception {
             config(http);
         }
@@ -102,6 +109,11 @@ public class SecurityConfig {
         }
 
         @Override
+        public RequestIdFilter getRequestIdFilter() {
+            return requestIdFilter;
+        }
+
+        @Override
         protected void configure(HttpSecurity http) throws Exception {
             config(http);
         }
@@ -118,7 +130,6 @@ public class SecurityConfig {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             final AuthHandler authHandler = new AuthHandler();
-            final RequestIdFilter requestIdFilter = new RequestIdFilter();
             http
                     .csrf().disable()
 //                    .csrf().ignoringAntMatchers("/druid/*").and()

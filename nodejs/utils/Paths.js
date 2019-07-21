@@ -1,6 +1,6 @@
 /**
  * 文件路径操作
- * Created by Jason Xie on 2018/4/1.
+ * @author 谢长春 2019-7-28
  */
 import fs from 'fs';
 import path from 'path';

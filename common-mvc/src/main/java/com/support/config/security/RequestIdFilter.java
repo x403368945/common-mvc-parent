@@ -1,7 +1,6 @@
 package com.support.config.security;
 
 import com.log.RequestId;
-import com.utils.util.Util;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Supplier;
 
 /**
  * 处理请求唯一标记字段
@@ -63,6 +61,7 @@ public class RequestIdFilter {
             RequestId.setRandomAlphanumeric(); // 设置请求唯一标记
             chain.doFilter(req, res);
         }, ChannelProcessingFilter.class);
+        //    }, SecurityContextPersistenceFilter.class);
         http.addFilterAfter((req, res, chain) -> {
             if (TL.get()) { // 如果  {@link HeaderWriter} 已经执行过了
                 RequestId.remove(); // 清除请求唯一标记

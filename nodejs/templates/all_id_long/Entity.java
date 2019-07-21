@@ -50,10 +50,11 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 @DynamicInsert
 @DynamicUpdate
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Data
 @JSONType(orders = {<%=orders%>})
-public class <%=TabName%> implements
+public final class <%=TabName%> implements
         ITable, // 所有与数据库表 - 实体类映射的表都实现该接口；方便后续一键查看所有表的实体
         <%=IUser%>
         <%=ITimestamp%>

@@ -37,10 +37,7 @@ public class UserController implements IAuthController<Long> {
     @ResponseBody
     public Result<?> current(@AuthenticationPrincipal final TabUser user, @PathVariable final int version) {
         return new Result<TabUser>(1) // 指定接口最新版本号
-                .version(builder -> builder
-                        .url("/user/{version}/current")
-                        .markdown(this.getClass().getSimpleName().concat("/current.md"))
-                        .method(GET)
+                .version(this.getClass(), builder -> builder
                         .props(ITabUser.Props.list())
                         .notes(Arrays.asList(
                                 "获取当前登录用户信息"
@@ -60,10 +57,7 @@ public class UserController implements IAuthController<Long> {
                                     @PathVariable final int version,
                                     @RequestBody(required = false) final Param param) {
         return new Result<>(1) // 指定接口最新版本号
-                .version(builder -> builder
-                        .url("/demo-list/{version}/nickname") // 当前请求接口
-                        .markdown(this.getClass().getSimpleName().concat("/updateNickname.md")) // 接口说明文档地址
-                        .method(PATCH) // 当前接口请求方式
+                .version(this.getClass(), builder -> builder
                         .props(TabUser.Props.list(ITabUser.Props.nickname)) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
                                 "修改当前登录用户昵称",
@@ -74,7 +68,7 @@ public class UserController implements IAuthController<Long> {
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
-                        .execute(() -> service.updateNickname(user.getId(), Param.of(param).required().parseObject().getString("nickname"), user.getId()))
+                       .call(() -> service.updateNickname(user.getId(), Param.of(param).required().parseObject().getString("nickname"), user.getId()))
                 );
     }
 }

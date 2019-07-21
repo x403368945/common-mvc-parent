@@ -1,11 +1,11 @@
 /**
  * 封装文件上传
  * https://github.com/request/request
- * Created by Jason Xie on 2018/4/1.
+ * @author 谢长春 2019-7-28
  */
+import axios from 'axios';
 import request from 'request';
-import Result from './Result';
-import Http from './Http';
+import Result from './entity/Result';
 
 /**
  * 上传文件
@@ -18,7 +18,7 @@ import Http from './Http';
 export default ({baseUrl, url, data, headers}) => {
   return new Promise((resolve, reject) => {
     request.post({
-      baseUrl: (baseUrl) || Http.baseURL(),
+      baseUrl: (baseUrl) || axios.defaults.baseURL,
       url: url,
       formData: data,
       headers: headers

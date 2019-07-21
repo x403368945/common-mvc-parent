@@ -17,7 +17,13 @@ import xlsx from 'xlsx';
 import browser from 'browser-sync';
 import {query} from './utils/db-execute';
 import Paths from './utils/Paths';
-import {Table, Names} from './src/db2java';
+import {Table} from './src/db2java';
+import Result from './utils/entity/Result';
+import {devConfig} from './src/service/config'
+import Asserts from './utils/asserts';
+import OpenDemoTest from './test/service/OpenDemo.test';
+import UserTest from './test/service/User.test';
+import DemoListTest from './test/service/DemoList.test';
 
 const web = browser.create();
 
@@ -64,6 +70,13 @@ gulp.task('server', gulp.series('listener', () => {
         }
     });
 }));
+
+gulp.task('test', async () => {
+    devConfig();
+    await OpenDemoTest.of().testAll();
+    await DemoListTest.of().testAll(); //
+    await UserTest.of().testAll(); // 测试用户相关的接口
+});
 
 gulp.task('mysql', async () => {
     // # 查看所有表定义参数，where name = '指定表名'
@@ -127,19 +140,19 @@ gulp.task('markdown', async () => {
             // console.log(columns);
         }
         writer.write(`\n\n\n`);
-        { // DDL 部分
-            writer.write('```mysql\n');
-            let [{Table: tableName, 'Create Table': ddl}] = await query(connection, `SHOW CREATE TABLE ${tables[i].name}`);
-            // console.log([tableName, ddl]);
-            writer.write(ddl);
-            writer.write('\n```');
-        }
+        // { // DDL 部分
+        //     writer.write('```mysql\n');
+        //     let [{Table: tableName, 'Create Table': ddl}] = await query(connection, `SHOW CREATE TABLE ${tables[i].name}`);
+        //     // console.log([tableName, ddl]);
+        //     writer.write(ddl);
+        //     writer.write('\n```');
+        // }
         writer.end();
     }
     connection.end();
 });
 gulp.task('db:java', async () => {
-    console.log(`命令需要带参数，代码会默认生成在根目录下的 src/main/java/ ：参考命令：
+    console.log(`命令需要带参数，代码会默认生成在根目录下的 src/test/java/ ：参考命令：
 gulp db:java --db demo_main_db --table tab_demo_list --template all_id_long_uid --pkg com.ccx.business
 
 参数说明：
@@ -160,16 +173,16 @@ gulp db:java --db demo_main_db --table tab_demo_list --template all_id_long_uid 
 --port {端口：默认 3306}
     `);
     const {
-        db: database = 'demo_main_db',
+        db: database = 'smart_city_db',
         host = 'localhost',
         user = 'root',
         password = '111111',
         port = '3306',
 
         // 表名
-        table = 'tab_demo_list',
+        table = 'tab_menu',
         // 模块名
-        module = 'demo-main',
+        module = '../demo-main',
         // 包名(也会作为文件输出目录)
         pkg = 'com.ccx.demo',
         // 模板代码存放目录名
@@ -184,7 +197,7 @@ gulp db:java --db demo_main_db --table tab_demo_list --template all_id_long_uid 
     for (let i = 0, len = tables.length; i < len; i++) {
         const table = new Table(tables[i]);
         let columns = await query(connection, `SHOW FULL COLUMNS FROM ${table.name}`);
-        // console.table(columns);
+        console.table(columns);
         // console.log(table)
         table.setColumns(columns)
             .setOutput(module, pkg)

@@ -34,7 +34,7 @@ export class Table {
          * 说明
          * @return {string}
          */
-        this.comment = Comment;
+        this.comment = Comment.replace(/\s/g, ' ').replace(/"/g, '\'');
         /**
          * 基于表名生成各种命名
          * @type {Names}
@@ -78,7 +78,7 @@ export class Table {
      * @result {Table}
      */
     setOutput(module, pkg) {
-        this.output = `../${module}/src/main/java/${pkg.replace(/\./g, '/')}/code/${this.names.javaname}`;
+        this.output = `../${module}/src/test/java/${pkg.replace(/\./g, '/')}/code/${this.names.javaname}`;
         return this;
     }
 
@@ -123,8 +123,8 @@ export class Table {
                 comment: this.comment,
                 date: new Date().formatDate(),
                 orders: this.columns.map(({name}) => `"${name}"`).join(', '),
-                IUser: this.columns.some(({name}) => ['createUserId', 'modifyUserId'].includes(name)) && 'IUser,' || '',
-                ITimestamp: this.columns.some(({name}) => name === 'modifyTime') && 'ITimestamp, // 所有需要更新时间戳的实体类' || '',
+                IUser: this.columns.some(({name}) => ['createUserId', 'modifyUserId'].includes(name)) ? 'IUser,' : '',
+                ITimestamp: this.columns.some(({name}) => name === 'modifyTime') ? 'ITimestamp, // 所有需要更新时间戳的实体类' : '',
                 fields: this.columns.map(column => column.field(this.adapters)).filter(Boolean).join('\n'),
                 props: this.columns.map(column => column.prop(this.adapters)).filter(Boolean).join(',\n'),
                 orderBy: this.columns.map(column => column.orderBy(this)).filter(Boolean).join(',\n'),
@@ -229,7 +229,8 @@ export class Column {
          * 实体属性名，驼峰命名法
          * @type {string}
          */
-        this.name = Field.replace(/_([a-zA-Z])/g, (m, $1) => $1.toUpperCase());
+        this.name = Field.replace(/^is_/, '') // 数据库中 is 开头的字段生成实体需要去掉 is_ ，然后在属性头上注解数据库字段名
+            .replace(/_([a-zA-Z])/g, (m, $1) => $1.toUpperCase());
         /**
          * 数据库字段名，带下划线
          * @type {string}
@@ -255,7 +256,7 @@ export class Column {
          * 是否允许负数
          * @type {boolean}
          */
-        this.unsigned = Type.toUpperCase().includes('unsigned');
+        this.unsigned = Type.toUpperCase().includes('UNSIGNED');
         /**
          * 字段字符集
          * @type {string}
@@ -271,7 +272,7 @@ export class Column {
          * 字段说明
          * @type {string}
          */
-        this.comment = Comment;
+        this.comment = Comment.replace(/\s/g, ' ').replace(/"/g, '\'');
         /**
          * 数据库与java数据类型映射
          * @type {Type}
@@ -285,72 +286,7 @@ export class Column {
      */
     field(adapters = [new BaseAdapter()]) {
         const adapter = adapters.map(o => o.fields).reduce((s, v) => Object.assign(s, v), {});
-        const defaultField = () => {
-            const list = [];
-            if (this.notNull) list.push(`    @NotNull`);
-            switch (this.dataType.name) {
-                case 'TINYINT':
-                    if (this.unsigned) {
-                        list.push('    @Min(0)');
-                        if (this.length) list.push(`    @Max(${Math.min(TINYINT_MAX_VALUE, parseInt('9'.repeat(this.length)))})`);
-                    } else if (this.length) { // 有符号表示有负数，所以要除 2
-                        list.push(`    @Min(${Math.max(TINYINT_MIN_VALUE, parseInt('-'.concat('9'.repeat(this.length / 2))))})`);
-                        list.push(`    @Max(${Math.min(TINYINT_MAX_VALUE, parseInt('9'.repeat(this.length / 2)))})`);
-                    }
-                    break;
-                case 'SMALLINT':
-                    if (this.unsigned) {
-                        list.push('    @Min(0)');
-                        if (this.length) list.push(`    @Max(${Math.min(SHORT_MAX_VALUE, parseInt('9'.repeat(this.length)))})`);
-                    } else if (this.length) { // 有符号表示有负数，所以要除 2
-                        list.push(`    @Min(${Math.max(SHORT_MIN_VALUE, parseInt('-'.concat('9'.repeat(this.length / 2))))})`);
-                        list.push(`    @Max(${Math.min(SHORT_MAX_VALUE, parseInt('9'.repeat(this.length / 2)))})`);
-                    }
-                    break;
-                case 'MEDIUMINT':
-                case 'INT':
-                    if (this.unsigned) {
-                        list.push('    @Min(0)');
-                        if (this.length) list.push(`    @Max(${Math.min(INTEGER_MAX_VALUE, parseInt('9'.repeat(this.length)))})`);
-                    } else if (this.length) { // 有符号表示有负数，所以要除 2
-                        list.push(`    @Min(${Math.max(INTEGER_MIN_VALUE, parseInt('-'.concat('9'.repeat(this.length / 2))))})`);
-                        list.push(`    @Max(${Math.min(INTEGER_MAX_VALUE, parseInt('9'.repeat(this.length / 2)))})`);
-                    }
-                    break;
-                case 'BIGINT':
-                    if (this.unsigned) {
-                        list.push('    @Min(0)');
-                        if (this.length) list.push(`    @Max(${Math.min(LONG_MAX_VALUE, parseInt('9'.repeat(this.length)))})`);
-                    } else if (this.length) { // 有符号表示有负数，所以要除 2
-                        list.push(`    @Min(${Math.max(LONG_MIN_VALUE, parseInt('-'.concat('9'.repeat(this.length / 2))))})`);
-                        list.push(`    @Max(${Math.min(LONG_MAX_VALUE, parseInt('9'.repeat(this.length / 2)))})`);
-                    }
-                    break;
-                case 'DECIMAL':
-                    list.push(`    @Digits(integer = ${this.length}, fraction = ${this.fixed || 0})`);
-                    break;
-                case 'CHAR':
-                    list.push(`    @Size(min = ${this.length}, max = ${this.length})`);
-                    break;
-                case 'VARCHAR':
-                    list.push(`    @Size(max = ${this.length})`);
-                    break;
-                case 'TEXT':
-                    list.push(`    @Size(max = ${Math.min(65535, this.length || 65535)})`);
-                    break;
-                case 'DATE':
-                    list.push('    @JSONField(format = "yyyy-MM-dd")');
-                    break;
-                case 'DATETIME':
-                case 'TIMESTAMP':
-                    list.push('    @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")');
-                    break;
-            }
-            list.push(`    private ${this.dataType.value} ${this.name};`);
-            return list.join('\n');
-        };
-        // 先从 adapter 中获取 prop 适配策略，未定义策略时使用默认策略
-        return `    /**\n     * ${this.comment}\n     */\n`.concat((adapter[this.name] || defaultField)(this));
+        return `    /**\n     * ${this.comment}\n     */\n`.concat((adapter[this.name] || adapter['default'])(this));
     }
 
     /**
@@ -359,9 +295,9 @@ export class Column {
      */
     prop(adapters = [new BaseAdapter()]) {
         const adapter = adapters.map(o => o.props).reduce((s, v) => Object.assign(s, v), {});
-        const defaultProp = () => `        ${this.name}(${this.dataType.value.toUpperCase()}.build(${this.notNull ? 'true, ' : ''}"${this.comment}"))`;
+        // const defaultProp = () => `        ${this.name}(${this.dataType.value.toUpperCase()}.build(${this.notNull ? 'true, ' : ''}"${this.comment}"))`;
         // 先从 adapter 中获取 prop 适配策略，未定义策略时使用默认策略
-        return (adapter[this.name] || defaultProp)(this);
+        return (adapter[this.name] || adapter['default'])(this);
     }
 
     /**
@@ -395,8 +331,12 @@ export class Column {
                     ? '//                .and({name}, () -> {name}.endsWith("%") || {name}.startsWith("%") ? q.{name}.like({name}) : q.{name}.eq({name}))'.formatObject({name: this.name})
                     : '//                .and({name}, () -> {name}.endsWith("%") || {name}.startsWith("%") ? q.{name}.like({name}) : q.{name}.startsWith({name}))'.formatObject({name: this.name});
             case 'TEXT':
+            case 'MEDIUMTEXT':
+            case 'LONGTEXT':
                 return '//                .and({name}, () -> {name}.endsWith("%") || {name}.startsWith("%") ? q.{name}.like({name}) : q.{name}.contains({name}))'.formatObject({name: this.name});
             case 'DECIMAL':
+            case 'DOUBLE':
+            case 'FLOAT':
                 return '//                .and({name}Range, () -> q.{name}.between({name}Range.getMin(), {name}Range.getMax()))'.formatObject({name: this.name});
             case 'DATE':
             case 'DATETIME':
@@ -415,6 +355,80 @@ export class Column {
 export class BaseAdapter {
     constructor() {
         this.fields = {
+            // 默认字段生成策略
+            default: ({name, db_name, dataType, notNull, unsigned, length, fixed}) => {
+                const list = [];
+                if (notNull) list.push(`    @NotNull`);
+                if (db_name.startsWith('is_')) list.push(`    @Column(name = "${db_name}")`); // 数据库自字段 is_ 开头的特殊处理
+                switch (dataType.name) {
+                    case 'TINYINT':
+                        if (unsigned) {
+                            list.push('    @Min(0)');
+                            if (length) list.push(`    @Max(${Math.min(TINYINT_MAX_VALUE, parseInt('9'.repeat(length)))})`);
+                        } else if (length) { // 有符号表示有负数，所以要除 2
+                            list.push(`    @Min(${Math.floor(Math.max(TINYINT_MIN_VALUE, parseInt('-'.concat('9'.repeat(length))) / 2))})`);
+                            list.push(`    @Max(${Math.floor(Math.min(TINYINT_MAX_VALUE, parseInt('9'.repeat(length)) / 2))})`);
+                        }
+                        break;
+                    case 'SMALLINT':
+                        if (unsigned) {
+                            list.push('    @Min(0)');
+                            if (length) list.push(`    @Max(${Math.min(SHORT_MAX_VALUE, parseInt('9'.repeat(length)))})`);
+                        } else if (length) { // 有符号表示有负数，所以要除 2
+                            list.push(`    @Min(${Math.floor(Math.max(SHORT_MIN_VALUE, parseInt('-'.concat('9'.repeat(length))) / 2))})`);
+                            list.push(`    @Max(${Math.floor(Math.min(SHORT_MAX_VALUE, parseInt('9'.repeat(length)) / 2))})`);
+                        }
+                        break;
+                    case 'MEDIUMINT':
+                    case 'INT':
+                        if (unsigned) {
+                            list.push('    @Min(0)');
+                            if (length) list.push(`    @Max(${Math.min(INTEGER_MAX_VALUE, parseInt('9'.repeat(length)))})`);
+                        } else if (length) { // 有符号表示有负数，所以要除 2
+                            list.push(`    @Min(${Math.floor(Math.max(INTEGER_MIN_VALUE, parseInt('-'.concat('9'.repeat(length))) / 2))})`);
+                            list.push(`    @Max(${Math.floor(Math.min(INTEGER_MAX_VALUE, parseInt('9'.repeat(length)) / 2))})`);
+                        }
+                        break;
+                    case 'BIGINT':
+                        if (unsigned) {
+                            list.push('    @Min(0)');
+                            if (length) list.push(`    @DecimalMax("${Math.min(LONG_MAX_VALUE, parseInt('9'.repeat(length)))}")`);
+                        } else if (length) { // 有符号表示有负数，所以要除 2
+                            list.push(`    @DecimalMin("${Math.floor(Math.max(LONG_MIN_VALUE, parseInt('-'.concat('9'.repeat(length))) / 2))}")`);
+                            list.push(`    @DecimalMax("${Math.floor(Math.min(LONG_MAX_VALUE, parseInt('9'.repeat(length)) / 2))}")`);
+                        }
+                        break;
+                    case 'DECIMAL':
+                    case 'DOUBLE':
+                    case 'FLOAT':
+                        list.push(`    @Digits(integer = ${length}, fraction = ${fixed || 0})`);
+                        break;
+                    case 'CHAR':
+                        list.push(`    @Size(min = ${length}, max = ${length})`);
+                        break;
+                    case 'VARCHAR':
+                        list.push(`    @Size(max = ${length})`);
+                        break;
+                    case 'TEXT':
+                        list.push(`    @Size(max = ${Math.min(65535, length || 65535)})`);
+                        break;
+                    case 'MEDIUMTEXT':
+                        list.push(`    @Size(max = ${Math.min(65535 * 2, length || 65535 * 2)})`);
+                        break;
+                    case 'LONGTEXT':
+                        list.push(`    @Size(max = ${Math.min(65535 * 4, length || 65535 * 4)})`);
+                        break;
+                    case 'DATE':
+                        list.push('    @JSONField(format = "yyyy-MM-dd")');
+                        break;
+                    case 'DATETIME':
+                    case 'TIMESTAMP':
+                        list.push('    @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")');
+                        break;
+                }
+                list.push(`    private ${dataType.value} ${name};`);
+                return list.join('\n');
+            },
             id: ({name, dataType, length}) => {
                 if ([DataType.BIGINT.name, DataType.INT.name].includes(dataType.name)) {
                     return `    @Id\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\n    @NotNull(groups = {IUpdate.class, IMarkDelete.class})\n    @Positive\n    private Long ${name};`
@@ -432,6 +446,7 @@ export class BaseAdapter {
             modifyUserName: ({name, length}) => `    @NotNull(groups = {ISave.class, IUpdate.class})\n    @Size(max = ${length})\n    private String ${name};`
         };
         this.props = {
+            default: ({name, dataType, notNull, comment}) => `        ${name}(${dataType.value.toUpperCase()}.build(${notNull ? 'true, ' : ''}"${comment}"))`,
             id: ({name, dataType, comment}) => `        ${name}(${[DataType.BIGINT.name, DataType.INT.name].includes(dataType.name) ? 'LONG' : 'STRING'}.build(true, "${comment}"))`,
             uid: ({name, comment}) => `        ${name}(STRING.build(true, "${comment}"))`,
             deleted: ({name, comment}) => `        ${name}(ENUM.build("是否逻辑删除").setOptions(Radio.comments()))`,
@@ -498,9 +513,13 @@ export const DataType = {
     INT: new Type('INT', 'Integer'),
     BIGINT: new Type('BIGINT', 'Long'),
     DECIMAL: new Type('DECIMAL', 'Double'),
+    DOUBLE: new Type('DOUBLE', 'Double'),
+    FLOAT: new Type('FLOAT', 'Float'),
     CHAR: new Type('CHAR', 'String'),
     VARCHAR: new Type('VARCHAR', 'String'),
     TEXT: new Type('TEXT', 'String'),
+    MEDIUMTEXT: new Type('MEDIUMTEXT', 'String'),
+    LONGTEXT: new Type('LONGTEXT', 'String'),
     DATE: new Type('DATE', 'Timestamp'),
     TIMESTAMP: new Type('TIMESTAMP', 'Timestamp'),
     DATETIME: new Type('DATETIME', 'Timestamp'),
@@ -535,7 +554,7 @@ export class Names {
          * tab_demo_list => demo-list
          * @type {string}
          */
-        this.java_name = tableName.replace(/^[a-zA-Z]+_/, '').replace('_', '-');
+        this.java_name = tableName.replace(/^[a-zA-Z]+_/, '').replace(/_/g, '-');
         /**
          * tab_demo_list => DemoList
          * @type {string}

@@ -1,11 +1,12 @@
 /**
  * 字符串原型扩展
+ * * @author 谢长春 2019-7-28
  */
 (() => {
   /**
    * 日期格式化
-   * @param pattern {String} yyyy-MM-dd HH:mm:ss
-   * @return {String}
+   * @param pattern {string} yyyy-MM-dd HH:mm:ss
+   * @return {string}
    */
   Date.prototype.format = function (pattern) {
     const values = {
@@ -28,7 +29,7 @@
 
   /**
    * 日期格式化:yyyy-MM-dd
-   * @returns {String}
+   * @returns {string}
    */
   Date.prototype.formatDate = function () {
     return this.format('yyyy-MM-dd');
@@ -36,7 +37,7 @@
 
   /**
    * 日期格式化:yyyy-MM-dd HH:mm:ss
-   * @returns {String}
+   * @returns {string}
    */
   Date.prototype.formatDatetime = function () {
     return this.format('yyyy-MM-dd HH:mm:ss');
@@ -44,7 +45,7 @@
 
   /**
    * 日期格式化:yyyy-MM-dd HH:mm:ss.SSS
-   * @returns {String}
+   * @returns {string}
    */
   Date.prototype.formatTimestamp = function () {
     return this.format('yyyy-MM-dd HH:mm:ss.SSS');

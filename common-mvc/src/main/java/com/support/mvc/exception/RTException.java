@@ -10,7 +10,9 @@ import java.util.function.Consumer;
  * 自定义异常: 封装 {@link RuntimeException} 用于处理 lambda 表达式处理异常
  *
  * @author 谢长春 2019-5-30
+ * @deprecated 请使用 {@link com.utils.exception.RTException} 替代
  */
+@Deprecated
 public final class RTException extends RuntimeException {
 
     public static void call(final ICall call) {
