@@ -14,7 +14,7 @@
     <packaging>jar</packaging>
 
     <!-- // spring-boot start >> spring-boot 特殊处理：依赖库 -->
-    <dependencies>
+    <!--<dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -24,24 +24,24 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>org.springframework.ccx</groupId>-->
-        <!--<artifactId>spring-boot-starter-jdbc</artifactId>-->
-        <!--</dependency>-->
-        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        &lt;!&ndash;<dependency>&ndash;&gt;
+        &lt;!&ndash;<groupId>org.springframework.ccx</groupId>&ndash;&gt;
+        &lt;!&ndash;<artifactId>spring-boot-starter-jdbc</artifactId>&ndash;&gt;
+        &lt;!&ndash;</dependency>&ndash;&gt;
+        &lt;!&ndash; https://mvnrepository.com/artifact/mysql/mysql-connector-java &ndash;&gt;
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.13</version>
         </dependency>
-        <!-- druid 参考 https://github.com/alibaba/druid/tree/master/druid-spring-boot-starter -->
-        <!-- https://mvnrepository.com/artifact/com.alibaba/druid-spring-boot-starter -->
+        &lt;!&ndash; druid 参考 https://github.com/alibaba/druid/tree/master/druid-spring-boot-starter &ndash;&gt;
+        &lt;!&ndash; https://mvnrepository.com/artifact/com.alibaba/druid-spring-boot-starter &ndash;&gt;
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>1.1.17</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.querydsl/querydsl-core -->
+        &lt;!&ndash; https://mvnrepository.com/artifact/com.querydsl/querydsl-core &ndash;&gt;
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-core</artifactId>
@@ -53,7 +53,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.querydsl/querydsl-apt -->
+        &lt;!&ndash; https://mvnrepository.com/artifact/com.querydsl/querydsl-apt &ndash;&gt;
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-apt</artifactId>
@@ -65,7 +65,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- http://mvnrepository.com/artifact/com.querydsl/querydsl-jpa -->
+        &lt;!&ndash; http://mvnrepository.com/artifact/com.querydsl/querydsl-jpa &ndash;&gt;
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-jpa</artifactId>
@@ -77,21 +77,21 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
+        &lt;!&ndash; https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload &ndash;&gt;
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
             <version>1.4</version>
-            <!--
+            &lt;!&ndash;
                         <exclusions>
                             <exclusion>
                                 <artifactId>commons-io</artifactId>
                                 <groupId>commons-io</groupId>
                             </exclusion>
                         </exclusions>
-            -->
+            &ndash;&gt;
         </dependency>
-    </dependencies>
+    </dependencies>-->
     <!-- // spring-boot end <<<< -->
     <build>
         <plugins>

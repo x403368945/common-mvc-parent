@@ -19,7 +19,7 @@
         <!-- 一是把日志信息转换成字节数组,二是把字节数组写入到输出流 -->
         <encoder>
             <pattern>%highlight(%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%rid] : %m%n)</pattern>
-            <charset>UTF-8</charset>
+            <charset>GBK</charset>
         </encoder>
     </appender>
 

@@ -7,20 +7,20 @@
         <groupId>com.ccx</groupId>
         <version>1.0.0</version>
         <!-- // spring-boot start >> -->
-        <relativePath>../pom.xml</relativePath>
+        <!--<relativePath>../pom.xml</relativePath>-->
         <!-- // spring-boot end <<<< -->
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>demo-main</artifactId>
     <version>1.0.0</version>
     <!-- // spring-mvc start >> -->
-    <!--<packaging>war</packaging>-->
+    <packaging>war</packaging>
     <!-- // spring-mvc end <<<< -->
     <!-- // spring-boot start >> -->
-    <packaging>jar</packaging>
+    <!--<packaging>jar</packaging>
     <properties>
         <main.class>com.ccx.demo.DemoMainApplication</main.class>
-    </properties>
+    </properties>-->
     <!-- // spring-boot end <<<< -->
 
     <dependencies>
@@ -28,41 +28,64 @@
             <groupId>com.ccx</groupId>
             <artifactId>common-mvc</artifactId>
             <version>1.0.0</version>
-            <!-- // spring-mvc start >> -->
-            <!--<classifier>classes</classifier>-->
-            <!-- // spring-mvc end <<<< -->
         </dependency>
         <!--<dependency>
             <groupId>com.ccx</groupId>
             <artifactId>common-mongo</artifactId>
             <version>1.0.0</version>
         </dependency>-->
-        <dependency>
+        <!-- // spring-boot start >> -->
+        <!--<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>-->
+        <!-- // spring-boot end <<<< -->
+        <!-- // spring-mvc start >> -->
+        <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-mongodb -->
+        <dependency> <!-- Spring mongo 一定要注意版本匹配 -->
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf -->
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf</artifactId>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf-spring5 -->
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf-spring5</artifactId>
+        </dependency>
+        <!-- // spring-mvc end <<<< -->
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-mongodb</artifactId>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.mongodb.morphia/morphia -->
+        <!--<dependency>
+            <groupId>org.mongodb.morphia</groupId>
+            <artifactId>morphia</artifactId>
+        </dependency>-->
     </dependencies>
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
-            <plugin>
+            <!-- // spring-boot start >> -->
+            <!--<plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <!--<skip>true</skip>-->
-                    <fork>true</fork> <!-- devtools 热启动配置 -->
+                    &lt;!&ndash;<skip>true</skip>&ndash;&gt;
+                    <fork>true</fork> &lt;!&ndash; devtools 热启动配置 &ndash;&gt;
                     <addResources>true</addResources>
                     <mainClass>${main.class}</mainClass>
                     <layout>ZIP</layout>
                 </configuration>
-                <!--<executions>
+                &lt;!&ndash;<executions>
                     &lt;!&ndash;
                         repackage 之后jar包内部结构会改变，其他模块依赖该模块之后会打包失败，找不到依赖，所以这里必须注释
                         如果需要单独打包发布该模块，需要再建一个用于发布的模块，依赖该模块打包成可运行的springboot.jar
@@ -72,12 +95,15 @@
                             <goal>repackage</goal>
                         </goals>
                     </execution>
-                </executions>-->
-            </plugin>
-            <!--<plugin> &lt;!&ndash; war 包插件 &ndash;&gt;
+                </executions>&ndash;&gt;
+            </plugin>-->
+            <!-- // spring-boot end <<<< -->
+            <!-- // spring-mvc start >> -->
+            <plugin> <!-- war 包插件 -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-            </plugin>-->
+            </plugin>
+            <!-- // spring-mvc end <<<< -->
             <!-- https://mvnrepository.com/artifact/com.mysema.maven/apt-maven-plugin -->
             <plugin> <!-- 该插件可以生成 querydsl 需要的查询对象，执行 mvn compile 即可-->
                 <groupId>com.mysema.maven</groupId>

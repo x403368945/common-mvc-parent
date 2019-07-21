@@ -46,93 +46,93 @@ import static com.google.common.base.Charsets.UTF_8;
 @Configuration
 @Slf4j
 // spring-mvc start >>
-//@Import(value = {InitConfig.class, BusConfig.class})
-//@EnableAspectJAutoProxy(proxyTargetClass = true)
-//@ComponentScan(basePackages = {"com.ccx"})
-//@EnableWebMvc
-//@PropertySource({"classpath:application.properties"})
+@Import(value = {InitConfig.class, BusConfig.class})
+@EnableAspectJAutoProxy(proxyTargetClass = true)
+@ComponentScan(basePackages = {"com.ccx"})
+@EnableWebMvc
+@PropertySource({"classpath:application.properties"})
 // spring-mvc end <<<<
 public class WebMvcConfig extends AbstractMvcConfig
 // spring-mvc start >>
-//        implements ApplicationContextAware
+        implements ApplicationContextAware
 // spring-mvc end <<<<
 {
     // spring-mvc start >>
-//    private ApplicationContext applicationContext;
-//
-//    @Override
-//    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-//        this.applicationContext = applicationContext;
+    private ApplicationContext applicationContext;
+
+    @Override
+    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+
+    /**
+     * 注入文件上传的bean
+     */
+    @Bean
+    public MultipartResolver multipartResolver() {
+        final CommonsMultipartResolver resolver = new CommonsMultipartResolver();
+//        StandardServletMultipartResolver resolver = new StandardServletMultipartResolver();
+        resolver.setDefaultEncoding(UTF_8.displayName());
+        resolver.setMaxUploadSize(1048576000);
+        return resolver;
+    }
+
+    //    @Override
+//    public void addFormatters(final FormatterRegistry registry) {
+//        super.addFormatters(registry);
+//        registry.addFormatter(varietyFormatter());
+//        registry.addFormatter(dateFormatter());
 //    }
 //
 //    /**
-//     * 注入文件上传的bean
+//     * 而VarietyFormatter可以自动转换我们的各种实体，将他们用在表单上（基本通过id）
+//     * @return {@link VarietyFormatter}
 //     */
 //    @Bean
-//    public MultipartResolver multipartResolver() {
-//        final CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-////        StandardServletMultipartResolver resolver = new StandardServletMultipartResolver();
-//        resolver.setDefaultEncoding(UTF_8.displayName());
-//        resolver.setMaxUploadSize(1048576000);
-//        return resolver;
+//    public VarietyFormatter varietyFormatter() {
+//        return new VarietyFormatter();
 //    }
-//
-//    //    @Override
-////    public void addFormatters(final FormatterRegistry registry) {
-////        super.addFormatters(registry);
-////        registry.addFormatter(varietyFormatter());
-////        registry.addFormatter(dateFormatter());
-////    }
-////
-////    /**
-////     * 而VarietyFormatter可以自动转换我们的各种实体，将他们用在表单上（基本通过id）
-////     * @return {@link VarietyFormatter}
-////     */
-////    @Bean
-////    public VarietyFormatter varietyFormatter() {
-////        return new VarietyFormatter();
-////    }
-//
-//    @Bean
-//    public SpringResourceTemplateResolver templateResolver() {
-//        // SpringResourceTemplateResolver automatically integrates with Spring's own
-//        // resource resolution infrastructure, which is highly recommended.
-//        final SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
-//        resolver.setApplicationContext(applicationContext);
-////        resolver.setPrefix("/WEB-INF/classes/");
-//        resolver.setPrefix("classpath:");
-//        resolver.setSuffix(".html");
-//        // HTML is the default value, added here for the sake of clarity.
-//        resolver.setTemplateMode(TemplateMode.HTML);
-//        // Template cache is true by default. Set to false if you want
-//        // templates to be automatically updated when modified.
-//        resolver.setCharacterEncoding("UTF-8");
-////        resolver.setCacheable(true);
-//        return resolver;
-//    }
-//
-//    @Bean
-//    public SpringTemplateEngine templateEngine() {
-//        // SpringTemplateEngine automatically applies SpringStandardDialect and
-//        // enables Spring's own MessageSource message resolution mechanisms.
-//        final SpringTemplateEngine engine = new SpringTemplateEngine();
-//        engine.setTemplateResolver(templateResolver());
-//        // Enabling the SpringEL compiler with Spring 4.2.4 or newer can
-//        // speed up execution in most scenarios, but might be incompatible
-//        // with specific cases when expressions in one template are reused
-//        // across different data types, so this flag is "false" by default
-//        // for safer backwards compatibility.
-//        engine.setEnableSpringELCompiler(true);
-//        return engine;
-//    }
-//
-//    @Bean
-//    public ThymeleafViewResolver viewResolver() {
-//        final ThymeleafViewResolver resolver = new ThymeleafViewResolver();
-//        resolver.setTemplateEngine(templateEngine());
-//        resolver.setCharacterEncoding("UTF-8");
-//        return resolver;
-//    }
+
+    @Bean
+    public SpringResourceTemplateResolver templateResolver() {
+        // SpringResourceTemplateResolver automatically integrates with Spring's own
+        // resource resolution infrastructure, which is highly recommended.
+        final SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
+        resolver.setApplicationContext(applicationContext);
+//        resolver.setPrefix("/WEB-INF/classes/");
+        resolver.setPrefix("classpath:");
+        resolver.setSuffix(".html");
+        // HTML is the default value, added here for the sake of clarity.
+        resolver.setTemplateMode(TemplateMode.HTML);
+        // Template cache is true by default. Set to false if you want
+        // templates to be automatically updated when modified.
+        resolver.setCharacterEncoding("UTF-8");
+//        resolver.setCacheable(true);
+        return resolver;
+    }
+
+    @Bean
+    public SpringTemplateEngine templateEngine() {
+        // SpringTemplateEngine automatically applies SpringStandardDialect and
+        // enables Spring's own MessageSource message resolution mechanisms.
+        final SpringTemplateEngine engine = new SpringTemplateEngine();
+        engine.setTemplateResolver(templateResolver());
+        // Enabling the SpringEL compiler with Spring 4.2.4 or newer can
+        // speed up execution in most scenarios, but might be incompatible
+        // with specific cases when expressions in one template are reused
+        // across different data types, so this flag is "false" by default
+        // for safer backwards compatibility.
+        engine.setEnableSpringELCompiler(true);
+        return engine;
+    }
+
+    @Bean
+    public ThymeleafViewResolver viewResolver() {
+        final ThymeleafViewResolver resolver = new ThymeleafViewResolver();
+        resolver.setTemplateEngine(templateEngine());
+        resolver.setCharacterEncoding("UTF-8");
+        return resolver;
+    }
     // spring-mvc end <<<<
 
     /**

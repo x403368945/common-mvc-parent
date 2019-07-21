@@ -35,40 +35,40 @@ import java.util.Date;
  * @author 谢长春 2019/1/23
  */
 // spring-boot start >> spring-boot 在 yml 文件简化了配置，所以将 MySQL 和 MongoDB 配置合并
-@Configuration
-public class DBConfig {
-
-    @Bean
-    public JPAQueryFactory jpaQueryFactory(@Autowired EntityManager entityManager) {
-        return new JPAQueryFactory(entityManager);
-    }
-
-    public class TimestampConverter implements Converter<Date, Timestamp> {
-        @Override
-        public Timestamp convert(Date date) {
-            return new Timestamp(date.getTime());
-        }
-    }
-
-    @Bean
-    public MongoCustomConversions mongoCustomConversions() {
-        return new MongoCustomConversions(Collections.singletonList(
-                new TimestampConverter()
-        ));
-    }
-
-    @Bean
-    public MappingMongoConverter mappingMongoConverter(MongoDbFactory mongoDbFactory, MongoMappingContext context, MongoCustomConversions mongoCustomConversions, BeanFactory beanFactory) {
-       final MappingMongoConverter converter = new MappingMongoConverter(new DefaultDbRefResolver(mongoDbFactory), context);
-//        converter.setCustomConversions(beanFactory.getBean(MongoCustomConversions.class));
-        converter.setTypeMapper(new DefaultMongoTypeMapper(null)); // typeKey为null的时候，插入mongodb 不会产生 _class 属性
-        converter.setCustomConversions(mongoCustomConversions); // 添加自定义的转换器
-        return converter;
-    }
-
-    @Bean
-    public MongoTemplate mongoTemplate(MongoDbFactory dbFactory, MappingMongoConverter converter) {
-        return new MongoTemplate(dbFactory, converter);
-    }
-}
+//@Configuration
+//public class DBConfig {
+//
+//    @Bean
+//    public JPAQueryFactory jpaQueryFactory(@Autowired EntityManager entityManager) {
+//        return new JPAQueryFactory(entityManager);
+//    }
+//
+//    public class TimestampConverter implements Converter<Date, Timestamp> {
+//        @Override
+//        public Timestamp convert(Date date) {
+//            return new Timestamp(date.getTime());
+//        }
+//    }
+//
+//    @Bean
+//    public MongoCustomConversions mongoCustomConversions() {
+//        return new MongoCustomConversions(Collections.singletonList(
+//                new TimestampConverter()
+//        ));
+//    }
+//
+//    @Bean
+//    public MappingMongoConverter mappingMongoConverter(MongoDbFactory mongoDbFactory, MongoMappingContext context, MongoCustomConversions mongoCustomConversions, BeanFactory beanFactory) {
+//       final MappingMongoConverter converter = new MappingMongoConverter(new DefaultDbRefResolver(mongoDbFactory), context);
+////        converter.setCustomConversions(beanFactory.getBean(MongoCustomConversions.class));
+//        converter.setTypeMapper(new DefaultMongoTypeMapper(null)); // typeKey为null的时候，插入mongodb 不会产生 _class 属性
+//        converter.setCustomConversions(mongoCustomConversions); // 添加自定义的转换器
+//        return converter;
+//    }
+//
+//    @Bean
+//    public MongoTemplate mongoTemplate(MongoDbFactory dbFactory, MappingMongoConverter converter) {
+//        return new MongoTemplate(dbFactory, converter);
+//    }
+//}
 // spring-boot end <<<<

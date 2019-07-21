@@ -2,7 +2,7 @@ package com.ccx.demo.business.common.web;
 
 import com.support.config.AbstractMvcConfig;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.web.servlet.error.ErrorAttributes;
+//import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -18,14 +18,14 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RequestMapping("")
 @Slf4j
 public class HomeController
-        // spring-boot start >> mvc 不需要继承 {@link AbstractMvcConfig.ErrorController}
-        extends AbstractMvcConfig.ErrorController
-        // spring-boot end <<<<
+// spring-boot start >> mvc 不需要继承 {@link AbstractMvcConfig.ErrorController}
+//        extends AbstractMvcConfig.ErrorController
+// spring-boot end <<<<
 {
     // spring-boot start >> mvc 不需要继承 {@link AbstractMvcConfig.ErrorController}
-    public HomeController(ErrorAttributes errorAttributes) {
-        super(errorAttributes);
-    }
+//    public HomeController(ErrorAttributes errorAttributes) {
+//        super(errorAttributes);
+//    }
     // spring-boot end <<<<
 
     @RequestMapping(value = "/", method = {GET, POST, PUT, PATCH, DELETE})

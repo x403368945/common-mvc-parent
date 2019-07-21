@@ -31,8 +31,8 @@ node_modules
 nodejs/yarn.lock
 
 # // spring-mvc start >> mvc 不支持的模块
-#/app-db-master-slave
-#/app-demo-main
-#/app-demo-service
-#app-demo/src/
+/app-db-master-slave
+/app-demo-main
+/app-demo-service
+app-demo/src/
 # // spring-mvc end <<<<

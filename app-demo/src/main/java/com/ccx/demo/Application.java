@@ -1,6 +1,6 @@
 package com.ccx.demo;
 
-import org.springframework.boot.SpringApplication;
+//import org.springframework.boot.SpringApplication;
 
 /**
  * spring-boot 特殊处理：mvc模式不需要该文件
@@ -9,6 +9,7 @@ import org.springframework.boot.SpringApplication;
  * @author 谢长春 2019/1/25
  */
 // spring-boot start >>
+/*
 public class Application {
 
     public static void main(String[] args) {
@@ -22,4 +23,5 @@ public class Application {
 //        };
 //    }
 }
+*/
 // spring-boot end <<<<

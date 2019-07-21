@@ -8,8 +8,6 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.support.mvc.entity.base.Result;
 import com.support.mvc.enums.Code;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
-import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.CacheControl;
 import org.springframework.http.MediaType;
@@ -21,7 +19,6 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
@@ -38,7 +35,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Charsets.UTF_8;
-import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
  * <pre>
@@ -51,33 +47,33 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @Slf4j
 public class AbstractMvcConfig implements WebMvcConfigurer {
 // spring-boot start >>
-    /**
-     * spring-boot 特殊处理：添加异常处理
-     * 服务端 500 异常处理
-     * 需要自定义 Controller 继承 {@link AbstractMvcConfig.ErrorController}
-     * spring security 需要添加 http.antMatchers("/error").permitAll()
-     *
-     * @author 谢长春
-     */
-    public static class ErrorController extends AbstractErrorController {
-        public ErrorController(ErrorAttributes errorAttributes) {
-            super(errorAttributes);
-        }
-
-        @Override
-        public String getErrorPath() {
-            return "/error";
-        }
-
-        /**
-         * 处理服务端 500 异常
-         */
-        @RequestMapping(value = "/error", method = {GET, POST, PUT, PATCH, DELETE})
-        @ResponseBody
-        public Result<?> error() {
-            return Code.FAILURE.toResult("500：请求失败，不明确的异常");
-        }
-    }
+//    /**
+//     * spring-boot 特殊处理：添加异常处理
+//     * 服务端 500 异常处理
+//     * 需要自定义 Controller 继承 {@link AbstractMvcConfig.ErrorController}
+//     * spring security 需要添加 http.antMatchers("/error").permitAll()
+//     *
+//     * @author 谢长春
+//     */
+//    public static class ErrorController extends AbstractErrorController {
+//        public ErrorController(ErrorAttributes errorAttributes) {
+//            super(errorAttributes);
+//        }
+//
+//        @Override
+//        public String getErrorPath() {
+//            return "/error";
+//        }
+//
+//        /**
+//         * 处理服务端 500 异常
+//         */
+//        @RequestMapping(value = "/error", method = {GET, POST, PUT, PATCH, DELETE})
+//        @ResponseBody
+//        public Result<?> error() {
+//            return Code.FAILURE.toResult("500：请求失败，不明确的异常");
+//        }
+//    }
 // spring-boot end <<<<
     /**
      * 多线程管理

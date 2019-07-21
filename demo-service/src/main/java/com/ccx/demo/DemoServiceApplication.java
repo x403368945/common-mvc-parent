@@ -1,6 +1,6 @@
 package com.ccx.demo;
 
-import org.springframework.boot.SpringApplication;
+//import org.springframework.boot.SpringApplication;
 
 /**
  * spring-boot 特殊处理：只有 spring-boot 需要该文件
@@ -11,6 +11,7 @@ import org.springframework.boot.SpringApplication;
  * @author 谢长春 2019/1/21
  */
 // spring-boot start >>
+/*
 public class DemoServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(DemoMainApplication.class, args);
@@ -24,4 +25,5 @@ public class DemoServiceApplication {
 //        };
 //    }
 }
+*/
 // spring-boot end <<<<

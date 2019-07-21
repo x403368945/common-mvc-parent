@@ -6,16 +6,22 @@
         <artifactId>common-mvc-parent</artifactId>
         <groupId>com.ccx</groupId>
         <version>1.0.0</version>
-        <relativePath>../pom.xml</relativePath>
+        <!-- // spring-boot start >> -->
+        <!--<relativePath>../pom.xml</relativePath>-->
+        <!-- // spring-boot end <<<< -->
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>demo-service</artifactId>
     <version>1.0.0</version>
-    <packaging>jar</packaging>
-
+    <!-- // spring-mvc start >> -->
+    <packaging>war</packaging>
+    <!-- // spring-mvc end <<<< -->
+    <!-- // spring-boot start >> -->
+    <!--<packaging>jar</packaging>
     <properties>
         <main.class>com.ccx.demo.DemoServiceApplication</main.class>
-    </properties>
+    </properties>-->
+    <!-- // spring-boot end <<<< -->
 
     <!-- spring-boot 特殊处理：pom 文件不一样 -->
     <dependencies>
@@ -23,20 +29,25 @@
             <groupId>com.ccx</groupId>
             <artifactId>demo-main</artifactId>
             <version>1.0.0</version>
+            <!-- // spring-mvc start >> -->
+            <classifier>classes</classifier>
+            <!-- // spring-mvc end <<<< -->
         </dependency>
     </dependencies>
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
-            <plugin>
+            <!-- // spring-boot start >> -->
+            <!--<plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <fork>true</fork> <!-- devtools 热启动配置 -->
+                    <fork>true</fork> &lt;!&ndash; devtools 热启动配置 &ndash;&gt;
                     <addResources>true</addResources>
                     <mainClass>${main.class}</mainClass>
                     <layout>ZIP</layout>
                 </configuration>
-                <!--<executions>
+                &lt;!&ndash;<executions>
                     &lt;!&ndash;
                         repackage 之后jar包内部结构会改变，其他模块依赖该模块之后会打包失败，找不到依赖，所以这里必须注释
                         如果需要单独打包发布该模块，需要再建一个用于发布的模块，依赖该模块打包成可运行的springboot.jar
@@ -46,8 +57,15 @@
                             <goal>repackage</goal>
                         </goals>
                     </execution>
-                </executions>-->
+                </executions>&ndash;&gt;
+            </plugin>-->
+            <!-- // spring-boot end <<<< -->
+            <!-- // spring-mvc start >> -->
+            <plugin> <!-- war 包插件 -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
             </plugin>
+            <!-- // spring-mvc end <<<< -->
             <!-- https://mvnrepository.com/artifact/com.mysema.maven/apt-maven-plugin -->
             <plugin> <!-- 该插件可以生成 querydsl 需要的查询对象，执行 mvn compile 即可-->
                 <groupId>com.mysema.maven</groupId>

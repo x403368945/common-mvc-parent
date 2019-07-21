@@ -2,10 +2,16 @@ package com.ccx.security.config;
 
 import com.ccx.security.config.init.AppConfig;
 import com.support.config.AbstractMvcConfig;
+import com.support.config.InitConfig;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.*;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+
+import static com.utils.enums.Charsets.UTF_8;
 
 /**
  * Spring MVC 配置
@@ -18,28 +24,26 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 @Configuration
 @Slf4j
 // spring-mvc start >>
-/*
 @Import(value = {InitConfig.class})
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @ComponentScan(basePackages = {"com.ccx"})
 @EnableWebMvc
 @PropertySource({"classpath:application.properties"})
-*/
 // spring-mvc end <<<<
 public class WebMvcConfig extends AbstractMvcConfig {
 
     // spring-mvc start >>
-//    /**
-//     * 注入文件上传的bean
-//     */
-//    @Bean
-//    public MultipartResolver multipartResolver() {
-//        final CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-////        StandardServletMultipartResolver resolver = new StandardServletMultipartResolver();
-//        resolver.setDefaultEncoding(UTF_8.displayName());
-//        resolver.setMaxUploadSize(1048576000);
-//        return resolver;
-//    }
+    /**
+     * 注入文件上传的bean
+     */
+    @Bean
+    public MultipartResolver multipartResolver() {
+        final CommonsMultipartResolver resolver = new CommonsMultipartResolver();
+//        StandardServletMultipartResolver resolver = new StandardServletMultipartResolver();
+        resolver.setDefaultEncoding(UTF_8.displayName());
+        resolver.setMaxUploadSize(1048576000);
+        return resolver;
+    }
     // spring-mvc end <<<<
 
     /**
