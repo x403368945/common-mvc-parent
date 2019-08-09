@@ -26,7 +26,7 @@ const DEMO_LIST_URL = Object.freeze({
  * 后台服务请求：参考案例：实体表操作
  * @author 谢长春 2019-7-28
  */
-class DemoListService {
+export class DemoListService {
     /**
      * js 中， 类对象在经过方法传递后无法推断类型，造成类方法和变量提示不准确，这里 self 转换之后可以得到正确的提示
      * @param self {DemoListService}

@@ -17,7 +17,7 @@ const USER_URL = Object.freeze({
  * 后台服务请求：用户
  * @author 谢长春 2019-7-28
  */
-class UserService {
+export class UserService {
     /**
      * js 中， 类对象在经过方法传递后无法推断类型，造成类方法和变量提示不准确，这里 self 转换之后可以得到正确的提示
      * @param self {UserService}

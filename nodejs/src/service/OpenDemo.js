@@ -36,7 +36,7 @@ const OPEN_DEMO_URL = Object.freeze({
  * 后台服务请求：参考案例：用于调试后端服务是否可用，以及基本传参格式是否正确，没有数据入库
  * @author 谢长春 2019-7-28
  */
-class OpenDemoService {
+export class OpenDemoService {
     /**
      * js 中， 类对象在经过方法传递后无法推断类型，造成类方法和变量提示不准确，这里 self 转换之后可以得到正确的提示
      * @param self {OpenDemoService}
