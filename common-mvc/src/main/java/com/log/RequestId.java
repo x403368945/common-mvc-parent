@@ -1,17 +1,57 @@
 package com.log;
 
+import ch.qos.logback.classic.helpers.MDCInsertingServletFilter;
 import com.utils.util.Util;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.slf4j.MDC;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Optional;
 
 /**
- * 将请求唯一标志存入 ThreadLocal
+ * <pre>
+ * 将请求标记存入 ThreadLocal
+ * 警告：多线程时需要特殊处理
+ * final Map<String, String> mdc = MDC.getCopyOfContextMap(); // 复制主线程 ThreadLocal
+ * new Thread(() -> {
+ *     try {
+ *         MDC.setContextMap(mdc); // 设置子线程 ThreadLocal
+ *         // 子线程代码
+ *     } finally {
+ *         MDC.clear(); // 清除子线程 ThreadLocal
+ *     }
+ * }).start();
  *
  * @author 谢长春 2019/6/6
  */
 @Slf4j
-public class RequestId {
-    private static final ThreadLocal<String> TL = ThreadLocal.withInitial(() -> "");
+public class RequestId extends MDCInsertingServletFilter {
+
+    /**
+     * 获取请求标记生成适配器
+     *
+     * @return {@link IRidAdapter}
+     */
+    protected IRidAdapter getRidAdapter() {
+        return new DefaultAdapter();
+    }
+
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        MDC.put("rid", Optional.ofNullable(getRidAdapter()).orElseGet(DefaultAdapter::new).getRid());
+        try {
+            super.doFilter(request, response, chain);
+            ((HttpServletResponse) response).addHeader("rid", RequestId.get());
+        } finally {
+            MDC.remove("rid");
+        }
+    }
 
     /**
      * 获取 ThreadLocal 值
@@ -19,67 +59,45 @@ public class RequestId {
      * @return {@link String}
      */
     public static String get() {
-//        if (Objects.equals("", TL.get())){
-//            return RequestId.setUUID();
-//        }
-        return TL.get();
+        return MDC.get("rid");
     }
 
     /**
-     * 设置 ThreadLocal 值
-     *
-     * @return {@link String}
+     * 请求标记适配接口
      */
-    public static String set(final String v) {
-        TL.set(v);
-        return v;
+    public interface IRidAdapter {
+        /**
+         * 获取请求标记
+         *
+         * @return {@link String}
+         */
+        String getRid();
     }
 
     /**
-     * 设置 uuid 到 ThreadLocal
-     *
-     * @return {@link String}
+     * 使用 6 位随机数 + 2 位数字或大小写字母
      */
-    public static String setUUID() {
-        TL.set(Util.uuid());
-        return TL.get();
+    public static class DefaultAdapter implements IRidAdapter {
+        public String getRid() {
+            return Util.random(6).concat(RandomStringUtils.randomAlphanumeric(2));
+        }
     }
 
     /**
-     * 设置 6 位随机数到 ThreadLocal
-     *
-     * @return {@link String}
+     * 使用 uuid
      */
-    public static String setRandomNumber() {
-        TL.set(Util.random(6));
-        return TL.get();
+    public static class UuidAdapter implements IRidAdapter {
+        public String getRid() {
+            return Util.uuid();
+        }
     }
 
     /**
-     * 设置 6 位随机数 + 2 位数字或大小写字母 到 ThreadLocal
-     *
-     * @return {@link String}
+     * 使用 6 位随机数
      */
-    public static String setRandomAlphanumeric() {
-        TL.set(Util.random(6).concat(RandomStringUtils.randomAlphanumeric(2)));
-        return TL.get();
-    }
-
-    /**
-     * 移除 ThreadLocal 值
-     */
-    public static void remove() {
-        TL.remove();
-    }
-
-    /**
-     * 移除 ThreadLocal 值
-     *
-     * @return {@link String}
-     */
-    public static String getAndRemove() {
-        final String v = TL.get();
-        TL.remove();
-        return v;
+    public static class RandomNumberAdapter implements IRidAdapter {
+        public String getRid() {
+            return Util.random(6);
+        }
     }
 }

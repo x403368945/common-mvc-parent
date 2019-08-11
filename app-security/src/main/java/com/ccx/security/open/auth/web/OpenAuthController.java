@@ -110,7 +110,7 @@ public class OpenAuthController {
         final Result<TabUser> result = new Result<>(1);
         try {
             result
-                    .version(builder -> builder
+                    .version(this.getClass(), builder -> builder
                             .props(TabUser.Props.list())
                             .notes(Arrays.asList(
                                     "会话模式登录，有效期30分钟"
@@ -158,10 +158,7 @@ public class OpenAuthController {
 //        final Result<TabUser> result = new Result<>(1);
 //        try {
 //            result
-//                    .version(builder -> builder
-//                            .url("/open/auth/{version}/login/TOKEN")
-//                            .markdown(this.getClass().getSimpleName().concat("/loginByToken.md"))
-//                            .method(POST)
+//                    .version(this.getClass(), builder -> builder
 //                            .props(Props.comments())
 //                            .notes(Arrays.asList(
 //                                    "TOKEN模式登录，最长有效期30天，重新调用该接口则上次的token失效；返回结果extras中存放的是当前有效token，请将该键值对存储在本地，向服务端发起请求时附加到请求头"

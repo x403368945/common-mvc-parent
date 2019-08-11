@@ -21,18 +21,19 @@ import java.util.Objects;
  *     AService.saveA 方法调用 BService.getB 方法，再调用 ARepository.save 方法，会出现 ARepository.save 向从库中插入数据
  *   DAO 拦截缺陷：
  *     数据库上下文切换频率高，每一个 DAO 方法都会切换一次数据源，同一个 Service.find() 方法多次调用同一个 Repository.find() 方法，会切换多次上下文
+ *     无法做到在同一个事务中，查询未提交的数据。因为查询会落在从库，但主库事务未提交，所以无法查询
  *   建议拦截策略放在 DAO 层，控制粒度更细，适配性更高
  * @author 谢长春 2019/6/9
  */
 @Component
 @Aspect
 @Slf4j
-//@Order(-1) // todo 保证该 AOP 在 @Transactional 之前执行，避免事务永远落在主库；目前没发现问题，暂时不添加 @Order 注解
+//@Order(-1) // 需要保证事务切面的 order 值要大于数据源切面，order 值越小权重越高
 public class DBAspect {
     /**
      * 主库操作拦截
      */
-//    @Before("execution(* com.ccx..*.service..*.save*(..)) " +
+//    @Around("execution(* com.ccx..*.service..*.save*(..)) " +
 //            "||execution(* com.ccx..*.service..*.update*(..)) " +
 //            "||execution(* com.ccx..*.service..*.markDelete*(..)) " +
 //            "||execution(* com.ccx..*.service..*.delete*(..)) " +
@@ -68,11 +69,11 @@ public class DBAspect {
     /**
      * 从库操作拦截
      */
-//    @Before("(execution(* com.ccx..*.service..*.find*(..)) " +
+//    @Around("execution(* com.ccx..*.service..*.find*(..)) " +
 //            "||execution(* com.ccx..*.service..*.get*(..)) " +
 //            "||execution(* com.ccx..*.service..*.search*(..)) " +
-//            "||execution(* com.ccx..*.service..*.load*(..)) " +
-//            ")&&!@annotation(com.support.aop.annotations.Master) "
+//            "||execution(* com.ccx..*.service..*.exist*(..)) " +
+//            "||execution(* com.ccx..*.service..*.load*(..)) "
 //    )
     @Around("execution(* com.ccx..*.dao.jpa..*.find*(..))" +
             "||execution(* com.ccx..*.dao.jpa..*.get*(..))" +

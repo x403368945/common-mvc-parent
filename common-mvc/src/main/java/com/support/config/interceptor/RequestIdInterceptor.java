@@ -10,11 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * 请求唯一标记，存入 ThreadLocal，请求响应之后移除 ThreadLocal
+ * 请求标记，存入 ThreadLocal，请求响应之后移除 ThreadLocal
  *
  * @author 谢长春 on 2018/1/28.
+ * @deprecated 该类已废弃，已使用继承 {@link ch.qos.logback.classic.helpers.MDCInsertingServletFilter} 方案替代替代
  */
 @Slf4j
+@Deprecated
 public class RequestIdInterceptor implements HandlerInterceptor {
 
     /**
@@ -25,7 +27,7 @@ public class RequestIdInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 //        log.info("{}#preHandle------------------------------------------------------------", this.getClass().getName());
-        response.addHeader("rid", RequestId.setRandomAlphanumeric());
+//        response.addHeader("rid", RequestId.setRandomAlphanumeric());
         return true;
     }
 
@@ -46,6 +48,6 @@ public class RequestIdInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex) throws Exception {
 //        log.info("{}#afterCompletion------------------------------------------------------", this.getClass().getName());
-        RequestId.remove();
+//        RequestId.remove();
     }
 }

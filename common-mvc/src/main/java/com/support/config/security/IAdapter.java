@@ -1,8 +1,8 @@
 package com.support.config.security;
 
+import com.log.RequestId;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-
-import java.util.Optional;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 
 /**
  * Spring Security 配置
@@ -35,15 +35,11 @@ public interface IAdapter {
             return "/cors/**";
         }
 
-        default RequestIdFilter getRequestIdFilter() {
-            return null;
-        }
-
         default void config(final HttpSecurity http) throws Exception {
             http
                     .antMatcher(matcher())
                     .csrf().disable()
-                    .headers().addHeaderWriter((req, res) -> Optional.ofNullable(getRequestIdFilter()).ifPresent(requestIdFilter -> requestIdFilter.writeHeaders(req, res))).and()
+//                    .headers().addHeaderWriter((req, res) -> Optional.ofNullable(getRequestIdFilter()).ifPresent(requestIdFilter -> requestIdFilter.writeHeaders(req, res))).and()
                     .cors().and()
                     .anonymous().and()
                     .servletApi().and()
@@ -51,7 +47,8 @@ public interface IAdapter {
                     .authorizeRequests()
                     .anyRequest().permitAll()
             ;
-            Optional.ofNullable(getRequestIdFilter()).ifPresent(requestIdFilter -> requestIdFilter.setRequestIdFilter(http));
+            // 请求标记过滤器注册到 Spring Security 过滤器前面； ChannelProcessingFilter.class, SecurityContextPersistenceFilter.class
+            http.addFilterBefore(new RequestId(), ChannelProcessingFilter.class);
         }
     }
 
@@ -65,15 +62,11 @@ public interface IAdapter {
             return "/open/**";
         }
 
-        default RequestIdFilter getRequestIdFilter() {
-            return null;
-        }
-
         default void config(final HttpSecurity http) throws Exception {
             http
                     .antMatcher(matcher())
                     .csrf().disable()
-                    .headers().addHeaderWriter((req, res) -> Optional.ofNullable(getRequestIdFilter()).ifPresent(requestIdFilter -> requestIdFilter.writeHeaders(req, res))).and()
+//                    .headers().addHeaderWriter((req, res) -> Optional.ofNullable(getRequestIdFilter()).ifPresent(requestIdFilter -> requestIdFilter.writeHeaders(req, res))).and()
                     .anonymous().and()
                     .servletApi().and()
                     .headers().and()
@@ -81,7 +74,8 @@ public interface IAdapter {
                     .anyRequest().permitAll()
             ;
             if (cors()) http.cors().and();
-            Optional.ofNullable(getRequestIdFilter()).ifPresent(requestIdFilter -> requestIdFilter.setRequestIdFilter(http));
+            // 请求标记过滤器注册到 Spring Security 过滤器前面； ChannelProcessingFilter.class, SecurityContextPersistenceFilter.class
+            http.addFilterBefore(new RequestId(), ChannelProcessingFilter.class);
         }
 
         /**

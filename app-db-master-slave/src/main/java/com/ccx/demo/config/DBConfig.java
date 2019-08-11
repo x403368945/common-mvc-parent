@@ -1,23 +1,25 @@
 package com.ccx.demo.config;
 
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
+import com.alibaba.druid.support.http.StatViewServlet;
+import com.alibaba.druid.support.http.WebStatFilter;
 import com.ccx.demo.tl.DBContext;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
+import javax.servlet.Filter;
+import javax.servlet.Servlet;
 import javax.sql.DataSource;
 import java.util.HashMap;
 
@@ -35,11 +37,8 @@ import static com.ccx.demo.enums.DBRoute.*;
  *    参考配置：https://docs.spring.io/spring-data/mongodb/docs/2.0.0.RC3/reference/html/
  *    QueryDSL
  *      参考配置： http://www.querydsl.com/static/querydsl/4.1.3/reference/html_single/#mongodb_integration
- *
- * 多数据源或主从配置策略配置方案最终实现说明：
- *   先由使用 springboot 默认装配实现（简化配置）
- *   然后在自定义 @Bean 实现方法头加上 @Primary 让优先级高于 springboot 默认实现方法，达到覆盖 springboot 默认实现目的
- *   这样可以减少破坏 springboot 自动装配逻辑
+ * 分库分表及多数据源也可以使用： Sharding-JDBC
+ *    参考配置：https://shardingsphere.apache.org/document/current/cn/overview/
  *
  * @author 谢长春 2019/1/23
  */
@@ -53,9 +52,9 @@ public class DBConfig {
      *
      * @return {@link DataSource}
      */
-    @Primary
+//    @Primary
     @Bean("masterDataSource")
-    @ConfigurationProperties("spring.datasource.master")
+    @ConfigurationProperties("spring.datasource.druid.master")
     public DataSource masterDataSource() {
 //        return DataSourceBuilder.create().build();
         return DruidDataSourceBuilder.create().build();
@@ -67,9 +66,8 @@ public class DBConfig {
      * @return {@link DataSource}
      */
     @Bean("secondDataSource")
-    @ConfigurationProperties("spring.datasource.second")
+    @ConfigurationProperties("spring.datasource.druid.second")
     public DataSource secondDataSource() {
-//        return DataSourceBuilder.create().build();
         return DruidDataSourceBuilder.create().build();
     }
 
@@ -79,9 +77,8 @@ public class DBConfig {
      * @return {@link DataSource}
      */
     @Bean("thirdDataSource")
-    @ConfigurationProperties("spring.datasource.third")
+    @ConfigurationProperties("spring.datasource.druid.third")
     public DataSource thirdDataSource() {
-//        return DataSourceBuilder.create().build();
         return DruidDataSourceBuilder.create().build();
     }
 
@@ -94,9 +91,10 @@ public class DBConfig {
      * @return {@link AbstractRoutingDataSource} extend {@link DataSource}
      */
     @Bean("routingDataSource")
-    public AbstractRoutingDataSource routingDataSource(@Qualifier("masterDataSource") DataSource masterDataSource,
-                                                       @Qualifier("secondDataSource") DataSource secondDataSource,
-                                                       @Qualifier("thirdDataSource") DataSource thirdDataSource) {
+    public DataSource routingDataSource(@Qualifier("masterDataSource") DataSource masterDataSource,
+                                        @Qualifier("secondDataSource") DataSource secondDataSource,
+                                        @Qualifier("thirdDataSource") DataSource thirdDataSource
+    ) {
         final AbstractRoutingDataSource routingDataSource = new AbstractRoutingDataSource() {
             @Override
             protected Object determineCurrentLookupKey() {
@@ -114,63 +112,61 @@ public class DBConfig {
     }
 
     /**
-     * 管理主从策略配置注入
+     * <pre>
+     * 这里是多数据源的关键：
+     * 代理了目标数据源 dataSource 的所有方法，其中在 invoke 方法，Spring 使用了排除法
+     * 只有 dataSource 获取到 {@link java.sql.Connection} 之后，在执行 {@link java.sql.Connection#prepareStatement(java.lang.String)} 时候，Spring 才会主动去数据库链接池中获取 {@link java.sql.Connection} ，
+     * 这样做的好处就是提高数据库链接的使用率和效率，{@link LazyConnectionDataSourceProxy} 经常会被用在一些分库分表、多数据源事务的应用当中
+     * 多数据源的事务管理解决方案，很多采用了同时开启所有数据源事务、同时提交的策略，例如：阿里的 cobar 解决方案等
      *
-     * @param builder           {@link EntityManagerFactoryBuilder} springboot 简化配置时，用于自动装配，必须在 {@link DBConfig#masterDataSource()} 头上指定 @Primary，该对象才有效
-     * @param routingDataSource {@link DBConfig#routingDataSource(DataSource, DataSource, DataSource)} 主从路由数据源
-     * @return {@link LocalContainerEntityManagerFactoryBean}
+     * @param routingDataSource {@link DBConfig#routingDataSource(DataSource, DataSource, DataSource)} ()}
+     * @return {@link LazyConnectionDataSourceProxy}
      */
-    @Bean("entityManagerFactoryBean")
-    public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean(
-            EntityManagerFactoryBuilder builder,
-            @Qualifier("routingDataSource") DataSource routingDataSource) {
-        return builder
-                .dataSource(routingDataSource)
-//                .properties(jpaProperties.getProperties())
-                .packages("com.ccx") // 设置实体类扫描包
-//                .persistenceUnit("multiPersistenceUnit")
-                .build();
-    }
-
-    /**
-     * 自定义实体管理，覆盖 springboot 自动装配
-     *
-     * @param entityManagerFactoryBean {@link DBConfig#entityManagerFactoryBean(EntityManagerFactoryBuilder, DataSource)}
-     * @return {@link EntityManagerFactory}
-     */
+    @Bean
     @Primary
-    @Bean("entityManagerFactory")
-    public EntityManagerFactory entityManagerFactory(LocalContainerEntityManagerFactoryBean entityManagerFactoryBean) {
-        return entityManagerFactoryBean.getObject();
-    }
-
-    /**
-     * 自定义事务控制，覆盖 springboot 自动装配
-     *
-     * @param entityManagerFactory {@link DBConfig#entityManagerFactory(LocalContainerEntityManagerFactoryBean)}
-     * @return {@link PlatformTransactionManager}
-     */
-    @Primary
-    @Bean("transactionManager")
-    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
-        return new JpaTransactionManager(entityManagerFactory);
-    }
-
-    /**
-     * 不加 @Primary {@link DBConfig#jpaQueryFactory(EntityManager)} 会报错
-     *
-     * @param entityManagerFactory {@link DBConfig#entityManagerFactory(LocalContainerEntityManagerFactoryBean)}
-     * @return {@link EntityManager}
-     */
-    @Primary
-    @Bean("entityManager")
-    public EntityManager entityManager(EntityManagerFactory entityManagerFactory) {
-        return entityManagerFactory.createEntityManager();
+    public LazyConnectionDataSourceProxy lazyConnectionDataSourceProxy(@Qualifier("routingDataSource") DataSource routingDataSource) {
+        return new LazyConnectionDataSourceProxy(routingDataSource);
     }
 
     @Bean
-    public JPAQueryFactory jpaQueryFactory(EntityManager entityManager) {
+    public JPAQueryFactory jpaQueryFactory(@Autowired EntityManager entityManager) {
         return new JPAQueryFactory(entityManager);
     }
 
+    /**
+     * 注册 {@link com.alibaba.druid.support.http.StatViewServlet}
+     *
+     * @return {@link ServletRegistrationBean}
+     */
+    @Bean
+    public ServletRegistrationBean druidStatViewServlet() {
+        // {@link org.springframework.boot.web.servlet.ServletRegistrationBean} 提供类的进行注册.
+        final ServletRegistrationBean<Servlet> servlet = new ServletRegistrationBean<>(new StatViewServlet(), "/druid/*");
+        // 添加初始化参数：initParams
+//        // 白名单：
+//        servlet.addInitParameter("allow", "127.0.0.1");
+//        // IP黑名单 (存在共同时，deny优先于allow) : 如果满足deny的话提示:Sorry, you are not permitted to view this page.
+//        servlet.addInitParameter("deny", "192.168.1.73");
+        // 登录查看信息的账号密码.
+        servlet.addInitParameter("loginUsername", "druid");
+        servlet.addInitParameter("loginPassword", "druid");
+        // 是否能够重置数据.
+        servlet.addInitParameter("resetEnable", "false");
+        return servlet;
+    }
+
+    /**
+     * 注册 {@link com.alibaba.druid.support.http.WebStatFilter}
+     *
+     * @return {@link FilterRegistrationBean}
+     */
+    @Bean
+    public FilterRegistrationBean druidStatFilter() {
+        final FilterRegistrationBean<Filter> filter = new FilterRegistrationBean<>(new WebStatFilter());
+        // 添加过滤规则.
+        filter.addUrlPatterns("/druid/*");
+        // 添加不需要忽略的格式信息.
+        filter.addInitParameter("exclusions", "/druid/*,*.html,*.htm,*.js,*.css,*.gif,*.jpg,*.bmp,*.png,*.ico,*.svg,*.ttf,*.woff,*.woff2");
+        return filter;
+    }
 }

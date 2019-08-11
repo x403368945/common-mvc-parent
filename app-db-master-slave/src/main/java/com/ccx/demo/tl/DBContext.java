@@ -34,7 +34,7 @@ public class DBContext {
      */
     public static DBRoute set(final DBRoute v) {
         TL.set(v);
-        log.debug("{} 数据源", TL.get().name());
+        log.debug("数据源：【{}】", TL.get().name());
         return v;
     }
 

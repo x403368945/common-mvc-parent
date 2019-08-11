@@ -23,7 +23,7 @@ public interface IService<E> extends ISearch<E> {
 //	IRepository<E> getFindRepository();
 
     /**
-     * 保存；使用 aop 拦截，通过 @ServiceAspect 注解设置 uid 和 用户信息
+     * 保存；使用 aop 拦截，通过 @ServiceAspect 注解设置用户信息
      *
      * @param obj    E 实体对象
      * @param userId {@link Long} 操作用户ID
@@ -36,7 +36,6 @@ public interface IService<E> extends ISearch<E> {
             @NotNull(message = "【userId】不能为null") @Positive(message = "【userId】必须大于0") final Long userId) {
 /* 以下字段将会在 @ServiceAspect 中设置
         obj.setId(null);
-        obj.setUid(Util.uuid());
         obj.setCreateUserId(userId);
         obj.setModifyUserId(userId);
 */
@@ -45,7 +44,7 @@ public interface IService<E> extends ISearch<E> {
     }
 
     /**
-     * 批量保存；使用 aop 拦截，通过 @ServiceAspect 注解设置 uid 和 用户信息
+     * 批量保存；使用 aop 拦截，通过 @ServiceAspect 注解设置用户信息
      *
      * @param list   {@link List<E>}  实体对象集合
      * @param userId {@link Long} 操作用户ID
@@ -58,7 +57,6 @@ public interface IService<E> extends ISearch<E> {
             @NotNull(message = "【userId】不能为null") @Positive(message = "【userId】必须大于0") final Long userId) {
 /* 以下字段将会在 @ServiceAspect 中设置
         obj.setId(null);
-        obj.setUid(Util.uuid());
         obj.setCreateUserId(userId);
         obj.setModifyUserId(userId);
 */
@@ -101,22 +99,6 @@ public interface IService<E> extends ISearch<E> {
     }
 
     /**
-     * 按ID和UUID删除，物理删除；执行物理删除前先查询到数据，等待删除成功之后返回该数据对象，通过 AOP 拦截记录到删除日志中
-     *
-     * @param id     {@link String} 数据ID
-     * @param uid    {@link String} 数据UUID
-     * @param userId {@link Long} 操作用户ID
-     * @return E 删除对象数据实体
-     */
-    @Transactional(rollbackFor = Exception.class)
-    default E deleteByUid(@NotBlank(message = "【id】不能为空") final String id,
-                          @NotNull(message = "【uid】不能为null") @Size(min = 32, max = 32, message = "【uid】长度必须是32位") final String uid,
-                          @NotNull(message = "【userId】不能为null") @Positive(message = "【userId】必须大于0") final Long userId) {
-//        return repository.deleteById(id, uid, userId);
-        throw new NullPointerException(this.getClass().getName().concat("：方法【deleteByUid(final String id, final String uid, final Long userId)】未实现"));
-    }
-
-    /**
      * 按ID删除，逻辑删除
      *
      * @param id     {@link String} 数据ID
@@ -127,21 +109,6 @@ public interface IService<E> extends ISearch<E> {
                                 @NotNull(message = "【userId】不能为null") @Positive(message = "【userId】必须大于0") final Long userId) {
 //        DeleteRowsException.asserts(repository.markDeleteById(id, userId));
         throw new NullPointerException(this.getClass().getName().concat("：方法【markDeleteById(final String id, final Long userId)】未实现"));
-    }
-
-    /**
-     * 按ID和UUID删除，逻辑删除
-     *
-     * @param id     {@link String} 数据ID
-     * @param uid    {@link String} 数据UUID
-     * @param userId {@link Long} 操作用户ID
-     */
-    @Transactional(rollbackFor = Exception.class)
-    default void markDeleteByUid(@NotBlank(message = "【id】不能为null") final String id,
-                                 @NotNull(message = "【uid】不能为null") @Size(min = 32, max = 32, message = "【uid】长度必须是32位") final String uid,
-                                 @NotNull(message = "【userId】不能为null") @Positive(message = "【userId】必须大于0") final Long userId) {
-//        DeleteRowsException.asserts(repository.markDeleteById(id, uid, userId));
-        throw new NullPointerException(this.getClass().getName().concat("：方法【markDeleteByUid(final String id, final String uid, final Long userId)】未实现"));
     }
 
     /**
@@ -158,7 +125,7 @@ public interface IService<E> extends ISearch<E> {
     }
 
     /**
-     * 批量操作按ID和UUID删除，逻辑删除
+     * 批量操作按ID删除，逻辑删除
      *
      * @param list   {@link List<E>} 数据ID
      * @param userId {@link Long} 操作用户ID

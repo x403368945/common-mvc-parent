@@ -1,6 +1,7 @@
 package com.ccx.demo.config;
 
 import com.ccx.demo.config.init.AppConfig;
+import com.log.RequestId;
 import com.support.config.security.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.cors.CorsConfiguration;
@@ -34,8 +36,6 @@ import java.util.Collections;
 // @EnableGlobalMethodSecurity(prePostEnabled = true) // 启用注解：@PreAuthorize；[@PreAuthorize("hasAuthority('ROLE_USER')"), @PreAuthorize("isAnonymous()")]
 @Slf4j
 public class SecurityConfig {
-    private static final RequestIdFilter requestIdFilter = new RequestIdFilter();
-
 //    /**
 //     * 自定义校验规则
 //     */
@@ -84,11 +84,6 @@ public class SecurityConfig {
     @Order(1)
     public static class CorsSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter implements IAdapter.Cors {
         @Override
-        public RequestIdFilter getRequestIdFilter() {
-            return requestIdFilter;
-        }
-
-        @Override
         protected void configure(HttpSecurity http) throws Exception {
             config(http);
         }
@@ -106,11 +101,6 @@ public class SecurityConfig {
         @Override
         public boolean cors() {
             return !AppConfig.isProd(); // ************************************************** 环境发布：非生产环境才能跨域
-        }
-
-        @Override
-        public RequestIdFilter getRequestIdFilter() {
-            return requestIdFilter;
         }
 
         @Override
@@ -134,8 +124,8 @@ public class SecurityConfig {
                     .csrf().disable()
 //                    .csrf().ignoringAntMatchers("/druid/*").and()
 //                    .cors().and()
-                    // http 响应头追加请求唯一标记
-                    .headers().addHeaderWriter(requestIdFilter::writeHeaders).and()
+                    // http 响应头追加请求标记
+//                    .headers().addHeaderWriter(requestIdFilter::writeHeaders).and()
                     //用户访问未经授权的rest API，返回错误码401（未经授权）
                     .exceptionHandling().authenticationEntryPoint(authHandler).accessDeniedHandler(authHandler)
 //                    // 指定会话策略；ALWAYS:总是创建HttpSession, IF_REQUIRED:只会在需要时创建一个HttpSession, NEVER:不会创建HttpSession，但如果它已经存在，将可以使用HttpSession, STATELESS:永远不会创建HttpSession，它不会使用HttpSession来获取SecurityContext
@@ -156,8 +146,6 @@ public class SecurityConfig {
             if (!AppConfig.isProd()) {
                 http.cors().and(); // ******************************************************* 环境发布：非生产环境才能跨域
             }
-            // 启用缓存
-//            httpSecurity.headers().cacheControl();
             { // 配置退出参数
                 http.logout()
                         .logoutSuccessHandler(authHandler)
@@ -177,9 +165,9 @@ public class SecurityConfig {
                         new JsonUsernamePasswordAuthenticationFilter(authenticationManager(), authHandler, authHandler),
                         UsernamePasswordAuthenticationFilter.class
                 );
+                // 请求标记过滤器注册到 Spring Security 过滤器前面； ChannelProcessingFilter.class, SecurityContextPersistenceFilter.class
+                http.addFilterBefore(new RequestId(), ChannelProcessingFilter.class);
 //                http.addFilterAfter(authTokenFilter, BasicAuthenticationFilter.class);
-                // 添加请求唯一标记处理
-                requestIdFilter.setRequestIdFilter(http);
             }
         }
 

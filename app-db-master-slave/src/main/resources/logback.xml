@@ -8,18 +8,19 @@
 - configuration 子节点为 appender、logger、root
 -->
 <configuration scan="false" scanPeriod="60 second" debug="true">
-    <property name="APP_NAME" value="${app.name:-demo-main}"/>
+    <property name="APP_NAME" value="${app.name:-app-db-master-slave}"/>
     <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
     <property name="LOG_HOME" value="${CATALINA_HOME:-.}/logs"/>
     <contextName>${APP_NAME}</contextName>
-    <!-- 自定义日志采集参数：[%rid] 采集请求唯一标记 -->
-    <conversionRule conversionWord="rid" converterClass="com.log.RidConvert"/>
 
     <!-- 负责写日志,控制台日志 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- 一是把日志信息转换成字节数组,二是把字节数组写入到输出流 -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
         <encoder>
-            <pattern>%highlight(%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%rid] : %m%n)</pattern>
+            <pattern>%highlight(%d{HH:mm:ss.SSS} %5level %50logger{50} [%X{rid}-%X{req.remoteHost}] : %m%n)</pattern>
             <charset>UTF-8</charset>
         </encoder>
     </appender>
@@ -28,7 +29,7 @@
     <appender name="DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_HOME}/${APP_NAME}.debug.log</file>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%rid] : %m%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} %5level %50logger{50} [%X{rid}-%X{req.remoteHost}] : %m%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
@@ -50,7 +51,7 @@
             <level>INFO</level>
         </filter>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%rid] : %m%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} %5level %50logger{50} [%X{rid}-%X{req.remoteHost}] : %m%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
@@ -64,29 +65,22 @@
         </rollingPolicy>
     </appender>
 
-    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_HOME}/${APP_NAME}.error.log</file>
-        <!-- ThresholdFilter:临界值过滤器，过滤掉 ERROR 以下级别的日志 -->
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>ERROR</level>
-        </filter>
+    <!-- 滚动记录文件，先将日志记录到指定文件，当符合某个条件时，将日志记录到其他文件 -->
+    <appender name="SQL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/${APP_NAME}.sql.log</file>
         <encoder>
-            <pattern>%d %5level [%20thread] %50logger{50} [%rid] : %m%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} %5level %50logger{50} [%X{rid}-%X{req.remoteHost}] : %m%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
-        <!--
-        - 按照固定窗口模式生成日志文件，当文件大于200MB时，生成新的日志文件。
-        - 最多保留21个文件
-        - 可以指定文件压缩选项
-        -->
-        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-            <fileNamePattern>${LOG_HOME}/${APP_NAME}.log.error%i.zip</fileNamePattern>
-            <minIndex>1</minIndex>
-            <maxIndex>21</maxIndex>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--
+            - 每天至少生成一个日志文件，超过 100M 则增加一个文件，最多保存 200 个日志文件
+            - 如果隔一段时间没有输出日志，前面过期的日志不会被删除，只有再重新打印日志的时候，会触发删除过期日志的操作。
+            -->
+            <fileNamePattern>${LOG_HOME}/${APP_NAME}.log.%d{yyyyMMdd}_%i.sql</fileNamePattern>
+            <maxHistory>200</maxHistory>
+            <maxFileSize>100MB</maxFileSize>
         </rollingPolicy>
-        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <maxFileSize>200MB</maxFileSize>
-        </triggeringPolicy>
     </appender>
 
     <!-- 异步输出 -->
@@ -94,7 +88,7 @@
         <!-- 设置为0表示不丢失日志；【默认值为-1，如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志】 -->
         <discardingThreshold>0</discardingThreshold>
         <!-- 更改默认的队列的深度,该值会影响性能.默认值为256 -->
-        <queueSize>512</queueSize>
+        <queueSize>256</queueSize>
         <!-- 添加附加的appender,最多只能添加一个 -->
         <appender-ref ref="DEBUG"/>
     </appender>
@@ -164,6 +158,10 @@
         &lt;!&ndash;<appender-ref ref="ERROR"/>&ndash;&gt;
         <appender-ref ref="ASYNC"/>
     </logger>-->
+    <!-- 指定文件记录 sql 语句 -->
+    <logger name="druid.sql.Statement" level="DEBUG" additivity="true">
+        <appender-ref ref="SQL"/>
+    </logger>
 
     <!--
     - 根logger
@@ -173,10 +171,9 @@
     -->
     <root level="DEBUG">
         <appender-ref ref="STDOUT"/>
-        <!--<appender-ref ref="DEBUG"/>-->
+        <appender-ref ref="DEBUG"/>
         <appender-ref ref="INFO"/>
-        <appender-ref ref="ERROR"/>
-        <appender-ref ref="ASYNC"/>
+        <!--<appender-ref ref="ASYNC"/>-->
         <!--<appender-ref ref="EXCEPTION"/>-->
     </root>
 </configuration>

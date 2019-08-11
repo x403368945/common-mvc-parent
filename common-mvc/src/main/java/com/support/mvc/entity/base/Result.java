@@ -160,7 +160,7 @@ public class Result<E> implements IJson {
     private Version version;
 
     /**
-     * 本次请求唯一标记
+     * 本次请求标记
      *
      * @return {@link String}
      */

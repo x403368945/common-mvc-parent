@@ -11,13 +11,12 @@
     <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
     <property name="LOG_HOME" value="${CATALINA_HOME:-.}/logs"/>
     <contextName>${APP_NAME}</contextName>
-    <!-- 自定义日志采集参数：[%rid] 采集请求唯一标记 -->
-    <conversionRule conversionWord="rid" converterClass="com.log.RidConvert"/>
+
     <!-- 负责写日志,控制台日志 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- 一是把日志信息转换成字节数组,二是把字节数组写入到输出流 -->
         <encoder>
-            <pattern>%highlight(%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%rid] : %m%n)</pattern>
+            <pattern>%highlight(%d{HH:mm:ss.SSS} %5level %50logger{50} [%X{rid}-%X{req.remoteHost}] : %m%n)</pattern>
             <charset>UTF-8</charset>
         </encoder>
     </appender>

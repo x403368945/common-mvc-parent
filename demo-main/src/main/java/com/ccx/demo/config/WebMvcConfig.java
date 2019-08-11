@@ -140,7 +140,7 @@ public class WebMvcConfig extends AbstractMvcConfig
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // 没有使用 security 时，可以使用拦截器拦截请求，设置请求唯一标记
+        // 没有使用 security 时，可以使用拦截器拦截请求，设置请求标记
 //        registry.addInterceptor(new RequestIdInterceptor()).addPathPatterns("/**");
     }
 
@@ -158,5 +158,31 @@ public class WebMvcConfig extends AbstractMvcConfig
                 .addResourceLocations(String.format("file:%s/", AppConfig.Path.ROOT.absolute()))
         ;
     }
+
+//    /**
+//     * 在 Spring Security 中注册过滤器
+//     * <pre>
+//     * 添加自定义过滤器：设置请求标记，在日志打印和响应头中追加该标记
+//     * 警告：多线程时需要特殊处理
+//     * final Map<String, String> mdc = MDC.getCopyOfContextMap(); // 复制主线程 ThreadLocal
+//     * new Thread(() -> {
+//     *     try {
+//     *         MDC.setContextMap(mdc); // 设置子线程 ThreadLocal
+//     *         // 子线程代码
+//     *     } finally {
+//     *         MDC.clear(); // 清除子线程 ThreadLocal
+//     *     }
+//     * }).start();
+//     *
+//     * @return FilterRegistrationBean
+//     */
+//    @Bean
+//    public FilterRegistrationBean filterRequestId() {
+//        final FilterRegistrationBean<Filter> bean = new FilterRegistrationBean<>();
+//        bean.setOrder(0);
+//        bean.setFilter(new RequestId());
+//        bean.addUrlPatterns("/*");
+//        return bean;
+//    }
 
 }

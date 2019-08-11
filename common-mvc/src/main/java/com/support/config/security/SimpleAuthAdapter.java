@@ -1,6 +1,7 @@
 package com.support.config.security;
 
 import com.google.common.collect.Sets;
+import com.log.RequestId;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
@@ -97,26 +99,23 @@ public class SimpleAuthAdapter extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         final AuthHandler authHandler = new AuthHandler();
-        final RequestIdFilter requestIdFilter = new RequestIdFilter();
-//        /**
-//         * {@link HeaderWriterFilter.java}
-//         */
-//        final HeaderWriter headerWriter = (request, response) -> {
-//            final String uuid = Util.uuid();
-//            response.addHeader("uuid", uuid);
-//        };
+        // 启用缓存
+//            http.headers().cacheControl();
         http
                 .csrf().disable()
-                // 允许跨域
-                .cors().and()
-                // http 响应头追加请求唯一标记
-                .headers().addHeaderWriter(requestIdFilter::writeHeaders).and()
+//                    .csrf().ignoringAntMatchers("/druid/*").and()
+//                    .cors().and()
+                // http 响应头追加请求标记
+//                .headers().addHeaderWriter(requestIdFilter::writeHeaders).and()
                 // 用户访问未经授权的rest API，返回错误码401（未经授权）
                 .exceptionHandling().authenticationEntryPoint(authHandler).accessDeniedHandler(authHandler)
+//                    // 指定会话策略；ALWAYS:总是创建HttpSession, IF_REQUIRED:只会在需要时创建一个HttpSession, NEVER:不会创建HttpSession，但如果它已经存在，将可以使用HttpSession, STATELESS:永远不会创建HttpSession，它不会使用HttpSession来获取SecurityContext
+//                    .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 基于Token，不需要Session
                 .and().authorizeRequests()
                 // TODO 建议在类头部或方法头上加权限注解，这里配置太多的权限容易混淆
                 .antMatchers("/").permitAll()
                 .anyRequest().authenticated()
+                // 开启 Basic 认证
                 .and().httpBasic()
                 .and().formLogin()
                 .successHandler(authHandler)
@@ -129,7 +128,6 @@ public class SimpleAuthAdapter extends WebSecurityConfigurerAdapter {
                 .deleteCookies("JSESSIONID") // 删除 JSESSIONID
                 .addLogoutHandler(new SecurityContextLogoutHandler()) // 添加一个LogoutHandler, // 清除 session
         ;
-
         if (cors()) {
             http.cors().and();
         }
@@ -139,8 +137,8 @@ public class SimpleAuthAdapter extends WebSecurityConfigurerAdapter {
                     new JsonUsernamePasswordAuthenticationFilter(authenticationManager(), authHandler, authHandler),
                     UsernamePasswordAuthenticationFilter.class
             );
-            // 添加请求唯一标记处理
-            requestIdFilter.setRequestIdFilter(http);
+            // 请求标记过滤器注册到 Spring Security 过滤器前面； ChannelProcessingFilter.class, SecurityContextPersistenceFilter.class
+            http.addFilterBefore(new RequestId(), ChannelProcessingFilter.class);
         }
     }
 

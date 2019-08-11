@@ -9,135 +9,95 @@ app: # 生产环境 todo 编辑时注意，请同时变更其他环境对应的�
   debug: false # 调试模式开关：true开启调试模式，false关闭调试模式
   junit: false # 单元测试开关：true开启单元测试模式，false关闭单元测试模式
 
+druid-config: &druid-config
+  driver-class-name: com.mysql.cj.jdbc.Driver
+  # 连接池的配置信息
+  # 初始化大小，最小，最大
+  initial-size: 2
+  min-idle: 2
+  # 最大连接数建议 （CPU核核数 * 2 + 1）
+  max-active: 5
+  # 配置获取连接等待超时的时间
+  max-wait: 60000
+  # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+  time-between-eviction-runs-millis: 60000
+  # 配置一个连接在池中最小生存的时间，单位是毫秒
+  #      minEvictableIdleTimeMillis: 300000
+  validation-query: SELECT 1
+  validation-query-timeout: 1
+  test-while-idle: true
+  test-on-borrow: false
+  test-on-return: false
+  # 打开PSCache，并且指定每个连接上PSCache的大小
+  pool-prepared-statements: true
+  max-pool-prepared-statement-per-connection-size: 10
+  # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙，防 sql 注入 ,wall,log4j
+  filters: stat,wall,slf4j
+  # 配置 DruidStatFilter： 多数据源需要使用代码注册监控页面 Servlet
+  #web-stat-filter:
+  #  enabled: true
+  #  url-pattern: "/*"
+  #  exclusions: "/druid/*,*.html,*.htm,*.js,*.css,*.gif,*.jpg,*.bmp,*.png,*.ico,*.svg,*.ttf,*.woff,*.woff2"
+  # 配置DruidStatViewServlet： 多数据源需要使用代码注册监控页面 Servlet
+  #stat-view-servlet:
+  #  enabled: true
+  #  url-pattern: "/druid/*"
+  #  # IP白名单(没有配置或者为空，则允许所有访问)
+  #  #allow: 127.0.0.1,192.168.163.1
+  #  # IP黑名单 (存在共同时，deny优先于allow)
+  #  #deny: 192.168.1.73
+  #  # 禁用HTML页面上的“Reset All”功能
+  #  reset-enable: false
+  #  # 登录名
+  #  login-username: druid
+  #  # 登录密码
+  #  login-password: druid
+  filter:
+    # 数据库监控统计： StatFilter
+    stat:
+      # 记录慢 sql 配置
+      enabled: true
+      db-type: mysql
+      log-slow-sql: true
+      merge-sql: true
+      # 慢 sql 标准
+      slow-sql-millis: 5000
+    # 防火墙，防 sql 注入
+    wall:
+      db-type: mysql
+    slf4j:
+      enabled: true
+      data-source-log-enabled: false
+      connection-close-after-log-enabled: false
+      # 格式化 SQL
+      statement-executable-sql-log-enable: true
+      statement-close-after-log-enabled: false
+      result-set-log-enabled: false
+
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     druid: # https://github.com/alibaba/druid/tree/master/druid-spring-boot-starter
-      # 配置DruidStatFilter
-      web-stat-filter:
-        enabled: true
-        url-pattern: "/*"
-        exclusions: "/druid/*,*.html,*.htm,*.js,*.css,*.gif,*.jpg,*.bmp,*.png,*.ico,*.svg,*.ttf,*.woff,*.woff2"
-      # 配置DruidStatViewServlet
-      stat-view-servlet:
-        enabled: true
-        url-pattern: "/druid/*"
-        # IP白名单(没有配置或者为空，则允许所有访问)
-        #allow: 127.0.0.1,192.168.163.1
-        # IP黑名单 (存在共同时，deny优先于allow)
-        #deny: 192.168.1.73
-        # 禁用HTML页面上的“Reset All”功能
-        reset-enable: false
-        # 登录名
-        login-username: druid
-        # 登录密码
-        login-password: druid
-      filter:
-        slf4j:
-          enabled: true
-          result-set-log-enabled: false
-          # 格式化 SQL
-          statement-executable-sql-log-enable: true
-    master: # 主库：写
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/demo_main_master_db?autoReconnect=true&serverTimezone=GMT%2B8&useSSL=false
-      # 使用 @ConfigurationProperties 装配数据源时必须使用 jdbc-url 替代 url ，参考：https://docs.spring.io/spring-boot/docs/2.1.5.RELEASE/reference/htmlsingle/#howto-configure-a-datasource
-      jdbc-url: jdbc:mysql://localhost:3306/demo_main_master_db?autoReconnect=true&serverTimezone=GMT%2B8&useSSL=false
-      username: root
-      password: 111111
-      # 多数据源无法重用配置信息，必须单独配置 Druid
-      type: com.alibaba.druid.pool.DruidDataSource
-      # 连接池的配置信息
-      # 初始化大小，最小，最大
-      initial-size: 2
-      min-idle: 2
-      # 最大连接数建议 （CPU核核数 * 2 + 1）
-      max-active: 5
-      # 配置获取连接等待超时的时间
-      max-wait: 6000
-      # 打开PSCache，并且指定每个连接上PSCache的大小，是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。
-      pool-prepared-statements: false
-      #max-pool-prepared-statement-per-connection-size: 10
-      # 配置一个连接在池中最小生存的时间，单位是毫秒
-      #      minEvictableIdleTimeMillis: 300000
-      validation-query: SELECT 1
-      validation-query-timeout: 1
-      test-while-idle: true
-      test-on-borrow: false
-      test-on-return: false
-      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
-      time-between-eviction-runs-millis: 60000
-      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙 ,wall,log4j
-      filters: stat,slf4j
-      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
-      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-      #min-evictable-idle-time-millis: 30001
-      #async-close-connection-enable: true
+      master: # 主库：写
+        url: jdbc:mysql://localhost:3306/demo_main_master_db?autoReconnect=true&serverTimezone=GMT%2B8&useSSL=false
+        # 使用 @ConfigurationProperties 装配数据源时必须使用 jdbc-url 替代 url ，参考：https://docs.spring.io/spring-boot/docs/2.1.5.RELEASE/reference/htmlsingle/#howto-configure-a-datasource
+        jdbc-url: jdbc:mysql://localhost:3306/demo_main_master_db?autoReconnect=true&serverTimezone=GMT%2B8&useSSL=false
+        username: root
+        password: 111111
+        <<: *druid-config
     second: # 从库1：读
-      driver-class-name: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://localhost:3306/demo_main_slave1_db?autoReconnect=true&serverTimezone=GMT%2B8&useSSL=false
+        # 使用 @ConfigurationProperties 装配数据源时必须使用 jdbc-url 替代 url ，参考：https://docs.spring.io/spring-boot/docs/2.1.5.RELEASE/reference/htmlsingle/#howto-configure-a-datasource
       jdbc-url: jdbc:mysql://localhost:3306/demo_main_slave1_db?autoReconnect=true&serverTimezone=GMT%2B8&useSSL=false
       username: root
       password: 111111
-      type: com.alibaba.druid.pool.DruidDataSource
-      # 连接池的配置信息
-      # 初始化大小，最小，最大
-      initial-size: 2
-      min-idle: 2
-      # 最大连接数建议 （CPU核核数 * 2 + 1）
-      max-active: 5
-      # 配置获取连接等待超时的时间
-      max-wait: 6000
-      # 打开PSCache，并且指定每个连接上PSCache的大小，是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。
-      pool-prepared-statements: false
-      #max-pool-prepared-statement-per-connection-size: 10
-      # 配置一个连接在池中最小生存的时间，单位是毫秒
-      #      minEvictableIdleTimeMillis: 300000
-      validation-query: SELECT 1
-      validation-query-timeout: 1
-      test-while-idle: true
-      test-on-borrow: false
-      test-on-return: false
-      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
-      time-between-eviction-runs-millis: 60000
-      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙 ,wall,log4j
-      filters: stat,slf4j
-      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
-      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-      #min-evictable-idle-time-millis: 30001
-      #async-close-connection-enable: true
+        <<: *druid-config
     third: # 从库2：读
-      driver-class-name: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://localhost:3306/demo_main_slave2_db?autoReconnect=true&serverTimezone=GMT%2B8&useSSL=false
+        # 使用 @ConfigurationProperties 装配数据源时必须使用 jdbc-url 替代 url ，参考：https://docs.spring.io/spring-boot/docs/2.1.5.RELEASE/reference/htmlsingle/#howto-configure-a-datasource
       jdbc-url: jdbc:mysql://localhost:3306/demo_main_slave2_db?autoReconnect=true&serverTimezone=GMT%2B8&useSSL=false
       username: root
       password: 111111
-      type: com.alibaba.druid.pool.DruidDataSource
-      # 连接池的配置信息
-      # 初始化大小，最小，最大
-      initial-size: 2
-      min-idle: 2
-      # 最大连接数建议 （CPU核核数 * 2 + 1）
-      max-active: 5
-      # 配置获取连接等待超时的时间
-      max-wait: 6000
-      # 打开PSCache，并且指定每个连接上PSCache的大小，是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。
-      pool-prepared-statements: false
-      #max-pool-prepared-statement-per-connection-size: 10
-      # 配置一个连接在池中最小生存的时间，单位是毫秒
-      #      minEvictableIdleTimeMillis: 300000
-      validation-query: SELECT 1
-      validation-query-timeout: 1
-      test-while-idle: true
-      test-on-borrow: false
-      test-on-return: false
-      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
-      time-between-eviction-runs-millis: 60000
-      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙 ,wall,log4j
-      filters: stat,slf4j
-      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
-      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-      #min-evictable-idle-time-millis: 30001
-      #async-close-connection-enable: true
+        <<: *druid-config
   #    schema: classpath:schema.sql
   #    data: classpath:database-init.sql

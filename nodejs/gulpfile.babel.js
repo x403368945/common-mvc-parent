@@ -74,8 +74,13 @@ gulp.task('server', gulp.series('listener', () => {
 gulp.task('test', async () => {
     devConfig();
     await OpenDemoTest.of().testAll();
-    await DemoListTest.of().testAll(); //
     await UserTest.of().testAll(); // 测试用户相关的接口
+    await DemoListTest.of().testAll(); //
+});
+gulp.task('test:one', async () => {
+    devConfig();
+    (await UserTest.of().loginUserBasic())
+        .updateNickname(); // 测试用户相关的接口
 });
 
 gulp.task('mysql', async () => {

@@ -32,19 +32,6 @@ interface ISearch<E> {
     }
 
     /**
-     * 按ID查询对象，同时匹配 uuid
-     *
-     * @param id  {@link String} 数据ID
-     * @param uid {@link String} 数据 uuid
-     * @return {@link Optional<E>} 实体对象
-     */
-    default Optional<E> findByUid(@NotBlank(message = "【id】不能为空") final String id,
-                                  @NotNull(message = "【uid】不能为null") @Size(min = 32, max = 32, message = "【uid】长度必须是32位") final String uid) {
-//		return repository.findById(id, uid);
-        throw new NullPointerException(this.getClass().getName().concat("：方法【findByUid(final String id, final String uid)】未实现"));
-    }
-
-    /**
      * 按条件查询列表
      *
      * @param condition E 查询条件

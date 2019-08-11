@@ -12,13 +12,15 @@
     <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
     <property name="LOG_HOME" value="${CATALINA_HOME:-.}/logs"/>
     <contextName>${APP_NAME}</contextName>
-    <!-- 自定义日志采集参数：[%rid] 采集请求唯一标记 -->
-    <conversionRule conversionWord="rid" converterClass="com.log.RidConvert"/>
+
     <!-- 负责写日志,控制台日志 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- 一是把日志信息转换成字节数组,二是把字节数组写入到输出流 -->
+        <!--<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>-->
         <encoder>
-            <pattern>%highlight(%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%rid] : %m%n)</pattern>
+            <pattern>%highlight(%d{HH:mm:ss.SSS} %5level %50logger{50} [%X{rid}-%X{req.remoteHost}] : %m%n)</pattern>
             <charset>UTF-8</charset>
         </encoder>
     </appender>
@@ -27,7 +29,7 @@
     <appender name="DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_HOME}/${APP_NAME}.debug.log</file>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%rid]: %m%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} %5level %50logger{50} [%X{rid}-%X{req.remoteHost}] : %m%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
@@ -49,7 +51,7 @@
             <level>INFO</level>
         </filter>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %5level [%20thread] %50logger{50} [%rid]: %m%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} %5level %50logger{50} [%X{rid}-%X{req.remoteHost}] : %m%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
@@ -63,37 +65,12 @@
         </rollingPolicy>
     </appender>
 
-    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_HOME}/${APP_NAME}.error.log</file>
-        <!-- ThresholdFilter:临界值过滤器，过滤掉 ERROR 以下级别的日志 -->
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>ERROR</level>
-        </filter>
-        <encoder>
-            <pattern>%d %5level [%20thread] %50logger{50} [%rid]: %m%n</pattern>
-            <charset>UTF-8</charset>
-        </encoder>
-        <!--
-        - 按照固定窗口模式生成日志文件，当文件大于200MB时，生成新的日志文件。
-        - 最多保留21个文件
-        - 可以指定文件压缩选项
-        -->
-        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-            <fileNamePattern>${LOG_HOME}/${APP_NAME}.log.error%i.zip</fileNamePattern>
-            <minIndex>1</minIndex>
-            <maxIndex>21</maxIndex>
-        </rollingPolicy>
-        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <maxFileSize>200MB</maxFileSize>
-        </triggeringPolicy>
-    </appender>
-
     <!-- 异步输出 -->
     <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
         <!-- 设置为0表示不丢失日志；【默认值为-1，如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志】 -->
         <discardingThreshold>0</discardingThreshold>
         <!-- 更改默认的队列的深度,该值会影响性能.默认值为256 -->
-        <queueSize>512</queueSize>
+        <queueSize>256</queueSize>
         <!-- 添加附加的appender,最多只能添加一个 -->
         <appender-ref ref="DEBUG"/>
     </appender>
@@ -168,10 +145,9 @@
     -->
     <root level="DEBUG">
         <appender-ref ref="STDOUT"/>
-        <!--<appender-ref ref="DEBUG"/>-->
+        <appender-ref ref="DEBUG"/>
         <appender-ref ref="INFO"/>
-        <appender-ref ref="ERROR"/>
-        <appender-ref ref="ASYNC"/>
+        <!--<appender-ref ref="ASYNC"/>-->
         <!--<appender-ref ref="EXCEPTION"/>-->
     </root>
 </configuration>
