@@ -106,7 +106,7 @@ public class Pager {
     public <T> QueryResults<T> toQueryResults(final Page<T> page) {
         return new QueryResults<>(
                 page.getContent(),
-                (long) page.getSize(),
+                (long) limit(),
                 (long) offset(),
                 page.getTotalElements()
         );

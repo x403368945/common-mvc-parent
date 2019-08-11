@@ -141,7 +141,7 @@ public class Result<E> implements IJson {
     @Setter
     private long totalCount;
     /**
-     * 本次响应数据总行数FAILURE
+     * 本次响应数据总行数
      */
     @Getter
     @Setter
