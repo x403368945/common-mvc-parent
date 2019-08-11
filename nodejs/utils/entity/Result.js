@@ -108,13 +108,13 @@ export default class Result {
      * @param totalCount {number} 分页：总行数
      * @param rid {string} 本次请求代码
      * @param exception {string} 响应异常内容，用于开发调试，可能会携带堆栈信息，仅开发环境返回
-     * @param data {array} 后端响应数据
+     * @param data {Array} 后端响应数据
      * @param extras {object} 后端响应数据扩展
      * @param version {object} 版本信息，内含接口响应参数说明，，仅开发环境返回
      * @param res {object} 完整的 http 请求+响应结果
      * @return {Result}
      */
-    static of({v, code, message, rowCount, pageCount, totalCount, rid, exception, data, extras, version, res} = {}) {
+    static of({v = undefined, code = undefined, message = undefined, rowCount = undefined, pageCount = undefined, totalCount = undefined, rid = undefined, exception = undefined, data = undefined, extras = undefined, version = undefined, res = undefined} = {}) {
         return new Result(v, code, message, rowCount, pageCount, totalCount, rid, exception, data, extras, version, res);
     }
 
@@ -128,7 +128,7 @@ export default class Result {
      * @param totalCount {number} 分页：总行数
      * @param rid {string} 本次请求代码
      * @param exception {string} 响应异常内容，用于开发调试，可能会携带堆栈信息，仅开发环境返回
-     * @param data {array} 后端响应数据
+     * @param data {Array} 后端响应数据
      * @param extras {object} 后端响应数据扩展
      * @param version {object} 版本信息，内含接口响应参数说明，，仅开发环境返回
      * @param res {object} 完整的 http 请求+响应结果
@@ -177,7 +177,7 @@ export default class Result {
         this.exception = exception;
         /**
          * 响应数据
-         * @type {any}
+         * @type {Array}
          */
         this.data = data;
         /**
@@ -265,12 +265,14 @@ export default class Result {
      * 获取 extras 指定 key 的值，当获取值为有效值时执行 call(value) 方法
      * 返回当前 {@link Result} 对象，便于链式调用和重复操作响应结果
      * @param key {string} key 可以是有层级的，例如: ‘parent.child.name’ 将会按层级获取对象中的属性 {parent:{child:{name:‘value’}}}，更详细的规则请参考 lodash 库中的 get 方法
-     * @param call {Function<any>}
+     * @param nonNull {Function<any>} 参数非空时执行该方法
+     * @param hasNull {Function<any>} 参数为空时执行该方法
      * @return {Result}
      */
-    getExtras(key, call = (data) => {
-    }) {
-        call(get(key, this.extras));
+    getExtras(key, nonNull = (data) => ({}), hasNull = () => ({})) {
+        const value = get(key, this.extras);
+        if (undefined !== value && null != value) nonNull(value);
+        else hasNull();
         return this;
     }
 
@@ -298,6 +300,17 @@ export default class Result {
                 throw new Error(`【${this.code}】响应代码异常，预期值【SUCCESS】`)
             });
         }
+        return this;
+    }
+
+    /**
+     * 断言接口版本是否匹配，用于测试接口，直接抛出异常
+     * @return {Result}
+     */
+    assertVersion() {
+        this.getExtras('version', msg => {
+            throw new Error(`接口版本不匹配，当前最新版本号【${this.v}】:${msg}`)
+        });
         return this;
     }
 

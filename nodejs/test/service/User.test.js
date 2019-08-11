@@ -55,7 +55,7 @@ export default class UserTest {
      */
     async logout() {
         console.log(`> 退出 ----------------------------------------------------------------------------------------------------`);
-        (await UserVO.of().getService().logout()).print().assertCode();
+        (await UserVO.of().getService().logout()).print().assertVersion().assertCode();
         return this;
     }
 
@@ -64,7 +64,7 @@ export default class UserTest {
      */
     async getCurrentUser() {
         console.log(`> 获取当前登录用户信息 ----------------------------------------------------------------------------------------------------`);
-        (await UserVO.of().getService().getCurrentUser()).print().assertData();
+        (await UserVO.of().getService().getCurrentUser()).print().assertVersion().assertData();
         return this;
     }
 
@@ -74,7 +74,7 @@ export default class UserTest {
      */
     async updateNickname() {
         console.log(`> 修改昵称 ----------------------------------------------------------------------------------------------------`);
-        (await UserVO.of({nickname: '张三'}).getService().updateNickname()).print().assertCode();
+        (await UserVO.of({nickname: '张三'}).getService().updateNickname()).print().assertVersion().assertCode();
         return this;
     }
 
