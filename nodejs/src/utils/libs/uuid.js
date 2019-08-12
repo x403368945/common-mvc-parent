@@ -1,5 +1,5 @@
 /**
- * Created by Jason Xie on 2018/4/1.
+ * Created by Conor Xie on 2018/4/1.
  */
 export default () => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
   const r = Math.random() * 16 | 0;

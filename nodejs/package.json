@@ -8,7 +8,7 @@
     "dev": "babel-node src/start.js --port 9999",
     "start": "NODE_ENV=production forever start src/start.js --port 9999",
     "eslint": "eslint --ext .js src",
-    "utils": "npx babel utils --out-dir node_modules/utils",
+    "utils": "npx babel src/utils --out-dir node_modules/utils",
     "build": "npx babel src --out-dir dist"
   },
   "dependencies": {

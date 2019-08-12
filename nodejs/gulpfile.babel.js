@@ -11,19 +11,19 @@ import fs from 'fs'
 import path from 'path'
 import readline from 'readline'
 import _ from 'lodash';
-import './utils/string-prototype'
-import './utils/date-prototype'
+import './src/utils/string-prototype'
+import './src/utils/date-prototype'
 import xlsx from 'xlsx';
 import browser from 'browser-sync';
-import {query} from './utils/db-execute';
-import Paths from './utils/Paths';
+import {query} from './src/utils/db-execute';
+import Paths from './src/utils/Paths';
 import {Table} from './src/db2java';
-import Result from './utils/entity/Result';
-import {devConfig} from './src/service/config'
-import Asserts from './utils/asserts';
-import OpenDemoTest from './test/service/OpenDemo.test';
-import UserTest from './test/service/User.test';
-import DemoListTest from './test/service/DemoList.test';
+import Result from './src/utils/entity/Result';
+import {devConfig} from './src/api/config'
+import Asserts from './src/utils/asserts';
+import OpenDemoTest from './test/api/OpenDemo.test';
+import UserTest from './test/api/User.test';
+import DemoListTest from './test/api/DemoList.test';
 
 const web = browser.create();
 

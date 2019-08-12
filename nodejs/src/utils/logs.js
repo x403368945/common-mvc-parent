@@ -1,5 +1,5 @@
 /**
- * Created by Jason Xie on 2018/4/1.
+ * Created by Conor Xie on 2018/4/1.
  */
 import {parse} from 'path';
 import Paths from './Paths';
