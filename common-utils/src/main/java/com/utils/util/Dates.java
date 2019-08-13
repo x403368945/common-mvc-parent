@@ -149,12 +149,12 @@ public final class Dates {
         /**
          * 开始
          */
-        @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+        @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")
         private Timestamp begin;
         /**
          * 结束
          */
-        @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+        @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")
         private Timestamp end;
 
         /**

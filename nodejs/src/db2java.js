@@ -1,7 +1,7 @@
-import Paths from './utils/Paths';
 import gulp from 'gulp'
 import rename from 'gulp-rename';
 import template from 'gulp-template';
+import Paths from './utils/entity/Paths';
 
 /**
  * 数据库表信息

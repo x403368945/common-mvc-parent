@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>common-mvc-parent</artifactId>
-        <groupId>com.ccx</groupId>
+        <groupId>com.ccx.parent</groupId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
@@ -20,7 +20,7 @@
     <!-- spring-boot 特殊处理：pom 文件不一样 -->
     <dependencies>
         <dependency>
-            <groupId>com.ccx</groupId>
+            <groupId>com.ccx.parent</groupId>
             <artifactId>demo-main</artifactId>
             <version>1.0.0</version>
         </dependency>

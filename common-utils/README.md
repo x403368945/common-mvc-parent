@@ -22,7 +22,7 @@ mvn install
 maven 依赖
 ```
 <dependency>
-    <groupId>com.utils</groupId>
+    <groupId>com.ccx.utils.parent</groupId>
     <artifactId>common-utils</artifactId>
     <version>1.0.0</version>
     <exclusions>

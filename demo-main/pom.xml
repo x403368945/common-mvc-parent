@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>common-mvc-parent</artifactId>
-        <groupId>com.ccx</groupId>
+        <groupId>com.ccx.parent</groupId>
         <version>1.0.0</version>
         <!-- // spring-boot start >> -->
         <relativePath>../pom.xml</relativePath>
@@ -25,12 +25,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.ccx</groupId>
+            <groupId>com.ccx.parent</groupId>
             <artifactId>common-mvc</artifactId>
             <version>1.0.0</version>
         </dependency>
         <!--<dependency>
-            <groupId>com.ccx</groupId>
+            <groupId>com.ccx.parent</groupId>
             <artifactId>common-mongo</artifactId>
             <version>1.0.0</version>
         </dependency>-->

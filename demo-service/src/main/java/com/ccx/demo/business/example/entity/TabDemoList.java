@@ -134,7 +134,7 @@ public class TabDemoList implements
      * 修改时间
      */
     @Column(insertable = false, updatable = false)
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")
     @Null(groups = {ISave.class})
     private Timestamp modifyTime;
     /**

@@ -122,7 +122,7 @@ public class TabUser extends UserDetail implements IJson {
     /**
      * 修改时间
      */
-    @JSONField(serialize = false, deserialize = false, format = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(serialize = false, deserialize = false, format = "yyyy-MM-dd HH:mm:ss.SSS")
     @Column(insertable = false, updatable = false)
     private Timestamp modifyTime;
     /**

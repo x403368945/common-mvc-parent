@@ -67,7 +67,7 @@ public interface IUser {
 //     * 修改时间
 //     */
 //    @NotNull(groups = {ISave.class, IUpdate.class})
-//    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+//    @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")
 //    private Timestamp modifyTime;
 //    /**
 //     * 修改用户ID

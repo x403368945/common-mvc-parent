@@ -174,12 +174,12 @@ export default class DemoListTest {
     const sorts = [OrderBy.desc('modifyTime')];
     (await DemoListVO.of().getService().pageable()).print().assertVersion().assertData();
     (await DemoListVO.of({sorts}).getService().pageable()).print().assertVersion().assertData();
-    (await DemoListVO.of({amountRange, sorts}).getService().pageable()).print().assertVersion().assertData();
+    (await DemoListVO.of({amountRange, sorts}).getService().pageable()).print().assertVersion().assertCode();
     (await DemoListVO.of({
       createTimeRange,
       amountRange,
       sorts
-    }).getService().pageable()).print().assertVersion().assertData();
+    }).getService().pageable()).print().assertVersion().assertCode();
     return this;
   }
 

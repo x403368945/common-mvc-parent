@@ -16,11 +16,11 @@ import './src/utils/date-prototype'
 import xlsx from 'xlsx';
 import browser from 'browser-sync';
 import {query} from './src/utils/db-execute';
-import Paths from './src/utils/Paths';
+import Paths from './src/utils/entity/Paths';
 import {Table} from './src/db2java';
 import Result from './src/utils/entity/Result';
 import {devConfig} from './src/api/config'
-import Asserts from './src/utils/asserts';
+import Asserts from './src/utils/entity/Asserts';
 import OpenDemoTest from './test/api/OpenDemo.test';
 import UserTest from './test/api/User.test';
 import DemoListTest from './test/api/DemoList.test';

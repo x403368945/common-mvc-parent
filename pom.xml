@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.ccx</groupId>
+    <groupId>com.ccx.parent</groupId>
     <artifactId>common-mvc-parent</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
@@ -19,7 +19,8 @@
         <module>app-demo</module><!-- 组合打包所有发布模块，避免出现循环依赖 -->
         <module>app-demo-main</module><!-- 单独打包发布 -->
         <module>app-demo-service</module><!-- 单独打包发布 -->
-        <module>app-db-master-slave</module><!-- 单独打包发布 -->
+        <module>app-db-master-slave</module>
+        <module>app-sharding-jdbc</module><!-- 单独打包发布 -->
     </modules>
 
     <profiles>
@@ -135,14 +136,8 @@
         </dependencies>
     </dependencyManagement>
     <dependencies>
-        <!--
-            下载 common-utils 源码到 common-mvc-parent 目录
-            以下是 common-utils 源码地址，任选一个即可
-            https://gitee.com/xcc/common-utils
-            https://github.com/x403368945/common-utils
-        -->
         <dependency>
-            <groupId>com.utils</groupId>
+            <groupId>com.ccx.utils.parent</groupId>
             <artifactId>common-utils</artifactId>
             <version>1.0.0</version>
         </dependency>

@@ -75,7 +75,7 @@ spring:
           enabled: true
           data-source-log-enabled: false
           connection-close-after-log-enabled: false
-          # 格式化 SQL
+          # 格式化 SQL：com.alibaba.druid.filter.logging.LogFilter.logExecutableSql
           statement-executable-sql-log-enable: true
           statement-close-after-log-enabled: false
           result-set-log-enabled: false
