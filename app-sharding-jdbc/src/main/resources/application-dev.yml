@@ -78,7 +78,7 @@ druid-config: &druid-config
 spring:
   shardingsphere:
     datasource:
-      names: master,second,third
+      names: master,second,third,remote
       master:
         type: com.alibaba.druid.pool.DruidDataSource
         url: jdbc:mysql://localhost:3306/demo_main_master_db?autoReconnect=true&serverTimezone=GMT%2B8&useSSL=false
