@@ -37,9 +37,9 @@ import java.util.Objects;
 public class AuthService implements UserDetailsService {
 
     private static final List<TabUser> USERS = Arrays.asList(
-            TabUser.builder().id(1L).uid(Util.uuid()).username("admin").role(Role.ROLE_ADMIN)
+            TabUser.builder().id(1L).uid(Util.uuid32()).username("admin").role(Role.ROLE_ADMIN)
                     .password(new BCryptPasswordEncoder().encode("admin")).deleted(Radio.NO).build(),
-            TabUser.builder().id(2L).uid(Util.uuid()).username("user").role(Role.ROLE_USER)
+            TabUser.builder().id(2L).uid(Util.uuid32()).username("user").role(Role.ROLE_USER)
                     .password(new BCryptPasswordEncoder().encode("111111")).deleted(Radio.NO).build()
     );
 

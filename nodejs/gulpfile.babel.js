@@ -178,20 +178,20 @@ gulp db:java --db demo_main_db --table tab_demo_list --template all_id_long_uid 
 --port {端口：默认 3306}
     `);
     const {
-        db: database = 'smart_city_db',
-        host = 'localhost',
-        user = 'root',
-        password = '111111',
+        db: database = 'wt_test',
+        host = 'rm-uf6pe409hq0wdt4pjko.mysql.rds.aliyuncs.com',
+        user = 'wttest',
+        password = 'sj_111111',
         port = '3306',
 
         // 表名
-        table = 'tab_menu',
+        table = 'tab_work_orde',
         // 模块名
-        module = '../demo-main',
+        module = '../smart-city-projects/smart-city-server/sc-manage',
         // 包名(也会作为文件输出目录)
-        pkg = 'com.ccx.demo',
+        pkg = 'com.ccx.smart.city',
         // 模板代码存放目录名
-        template = 'all_id_long_uid'
+        template = 'all_simple_id_long_uid'
     } = options;
     const mysql = require('mysql');
     console.log([{database, host, user, password, port, table, template, pkg}]);

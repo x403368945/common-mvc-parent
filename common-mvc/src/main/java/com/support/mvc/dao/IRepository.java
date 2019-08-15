@@ -24,9 +24,22 @@ public interface IRepository<E, ID> extends ISearchRepository<E> {
      * @param id  ID 数据ID
      * @param uid String uuid
      * @return {@link Optional<E>} 查询结果
+     * @deprecated 方法已重命名，请使用 {@link IRepository#findByUid(Object, String)}
      */
+    @Deprecated
     default Optional<E> findById(final ID id, final String uid) {
         throw new NullPointerException(this.getClass().getName().concat("：方法【findById(final ID id, final String uid)】未实现"));
+    }
+
+    /**
+     * 按 ID 和 uuid 查询
+     *
+     * @param id  ID 数据ID
+     * @param uid String uuid
+     * @return {@link Optional<E>} 查询结果
+     */
+    default Optional<E> findByUid(final ID id, final String uid) {
+        throw new NullPointerException(this.getClass().getName().concat("：方法【findByUidId(final ID id, final String uid)】未实现"));
     }
 
     /**

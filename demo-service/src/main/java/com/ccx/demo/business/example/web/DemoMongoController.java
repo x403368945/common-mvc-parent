@@ -85,7 +85,7 @@ public class DemoMongoController implements IAuthController<String> {
                         ))
                         .build()
                         .demo(v -> v.setDemo(
-                                URL.SERVER.append(v.formatUrl(Util.uuid())), // 当前接口参考案例请求地址；
+                                URL.SERVER.append(v.formatUrl(Util.uuid32())), // 当前接口参考案例请求地址；
                                 DemoMongo.builder() // 当前接口参考案例请求参数，一般demo中存放必填字段或者所有字段
                                         .name("JX")
                                         .modifyTime(Dates.now().timestamp())
@@ -116,7 +116,7 @@ public class DemoMongoController implements IAuthController<String> {
                                 "1.当前版本变更说明"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(Util.uuid())))) // 当前接口参考案例请求地址；
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(Util.uuid32())))) // 当前接口参考案例请求地址；
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
@@ -138,7 +138,7 @@ public class DemoMongoController implements IAuthController<String> {
                                 "1.当前版本变更说明"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(Util.uuid())))) // 当前接口参考案例请求地址；
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(Util.uuid32())))) // 当前接口参考案例请求地址；
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
@@ -162,7 +162,7 @@ public class DemoMongoController implements IAuthController<String> {
                                 .build()
                                 .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl()), // 当前接口参考案例请求地址；
                                         // 方案1：按 ID 逻辑删除
-                                        Arrays.asList(Util.uuid(), Util.uuid())
+                                        Arrays.asList(Util.uuid32(), Util.uuid32())
                                         // 方案2：按 ID 和 UUID 逻辑删除
 //                                Arrays.asList(
 //                                        DemoMongo.builder().id(Util.uuid()).build(),
@@ -218,7 +218,7 @@ public class DemoMongoController implements IAuthController<String> {
                                 "1.当前版本变更说明"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(Util.uuid(), Dates.now().getTimeMillis())))) // 当前接口参考案例请求地址；
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(Util.uuid32(), Dates.now().getTimeMillis())))) // 当前接口参考案例请求地址；
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号

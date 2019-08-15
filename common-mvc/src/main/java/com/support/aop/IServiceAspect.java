@@ -184,7 +184,7 @@ public interface IServiceAspect {
                 set(obj, "id", null);
             }
             if (service.uid()) { // 生成 uuid 填充到新增对象 uid 字段
-                set(obj, "uid", Util.uuid());
+                set(obj, "uid", Util.uuid32());
             }
             if (service.user()) { // 将当前操作用户填充到新增对象 createUserId|modifyUserId 字段
                 set(obj, "createUserId", userId);
@@ -215,7 +215,7 @@ public interface IServiceAspect {
         @SuppressWarnings("unchecked")
         private static void beanSaveMongo(final MongoServiceAspect service, final Object obj, final Object userId, final Optional<String> nickname) {
             if (service.id()) { // mongodb 不支持自增，设置为uuid
-                set(obj, "id", Util.uuid());
+                set(obj, "id", Util.uuid32());
             }
             if (service.user()) { // 将当前操作用户填充到新增对象 createUserId|modifyUserId 字段
                 set(obj, "createUserId", userId);

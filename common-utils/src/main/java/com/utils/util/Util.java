@@ -6,6 +6,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
+
 import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.text.MessageFormat;
@@ -30,8 +31,19 @@ public final class Util {
      * 获取UUID；中间的 - 剔除
      *
      * @return String
+     * @deprecated 方法名有歧义，已重命名为：{@link com.utils.util.Util#uuid32()}
      */
+    @Deprecated
     public static String uuid() {
+        return UUID.randomUUID().toString().replace("-", "");
+    }
+
+    /**
+     * 获取UUID；中间的 - 剔除
+     *
+     * @return String
+     */
+    public static String uuid32() {
         return UUID.randomUUID().toString().replace("-", "");
     }
 
@@ -638,7 +650,7 @@ public final class Util {
     }
 
     public static void main(String[] args) {
-        log.info(uuid());
+        log.info(uuid32());
         log.info("RandomStringUtils.random : {}",
                 JSON.toJSONString(
                         Stream.iterate(0, n -> n + 1).limit(10)

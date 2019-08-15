@@ -88,7 +88,7 @@ public class RequestId extends MDCInsertingServletFilter {
      */
     public static class UuidAdapter implements IRidAdapter {
         public String getRid() {
-            return Util.uuid();
+            return Util.uuid32();
         }
     }
 

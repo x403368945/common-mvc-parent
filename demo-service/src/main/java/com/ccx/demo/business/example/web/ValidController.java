@@ -88,7 +88,7 @@ public class ValidController implements IAuthController<Long> {
     @ResponseBody
     public Result<?> notEmpty(@PathVariable final int version) {
         return new Result<>(1).execute(result -> {
-            if (0 == version) result.setSuccess(service.notEmpty(Collections.singletonList(Util.uuid())));
+            if (0 == version) result.setSuccess(service.notEmpty(Collections.singletonList(Util.uuid32())));
             if (1 == version) result.setSuccess(service.notEmpty(null));
             if (2 == version) result.setSuccess(service.notEmpty(Collections.emptyList()));
             if (3 == version) result.setSuccess(service.notEmpty(Collections.singletonList("")));
@@ -311,7 +311,7 @@ public class ValidController implements IAuthController<Long> {
         return new Result<TabValid>(1).call(() -> {
             {
                 if (0 == version)
-                    service.update(1L, user.getId(), TabValid.builder().uid(Util.uuid()).label(Strings.repeat("测试", 5)).value((short) 1).content(Strings.repeat("内容", 15)).build());
+                    service.update(1L, user.getId(), TabValid.builder().uid(Util.uuid32()).label(Strings.repeat("测试", 5)).value((short) 1).content(Strings.repeat("内容", 15)).build());
                 if (1 == version) service.update(null, null, null);
                 if (2 == version) service.update(0L, 0L, TabValid.builder().build());
                 if (3 == version) service.update(1L, user.getId(), TabValid.builder().build());
@@ -323,7 +323,7 @@ public class ValidController implements IAuthController<Long> {
             }
             {
                 if (7 == version)
-                    service.update(1L, TabValid.builder().uid(Util.uuid()).label(Strings.repeat("测试", 5)).value((short) 1).content(Strings.repeat("内容", 15)).build());
+                    service.update(1L, TabValid.builder().uid(Util.uuid32()).label(Strings.repeat("测试", 5)).value((short) 1).content(Strings.repeat("内容", 15)).build());
                 if (8 == version) service.update(null, null);
                 if (9 == version) service.update(0L, TabValid.builder().build());
                 if (10 == version) service.update(1L, TabValid.builder().build());
@@ -365,13 +365,13 @@ public class ValidController implements IAuthController<Long> {
                                  @PathVariable final String uid) {
         return new Result<>(1).call(() -> {
             {
-                if (0 == version) service.deleteByUid(id, Util.uuid(), user.getId());
+                if (0 == version) service.deleteByUid(id, Util.uuid32(), user.getId());
                 if (1 == version) service.deleteByUid(null, null, null);
                 if (2 == version) service.deleteByUid(0L, "", 0L);
                 if (3 == version) service.deleteByUid(1L, "1", 1L);
             }
             {
-                if (4 == version) service.deleteByUid(id, Util.uuid());
+                if (4 == version) service.deleteByUid(id, Util.uuid32());
                 if (5 == version) service.deleteByUid(null, null);
                 if (6 == version) service.deleteByUid(0L, "");
                 if (7 == version) service.deleteByUid(1L, "1");
@@ -408,14 +408,14 @@ public class ValidController implements IAuthController<Long> {
                                      @PathVariable final String uid) {
         return new Result<>(1).call(() -> {
             {
-                if (0 == version) service.markDeleteByUid(id, Util.uuid(), user.getId());
+                if (0 == version) service.markDeleteByUid(id, Util.uuid32(), user.getId());
                 if (1 == version) service.markDeleteByUid(null, null, null);
                 if (2 == version) service.markDeleteByUid(0L, "", 0L);
                 if (3 == version) service.markDeleteByUid(1L, "1", 1L);
             }
             {
 
-                if (4 == version) service.markDeleteByUid(id, Util.uuid());
+                if (4 == version) service.markDeleteByUid(id, Util.uuid32());
                 if (5 == version) service.markDeleteByUid(null, null);
                 if (6 == version) service.markDeleteByUid(0L, "");
                 if (7 == version) service.markDeleteByUid(1L, "1");
@@ -432,7 +432,7 @@ public class ValidController implements IAuthController<Long> {
         return new Result<>(1).call(() -> {
             {
                 if (0 == version)
-                    service.markDelete(Collections.singletonList(TabValid.builder().id(1L).uid(Util.uuid()).build()), user.getId());
+                    service.markDelete(Collections.singletonList(TabValid.builder().id(1L).uid(Util.uuid32()).build()), user.getId());
                 if (1 == version) service.markDelete(null, null);
                 if (2 == version) service.markDelete(Collections.emptyList(), 0L);
                 if (3 == version) service.markDelete(Collections.singletonList(TabValid.builder().build()), 0L);
@@ -441,7 +441,7 @@ public class ValidController implements IAuthController<Long> {
             }
             {
                 if (5 == version)
-                    service.markDelete(Collections.singletonList(TabValid.builder().id(1L).uid(Util.uuid()).build()));
+                    service.markDelete(Collections.singletonList(TabValid.builder().id(1L).uid(Util.uuid32()).build()));
                 if (6 == version) service.markDelete(null);
                 if (7 == version) service.markDelete(Collections.emptyList());
                 if (8 == version) service.markDelete(Collections.singletonList(TabValid.builder().build()));
@@ -474,7 +474,7 @@ public class ValidController implements IAuthController<Long> {
                                         @PathVariable final String uid,
                                         @PathVariable final long timestamp) {
         return new Result<TabValid>(1).execute(result -> {
-            if (0 == version) result.setSuccess(service.findByUid(1L, Util.uuid()).orElse(null));
+            if (0 == version) result.setSuccess(service.findByUid(1L, Util.uuid32()).orElse(null));
             if (1 == version) result.setSuccess(service.findByUid(null, null).orElse(null));
             if (2 == version) result.setSuccess(service.findByUid(0L, "0").orElse(null));
         });

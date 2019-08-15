@@ -83,7 +83,7 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
                         .demo(v -> v.setDemo(
                                 URL.SERVER.append(v.formatUrl(100)), // 当前接口参考案例请求地址；
                                 <%=TabName%>.builder() // 当前接口参考案例请求参数，一般demo中存放必填字段或者所有字段
-                                        .uid(Util.uuid())
+                                        .uid(Util.uuid32())
 //                                            .modifyTime(Dates.now().timestamp())
                                         .build()
                         ))
@@ -135,7 +135,7 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
                             "1. <%=comment%>"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100, Util.uuid())))) // 当前接口参考案例请求地址；
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100, Util.uuid32())))) // 当前接口参考案例请求地址；
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
@@ -180,7 +180,7 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
                             "1. <%=comment%>"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100, Util.uuid())))) // 当前接口参考案例请求地址；
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100, Util.uuid32())))) // 当前接口参考案例请求地址；
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
@@ -207,8 +207,8 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
                                 // Arrays.asList(100, 101, 102)
                                 // 方案2：按 ID 和 UUID 逻辑删除
                                 Arrays.asList(
-                                        <%=TabName%>.builder().id(100L).uid(Util.uuid()).build(),
-                                        <%=TabName%>.builder().id(101L).uid(Util.uuid()).build()
+                                        <%=TabName%>.builder().id(100L).uid(Util.uuid32()).build(),
+                                        <%=TabName%>.builder().id(101L).uid(Util.uuid32()).build()
                                 )
                         ))
                 )
@@ -285,7 +285,7 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
                                 "1. <%=comment%>"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100, Util.uuid())))) // 当前接口参考案例请求地址；
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100, Util.uuid32())))) // 当前接口参考案例请求地址；
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
@@ -310,7 +310,7 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
                             "1. <%=comment%>"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100, Util.uuid(), Dates.now().getTimeMillis())))) // 当前接口参考案例请求地址；
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100, Util.uuid32(), Dates.now().getTimeMillis())))) // 当前接口参考案例请求地址；
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
