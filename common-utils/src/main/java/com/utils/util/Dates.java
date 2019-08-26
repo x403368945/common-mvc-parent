@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -211,6 +212,22 @@ public final class Dates {
                 action.accept(beginDate.firstDayOfMonth().timestamp(), beginDate.lastDayOfMonth().timestamp());
                 beginDate.addMonth(1);
             } while (beginDate.le(endDate));
+        }
+
+        /**
+         * 选定区间：按天归集为集合
+         *
+         * @return {@link List<String>}
+         */
+        public List<String> dayArray(final Pattern pattern) {
+            final Dates beginDate = Dates.of(begin);
+            final Dates endDate = Dates.of(end).endTimeOfDay();
+            final ArrayList<String> list = new ArrayList<>();
+            do {
+                list.add(beginDate.format(pattern));
+                beginDate.addDay(1);
+            } while (beginDate.le(endDate));
+            return list;
         }
 
         /**
@@ -816,14 +833,17 @@ public final class Dates {
      * 比对两个日期
      * <pre>
      *     小于 destDate 返回 -1；左小，右大；2018-01-01 | 2018-01-02=-1
-     *     大于 destDate 返回 1； 右大，左小；2018-01-02 | 2018-01-01= 1
+     *     大于 destDate 返回 1； 左大，右小；2018-01-02 | 2018-01-01= 1
      *     相等返回 0
      *
      * @param destDate Dates
      * @return int
      */
     public int compare(Dates destDate) {
-        return this.obj.compareTo(destDate.get());
+        final long value = this.getTimeMillis() - destDate.getTimeMillis();
+        if (value < 0) return -1;
+        if (value > 0) return 1;
+        return 0;
     }
 
     /**

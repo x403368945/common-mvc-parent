@@ -1,5 +1,6 @@
 package com.ccx.demo.config;
 
+import com.alibaba.druid.filter.logging.Slf4jLogFilter;
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
@@ -7,6 +8,8 @@ import com.ccx.demo.tl.DBContext;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -50,7 +53,7 @@ public class DBConfig {
     /**
      * 主库：数据源
      *
-     * @return {@link DataSource}
+     * @return {@link javax.sql.DataSource}
      */
 //    @Primary
     @Bean("masterDataSource")
@@ -63,7 +66,7 @@ public class DBConfig {
     /**
      * 从库1：数据源
      *
-     * @return {@link DataSource}
+     * @return {@link javax.sql.DataSource}
      */
     @Bean("secondDataSource")
     @ConfigurationProperties("spring.datasource.druid.second")
@@ -74,7 +77,7 @@ public class DBConfig {
     /**
      * 从库2：数据源
      *
-     * @return {@link DataSource}
+     * @return {@link javax.sql.DataSource}
      */
     @Bean("thirdDataSource")
     @ConfigurationProperties("spring.datasource.druid.third")
@@ -88,7 +91,7 @@ public class DBConfig {
      * @param masterDataSource {@link DBConfig#masterDataSource()}
      * @param secondDataSource {@link DBConfig#secondDataSource()}
      * @param thirdDataSource  {@link DBConfig#thirdDataSource()}
-     * @return {@link AbstractRoutingDataSource} extend {@link DataSource}
+     * @return {@link org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource} extend {@link javax.sql.DataSource}
      */
     @Bean("routingDataSource")
     public DataSource routingDataSource(@Qualifier("masterDataSource") DataSource masterDataSource,
@@ -120,7 +123,7 @@ public class DBConfig {
      * 多数据源的事务管理解决方案，很多采用了同时开启所有数据源事务、同时提交的策略，例如：阿里的 cobar 解决方案等
      *
      * @param routingDataSource {@link DBConfig#routingDataSource(DataSource, DataSource, DataSource)} ()}
-     * @return {@link LazyConnectionDataSourceProxy}
+     * @return {@link org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy}
      */
     @Bean
     @Primary
@@ -136,7 +139,7 @@ public class DBConfig {
     /**
      * 注册 {@link com.alibaba.druid.support.http.StatViewServlet}
      *
-     * @return {@link ServletRegistrationBean}
+     * @return {@link org.springframework.boot.web.servlet.ServletRegistrationBean}
      */
     @Bean
     public ServletRegistrationBean druidStatViewServlet() {
@@ -158,7 +161,7 @@ public class DBConfig {
     /**
      * 注册 {@link com.alibaba.druid.support.http.WebStatFilter}
      *
-     * @return {@link FilterRegistrationBean}
+     * @return {@link org.springframework.boot.web.servlet.FilterRegistrationBean}
      */
     @Bean
     public FilterRegistrationBean druidStatFilter() {
@@ -168,5 +171,19 @@ public class DBConfig {
         // 添加不需要忽略的格式信息.
         filter.addInitParameter("exclusions", "/druid/*,*.html,*.htm,*.js,*.css,*.gif,*.jpg,*.bmp,*.png,*.ico,*.svg,*.ttf,*.woff,*.woff2");
         return filter;
+    }
+
+    /**
+     * 注册日志打印格式，
+     * 参考：{@link com.alibaba.druid.spring.boot.autoconfigure.stat.DruidFilterConfiguration}
+     *
+     * @return {@link com.alibaba.druid.filter.logging.Slf4jLogFilter}
+     */
+    @Bean
+    @ConfigurationProperties("spring.datasource.druid.filter.slf4j")
+    @ConditionalOnProperty(prefix = "spring.datasource.druid.filter.slf4j", name = "enabled")
+    @ConditionalOnMissingBean
+    public Slf4jLogFilter slf4jLogFilter() {
+        return new Slf4jLogFilter();
     }
 }

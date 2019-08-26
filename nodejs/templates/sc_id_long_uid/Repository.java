@@ -27,13 +27,13 @@ public interface <%=JavaName%>Repository extends
         IRepository<<%=TabName%>, <%=id%>> {
     Q<%=TabName%> q = Q<%=TabName%>.<%=tabName%>;
 
-    @Override
-    default long update(final <%=id%> id, final Long userId, final <%=TabName%> obj) {
-        return obj.update(jpaQueryFactory.<JPAQueryFactory>get().update(q))
-                .get()
-                .where(q.id.eq(id).and(q.uid.eq(obj.getUid())).and(q.modifyTime.eq(obj.getModifyTime())))
-                .execute();
-    }
+//    @Override
+//    default long update(final <%=id%> id, final Long userId, final <%=TabName%> obj) {
+//        return obj.update(jpaQueryFactory.<JPAQueryFactory>get().update(q))
+//                .get()
+//                .where(q.id.eq(id).and(q.uid.eq(obj.getUid())).and(q.modifyTime.eq(obj.getModifyTime())))
+//                .execute();
+//    }
 
 //    @Override
 //    default <%=TabName%> deleteById(final <%=id%> id, final Long userId) {

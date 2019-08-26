@@ -1,12 +1,9 @@
 package com.ccx.demo.business.example.service;
 
-import com.ccx.demo.business.example.dao.jpa.DemoListRepository;
-import com.ccx.demo.business.example.entity.TabDemoList;
-import com.ccx.demo.business.user.bordcast.IUserEvent;
-import com.google.common.eventbus.Subscribe;
+import com.ccx.demo.business.example.dao.jpa.ConvertRepository;
+import com.ccx.demo.business.example.entity.TabConvert;
 import com.querydsl.core.QueryResults;
 import com.support.aop.annotations.ServiceAspect;
-import com.support.config.BusConfig.EventBusListener;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.exception.DeleteRowsException;
 import com.support.mvc.exception.UpdateRowsException;
@@ -19,51 +16,39 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * 服务接口实现类：
+ * 服务接口实现类：测试自定义 Convert 表
  *
- *
- * @author 谢长春 on 2018-12-17
+ * @author 谢长春 on 2019-08-21
  */
 @Slf4j
 @Service
 @ServiceAspect
-@EventBusListener
-public class DemoListService implements IService<TabDemoList> {
+public class ConvertService implements IService<TabConvert> {
     @Autowired
-    private DemoListRepository repository;
-
-    /**
-     * 监听用户昵称变更广播
-     *
-     * @param obj {@link IUserEvent.NicknameUpdate}
-     */
-    @Subscribe
-    public void listener(final IUserEvent.NicknameUpdate obj) {
-        repository.updateNickName(obj.getId(), obj.getNickname());
-    }
+    private ConvertRepository repository;
 
     @Override
-    public TabDemoList save(final TabDemoList obj, final Long userId) {
+    public TabConvert save(final TabConvert obj, final Long userId) {
         return repository.save(obj);
     }
 
     @Override
-    public List<TabDemoList> saveAll(final List<TabDemoList> list, final Long userId) {
+    public List<TabConvert> saveAll(final List<TabConvert> list, final Long userId) {
         return repository.saveAll(list);
     }
 
     @Override
-    public void update(final Long id, final Long userId, final TabDemoList obj) {
+    public void update(final Long id, final Long userId, final TabConvert obj) {
         UpdateRowsException.asserts(repository.update(id, userId, obj));
     }
 
     @Override
-    public TabDemoList deleteById(final Long id, final Long userId) {
+    public TabConvert deleteById(final Long id, final Long userId) {
         return repository.deleteById(id, userId);
     }
 
     @Override
-    public TabDemoList deleteByUid(final Long id, final String uid, final Long userId) {
+    public TabConvert deleteByUid(final Long id, final String uid, final Long userId) {
         return repository.deleteByUid(id, uid, userId);
     }
 
@@ -83,27 +68,27 @@ public class DemoListService implements IService<TabDemoList> {
     }
 
     @Override
-    public void markDelete(final List<TabDemoList> list, final Long userId) {
+    public void markDelete(final List<TabConvert> list, final Long userId) {
         DeleteRowsException.warn(repository.markDelete(list, userId), list.size());
     }
 
     @Override
-    public Optional<TabDemoList> findById(final Long id) {
+    public Optional<TabConvert> findById(final Long id) {
         return repository.findById(id);
     }
 
     @Override
-    public Optional<TabDemoList> findByUid(final Long id, final String uid) {
+    public Optional<TabConvert> findByUid(final Long id, final String uid) {
         return repository.findByUid(id, uid);
     }
 
     @Override
-    public List<TabDemoList> findList(final TabDemoList condition) {
+    public List<TabConvert> findList(final TabConvert condition) {
         return repository.findList(condition);
     }
 
     @Override
-    public QueryResults<TabDemoList> findPage(final TabDemoList condition, final Pager pager) {
+    public QueryResults<TabConvert> findPage(final TabConvert condition, final Pager pager) {
         return repository.findPage(condition, Pager.rebuild(pager));
     }
 }

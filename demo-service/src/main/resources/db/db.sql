@@ -35,3 +35,23 @@ CREATE TABLE tab_demo_list (
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_general_ci COMMENT '测试案例表';
 
+-- 测试自定义 Convert 表
+DROP TABLE IF EXISTS tab_convert;
+CREATE TABLE tab_convert (
+    `id`             BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL COMMENT '数据ID，主键自增',
+    `uid`            CHAR(32)                          NOT NULL COMMENT '数据UUID，缓存和按ID查询时可使用强校验',
+    `ids`            JSON                              NULL COMMENT '{@link List<Long>}',
+    `images`         JSON                              NULL COMMENT '{@link List<String>}',
+    `items`          JSON                              NULL COMMENT '{@link List<com.support.mvc.entity.base.Item>}',
+    `item`           JSON                              NULL COMMENT '{@link com.support.mvc.entity.base.Item}',
+    `createTime`     TIMESTAMP                         NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `createUserId`   BIGINT                            NOT NULL COMMENT '创建用户ID',
+    `modifyTime`     TIMESTAMP(3)                      NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '修改时间',
+    `modifyUserId`   BIGINT                            NOT NULL COMMENT '修改用户ID',
+    `deleted`        TINYINT(1) UNSIGNED               NOT NULL DEFAULT 0 COMMENT '是否逻辑删除（1、已删除， 0、未删除）',
+    KEY (`uid`)
+)
+    ENGINE InnoDB
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_general_ci COMMENT '测试自定义 Convert 表';
+

@@ -58,9 +58,9 @@ import java.util.Properties;
 //        entityManagerFactory.setDataSource(dataSource());
 //        entityManagerFactory.setJpaVendorAdapter(jpaVendorAdapter());
 //        entityManagerFactory.setJpaProperties(hibernateProperties());
-//        entityManagerFactory.setPackagesToScan("com.ccx");
+//        entityManagerFactory.setPackagesToScan("com.ccx"); // 设置实体类所在位置
 //        entityManagerFactory.setPersistenceProviderClass(HibernatePersistenceProvider.class);
-////        entityManagerFactory.setPersistenceUnitName("");
+////        entityManagerFactory.setPersistenceUnitName(""); // 持久化单元创建一个默认即可，多个便要分别命名
 //        return entityManagerFactory;
 //    }
 //

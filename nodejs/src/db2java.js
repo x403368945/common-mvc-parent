@@ -359,7 +359,7 @@ export class BaseAdapter {
       default: ({name, db_name, dataType, notNull, unsigned, length, fixed}) => {
         const list = [];
         if (notNull) list.push(`    @NotNull`);
-        if (db_name.startsWith('is_')) list.push(`    @Column(name = "${db_name}")`); // 数据库自字段 is_ 开头的特殊处理
+        if (db_name.includes('_')) list.push(`    @Column(name = "${db_name}")`); // 数据库自字段 is_ 开头的特殊处理
         switch (dataType.name) {
           case 'TINYINT':
             if (unsigned) {
