@@ -25,7 +25,7 @@
 -- 用户表
 DROP TABLE IF EXISTS tab_user;
 CREATE TABLE tab_user (
-    `id`             BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL COMMENT '数据ID，主键自增',
+    `id`             BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '数据ID，主键自增',
     `uid`            VARCHAR(32)                       NOT NULL COMMENT '用户UUID，缓存和按ID查询时可使用强校验',
     `subdomain`      VARCHAR(10)                       NOT NULL DEFAULT '' COMMENT '子域名用户组',
     `username`       VARCHAR(15)                       NOT NULL COMMENT '登录名',
@@ -51,7 +51,7 @@ CREATE TABLE tab_user (
 -- 用户登录记录表
 DROP TABLE IF EXISTS tab_user_login;
 CREATE TABLE tab_user_login (
-    `id`        BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL COMMENT '数据ID，主键自增',
+    `id`        BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '数据ID，主键自增',
     `userId`    BIGINT                            NOT NULL COMMENT '用户ID，tab_user.id',
     `timestamp` TIMESTAMP(3)                      NOT NULL DEFAULT CURRENT_TIMESTAMP(3) COMMENT '登录时间',
     KEY (`timestamp`)
@@ -63,7 +63,7 @@ CREATE TABLE tab_user_login (
 -- mysql + mongo 镜像
 -- DROP TABLE IF EXISTS tab_demo_jpa_mongo;
 -- CREATE TABLE tab_demo_jpa_mongo (
---   `id`             BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL COMMENT '数据ID，主键自增',
+--   `id`             BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '数据ID，主键自增',
 --   `uid`            CHAR(32)                          NOT NULL COMMENT '数据UUID，缓存和按ID查询时可使用强校验',
 --   `name`           VARCHAR(50)                       NOT NULL COMMENT '姓名',
 --   `phone`          VARCHAR(50)                       NOT NULL DEFAULT '' COMMENT '手机',
@@ -78,7 +78,7 @@ CREATE TABLE tab_user_login (
 -- 测试表
 DROP TABLE IF EXISTS tab_demo_list;
 CREATE TABLE tab_demo_list (
-    `id`             BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL COMMENT '数据ID，主键自增',
+    `id`             BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '数据ID，主键自增',
     `uid`            CHAR(32)                          NOT NULL COMMENT '数据UUID，缓存和按ID查询时可使用强校验',
     `name`           VARCHAR(50)                       NOT NULL DEFAULT '' COMMENT '名称',
     `content`        TEXT                              NULL COMMENT '内容',

@@ -101,7 +101,7 @@ gulp.task('mysql', async () => {
     port: '3306'
   });
   connection.connect();
-  connection.query(`SELECT * FROM tab_demo_list;`,
+  connection.query('SELECT * FROM tab_demo_list;',
     (err, result) => {
       if (err) {
         console.error('[SELECT ERROR] - ', err.message);
@@ -124,11 +124,16 @@ gulp.task('markdown', async () => {
     port: '3306'
   });
   connection.connect();
-  const tables = await query(connection, `SHOW TABLE STATUS FROM demo_main_db`)
+  const tables = await query(connection, 'SHOW TABLE STATUS FROM demo_main_db')
     .then(async result => {
       // console.table(result);
       return result.map(({Name, Engine, Collation, Comment}) =>
-        Object.assign({name: Name, engine: Engine, collation: Collation, comment: Comment}));
+        Object.assign({
+          name: Name,
+          engine: Engine,
+          collation: Collation,
+          comment: Comment
+        }));
     });
   console.table(tables);
   for (let i = 0, len = tables.length; i < len; i++) {
@@ -138,13 +143,13 @@ gulp.task('markdown', async () => {
     writer.write(`select * from ${name}\n\n`);
     { // markdown 字段表格部分
       writer.write('|字段|类型|允许空|默认值|描述|\n');
-      writer.write(`|----|----|----|----|----|\n`);
-      let columns = await query(connection, `SHOW FULL COLUMNS FROM  ${name}`);
+      writer.write('|----|----|----|----|----|\n');
+      const columns = await query(connection, `SHOW FULL COLUMNS FROM  ${name}`);
       columns.forEach(({Field, Type, Collation, Null, Default, Comment}) =>
         writer.write(`|${Field}|${Type}|${Null}|${Default || ''}|${Collation ? Collation + ',' : ''}${Comment}|\n`));
       // console.log(columns);
     }
-    writer.write(`\n\n\n`);
+    writer.write('\n\n\n');
     // { // DDL 部分
     //     writer.write('```mysql\n');
     //     let [{Table: tableName, 'Create Table': ddl}] = await query(connection, `SHOW CREATE TABLE ${tables[i].name}`);
@@ -194,14 +199,29 @@ gulp.task('db:java', async () => {
     template = 'all_id_long_uid'
   } = options;
   const mysql = require('mysql');
-  console.log([{database, host, user, password, port, table, template, pkg}]);
-  const connection = mysql.createConnection({database, host, user, password, port});
+  console.log([{
+    database,
+    host,
+    user,
+    password,
+    port,
+    table,
+    template,
+    pkg
+  }]);
+  const connection = mysql.createConnection({
+    database,
+    host,
+    user,
+    password,
+    port
+  });
   connection.connect();
   const tables = await query(connection, `SHOW TABLE STATUS FROM ${database} `.concat(table && `where Name = '${table}'`));
   console.table(tables);
   for (let i = 0, len = tables.length; i < len; i++) {
     const table = new Table(tables[i]);
-    let columns = await query(connection, `SHOW FULL COLUMNS FROM ${table.name}`);
+    const columns = await query(connection, `SHOW FULL COLUMNS FROM ${table.name}`);
     console.table(columns);
     // console.log(table)
     table.setColumns(columns)
@@ -245,7 +265,7 @@ gulp.task('read:line', () => {
 
 gulp.task('xlsx', () => {
   const wb = xlsx.readFile(
-    `./temp/数据文件.xls`
+    './temp/数据文件.xls'
   );
   const file = 'temp/数据文件.sql';
   const writer = fs.createWriteStream(file);
@@ -269,10 +289,24 @@ gulp.task('xlsx', () => {
 
 gulp.task('exec', () => {
   const proc = require('child_process');
-  proc.exec('dir', function (error, stdout, stderr) {
+  proc.exec('ls', function (error, stdout, stderr) {
     console.log(stdout);
     if (error !== null) {
       console.log('exec error: ' + error);
     }
+  });
+});
+
+gulp.task('stdout', () => {
+  process.stdin.setEncoding('utf8');
+  process.stdin.on('readable', () => {
+    const chunk = process.stdin.read();
+    if (chunk) {
+      process.stdout.write(`data: ${chunk}`);
+      process.exitCode = 1;
+    }
+  });
+  process.stdin.on('end', () => {
+    process.stdout.write('end');
   });
 });
