@@ -190,7 +190,9 @@ gulp.task('db:java', async () => {
     port = '3306',
 
     // 表名
-    table = 'tab_convert',
+    table = [
+      'tab_convert'
+    ],
     // 模块名
     module = 'demo-service',
     // 包名(也会作为文件输出目录)
@@ -217,7 +219,7 @@ gulp.task('db:java', async () => {
     port
   });
   connection.connect();
-  const tables = await query(connection, `SHOW TABLE STATUS FROM ${database} `.concat(table && `where Name = '${table}'`));
+  const tables = await query(connection, `SHOW TABLE STATUS FROM ${database} `.concat(table && `where Name in ('${table.join("','")}')`));
   console.table(tables);
   for (let i = 0, len = tables.length; i < len; i++) {
     const table = new Table(tables[i]);
@@ -234,7 +236,6 @@ gulp.task('db:java', async () => {
   }
   connection.end();
 });
-
 gulp.task('in:out', () => {
   const writer = fs.createWriteStream(path.resolve('src/out.tmp'));
   writer.on('close', () => console.log('end'));
