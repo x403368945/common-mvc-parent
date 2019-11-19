@@ -15,10 +15,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
@@ -36,51 +39,516 @@ import static com.utils.util.Dates.Pattern.*;
 public final class Dates {
     private static final ZoneId ZONE_ID = ZoneId.of("GMT+8");
 
+    public interface IPattern {
+        /**
+         * 日期 + 时间 格式化对象
+         *
+         * @return {@link DateTimeFormatter}
+         */
+        DateTimeFormatter getFormatter();
+
+        /**
+         * 转换为日期操作对象
+         *
+         * @param value String 日期
+         * @return {@link Dates}
+         */
+        Dates parse(final String value);
+
+        /**
+         * 获取日期字符
+         *
+         * @return {@link String}
+         */
+        String now();
+
+        /**
+         * 格式化日期
+         *
+         * @param value {@link LocalDateTime}
+         * @return {@link String}
+         */
+        String format(final LocalDateTime value);
+
+        /**
+         * 格式化日期
+         *
+         * @param value {@link LocalDate}
+         * @return {@link String}
+         */
+        String format(final LocalDate value);
+
+        /**
+         * 格式化日期
+         *
+         * @param value {@link LocalTime}
+         * @return {@link String}
+         */
+        String format(final LocalTime value);
+
+        /**
+         * 格式化日期
+         *
+         * @param value {@link Timestamp}
+         * @return {@link String}
+         */
+        String format(final Timestamp value);
+
+        /**
+         * 格式化日期
+         *
+         * @param value {@link Date} or {@link Timestamp}
+         * @return {@link String}
+         */
+        String format(final Date value);
+    }
+
+    public interface IDateTimePatternAdapter extends IPattern {
+        default String now() {
+            return LocalDateTime.now().format(getFormatter());
+        }
+
+        default String format(final LocalDateTime value) {
+            return value.format(getFormatter());
+        }
+
+        default String format(final LocalDate value) {
+            return value.atStartOfDay().format(getFormatter());
+        }
+
+        default String format(final LocalTime value) {
+            return value.atDate(LocalDate.now()).format(getFormatter());
+        }
+
+        default String format(final Timestamp value) {
+            return value.toLocalDateTime().format(getFormatter());
+        }
+
+        default String format(final Date value) {
+            return getFormatter().format(value.toInstant());
+        }
+    }
+
+    public interface IDatePatternAdapter extends IPattern {
+        default String now() {
+            return LocalDate.now().format(getFormatter());
+        }
+
+        default String format(final LocalDateTime value) {
+            return value.toLocalDate().format(getFormatter());
+        }
+
+        default String format(final LocalDate value) {
+            return value.format(getFormatter());
+        }
+
+        default String format(final LocalTime value) {
+            throw new IllegalArgumentException("无法将 LocalTime 格式化成 LocalDate");
+        }
+
+        default String format(final Timestamp value) {
+            return value.toLocalDateTime().toLocalDate().format(getFormatter());
+        }
+
+        default String format(final Date value) {
+            return getFormatter().format(LocalDate.from(value.toInstant()));
+        }
+    }
+
+    public interface ITimePatternAdapter extends IPattern {
+        default String now() {
+            return LocalTime.now().format(getFormatter());
+        }
+
+        default String format(final LocalDateTime value) {
+            return value.toLocalTime().format(getFormatter());
+        }
+
+        default String format(final LocalDate value) {
+            throw new IllegalArgumentException("无法将 LocalDate 格式化成 LocalTime");
+        }
+
+        default String format(final LocalTime value) {
+            return value.format(getFormatter());
+        }
+
+        default String format(final Timestamp value) {
+            return value.toLocalDateTime().toLocalTime().format(getFormatter());
+        }
+
+        default String format(final Date value) {
+            return getFormatter().format(LocalTime.from(value.toInstant()));
+        }
+    }
+
     /**
      * 枚举：定义日期格式
      */
-    public enum Pattern {
-//        yyyy("yyyy"),
-//        MM("MM"),
-//        dd("dd"),
-//        HH("HH"),
-//        mm("mm"),
-//        ss("ss"),
+    public enum Pattern implements IPattern {
+        yyyy_MM_dd_HH_mm_ss_SSS("yyyy-MM-dd HH:mm:ss.SSS", new IDateTimePatternAdapter() {
+            @Override
+            public DateTimeFormatter getFormatter() {
+                return yyyy_MM_dd_HH_mm_ss_SSS.formatter;
+            }
 
-        yyyy_MM_dd_HH_mm_ss_SSS("yyyy-MM-dd HH:mm:ss.SSS"),
-        yyyy_MM_dd_HH_mm_ss("yyyy-MM-dd HH:mm:ss"),
-        yyyy_MM_dd("yyyy-MM-dd"),
-        yyyy_MM("yyyy-MM"),
-        yy_MM_dd("yy-MM-dd"),
-        HH_mm_ss("HH:mm:ss"),
-        HH_mm("HH:mm"),
+            @Override
+            public Dates parse(final String value) {
+                try {
+                    return Dates.of(LocalDateTime.parse(value, getFormatter()));
+                } catch (DateTimeParseException e) {
+                    try {
+                        return Dates.of(LocalDateTime.parse(value, yyyy_MM_dd_HH_mm_ss.formatter));
+                    } catch (DateTimeParseException ex) {
+                        return Dates.of(LocalDate.parse(value, yyyy_MM_dd.formatter));
+                    }
+                }
+            }
+        }),
+        yyyy_MM_dd_HH_mm_ss("yyyy-MM-dd HH:mm:ss", new IDateTimePatternAdapter() {
+            @Override
+            public DateTimeFormatter getFormatter() {
+                return yyyy_MM_dd_HH_mm_ss.formatter;
+            }
 
-        yyyyMMddHHmmssSSS("yyyyMMddHHmmssSSS"),
-        yyyyMMddHHmmss("yyyyMMddHHmmss"),
-        yyyyMMdd("yyyyMMdd"),
-        yyyyMM("yyyyMM"),
-        HHmmssSSS("HHmmssSSS"),
-        HHmmss("HHmmss"),
+            @Override
+            public Dates parse(final String value) {
+                try {
+                    return Dates.of(LocalDateTime.parse(value, getFormatter()));
+                } catch (DateTimeParseException e) {
+                    try {
+                        return Dates.of(LocalDateTime.parse(value, yyyy_MM_dd_HH_mm_ss_SSS.formatter));
+                    } catch (DateTimeParseException ex) {
+                        return Dates.of(LocalDate.parse(value, yyyy_MM_dd.formatter));
+                    }
+                }
+            }
+        }),
+        yyyy_MM_dd("yyyy-MM-dd", new IDatePatternAdapter() {
+            @Override
+            public DateTimeFormatter getFormatter() {
+                return yyyy_MM_dd.formatter;
+            }
 
-        zh_yyyy_MM_dd_HH_mm_ss("yyyy年MM月dd日 HH时mm分"),
-        zh_yyyy_MM_dd("yyyy年MM月dd日"),
-        zh_yyyy_MM("yyyy年MM月"),
+            @Override
+            public Dates parse(final String value) {
+                try {
+                    return Dates.of(LocalDate.parse(value, getFormatter()));
+                } catch (DateTimeParseException e) {
+                    try {
+                        return Dates.of(LocalDateTime.parse(value, yyyy_MM_dd_HH_mm_ss_SSS.formatter));
+                    } catch (DateTimeParseException ex) {
+                        return Dates.of(LocalDateTime.parse(value, yyyy_MM_dd_HH_mm_ss.formatter));
+                    }
+                }
+            }
+        }),
+        yyyy_MM("yyyy-MM", new IDatePatternAdapter() {
+            @Override
+            public DateTimeFormatter getFormatter() {
+                return yyyy_MM.formatter;
+            }
+
+            @Override
+            public Dates parse(final String value) {
+                try {
+                    return Dates.of(YearMonth.parse(value, getFormatter()).atDay(1));
+                } catch (Exception e) {
+                    return yyyy_MM_dd.parse(value);
+                }
+            }
+        }),
+        yy_MM_dd("yy-MM-dd", new IDatePatternAdapter() {
+            @Override
+            public DateTimeFormatter getFormatter() {
+                return yy_MM_dd.formatter;
+            }
+
+            @Override
+            public Dates parse(final String value) {
+                return Dates.of(LocalDate.parse(value, getFormatter()));
+            }
+        }),
+        HH_mm_ss("HH:mm:ss", new ITimePatternAdapter() {
+            @Override
+            public DateTimeFormatter getFormatter() {
+                return HH_mm_ss.formatter;
+            }
+
+            @Override
+            public Dates parse(final String value) {
+                try {
+                    return Dates.of(LocalTime.parse(value, getFormatter()));
+                } catch (DateTimeParseException e) {
+                    try {
+                        return Dates.of(LocalDateTime.parse(value, yyyy_MM_dd_HH_mm_ss_SSS.formatter));
+                    } catch (DateTimeParseException ex) {
+                        return Dates.of(LocalDateTime.parse(value, yyyy_MM_dd_HH_mm_ss.formatter));
+                    }
+                }
+            }
+        }),
+        HH_mm("HH:mm", new ITimePatternAdapter() {
+            @Override
+            public DateTimeFormatter getFormatter() {
+                return HH_mm.formatter;
+            }
+
+            @Override
+            public Dates parse(final String value) {
+                try {
+                    return Dates.of(LocalTime.parse(value, getFormatter()));
+                } catch (Exception e) {
+                    return Dates.of(LocalTime.parse(value));
+                }
+            }
+        }),
+        yyyyMMddHHmmssSSS("yyyyMMddHHmmssSSS",
+                new DateTimeFormatterBuilder().appendPattern("yyyyMMddHHmmss").appendValue(ChronoField.MILLI_OF_SECOND, 3).toFormatter(),
+                new IDateTimePatternAdapter() {
+                    @Override
+                    public DateTimeFormatter getFormatter() {
+                        return yyyyMMddHHmmssSSS.formatter;
+                    }
+
+                    @Override
+                    public Dates parse(final String value) {
+                        return Dates.of(LocalDateTime.parse(value, getFormatter()));
+//                try {
+//                    return Dates.of(LocalDateTime.parse(value, getFormatter()));
+//                } catch (DateTimeParseException e) {
+//                    try {
+//                        return Dates.of(LocalDateTime.parse(value, yyyyMMddHHmmss.formatter));
+//                    } catch (DateTimeParseException ex) {
+//                        return Dates.of(LocalDate.parse(value, yyyyMMdd.formatter));
+//                    }
+//                }
+                    }
+                }),
+        yyyyMMddHHmmss("yyyyMMddHHmmss", new IDateTimePatternAdapter() {
+            @Override
+            public DateTimeFormatter getFormatter() {
+                return yyyyMMddHHmmss.formatter;
+            }
+
+            @Override
+            public Dates parse(final String value) {
+                try {
+                    return Dates.of(LocalDateTime.parse(value, getFormatter()));
+                } catch (DateTimeParseException e) {
+                    try {
+                        return Dates.of(LocalDateTime.parse(value, yyyyMMddHHmmssSSS.formatter));
+                    } catch (DateTimeParseException ex) {
+                        return Dates.of(LocalDate.parse(value, yyyyMMdd.formatter));
+                    }
+                }
+            }
+        }),
+        yyyyMMdd("yyyyMMdd", new IDatePatternAdapter() {
+            @Override
+            public DateTimeFormatter getFormatter() {
+                return yyyyMMdd.formatter;
+            }
+
+            @Override
+            public Dates parse(final String value) {
+                try {
+                    return Dates.of(LocalDate.parse(value, getFormatter()));
+                } catch (DateTimeParseException e) {
+                    try {
+                        return Dates.of(LocalDateTime.parse(value, yyyyMMddHHmmssSSS.formatter));
+                    } catch (DateTimeParseException ex) {
+                        return Dates.of(LocalDateTime.parse(value, yyyyMMddHHmmss.formatter));
+                    }
+                }
+            }
+        }),
+        yyyyMM("yyyyMM", new IDatePatternAdapter() {
+            @Override
+            public DateTimeFormatter getFormatter() {
+                return yyyyMM.formatter;
+            }
+
+            @Override
+            public Dates parse(final String value) {
+                return Dates.of(YearMonth.parse(value, getFormatter()).atDay(1));
+            }
+        }),
+        HHmmssSSS("HHmmssSSS", new ITimePatternAdapter() {
+            @Override
+            public DateTimeFormatter getFormatter() {
+                return HHmmssSSS.formatter;
+            }
+
+            @Override
+            public Dates parse(final String value) {
+                try {
+                    return Dates.of(LocalTime.parse(value, getFormatter()));
+                } catch (DateTimeParseException e) {
+                    try {
+                        return Dates.of(LocalDateTime.parse(value, yyyyMMddHHmmssSSS.formatter));
+                    } catch (DateTimeParseException ex) {
+                        return Dates.of(LocalDateTime.parse(value, yyyyMMddHHmmss.formatter));
+                    }
+                }
+            }
+        }),
+        HHmmss("HHmmss", new ITimePatternAdapter() {
+            @Override
+            public DateTimeFormatter getFormatter() {
+                return HHmmss.formatter;
+            }
+
+            @Override
+            public Dates parse(final String value) {
+                return Dates.of(LocalTime.parse(value, getFormatter()));
+            }
+        }),
+
+        U_yyyy_MM_dd_HH_mm_ss_SSS("yyyy/MM/dd HH:mm:ss.SSS", new IDateTimePatternAdapter() {
+            @Override
+            public DateTimeFormatter getFormatter() {
+                return U_yyyy_MM_dd_HH_mm_ss_SSS.formatter;
+            }
+
+            @Override
+            public Dates parse(final String value) {
+                try {
+//                    return Dates.of(LocalDateTime.parse(value.replace("/", "-"), yyyy_MM_dd_HH_mm_ss_SSS.formatter));
+                    return Dates.of(LocalDateTime.parse(value, getFormatter()));
+                } catch (DateTimeParseException e) {
+                    try {
+                        return Dates.of(LocalDateTime.parse(value, U_yyyy_MM_dd_HH_mm_ss.formatter));
+                    } catch (DateTimeParseException ex) {
+                        return Dates.of(LocalDate.parse(value, U_yyyy_MM_dd.formatter));
+                    }
+                }
+            }
+        }),
+        U_yyyy_MM_dd_HH_mm_ss("yyyy/MM/dd HH:mm:ss", new IDateTimePatternAdapter() {
+            @Override
+            public DateTimeFormatter getFormatter() {
+                return U_yyyy_MM_dd_HH_mm_ss.formatter;
+            }
+
+            @Override
+            public Dates parse(final String value) {
+                try {
+                    return Dates.of(LocalDateTime.parse(value, getFormatter()));
+                } catch (DateTimeParseException e) {
+                    try {
+                        return Dates.of(LocalDateTime.parse(value, U_yyyy_MM_dd_HH_mm_ss_SSS.formatter));
+                    } catch (DateTimeParseException ex) {
+                        return Dates.of(LocalDate.parse(value, U_yyyy_MM_dd.formatter));
+                    }
+                }
+            }
+        }),
+        U_yyyy_MM_dd("yyyy/MM/dd", new IDatePatternAdapter() {
+            @Override
+            public DateTimeFormatter getFormatter() {
+                return U_yyyy_MM_dd.formatter;
+            }
+
+            @Override
+            public Dates parse(final String value) {
+                try {
+                    return Dates.of(LocalDate.parse(value, getFormatter()));
+                } catch (DateTimeParseException e) {
+                    try {
+                        return Dates.of(LocalDateTime.parse(value, U_yyyy_MM_dd_HH_mm_ss.formatter));
+                    } catch (DateTimeParseException ex) {
+                        return Dates.of(LocalDateTime.parse(value, U_yyyy_MM_dd_HH_mm_ss_SSS.formatter));
+                    }
+                }
+            }
+        }),
+
+        zh_yyyy_MM_dd_HH_mm_ss("yyyy年MM月dd日 HH时mm分ss秒", new IDateTimePatternAdapter() {
+            @Override
+            public DateTimeFormatter getFormatter() {
+                return zh_yyyy_MM_dd_HH_mm_ss.formatter;
+            }
+
+            @Override
+            public Dates parse(final String value) {
+                return Dates.of(LocalDateTime.parse(value, getFormatter()));
+            }
+        }),
+        zh_yyyy_MM_dd_HH_mm("yyyy年MM月dd日 HH时mm分", new IDateTimePatternAdapter() {
+            @Override
+            public DateTimeFormatter getFormatter() {
+                return zh_yyyy_MM_dd_HH_mm.formatter;
+            }
+
+            @Override
+            public Dates parse(final String value) {
+                return Dates.of(LocalDateTime.parse(value, getFormatter()));
+            }
+        }),
+        zh_yyyy_MM_dd("yyyy年MM月dd日", new IDatePatternAdapter() {
+            @Override
+            public DateTimeFormatter getFormatter() {
+                return zh_yyyy_MM_dd.formatter;
+            }
+
+            @Override
+            public Dates parse(final String value) {
+                return Dates.of(LocalDate.parse(value, getFormatter()));
+            }
+        }),
+        zh_yyyy_MM("yyyy年MM月", new IDatePatternAdapter() {
+            @Override
+            public DateTimeFormatter getFormatter() {
+                return zh_yyyy_MM.formatter;
+            }
+
+            @Override
+            public Dates parse(final String value) {
+                return Dates.of(YearMonth.parse(value, getFormatter()).atDay(1));
+            }
+        }),
         ;
         /**
          * 枚举属性说明
          */
         private final String comment;
         private final DateTimeFormatter formatter;
+        /**
+         * 不要使用非线程安全的 java 日期工具类
+         */
+        @Deprecated
         private final SimpleDateFormat format;
+        /**
+         * 日期+时间处理适配器
+         */
+        private final IPattern adapter;
 
         public String value() {
             return this.comment;
         }
 
-        Pattern(final String comment) {
+        Pattern(final String comment, final IPattern adapter) {
+            this(comment, DateTimeFormatter.ofPattern(comment), adapter);
+        }
+
+        Pattern(final String comment, final DateTimeFormatter dateTimeFormatter, final IPattern adapter) {
             this.comment = comment;
-            this.formatter = DateTimeFormatter.ofPattern(comment);
-            this.format = new SimpleDateFormat(comment);
+            this.formatter = dateTimeFormatter;
+            this.format = new SimpleDateFormat(comment, Locale.CHINA);
+            this.adapter = adapter;
+        }
+
+        /**
+         * 不要使用非线程安全的 java 日期工具类
+         */
+        @Deprecated
+        public SimpleDateFormat getFormat() {
+            return format;
+        }
+
+        @Override
+        public DateTimeFormatter getFormatter() {
+            return this.formatter;
         }
 
         /**
@@ -89,7 +557,7 @@ public final class Dates {
          * @return {@link String}
          */
         public String now() {
-            return LocalDateTime.now(ZONE_ID).format(formatter);
+            return adapter.now();
         }
 
         /**
@@ -99,22 +567,7 @@ public final class Dates {
          * @return {@link Dates}
          */
         public Dates parse(final String value) {
-            try {
-                return Dates.of(format.parse(value));
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
-            // TODO java 8 新的日期操作类，格式化容错率太低了
-//            try {
-//                return new Dates(LocalDateTime.parse(value, formatter));
-//            } catch (DateTimeException e) {
-//                try {
-//                    return new Dates(LocalDate.parse(value, formatter));
-//                } catch (DateTimeException e1) {
-//                    return new Dates(LocalTime.parse(value, formatter));
-//                }
-//            }
-//            return new Dates(LocalDateTime.parse(value, formatter));
+            return Objects.isNull(value) ? null : adapter.parse(value);
         }
 
         /**
@@ -124,7 +577,37 @@ public final class Dates {
          * @return {@link String}
          */
         public String format(final LocalDateTime value) {
-            return value.format(formatter);
+            return Objects.isNull(value) ? null : adapter.format(value);
+        }
+
+        /**
+         * 格式化日期
+         *
+         * @param value {@link LocalDate}
+         * @return {@link String}
+         */
+        public String format(final LocalDate value) {
+            return Objects.isNull(value) ? null : adapter.format(value);
+        }
+
+        /**
+         * 格式化日期
+         *
+         * @param value {@link LocalTime}
+         * @return {@link String}
+         */
+        public String format(final LocalTime value) {
+            return Objects.isNull(value) ? null : adapter.format(value);
+        }
+
+        /**
+         * 格式化日期
+         *
+         * @param value {@link Timestamp}
+         * @return {@link String}
+         */
+        public String format(final Timestamp value) {
+            return Objects.isNull(value) ? null : adapter.format(value);
         }
 
         /**
@@ -134,7 +617,7 @@ public final class Dates {
          * @return {@link String}
          */
         public String format(final Date value) {
-            return format.format(value);
+            return Objects.isNull(value) ? null : adapter.format(value);
         }
     }
 
@@ -212,22 +695,6 @@ public final class Dates {
                 action.accept(beginDate.firstDayOfMonth().timestamp(), beginDate.lastDayOfMonth().timestamp());
                 beginDate.addMonth(1);
             } while (beginDate.le(endDate));
-        }
-
-        /**
-         * 选定区间：按天归集为集合
-         *
-         * @return {@link List<String>}
-         */
-        public List<String> dayArray(final Pattern pattern) {
-            final Dates beginDate = Dates.of(begin);
-            final Dates endDate = Dates.of(end).endTimeOfDay();
-            final ArrayList<String> list = new ArrayList<>();
-            do {
-                list.add(beginDate.format(pattern));
-                beginDate.addDay(1);
-            } while (beginDate.le(endDate));
-            return list;
         }
 
         /**
@@ -331,7 +798,7 @@ public final class Dates {
      */
     public static Dates of(final LocalTime value) {
         Objects.requireNonNull(value, "参数【value】是必须的");
-        return new Dates(value.atDate(LocalDate.now(ZONE_ID)));
+        return new Dates(value.atDate(LocalDate.now()));
     }
 
     /**
@@ -363,7 +830,7 @@ public final class Dates {
      * @return {@link Dates}
      */
     public static Dates of(final long value) {
-        return new Dates(new Timestamp(value).toLocalDateTime());
+        return new Dates(LocalDateTime.ofInstant(Instant.ofEpochMilli(value), ZoneId.systemDefault()));
     }
 
     /**
@@ -372,16 +839,13 @@ public final class Dates {
      * @param value   String 日期字符串
      * @param pattern {@link Pattern} 日期格式
      * @return {@link Dates}
+     * @deprecated 替代方法 {@link Pattern#parse(String)}
      */
+    @Deprecated
     public static Dates of(final String value, final Pattern pattern) {
         Objects.requireNonNull(value, "参数【value】是必须的");
         Objects.requireNonNull(pattern, "参数【pattern】是必须的");
-        try {
-            return of(new SimpleDateFormat(pattern.value()).parse(value).getTime());
-//            return pattern.parse(value); // LocalDateTime 容错性低，格式必须完全匹配才能转换
-        } catch (ParseException e) {
-            throw new IllegalArgumentException(String.format("日期转换失败，value:%s > pattern:%s", value, pattern));
-        }
+        return pattern.parse(value);
     }
 
     /**
@@ -415,17 +879,16 @@ public final class Dates {
                 default:
                     throw new IllegalArgumentException("未识别的日期格式:".concat(value));
             }
-            return of(new SimpleDateFormat(pattern).parse(value).getTime());
+            return of(new SimpleDateFormat(pattern, Locale.CHINA).parse(value).getTime());
 //            return new Dates(LocalDateTime.parse(value, DateTimeFormatter.ofPattern(pattern)));
         } catch (ParseException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             throw new IllegalArgumentException(String.format("日期转换失败，value:%s", value));
         }
     }
 
-
     private Dates() {
-        this.obj = LocalDateTime.now();
+        this.value = LocalDateTime.now();
     }
 
     private Dates(final LocalTime value) {
@@ -437,16 +900,16 @@ public final class Dates {
     }
 
     private Dates(final LocalDateTime value) {
-        this.obj = value;
+        this.value = value;
     }
 
-    private LocalDateTime obj;
+    private LocalDateTime value;
 
     /**
      * @return {@link LocalDateTime}
      */
     public LocalDateTime get() {
-        return obj;
+        return value;
     }
 
     /**
@@ -455,7 +918,7 @@ public final class Dates {
      * @return long
      */
     public long getTimeMillis() {
-        return Timestamp.valueOf(obj).getTime();
+        return Timestamp.valueOf(value).getTime();
     }
 
     /**
@@ -464,7 +927,7 @@ public final class Dates {
      * @return {@link Timestamp}
      */
     public Timestamp timestamp() {
-        return Timestamp.valueOf(obj);
+        return Timestamp.valueOf(value);
     }
 
     /**
@@ -473,7 +936,7 @@ public final class Dates {
      * @return {@link Date}
      */
     public Date date() {
-        return Timestamp.valueOf(obj);
+        return Timestamp.valueOf(value);
     }
 
     /**
@@ -484,7 +947,7 @@ public final class Dates {
      */
     public String format(final Pattern pattern) {
         Objects.requireNonNull(pattern, "参数【pattern】是必须的");
-        return pattern.format(obj);
+        return pattern.format(value);
     }
 
     /**
@@ -492,10 +955,12 @@ public final class Dates {
      *
      * @param pattern {@link Pattern}
      * @return String
+     * @deprecated 方法已废弃，请使用线程安全的日期函数 {@link this#format(Pattern)}
      */
+    @Deprecated
     public String format(final String pattern) {
         Objects.requireNonNull(pattern, "参数【pattern】是必须的");
-        return obj.format(DateTimeFormatter.ofPattern(pattern));
+        return value.format(DateTimeFormatter.ofPattern(pattern));
     }
 
     /**
@@ -504,7 +969,7 @@ public final class Dates {
      * @return String
      */
     public String formatDate() {
-        return yyyy_MM_dd.format(obj);
+        return yyyy_MM_dd.format(value);
     }
 
     /**
@@ -513,7 +978,7 @@ public final class Dates {
      * @return String
      */
     public String formatTime() {
-        return HH_mm_ss.format(obj);
+        return HH_mm_ss.format(value);
     }
 
     /**
@@ -522,7 +987,7 @@ public final class Dates {
      * @return String
      */
     public String formatDateTime() {
-        return yyyy_MM_dd_HH_mm_ss.format(obj);
+        return yyyy_MM_dd_HH_mm_ss.format(value);
     }
 
     /**
@@ -531,7 +996,7 @@ public final class Dates {
      * @return int
      */
     public int year() {
-        return obj.getYear();
+        return value.getYear();
     }
 
     /**
@@ -540,7 +1005,7 @@ public final class Dates {
      * @return int
      */
     public int month() {
-        return obj.getMonthValue();
+        return value.getMonthValue();
     }
 
     /**
@@ -549,7 +1014,7 @@ public final class Dates {
      * @return int
      */
     public int day() {
-        return obj.getDayOfMonth();
+        return value.getDayOfMonth();
     }
 
     /**
@@ -558,7 +1023,7 @@ public final class Dates {
      * @return {@link Week}
      */
     public Week week() {
-        return Week.values()[obj.getDayOfWeek().ordinal()];
+        return Week.values()[value.getDayOfWeek().ordinal()];
     }
 
     /**
@@ -567,7 +1032,7 @@ public final class Dates {
      * @return int
      */
     public int h() {
-        return obj.getHour();
+        return value.getHour();
     }
 
     /**
@@ -576,7 +1041,7 @@ public final class Dates {
      * @return int
      */
     public int m() {
-        return obj.getMinute();
+        return value.getMinute();
     }
 
     /**
@@ -585,7 +1050,7 @@ public final class Dates {
      * @return int
      */
     public int s() {
-        return obj.getSecond();
+        return value.getSecond();
     }
 
     /**
@@ -594,7 +1059,7 @@ public final class Dates {
      * @return int
      */
     public int ns() {
-        return obj.getNano();
+        return value.getNano();
     }
 
     /**
@@ -604,7 +1069,7 @@ public final class Dates {
      * @return {@link Dates}
      */
     public Dates year(int value) {
-        obj = obj.withYear(value);
+        this.value = this.value.withYear(value);
         return this;
     }
 
@@ -615,7 +1080,7 @@ public final class Dates {
      * @return {@link Dates}
      */
     public Dates month(int value) {
-        obj = obj.withMonth(Math.min(12, value));
+        this.value = this.value.withMonth(Math.min(12, value));
         return this;
     }
 
@@ -626,7 +1091,7 @@ public final class Dates {
      * @return {@link Dates}
      */
     public Dates day(int value) {
-        obj = obj.withDayOfMonth(Math.min(value, obj.with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth()));
+        this.value = this.value.withDayOfMonth(Math.min(value, this.value.with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth()));
         return this;
     }
 
@@ -637,7 +1102,7 @@ public final class Dates {
      * @return {@link Dates}
      */
     public Dates h(int value) {
-        obj = obj.withHour(Math.min(23, value));
+        this.value = this.value.withHour(Math.min(23, value));
         return this;
     }
 
@@ -648,7 +1113,7 @@ public final class Dates {
      * @return {@link Dates}
      */
     public Dates m(int value) {
-        obj = obj.withMinute(Math.min(59, value));
+        this.value = this.value.withMinute(Math.min(59, value));
         return this;
     }
 
@@ -659,7 +1124,7 @@ public final class Dates {
      * @return {@link Dates}
      */
     public Dates s(int value) {
-        obj = obj.withSecond(Math.min(59, value));
+        this.value = this.value.withSecond(Math.min(59, value));
         return this;
     }
 
@@ -670,7 +1135,7 @@ public final class Dates {
      * @return {@link Dates}
      */
     public Dates ns(int value) {
-        obj = obj.withNano(value);
+        this.value = this.value.withNano(value);
         return this;
     }
 
@@ -681,7 +1146,7 @@ public final class Dates {
      * @return {@link Dates}
      */
     public Dates addYear(int value) {
-        obj = obj.plusYears(value);
+        this.value = this.value.plusYears(value);
         return this;
     }
 
@@ -692,7 +1157,7 @@ public final class Dates {
      * @return {@link Dates}
      */
     public Dates addMonth(int value) {
-        obj = obj.plusMonths(value);
+        this.value = this.value.plusMonths(value);
         return this;
     }
 
@@ -703,7 +1168,7 @@ public final class Dates {
      * @return {@link Dates}
      */
     public Dates addDay(int value) {
-        obj = obj.plusDays(value);
+        this.value = this.value.plusDays(value);
         return this;
     }
 
@@ -714,7 +1179,7 @@ public final class Dates {
      * @return {@link Dates}
      */
     public Dates addWeek(int value) {
-        obj = obj.plusWeeks(value);
+        this.value = this.value.plusWeeks(value);
         return this;
     }
 
@@ -725,7 +1190,7 @@ public final class Dates {
      * @return {@link Dates}
      */
     public Dates addHour(int value) {
-        obj = obj.plusHours(value);
+        this.value = this.value.plusHours(value);
         return this;
     }
 
@@ -736,7 +1201,7 @@ public final class Dates {
      * @return {@link Dates}
      */
     public Dates addMinute(int value) {
-        obj = obj.plusMinutes(value);
+        this.value = this.value.plusMinutes(value);
         return this;
     }
 
@@ -747,7 +1212,7 @@ public final class Dates {
      * @return {@link Dates}
      */
     public Dates addSecond(int value) {
-        obj = obj.plusSeconds(value);
+        this.value = this.value.plusSeconds(value);
         return this;
     }
 
@@ -757,8 +1222,8 @@ public final class Dates {
      * @return {@link Dates}
      */
     public Dates prevMonday() {
-        obj = obj.minusWeeks(1) // minusWeeks(1) ；即上周
-                .minusDays(obj.getDayOfWeek().ordinal()) // 设置为周一
+        value = value.minusWeeks(1) // minusWeeks(1) ；即上周
+                .minusDays(value.getDayOfWeek().ordinal()) // 设置为周一
         ;
 //        obj = obj.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)); // 上一个周一，当前为周一时有bug
         return this;
@@ -770,8 +1235,8 @@ public final class Dates {
      * @return {@link Dates}
      */
     public Dates nextMonday() {
-        obj = obj.plusWeeks(1) // plusWeeks(1) ；即下周
-                .minusDays(obj.getDayOfWeek().ordinal()) // 设置为周一
+        value = value.plusWeeks(1) // plusWeeks(1) ；即下周
+                .minusDays(value.getDayOfWeek().ordinal()) // 设置为周一
         ;
 //        obj = obj.with(TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY));  // 下一个周一，当前为周一时有bug
         return this;
@@ -785,6 +1250,17 @@ public final class Dates {
      */
     public Dates beginTimeOfDay() {
         h(0).m(0).s(0).ns(0);
+        return this;
+    }
+
+    /**
+     * 当前小时时间
+     * 设置为当前小时 x 时 0 分 0 秒 0 纳秒
+     *
+     * @return {@link Dates}
+     */
+    public Dates beginTimeOfMinute() {
+        m(0).s(0).ns(0);
         return this;
     }
 
@@ -815,7 +1291,7 @@ public final class Dates {
      * @return {@link Dates}
      */
     public Dates firstDayOfNextMonth() {
-        obj = obj.with(TemporalAdjusters.firstDayOfNextMonth());
+        value = value.with(TemporalAdjusters.firstDayOfNextMonth());
         return this;
     }
 
@@ -825,7 +1301,17 @@ public final class Dates {
      * @return {@link Dates}
      */
     public Dates lastDayOfMonth() {
-        obj = obj.with(TemporalAdjusters.lastDayOfMonth());
+        value = value.with(TemporalAdjusters.lastDayOfMonth());
+        return this;
+    }
+
+    /**
+     * 设置为上月最后一天
+     *
+     * @return {@link Dates}
+     */
+    public Dates lastDayOfPrevMonth() {
+        value = value.plusMonths(-1).with(TemporalAdjusters.lastDayOfMonth());
         return this;
     }
 
@@ -904,7 +1390,7 @@ public final class Dates {
     public Duration getTimeConsuming() {
 // import java.time.Duration;
 // import java.time.Period;
-        return Duration.between(obj, LocalDateTime.now());
+        return Duration.between(value, LocalDateTime.now());
     }
 
     /**
@@ -920,14 +1406,14 @@ public final class Dates {
     }
 
     /**
-     * 获取两个日期之间相差的天数
-     * 目标日期destDate - 当前dates
+     * 绝对值：获取两个日期之间相差的天数
+     * abs(目标日期destDate - 当前dates)
      *
      * @param destDate Dates 目标日期
      * @return int 相差天数
      */
     public int getDifferDay(Dates destDate) {
-        return (int) Duration.between(obj, destDate.get()).toDays();
+        return Math.abs((int) Duration.between(value, destDate.get()).toDays());
     }
 
     /**
@@ -979,26 +1465,42 @@ public final class Dates {
 
     @Override
     public String toString() {
-        return formatDateTime();
+        return Objects.toString(value);
     }
 
     public static void main(String[] args) {
-        log.info(Dates.now().format(Pattern.yyyy_MM));
-        log.info(Dates.now().formatTime());
-        log.info(Dates.now().formatDate());
-        log.info(Dates.now().formatDateTime());
-        log.info(Dates.of(new Date()).addYear(1).format("yyyy-MM-dd"));
-        log.info(Dates.of(new Timestamp(System.currentTimeMillis())).formatDateTime());
-        log.info("{}", Dates.now().getRangeOfMonth());
-        log.info("{}", Dates.now().getRangeOfYear());
-        log.info("{}", Dates.now().getRangeOfQuarter());
-        log.info("{}", JSON.parseObject("{\"begin\":\"2017-11-01\",\"end\":\"2017-11-30\"}", Range.class).rebuild());
-        Dates dates = Dates.now();
-        log.info(dates.formatDateTime());
-        log.info("{}", dates.get());
-        log.info("{}", Dates.of(dates.formatDateTime(), yyyy_MM_dd_HH_mm_ss).get());
-        log.info(Dates.of("2017-01-17 08:56:03 +0000", yyyy_MM_dd).formatDate());
-
+        log.info("当前时间：{}", Dates.now());
+        log.info("当天 0 时 0 分 0 秒 0 毫秒：{}", Dates.now().beginTimeOfDay());
+        log.info("当天 23 时 59 分 59 秒 999 毫秒：{}", Dates.now().endTimeOfDay());
+        log.info("上周一：{}", Dates.now().prevMonday());
+        log.info("下周一：{}", Dates.now().nextMonday());
+        log.info("本月 1 号：{}", Dates.now().firstDayOfMonth());
+        log.info("本月最后一天：{}", Dates.now().lastDayOfMonth());
+        log.info("上月最后一天：{}", Dates.now().lastDayOfPrevMonth());
+        log.info("下月 1 号：{}", Dates.now().firstDayOfNextMonth());
+        log.info("天数差：当前日期 与 下个月 1 号：{}", Dates.now().getDifferDay(Dates.now().firstDayOfNextMonth()));
+        log.info("天数差：当前日期 与 上个月最后一天：{}", Dates.now().getDifferDay(Dates.now().lastDayOfPrevMonth()));
+        log.info("当月时间区间：{}", Dates.now().getRangeOfMonth());
+        log.info("当年时间区间：{}", Dates.now().getRangeOfYear());
+        log.info("年 +1 ：{}", Dates.now().addYear(1));
+        log.info("年 -1 ：{}", Dates.now().addYear(-1));
+        log.info("月 +1 ：{}", Dates.now().addMonth(1));
+        log.info("月 -1 ：{}", Dates.now().addMonth(-1));
+        log.info("日 +1 ：{}", Dates.now().addDay(1));
+        log.info("日 -1 ：{}", Dates.now().addDay(-1));
+        log.info("时 +1 ：{}", Dates.now().addHour(1));
+        log.info("时 -1 ：{}", Dates.now().addHour(-1));
+        log.info("分 +1 ：{}", Dates.now().addMinute(1));
+        log.info("分 -1 ：{}", Dates.now().addMinute(-1));
+        log.info("秒 +1 ：{}", Dates.now().addSecond(1));
+        log.info("秒 -1 ：{}", Dates.now().addSecond(-1));
+        log.info("formatTime:{}=>{}", Dates.now(), Dates.now().formatTime());
+        log.info("formatDate:{}=>{}", Dates.now(), Dates.now().formatDate());
+        log.info("formatDateTime:{}=>{}", Dates.now(), Dates.now().formatDateTime());
+        log.info("json 反序列化：{}", JSON.parseObject("{\"begin\":\"2017-11-01\",\"end\":\"2017-11-30\"}", Range.class).rebuild());
+        log.info("当前日期对比上个月最后一天：{}", Dates.now().compare(Dates.now().lastDayOfPrevMonth()));
+        log.info("当前日期对比下个月 1 号：{}", Dates.now().compare(Dates.now().firstDayOfNextMonth()));
+        log.info("当前日期与上个月最后一天：{}", Dates.now().compare(Dates.now().lastDayOfPrevMonth()));
         log.info("左 > 右 true：{}", Dates.now().addDay(1).gt(Dates.now()));
         log.info("左 > 右 false：{}", Dates.now().gt(Dates.now().addDay(1)));
         log.info("左 < 右 true：{}", Dates.now().lt(Dates.now().addDay(1)));
@@ -1011,21 +1513,124 @@ public final class Dates {
         log.info("左 <= 右 true：{}", Dates.now().beginTimeOfDay().le(Dates.now().beginTimeOfDay()));
         log.info("左 <= 右 true：{}", Dates.now().beginTimeOfDay().le(Dates.now().addDay(1).beginTimeOfDay()));
         log.info("左 <= 右 false：{}", Dates.now().addDay(1).beginTimeOfDay().le(Dates.now().beginTimeOfDay()));
-
-        try {
-            log.info("{}", LocalDateTime.parse("2018-12-12", DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        } catch (DateTimeException e) {
-            try {
-                log.info("{}", LocalDate.parse("2018-12-12", DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-            } catch (DateTimeException e1) {
-                log.info("{}", LocalTime.parse("2018-12-12", DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        for (Pattern pattern : values()) {
+            log.info("{}.now():{} => {}", pattern.name(), pattern.comment, pattern.now());
+        }
+        for (Pattern pattern : values()) {
+            log.info("{}.format({}) => {}", pattern.name(), pattern.comment, pattern.format(LocalDateTime.now()));
+            if (pattern.adapter instanceof IDatePatternAdapter || pattern.adapter instanceof IDateTimePatternAdapter) {
+                log.info("{}.format({}) => {}", pattern.name(), pattern.comment, pattern.format(LocalDate.now()));
+            }
+            if (pattern.adapter instanceof ITimePatternAdapter || pattern.adapter instanceof IDateTimePatternAdapter) {
+                log.info("{}.format({}) => {}", pattern.name(), pattern.comment, pattern.format(LocalTime.now()));
             }
         }
-        log.info("{}", LocalDateTime.parse("2018-12-12 00:00:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        log.info("{} => {}", yyyy_MM_dd_HH_mm_ss_SSS.comment, yyyy_MM_dd_HH_mm_ss_SSS.parse("2018-12-12 00:00:00.000"));
-        log.info("{} => {}", yyyy_MM_dd_HH_mm_ss.comment, yyyy_MM_dd_HH_mm_ss.parse("2018-12-12 00:00:00.000"));
-        log.info("{} => {}", yyyy_MM_dd.comment, yyyy_MM_dd.parse("2018-12-12"));
-        log.info("{} => {}", yyyy_MM.comment, yyyy_MM.parse("2018-12"));
+        Stream.of(
+                yyyy_MM_dd_HH_mm_ss_SSS,
+                yyyy_MM_dd_HH_mm_ss,
+                yyyy_MM_dd,
+                yyyy_MM
+        ).forEach(pattern -> {
+            Stream.of(
+                    "2019-10-11 10:01:11.888",
+                    "2019-10-11 10:01:11",
+                    "2019-10-11"
+            ).forEach(value -> {
+                log.info("{}.parse({}) => {}", pattern.name(), pattern.comment, pattern.parse(value));
+            });
+        });
+        Stream.of(
+                HH_mm_ss
+        ).forEach(pattern -> {
+            Stream.of(
+                    "2019-10-11 10:01:11.888",
+                    "2019-10-11 10:01:11",
+                    "10:01:11"
+            ).forEach(value -> {
+                log.info("{}.parse({}) => {}", pattern.name(), pattern.comment, pattern.parse(value));
+            });
+        });
+        Stream.of(
+                HH_mm
+        ).forEach(pattern -> {
+            Stream.of(
+                    "10:01:11",
+                    "10:01"
+            ).forEach(value -> {
+                log.info("{}.parse({}) => {}", pattern.name(), pattern.comment, pattern.parse(value));
+            });
+        });
+        Stream.of(
+                yyyyMMddHHmmssSSS
+        ).forEach(pattern -> {
+            Stream.of(
+                    "20191011100111888"
+            ).forEach(value -> {
+                log.info("{}.parse({}) => {}", pattern.name(), pattern.comment, pattern.parse(value));
+            });
+        });
+        Stream.of(
+                yyyyMMddHHmmss,
+                yyyyMMdd
+        ).forEach(pattern -> {
+            Stream.of(
+                    "20191011100111",
+                    "20191011"
+            ).forEach(value -> {
+                log.info("{}.parse({}) => {}", pattern.name(), pattern.comment, pattern.parse(value));
+            });
+        });
+        Stream.of(
+                yyyyMM
+        ).forEach(pattern -> {
+            Stream.of(
+                    "201910"
+            ).forEach(value -> {
+                log.info("{}.parse({}) => {}", pattern.name(), pattern.comment, pattern.parse(value));
+            });
+        });
+        Stream.of(
+                U_yyyy_MM_dd_HH_mm_ss_SSS
+        ).forEach(pattern -> {
+            Stream.of(
+                    "2019/10/11 10:01:11.888",
+                    "2019/10/11 10:01:11",
+                    "2019/10/11"
+            ).forEach(value -> {
+                log.info("{}.parse({}) => {}", pattern.name(), pattern.comment, pattern.parse(value));
+            });
+        });
+        Stream.of(
+                U_yyyy_MM_dd_HH_mm_ss,
+                U_yyyy_MM_dd
+        ).forEach(pattern -> {
+            Stream.of(
+                    "2019/10/11 10:01:11",
+                    "2019/10/11"
+            ).forEach(value -> {
+                log.info("{}.parse({}) => {}", pattern.name(), pattern.comment, pattern.parse(value));
+            });
+        });
+        Stream.of(
+                HHmmssSSS
+        ).forEach(pattern -> {
+            Stream.of(
+                    "20191011100111888",
+                    "20191011100111",
+                    "100111888"
+            ).forEach(value -> {
+                log.info("{}.parse({}) => {}", pattern.name(), pattern.comment, pattern.parse(value));
+            });
+        });
+        Stream.of(
+                HHmmss
+        ).forEach(pattern -> {
+            Stream.of(
+                    "100111"
+            ).forEach(value -> {
+                log.info("{}.parse({}) => {}", pattern.name(), pattern.comment, pattern.parse(value));
+            });
+        });
     }
 
 }

@@ -101,7 +101,13 @@ export class Table {
         pkg,
         comment: this.comment,
         date: new Date().formatDate(),
-        id: (this.columns.find(({name}) => name === 'id') || {dataType: {}}).dataType.value
+        id: (() => { // 目前只支持 Long 、 String 类型作为ID
+          const dataType = (this.columns.find(({name}) => name === 'id') || {dataType: {}}).dataType;
+          if (dataType.value === DataType.VARCHAR.value) {
+            return dataType.value;
+          }
+          return DataType.BIGINT.value;
+        })()
       })))
       .pipe(rename(filename))
       .pipe(gulp.dest(this.output));
@@ -165,7 +171,13 @@ export class Table {
         pkg,
         comment: this.comment,
         date: new Date().formatDate(),
-        id: (this.columns.find(({name}) => name === 'id') || {dataType: {}}).dataType.value
+        id: (() => { // 目前只支持 Long 、 String 类型作为ID
+          const dataType = (this.columns.find(({name}) => name === 'id') || {dataType: {}}).dataType;
+          if (dataType.value === DataType.VARCHAR.value) {
+            return dataType.value;
+          }
+          return DataType.BIGINT.value;
+        })()
       })))
       .pipe(rename(filename))
       .pipe(gulp.dest(this.output));
@@ -194,7 +206,13 @@ export class Table {
         pkg,
         comment: this.comment,
         date: new Date().formatDate(),
-        id: (this.columns.find(({name}) => name === 'id') || {dataType: {}}).dataType.value
+        id: (() => { // 目前只支持 Long 、 String 类型作为ID
+          const dataType = (this.columns.find(({name}) => name === 'id') || {dataType: {}}).dataType;
+          if (dataType.value === DataType.VARCHAR.value) {
+            return dataType.value;
+          }
+          return DataType.BIGINT.value;
+        })()
       })))
       .pipe(rename(filename))
       .pipe(gulp.dest(this.output));
@@ -286,7 +304,7 @@ export class Column {
    */
   field(adapters = [new BaseAdapter()]) {
     const adapter = adapters.map(o => o.fields).reduce((s, v) => Object.assign(s, v), {});
-    return `    /**\n     * ${this.comment}\n     */\n`.concat((adapter[this.name] || adapter['default'])(this));
+    return `    /**\n     * ${this.comment}\n     */\n`.concat((adapter[this.name] || adapter.default)(this));
   }
 
   /**
@@ -297,7 +315,7 @@ export class Column {
     const adapter = adapters.map(o => o.props).reduce((s, v) => Object.assign(s, v), {});
     // const defaultProp = () => `        ${this.name}(${this.dataType.value.toUpperCase()}.build(${this.notNull ? 'true, ' : ''}"${this.comment}"))`;
     // 先从 adapter 中获取 prop 适配策略，未定义策略时使用默认策略
-    return (adapter[this.name] || adapter['default'])(this);
+    return (adapter[this.name] || adapter.default)(this);
   }
 
   /**
@@ -315,7 +333,7 @@ export class Column {
    * @return {string}
    */
   update(excludes = ['id', 'uid', 'deleted', 'createTime', 'createUserId', 'modifyTime']) {
-    return excludes.includes(this.name) ? '' : `//                .then({name}, update -> update.set(q.{name}, {name}))`.formatObject({name: this.name})
+    return excludes.includes(this.name) ? '' : '//                .then({name}, update -> update.set(q.{name}, {name}))'.formatObject({name: this.name})
   }
 
   /**
@@ -358,7 +376,7 @@ export class BaseAdapter {
       // 默认字段生成策略
       default: ({name, db_name, dataType, notNull, unsigned, length, fixed}) => {
         const list = [];
-        if (notNull) list.push(`    @NotNull`);
+        if (notNull) list.push('    @NotNull');
         if (db_name.includes('_')) list.push(`    @Column(name = "${db_name}")`); // 数据库自字段 is_ 开头的特殊处理
         switch (dataType.name) {
           case 'TINYINT':
