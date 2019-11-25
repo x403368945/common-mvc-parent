@@ -21,6 +21,7 @@ import java.util.function.Supplier;
  *
  * @author 谢长春 on 2018-8-8 .
  */
+@SuppressWarnings("unchecked")
 public interface ISheet<T> {
     /**
      * 当前操作对象作为参数，执行完之后返回当前对象；

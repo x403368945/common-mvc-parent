@@ -205,7 +205,7 @@ public interface UserRepository extends
 //    }
 
     @Override
-    default Optional<TabUser> findById(final Long id, final String uid) {
+    default Optional<TabUser> findByUid(final Long id, final String uid) {
         return Optional.ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
                 .selectFrom(q)
                 .where(q.id.eq(id).and(q.uid.eq(uid)))

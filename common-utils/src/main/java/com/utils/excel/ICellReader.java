@@ -15,6 +15,7 @@ import java.util.function.Supplier;
  *
  * @author 谢长春 on 2018-8-8 .
  */
+@SuppressWarnings("unchecked")
 public interface ICellReader<T extends ICellReader> {
     /**
      * 获取当前操作单元格

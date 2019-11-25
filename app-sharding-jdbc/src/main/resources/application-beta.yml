@@ -79,23 +79,23 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     druid: # https://github.com/alibaba/druid/tree/master/druid-spring-boot-starter
       master: # 主库：写
-        url: jdbc:mysql://localhost:3306/demo_main_master_db?autoReconnect=true&serverTimezone=GMT%2B8&useSSL=false
+        url: jdbc:mysql://localhost:3306/demo_main_master_db?serverTimezone=GMT%2B8&useSSL=false
         # 使用 @ConfigurationProperties 装配数据源时必须使用 jdbc-url 替代 url ，参考：https://docs.spring.io/spring-boot/docs/2.1.5.RELEASE/reference/htmlsingle/#howto-configure-a-datasource
-        jdbc-url: jdbc:mysql://localhost:3306/demo_main_master_db?autoReconnect=true&serverTimezone=GMT%2B8&useSSL=false
+        jdbc-url: jdbc:mysql://localhost:3306/demo_main_master_db?serverTimezone=GMT%2B8&useSSL=false
         username: root
         password: 111111
         <<: *druid-config
     second: # 从库1：读
-      url: jdbc:mysql://localhost:3306/demo_main_slave1_db?autoReconnect=true&serverTimezone=GMT%2B8&useSSL=false
+      url: jdbc:mysql://localhost:3306/demo_main_slave1_db?serverTimezone=GMT%2B8&useSSL=false
         # 使用 @ConfigurationProperties 装配数据源时必须使用 jdbc-url 替代 url ，参考：https://docs.spring.io/spring-boot/docs/2.1.5.RELEASE/reference/htmlsingle/#howto-configure-a-datasource
-      jdbc-url: jdbc:mysql://localhost:3306/demo_main_slave1_db?autoReconnect=true&serverTimezone=GMT%2B8&useSSL=false
+      jdbc-url: jdbc:mysql://localhost:3306/demo_main_slave1_db?serverTimezone=GMT%2B8&useSSL=false
       username: root
       password: 111111
         <<: *druid-config
     third: # 从库2：读
-      url: jdbc:mysql://localhost:3306/demo_main_slave2_db?autoReconnect=true&serverTimezone=GMT%2B8&useSSL=false
+      url: jdbc:mysql://localhost:3306/demo_main_slave2_db?serverTimezone=GMT%2B8&useSSL=false
         # 使用 @ConfigurationProperties 装配数据源时必须使用 jdbc-url 替代 url ，参考：https://docs.spring.io/spring-boot/docs/2.1.5.RELEASE/reference/htmlsingle/#howto-configure-a-datasource
-      jdbc-url: jdbc:mysql://localhost:3306/demo_main_slave2_db?autoReconnect=true&serverTimezone=GMT%2B8&useSSL=false
+      jdbc-url: jdbc:mysql://localhost:3306/demo_main_slave2_db?serverTimezone=GMT%2B8&useSSL=false
       username: root
       password: 111111
         <<: *druid-config

@@ -1,29 +1,18 @@
 package com.ccx.demo.config;
 
-import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
-import com.ccx.demo.tl.DBContext;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
-import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.servlet.Filter;
 import javax.servlet.Servlet;
-import javax.sql.DataSource;
-import java.util.HashMap;
-
-import static com.ccx.demo.enums.DBRoute.*;
 
 /**
  * spring-boot 特殊处理：大多数配置都在 application.yml 文件中完成，简化了数据库配置
@@ -47,7 +36,7 @@ import static com.ccx.demo.enums.DBRoute.*;
 @EnableJpaRepositories(basePackages = {"com.ccx.**.dao"})
 public class DBConfig {
 
-//    /**
+    //    /**
 //     * 主库：数据源
 //     *
 //     * @return {@link DataSource}
@@ -127,9 +116,11 @@ public class DBConfig {
 //    public LazyConnectionDataSourceProxy lazyConnectionDataSourceProxy(@Qualifier("routingDataSource") DataSource routingDataSource) {
 //        return new LazyConnectionDataSourceProxy(routingDataSource);
 //    }
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Bean
-    public JPAQueryFactory jpaQueryFactory(@Autowired EntityManager entityManager) {
+    public JPAQueryFactory jpaQueryFactory() {
         return new JPAQueryFactory(entityManager);
     }
 

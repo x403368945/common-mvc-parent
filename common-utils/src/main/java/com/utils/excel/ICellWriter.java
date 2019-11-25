@@ -18,6 +18,7 @@ import static com.utils.util.Dates.Pattern.yyyy_MM_dd;
  *
  * @author 谢长春 on 2018-8-8 .
  */
+@SuppressWarnings("unchecked")
 public interface ICellWriter<T extends ICellWriter> {
     /**
      * 获取当前操作单元格
@@ -178,7 +179,7 @@ public interface ICellWriter<T extends ICellWriter> {
                     } else if (v.matches("^[+-]?\\d+\\.\\d+$")) {
                         writeNumber(Num.of(value).doubleValue());
                     } else if (v.matches("^[+-]?\\d{4}-\\d{1,2}-\\d{1,2}$")) {
-                        writeDate(Dates.of(Objects.toString(value), yyyy_MM_dd).timestamp());
+                        writeDate(yyyy_MM_dd.parse(Objects.toString(value)).timestamp());
                     } else {
                         writeText(v);
                     }
@@ -191,7 +192,7 @@ public interface ICellWriter<T extends ICellWriter> {
                 default:
                     writeText(Objects.toString(value, null));
             }
-            }
+        }
         return (T) this;
     }
 
@@ -227,7 +228,7 @@ public interface ICellWriter<T extends ICellWriter> {
                     writeText(Objects.toString(value, null));
                     break;
                 case DATE:
-                    writeDate(Dates.of(Objects.toString(value), yyyy_MM_dd).timestamp());
+                    writeDate(yyyy_MM_dd.parse(Objects.toString(value)).timestamp());
                     break;
                 case FORMULA:
                     writeFormula(Objects.toString(value, null));

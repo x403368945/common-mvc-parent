@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.math.BigDecimal;
 import java.security.MessageDigest;
@@ -547,7 +547,6 @@ public final class Util {
      * @param value {@link String} unicode 字符串
      * @return {@link String} 解码后的字符串
      */
-    @SuppressWarnings("deprecation")
     public static String decodeUnicode(final String value) {
         Objects.requireNonNull(value, "参数【value】不能为null");
         return StringEscapeUtils.unescapeJava(value.replaceAll("\\\\u(\\w{2})(?!\\w)", "\\\\u00$1"));

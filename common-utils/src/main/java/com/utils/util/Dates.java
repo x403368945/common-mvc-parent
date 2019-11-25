@@ -19,10 +19,7 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAdjusters;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -567,6 +564,19 @@ public final class Dates {
          * @return {@link Dates}
          */
         public Dates parse(final String value) {
+            return Objects.requireNonNull(
+                    adapter.parse(Objects.requireNonNull(value,"value is not null")),
+                    "result is not null"
+            );
+        }
+
+        /**
+         * 转换为日期操作对象
+         *
+         * @param value String 日期
+         * @return {@link Dates}
+         */
+        public Dates parseOfNullable(final String value) {
             return Objects.isNull(value) ? null : adapter.parse(value);
         }
 

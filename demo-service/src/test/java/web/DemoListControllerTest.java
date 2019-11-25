@@ -91,7 +91,7 @@ public class DemoListControllerTest implements ITest {
                                         .content(RandomStringUtils.randomAlphabetic(15))
                                         .status(DemoStatus.RUNNING)
                                         .amount((double) Util.randomMax(9999))
-                                        .modifyTime(Dates.of("2018-12-18 10:45:10", yyyy_MM_dd_HH_mm_ss).timestamp())
+                                        .modifyTime(yyyy_MM_dd_HH_mm_ss.parse("2018-12-18 10:45:10").timestamp())
                                         .build()
                         ))
                 )

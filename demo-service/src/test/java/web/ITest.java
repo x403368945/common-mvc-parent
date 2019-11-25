@@ -409,11 +409,11 @@ interface ITest {
 
         public Tester findByUidTimestamp(Object id, String uid, String timestamp) {
             try {
-                System.err.println("url:\n" + format("{url}/{id}/{uid}/{timestamp}", getUrl(), id, uid, Dates.of(timestamp, yyyy_MM_dd_HH_mm_ss).getTimeMillis()));
+                System.err.println("url:\n" + format("{url}/{id}/{uid}/{timestamp}", getUrl(), id, uid, yyyy_MM_dd_HH_mm_ss.parse(timestamp).getTimeMillis()));
                 System.err.println("参数:");
                 asserts(
                         mockMvc.perform(MockMvcRequestBuilders
-                                .get("{url}/{id}/{uid}/{timestamp}", getUrl(), id, uid, Dates.of(timestamp, yyyy_MM_dd_HH_mm_ss).getTimeMillis())
+                                .get("{url}/{id}/{uid}/{timestamp}", getUrl(), id, uid, yyyy_MM_dd_HH_mm_ss.parse(timestamp).getTimeMillis())
                                 .with(httpBasic(username, password))
                         )
                 );

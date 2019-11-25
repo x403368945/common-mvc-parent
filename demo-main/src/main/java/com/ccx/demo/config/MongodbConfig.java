@@ -57,7 +57,7 @@ import java.util.Date;
 //
 //    class TimestampConverter implements Converter<Date, Timestamp> {
 //        @Override
-//        public Timestamp convert(Date date) {
+//        public Timestamp convert(Date date) {yyyy_MM_dd_HH_mm_ss
 //            return new Timestamp(date.getTime());
 //        }
 //    }

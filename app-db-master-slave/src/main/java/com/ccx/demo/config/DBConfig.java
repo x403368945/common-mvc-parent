@@ -6,7 +6,6 @@ import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
 import com.ccx.demo.tl.DBContext;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -21,6 +20,7 @@ import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.servlet.Filter;
 import javax.servlet.Servlet;
 import javax.sql.DataSource;
@@ -131,11 +131,6 @@ public class DBConfig {
         return new LazyConnectionDataSourceProxy(routingDataSource);
     }
 
-    @Bean
-    public JPAQueryFactory jpaQueryFactory(@Autowired EntityManager entityManager) {
-        return new JPAQueryFactory(entityManager);
-    }
-
     /**
      * 注册 {@link com.alibaba.druid.support.http.StatViewServlet}
      *
@@ -185,5 +180,13 @@ public class DBConfig {
     @ConditionalOnMissingBean
     public Slf4jLogFilter slf4jLogFilter() {
         return new Slf4jLogFilter();
+    }
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Bean
+    public JPAQueryFactory jpaQueryFactory() {
+        return new JPAQueryFactory(entityManager);
     }
 }
