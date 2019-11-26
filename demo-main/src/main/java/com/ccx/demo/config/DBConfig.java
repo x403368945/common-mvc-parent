@@ -56,29 +56,29 @@ public class DBConfig {
             return new Timestamp(date.getTime());
         }
     }
-
-    @ReadingConverter
-    public class InstantConverter implements Converter<LocalDateTime, Instant> {
-        @Override
-        public Instant convert(LocalDateTime localDateTime) {
-            return Instant.from(localDateTime);
-        }
-    }
-
-    @WritingConverter
-    public class LocalDateTimeConverter implements Converter<Instant, LocalDateTime> {
-        @Override
-        public LocalDateTime convert(Instant instant) {
-            return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-        }
-    }
-
+//
+//    @ReadingConverter
+//    public class InstantConverter implements Converter<LocalDateTime, Instant> {
+//        @Override
+//        public Instant convert(LocalDateTime localDateTime) {
+//            return Instant.from(localDateTime);
+//        }
+//    }
+//
+//    @WritingConverter
+//    public class LocalDateTimeConverter implements Converter<Instant, LocalDateTime> {
+//        @Override
+//        public LocalDateTime convert(Instant instant) {
+//            return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+//        }
+//    }
+//
     @Bean
     public MongoCustomConversions mongoCustomConversions() {
         return new MongoCustomConversions(Arrays.asList(
-                new TimestampConverter(),
-                new InstantConverter(),
-                new LocalDateTimeConverter()
+                new TimestampConverter()
+//                new InstantConverter(),
+//                new LocalDateTimeConverter()
         ));
     }
 
