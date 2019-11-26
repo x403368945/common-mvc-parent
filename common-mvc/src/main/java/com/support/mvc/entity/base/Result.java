@@ -17,7 +17,6 @@ import com.utils.util.FWrite;
 import com.utils.util.Maps;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -43,9 +42,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @Accessors(chain = true)
 @JSONType(orders = {"v", "code", "message", "rowCount", "pageCount", "totalCount", "rid", "exception", "data", "extras", "version"})
 public class Result<E> implements IJson {
-    public interface Call {
-
-    }
 
     /**
      * 默认构造函数
@@ -456,13 +452,13 @@ public class Result<E> implements IJson {
      *
      * @return {@link Result}{@link Result<E>}
      */
-    @SneakyThrows
+    @SuppressWarnings("unchecked")
     public Result<E> version(final Class clazz, final Function<Version.VersionBuilder, Version> version) {
         try {
             Assert.isTrue(v > 0, "指定版本前先指定【v】字段，当前接口最新版本号，版本号最小值为1");
             Objects.requireNonNull(version, "参数【version】不能为null");
-            final Version.VersionBuilder builder = Version.builder().id(v);
             final String method = Thread.currentThread().getStackTrace()[2].getMethodName();
+            final Version.VersionBuilder builder = Version.builder().id(v).markdown(String.format("%s/%s.md", clazz.getSimpleName(), method));
             for (Method m : clazz.getMethods()) {
 //                System.out.println(m.getName());
                 if (Objects.equals(method, m.getName())) {
@@ -490,7 +486,7 @@ public class Result<E> implements IJson {
                     break;
                 }
             }
-            this.version = version.apply(builder.markdown(String.format("%s/%s.md", clazz.getSimpleName(), method)));
+            this.version = version.apply(builder);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }

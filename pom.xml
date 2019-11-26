@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Xlint="http://java.sun.com/xml/ns/javaee"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ccx.parent</groupId>
     <artifactId>common-mvc-parent</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>pom</packaging>
 
     <!-- spring-boot 特殊处理：pom 文件与mvc差别较大 -->
@@ -160,14 +160,20 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-actuator</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jackson-datatype-jsr310</artifactId>
+                    <groupId>com.fasterxml.jackson.datatype</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <exclusions>
                 <exclusion>
-                    <artifactId>jackson-databind</artifactId>
-                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>spring-boot-starter-json</artifactId>
+                    <groupId>org.springframework.boot</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -196,20 +202,20 @@
             <version>5.2.1.RELEASE</version>
             <scope>test</scope>
         </dependency>
-            <!-- 打包发布时起作用：支付宝 sdk 集成；需要手动安装支付宝 sdk jar包到 maven 仓库，参考: /src/test/files/libs/README.md -->
-            <!--<dependency>
-                <groupId>com.alipay.api</groupId>
-                <artifactId>alipay-sdk</artifactId>
-                <version>20180104135026</version>
-            </dependency>-->
-            <!-- 编译时起作用：支付宝 sdk 集成；由于mvn install:install-file 命令安装 sdk jar包之后，maven 打包时可以检测到依赖，但编译时检测不到依赖，所以编译时使用这个依赖，打包时使用上面的依赖 -->
-            <!--<dependency>
-                <groupId>com.alipay.api</groupId>
-                <artifactId>sdk</artifactId>
-                <version>20180104135026</version>
-                <scope>system</scope>
-                <systemPath>${project.basedir}/src/test/files/libs/alipay-sdk-java20180104135026.jar</systemPath>
-            </dependency>-->
+        <!-- 打包发布时起作用：支付宝 sdk 集成；需要手动安装支付宝 sdk jar包到 maven 仓库，参考: /src/test/files/libs/README.md -->
+        <!--<dependency>
+            <groupId>com.alipay.api</groupId>
+            <artifactId>alipay-sdk</artifactId>
+            <version>20180104135026</version>
+        </dependency>-->
+        <!-- 编译时起作用：支付宝 sdk 集成；由于mvn install:install-file 命令安装 sdk jar包之后，maven 打包时可以检测到依赖，但编译时检测不到依赖，所以编译时使用这个依赖，打包时使用上面的依赖 -->
+        <!--<dependency>
+            <groupId>com.alipay.api</groupId>
+            <artifactId>sdk</artifactId>
+            <version>20180104135026</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/test/files/libs/alipay-sdk-java20180104135026.jar</systemPath>
+        </dependency>-->
     </dependencies>
     <build>
         <!--<finalName>${artifactId}</finalName>--> <!--build目标文件的文件名，默认情况下为${artifactId}-${version}；-->
@@ -217,7 +223,8 @@
             <resource>
                 <directory>${basedir}/src/main/resources</directory>
                 <targetPath>${basedir}/target/classes</targetPath>
-                <filtering>true</filtering> <!-- 开启 filtering 会替换静态资源（html|js|...）中使用 ${key:属性名} 占位的属性，可以定义在 pom.xml -> properties -> key  -->
+                <filtering>true
+                </filtering> <!-- 开启 filtering 会替换静态资源（html|js|...）中使用 ${key:属性名} 占位的属性，可以定义在 pom.xml -> properties -> key  -->
                 <excludes> <!-- 经过maven的filter，会破坏font文件的二进制文件格式，到前台解析出错 -->
                     <exclude>static/**</exclude>
                     <!--<exclude>*-web/**</exclude>-->
@@ -294,6 +301,9 @@
                     <target>${java.version}</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
                     <skip>true</skip>
+                    <compilerArguments>
+                        <Xlint:unchecked/>
+                    </compilerArguments>
                     <!--<compilerArgs>
                         <arg>-extdirs</arg>
                         <arg>${basedir}/src/demo/static/*</arg>

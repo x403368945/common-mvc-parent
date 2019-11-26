@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
+import org.springframework.data.convert.WritingConverter;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver;
@@ -55,6 +56,7 @@ public class DBConfig {
             return new Timestamp(date.getTime());
         }
     }
+
     @ReadingConverter
     public class InstantConverter implements Converter<LocalDateTime, Instant> {
         @Override
@@ -63,6 +65,7 @@ public class DBConfig {
         }
     }
 
+    @WritingConverter
     public class LocalDateTimeConverter implements Converter<Instant, LocalDateTime> {
         @Override
         public LocalDateTime convert(Instant instant) {
@@ -74,7 +77,8 @@ public class DBConfig {
     public MongoCustomConversions mongoCustomConversions() {
         return new MongoCustomConversions(Arrays.asList(
                 new TimestampConverter(),
-                new InstantConverter()
+                new InstantConverter(),
+                new LocalDateTimeConverter()
         ));
     }
 

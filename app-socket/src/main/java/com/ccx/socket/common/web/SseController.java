@@ -51,7 +51,7 @@ public class SseController {
                     .data(Maps.ofSO()
                             .put("id", id)
                             .put("comment", "服务端推送开启")
-                            .buildJSONObject(), MediaType.APPLICATION_JSON_UTF8
+                            .buildJSONObject(), MediaType.APPLICATION_JSON
                     )
             );
         } catch (IOException e) {
@@ -74,12 +74,12 @@ public class SseController {
                                     .put("id", id)
                                     .put("number", num.get())
                                     .put("timestamp", Dates.now().formatDateTime())
-                                    .buildJSONObject(), MediaType.APPLICATION_JSON_UTF8
+                                    .buildJSONObject(), MediaType.APPLICATION_JSON
                             )
                     );
                     log.info(String.format("第%d次:%s", num.get(), id));
                     if (num.next().get() > 10) {
-                        emitter.send(SseEmitter.event().id(id).name("end").data(Maps.ofSO().put("id", id).put("comment", "服务端推送关闭").buildJSONObject(), MediaType.APPLICATION_JSON_UTF8));
+                        emitter.send(SseEmitter.event().id(id).name("end").data(Maps.ofSO().put("id", id).put("comment", "服务端推送关闭").buildJSONObject(), MediaType.APPLICATION_JSON));
                         emitter.complete();
                         timer.cancel();
                     } else {

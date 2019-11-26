@@ -26,3 +26,6 @@ spring:
     # 参考： https://www.docs4dev.com/docs/zh/hibernate-orm/5.4/reference/hibernate_user_guide.html  {@link org.hibernate.cfg.AvailableSettings}
     properties:
       "hibernate.cache.use_second_level_cache": false
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration

@@ -52,7 +52,7 @@ public class UserService implements IService<TabUser> {
 
     @Override
     public Optional<TabUser> findByUid(final Long id, final String uid) {
-        return repository.findById(id, uid);
+        return repository.findByUid(id, uid);
     }
 
     @Override
