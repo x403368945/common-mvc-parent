@@ -10,6 +10,7 @@
     <property name="APP_NAME" value="${app.name:-app-socket}"/>
     <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
     <property name="LOG_HOME" value="${CATALINA_HOME:-.}/logs"/>
+    <property name="CONSOLE_ENCODING" value="${console.encoding:-UTF-8}"/>
     <contextName>${APP_NAME}</contextName>
 
     <!-- 负责写日志,控制台日志 -->
