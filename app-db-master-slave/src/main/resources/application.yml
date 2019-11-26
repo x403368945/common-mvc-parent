@@ -51,6 +51,8 @@ druid-config: &druid-config
   filters: stat,wall,slf4j
 
 spring:
+#  profiles:
+#    active: @env@ # 采坑记录，使用 @@ 获取 pom.xml 环境变量时，必须指定 build > resources > resource > <filtering>true</filtering>
   mvc:
     throw-exception-if-no-handler-found: true # 出现错误时, 直接抛出异常(便于异常统一处理，否则捕获不到404)
   resources:
@@ -76,8 +78,6 @@ spring:
     # 参考： https://www.docs4dev.com/docs/zh/hibernate-orm/5.4/reference/hibernate_user_guide.html  {@link org.hibernate.cfg.AvailableSettings}
     properties:
       "hibernate.cache.use_second_level_cache": false
-  profiles:
-    active: @env@ # 采坑记录，使用 @@ 获取 pom.xml 环境变量时，必须指定 build > resources > resource > <filtering>true</filtering>
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     druid: # https://github.com/alibaba/druid/tree/master/druid-spring-boot-starter
