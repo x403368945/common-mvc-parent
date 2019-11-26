@@ -3,6 +3,7 @@ package com.support.mvc.service;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Expression;
 import com.support.mvc.entity.base.Pager;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -16,6 +17,7 @@ import java.util.Optional;
  * @param <E>
  * @author 谢长春 2017年7月14日 上午11:23:18
  */
+@Validated
 interface ISearch<E> {
 
     /**

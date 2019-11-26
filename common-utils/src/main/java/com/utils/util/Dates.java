@@ -19,7 +19,10 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAdjusters;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -1281,7 +1284,7 @@ public final class Dates {
      * @return {@link Dates}
      */
     public Dates endTimeOfDay() {
-        h(23).m(59).s(59).ns(999999999);
+        h(23).m(59).s(59).ns(999998998);
         return this;
     }
 

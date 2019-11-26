@@ -3,7 +3,6 @@ package com.support.mvc.exception;
 /**
  * 自定义异常: 数据更新异常
  *
- *
  * @author 谢长春 2016-11-23
  */
 public class UpdateRowsException extends RuntimeException {
@@ -19,9 +18,33 @@ public class UpdateRowsException extends RuntimeException {
         }
     }
 
+
     public static void asserts(int rows) {
         asserts((long) rows);
     }
+
+    /**
+     * 断言是否抛出数据更新异常，数据变更行数必须 = count
+     *
+     * @param rows  long 影响行数
+     * @param count long 预计更新行数
+     */
+    public static void asserts(long rows, long count) {
+        if (count != rows) {
+            throw new UpdateRowsException(String.format("数据变更失败，影响行数:%d，预期更新行数%d", rows, count));
+        }
+    }
+
+    /**
+     * 断言是否抛出数据更新异常，数据变更行数必须 = count
+     *
+     * @param rows  long 影响行数
+     * @param count int 预计更新行数
+     */
+    public static void asserts(long rows, int count) {
+        asserts(rows, (long) count);
+    }
+
     /**
      * 断言是否为批量更新
      * 断言是否抛出批量更新异常，数据变更行数必须大于0

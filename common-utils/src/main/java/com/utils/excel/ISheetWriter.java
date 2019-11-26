@@ -622,7 +622,7 @@ public interface ISheetWriter<T extends ISheetWriter> extends ISheet<T>, ICellWr
     /**
      * 设置行分组
      *
-     * @param range {@link com.utils.util.RangeInt} 分组行索引区间
+     * @param range {@link RangeInt} 分组行索引区间
      * @return <T extends ISheetWriter>
      */
     default T groupRow(final RangeInt range) {
@@ -656,7 +656,7 @@ public interface ISheetWriter<T extends ISheetWriter> extends ISheet<T>, ICellWr
     /**
      * 设置列分组
      *
-     * @param range {@link com.utils.util.RangeInt} 分组列索引区间
+     * @param range {@link RangeInt} 分组列索引区间
      * @return <T extends ISheetWriter>
      */
     default T groupColumn(final RangeInt range) {

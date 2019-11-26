@@ -24,6 +24,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static com.utils.excel.enums.Column.*;
+import static com.utils.util.Dates.Pattern.yyyy_MM_dd;
 
 /**
  * 【.xlsx】数据写入操作；写入完成之后需要调用 close 方法；否则可能造成内存泄露
@@ -179,7 +180,7 @@ public final class XSheetWriter implements ISheetWriter<XSheetWriter>, ISheetWri
                     workbook.createSheet("Sheet1");
                     workbook.getSheet("Sheet1").setDefaultColumnWidth(15);
                     // 日期格式样式
-                    final CellStyle dateStyle = CellStyles.builder().dataFormat(workbook.createDataFormat().getFormat(Dates.Pattern.yyyy_MM_dd.value())).build().createCellStyle(workbook);
+                    final CellStyle dateStyle = CellStyles.builder().dataFormat(workbook.createDataFormat().getFormat(yyyy_MM_dd.value())).build().createCellStyle(workbook);
                     // 蓝色单元格样式
                     final CellStyle blueStyle = CellStyles.builder().fillPattern(FillPatternType.SOLID_FOREGROUND).fillForegroundColor(Colors.SkyBlue.color).build().createCellStyle(workbook);
                     // 绿色单元格样式
@@ -254,7 +255,7 @@ public final class XSheetWriter implements ISheetWriter<XSheetWriter>, ISheetWri
                     workbook.createSheet("Sheet1");
                     workbook.getSheet("Sheet1").setDefaultColumnWidth(15);
                     // 日期格式样式
-                    final CellStyle dateStyle = CellStyles.builder().dataFormat(workbook.createDataFormat().getFormat(Dates.Pattern.yyyy_MM_dd.value())).build().createCellStyle(workbook);
+                    final CellStyle dateStyle = CellStyles.builder().dataFormat(workbook.createDataFormat().getFormat(yyyy_MM_dd.value())).build().createCellStyle(workbook);
                     // 蓝色单元格样式
                     final CellStyle blueStyle = CellStyles.builder().fillPattern(FillPatternType.SOLID_FOREGROUND).fillForegroundColor(Colors.SkyBlue.color).build().createCellStyle(workbook);
                     // 绿色单元格样式

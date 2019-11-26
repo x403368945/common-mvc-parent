@@ -21,5 +21,8 @@ spring:
       ddl-auto: none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    # 参考： https://www.docs4dev.com/docs/zh/hibernate-orm/5.4/reference/hibernate_user_guide.html  {@link org.hibernate.cfg.AvailableSettings}
+    properties:
+      "hibernate.cache.use_second_level_cache": false
   profiles:
     active: @env@ # 采坑记录，使用 @@ 获取 pom.xml 环境变量时，必须指定 build > resources > resource > <filtering>true</filtering>

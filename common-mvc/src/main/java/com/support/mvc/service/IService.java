@@ -20,7 +20,6 @@ import java.util.List;
  * @param <E>
  * @author 谢长春 2017年7月14日 上午11:23:18
  */
-@Validated
 public interface IService<E> extends ISearch<E> {
 //	IRepository<E> getFindRepository();
 

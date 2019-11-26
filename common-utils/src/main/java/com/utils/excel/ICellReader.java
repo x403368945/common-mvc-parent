@@ -5,10 +5,13 @@ import com.utils.util.Dates;
 import com.utils.util.Num;
 import org.apache.poi.ss.usermodel.*;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+
+import static com.utils.util.Dates.Pattern.yyyy_MM_dd_HH_mm_ss;
 
 /**
  * Cell单元格读取操作
@@ -158,7 +161,7 @@ public interface ICellReader<T extends ICellReader> {
                 return getCell().getStringCellValue();
             case NUMERIC:
                 return (DateUtil.isCellDateFormatted(getCell()))
-                        ? Dates.of(getCell().getDateCellValue().getTime()).format(Dates.Pattern.yyyy_MM_dd_HH_mm_ss)
+                        ? Dates.of(getCell().getDateCellValue().getTime()).format(yyyy_MM_dd_HH_mm_ss)
                         : Num.of(getCell().getNumericCellValue()).toBigDecimal().toPlainString(); // 解决科学计数法 toString()问题
 //                        : Num.of(getCell().getNumericCellValue()).toBigDecimal().setScale(4, ROUND_HALF_UP).toPlainString(); // 解决科学计数法 toString()问题
 //                        : Optional.ofNullable(Num.of(getCell().getNumericCellValue()).toBigDecimal()).map(bigDecimal -> bigDecimal.setScale(4, ROUND_HALF_UP).toPlainString() /* 解决科学计数法 toString()问题*/).orElse(null);
@@ -206,6 +209,32 @@ public interface ICellReader<T extends ICellReader> {
     default T stringValue(final Consumer<Optional<String>> consumer) {
         consumer.accept(Optional.ofNullable(stringValue()));
         return (T) this;
+    }
+
+    /**
+     * 获取单元格数值，空值和非数字默认为null
+     *
+     * @return {@link BigDecimal}
+     */
+    default BigDecimal bigDecimalValue() {
+        if (cellIsBlank()) {
+            return null;
+        }
+        switch (getCell().getCellType()) {
+            case STRING:
+                return new BigDecimal(getCell().getStringCellValue());
+            case NUMERIC:
+                return new BigDecimal(Double.toString(getCell().getNumericCellValue()));
+            case FORMULA:
+                switch (getCell().getCachedFormulaResultType()) {
+                    case NUMERIC:
+                        return new BigDecimal(Double.toString(getCell().getNumericCellValue()));
+                    case STRING:
+                        return new BigDecimal(getCell().getStringCellValue());
+                }
+                break;
+        }
+        return null;
     }
 
     /**

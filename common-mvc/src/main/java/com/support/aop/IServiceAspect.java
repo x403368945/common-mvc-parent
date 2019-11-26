@@ -158,11 +158,10 @@ public interface IServiceAspect {
     //    @AfterReturning(value = "point()", returning = "result")
     default void delete(final JoinPoint joinPoint, final Object result) {
         log.info(String.join("\n",
-                ">>>>>>>>> 删除操作",
+                ">>>>>>>>> 物理删除操作",
                 String.valueOf(joinPoint),
                 "args:".concat(Arrays.toString(joinPoint.getArgs())),
-                "result:".concat(JSON.toJSONString(result)),
-                "<<<<<<<<<  删除操作"
+                "result:".concat(JSON.toJSONString(result))
         ));
     }
 

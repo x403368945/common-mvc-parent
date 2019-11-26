@@ -1,6 +1,7 @@
 package com.log;
 
 import ch.qos.logback.classic.helpers.MDCInsertingServletFilter;
+import com.google.common.base.Strings;
 import com.utils.util.Util;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -10,6 +11,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
@@ -44,8 +46,12 @@ public class RequestId extends MDCInsertingServletFilter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        MDC.put("rid", Optional.ofNullable(getRidAdapter()).orElseGet(DefaultAdapter::new).getRid());
         try {
+            String rid = ((HttpServletRequest) request).getHeader("rid");
+            if (Strings.isNullOrEmpty(rid)) {
+                rid = Optional.ofNullable(getRidAdapter()).orElseGet(DefaultAdapter::new).getRid();
+            }
+            MDC.put("rid", rid);
             super.doFilter(request, response, chain);
             ((HttpServletResponse) response).addHeader("rid", RequestId.get());
         } finally {

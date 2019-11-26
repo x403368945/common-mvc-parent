@@ -234,6 +234,10 @@ public interface IWhere<U, W> {
             return and(Objects.nonNull(collection) && !collection.isEmpty(), supplier);
         }
 
+        public QdslWhere andIfNonEmpty(final Object[] objects, final Supplier<BooleanExpression> supplier) {
+            return and(Objects.nonNull(objects) && objects.length>0, supplier);
+        }
+
         public boolean isEmpty() {
             return 0 == expressions.size();
         }

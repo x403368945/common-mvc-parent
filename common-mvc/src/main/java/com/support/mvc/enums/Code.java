@@ -17,6 +17,7 @@ import java.util.stream.Stream;
 public enum Code {
     SUCCESS("成功"),
     FAILURE("失败"),
+    CUSTOMIZE("自定义异常，将会以 exception 内容替换 message 内容，一般用于抛出带动态参数消息，直接在前端弹窗"),
     VALIDATED("参数校验失败"),
     VERSION("接口版本号不匹配"),
     LAMBDA("lambda 表达式抛出异常"),

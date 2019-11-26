@@ -1,8 +1,10 @@
 package com.ccx.demo.support.entity;
 
 import com.ccx.demo.business.user.dao.jpa.UserRepository;
+import com.ccx.demo.business.user.entity.TabUser;
 import com.querydsl.core.annotations.QueryTransient;
 
+import java.beans.Transient;
 import java.util.Optional;
 
 import static com.ccx.demo.config.init.BeanInitializer.Beans.userRepository;
@@ -13,6 +15,18 @@ import static com.ccx.demo.config.init.BeanInitializer.Beans.userRepository;
  * @author 谢长春 2017-9-26
  */
 public interface IUser {
+    /**
+     * 获取缓存用户昵称
+     *
+     * @param userId {@link TabUser#getId()}
+     * @return {@link String}
+     */
+    @Transient
+    @QueryTransient
+    default String getNickNameByCache(final Long userId) {
+        return Optional.ofNullable(userId).map(id -> userRepository.<UserRepository>get().getNickame(id)).orElse(null);
+    }
+
     /**
      * 创建者ID
      *
@@ -27,9 +41,10 @@ public interface IUser {
      *
      * @return String
      */
+    @Transient
     @QueryTransient
     default String getCreateUserName() {
-        return Optional.ofNullable(getCreateUserId()).map(id -> userRepository.<UserRepository>get().getNickame(id)).orElse(null);
+        return getNickNameByCache(getCreateUserId());
     }
 
     /**
@@ -46,9 +61,10 @@ public interface IUser {
      *
      * @return String
      */
+    @Transient
     @QueryTransient
     default String getModifyUserName() {
-        return Optional.ofNullable(getModifyUserId()).map(id -> userRepository.<UserRepository>get().getNickame(id)).orElse(null);
+        return getNickNameByCache(getModifyUserId());
     }
 
 //    /**

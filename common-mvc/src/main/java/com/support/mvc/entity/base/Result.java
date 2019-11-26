@@ -8,7 +8,6 @@ import com.alibaba.fastjson.annotation.JSONType;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.log.RequestId;
 import com.querydsl.core.QueryResults;
-import com.support.mvc.actions.IExecute;
 import com.support.mvc.enums.Code;
 import com.support.mvc.exception.CodeException;
 import com.support.mvc.exception.UserSessionException;
@@ -16,7 +15,6 @@ import com.utils.ICall;
 import com.utils.IJson;
 import com.utils.util.FWrite;
 import com.utils.util.Maps;
-import com.utils.util.Util;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -199,6 +197,12 @@ public class Result<E> implements IJson {
      * @return String
      */
     public String getMessage() {
+        if (Objects.equals(Code.CUSTOMIZE, code)) {
+            // 处理自定义动态异常消息
+            return Objects.isNull(this.exception)
+                    ? null
+                    : this.exception.replace(Code.CUSTOMIZE.name().concat(":"), "");
+        }
         return this.code.comment;
     }
 
@@ -246,7 +250,7 @@ public class Result<E> implements IJson {
      */
     public Result<E> setSuccess(final Page<E> page) {
         this.code = Code.SUCCESS;
-        if (Util.isNotEmpty(page)) {
+        if (Objects.nonNull(page)) {
             this.totalCount = page.getTotalElements();
             this.pageCount = page.getTotalPages();
             setSuccess(page.getContent());
@@ -262,7 +266,7 @@ public class Result<E> implements IJson {
      */
     public Result<E> setSuccess(final QueryResults<E> page) {
         this.code = Code.SUCCESS;
-        if (Util.isNotEmpty(page)) {
+        if (Objects.nonNull(page)) {
             this.totalCount = page.getTotal();
             this.pageCount = (int) (page.getTotal() / page.getLimit() + (page.getTotal() % page.getLimit() > 0 ? 1 : 0));
             setSuccess(page.getResults());
@@ -278,7 +282,7 @@ public class Result<E> implements IJson {
      */
     public Result<E> setSuccess(final List<E> data) {
         this.code = Code.SUCCESS;
-        this.data = Util.isNotEmpty(data) ? data : Collections.emptyList(); // 设置有效的结果集
+        this.data = Objects.nonNull(data) ? data : Collections.emptyList(); // 设置有效的结果集
         this.rowCount = this.data.size(); // 设置结果集大小
         return this; // 保证链式请求，返回:this
     }
@@ -289,10 +293,26 @@ public class Result<E> implements IJson {
      * @param data E[]
      * @return Result<E>
      */
-    @SuppressWarnings("unchecked")
-    public Result<E> setSuccess(final E... data) {
+    public Result<E> setSuccess(final E[] data) {
         this.code = Code.SUCCESS;
-        this.data = (data.length > 1 || (data.length == 1 && Util.isNotEmpty(data[0]))) ? Arrays.asList(data) : Collections.emptyList(); // 设置有效的结果集
+        this.data = (data.length > 0 && Objects.nonNull(data[0])) ? Arrays.asList(data) : Collections.emptyList(); // 设置有效的结果集
+        this.rowCount = this.data.size(); // 设置结果集大小
+        return this; // 保证链式请求，返回:this
+    }
+
+    /**
+     * 重载方法，设置成功后的数据集合；返回当前对象，便于链式调用
+     *
+     * @param data E
+     * @return Result<E>
+     */
+    public Result<E> setSuccess(final E data) {
+        this.code = Code.SUCCESS;
+        if (Objects.nonNull(data)) {
+            this.data = Collections.singletonList(data);
+        } else {
+            this.data = Collections.emptyList();
+        }
         this.rowCount = this.data.size(); // 设置结果集大小
         return this; // 保证链式请求，返回:this
     }
@@ -306,7 +326,7 @@ public class Result<E> implements IJson {
      */
     public Result<E> addExtras(final String key, final Object value) {
         Objects.requireNonNull(key, "参数【key】是必须的");
-        if (Util.isEmpty(this.extras)) {
+        if (Objects.isNull(this.extras)) {
             this.extras = new HashMap<>();
         }
         this.extras.put(key, value);
@@ -320,7 +340,7 @@ public class Result<E> implements IJson {
      */
     public Result<E> addExtras(final JSONObject obj) {
         Objects.requireNonNull(obj, "参数【obj】是必须的");
-        if (Util.isEmpty(this.extras)) {
+        if (Objects.isNull(this.extras)) {
             this.extras = new HashMap<>();
         }
         this.extras.putAll(obj);
@@ -333,7 +353,7 @@ public class Result<E> implements IJson {
      * @return Result<E>
      */
     public Result<E> addExtras(final Map<String, String> extras) {
-        if (Util.isEmpty(this.extras)) {
+        if (Objects.isNull(this.extras)) {
             this.extras = new HashMap<>();
         }
         this.extras.putAll(extras);
@@ -406,7 +426,7 @@ public class Result<E> implements IJson {
      * @return {@link Result}{@link Result<E>}
      */
     public Result<E> versionAssert(final int version, final boolean exception) {
-        if (Util.nonEquals(this.v, version)) {
+        if (!Objects.equals(this.v, version)) {
             if (exception) {
                 throw Code.VERSION.exception("当前请求版本号与接口最新版本号不匹配");
             } else {
@@ -539,7 +559,6 @@ public class Result<E> implements IJson {
         return JSON.toJSONString(this);
     }
 
-    @SuppressWarnings("unchecked")
     public static void main(String[] args) {
         {
             log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 打印所有状态码 <<<<<<<<<<<<<<<<<<");
@@ -564,7 +583,7 @@ public class Result<E> implements IJson {
             result.setSuccess("111");
             log.info(result.toString());
             // 设置多个对象，必须是泛型声明的类型
-            result.setSuccess("222", "333");
+            result.setSuccess(Arrays.asList("222", "333"));
             log.info(result.toString());
             // 设置对象对象数组，必须是泛型声明的类型
             result.setSuccess(new String[]{"444", "555"});
@@ -582,7 +601,7 @@ public class Result<E> implements IJson {
             result.setSuccess(Maps.bySO("key", "111"));
             log.info(result.toString());
             // 设置多个对象，必须是泛型声明的类型
-            result.setSuccess(Maps.bySO("key", "222"), Maps.bySO("key", "333"));
+            result.setSuccess(Arrays.asList(Maps.bySO("key", "222"), Maps.bySO("key", "333")));
             log.info(result.toString());
             // 设置对象集合，必须是泛型声明的类型
             result.setSuccess(Arrays.asList(Maps.bySO("key", "444"), Maps.bySO("key", "555")));
@@ -597,7 +616,7 @@ public class Result<E> implements IJson {
             result.setSuccess(Item.builder().key("key").value(111).build());
             log.info(result.toString());
             // 设置多个对象，必须是泛型声明的类型
-            result.setSuccess(Item.builder().key("key").value(222).build(), Item.builder().key("key").value(333).build());
+            result.setSuccess(Arrays.asList(Item.builder().key("key").value(222).build(), Item.builder().key("key").value(333).build()));
             log.info(result.toString());
             // 设置对象对象数组，必须是泛型声明的类型
             result.setSuccess(new Item[]{Item.builder().key("key").value(444).build(), Item.builder().key("key").value(555).build()});

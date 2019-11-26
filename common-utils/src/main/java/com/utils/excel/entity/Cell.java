@@ -274,7 +274,7 @@ public class Cell implements IJson {
         }
         {
             List<Cell> headers = new ArrayList<>();
-            Cell.CellBuilder builder = Cell.builder();
+            CellBuilder builder = Cell.builder();
             int index = 0; // 索引从0开始
             {
                 builder.group("主营业务收入");

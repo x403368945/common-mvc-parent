@@ -37,6 +37,7 @@
     "eslint-plugin-standard": "^4.0.1",
     "gulp": "^4.0.2",
     "gulp-batch": "^1.0.5",
+    "gulp-concat": "^2.6.1",
     "gulp-flatten": "^0.4.0",
     "gulp-promise": "^1.0.2",
     "gulp-rename": "^1.4.0",

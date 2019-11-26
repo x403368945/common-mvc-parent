@@ -7,7 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import javax.validation.groups.Default;
 import java.util.List;
 
@@ -18,7 +21,6 @@ import java.util.List;
  * @param <E>
  * @author 谢长春 2017年7月14日 上午11:23:18
  */
-@Validated
 public interface IService<E> extends ISearch<E> {
 //	IRepository<E> getFindRepository();
 
