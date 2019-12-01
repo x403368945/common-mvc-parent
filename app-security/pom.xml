@@ -13,10 +13,10 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>app-security</artifactId>
     <!-- // spring-mvc start >> -->
-    <packaging>war</packaging>
+    <!--<packaging>war</packaging>-->
     <!-- // spring-mvc end <<<< -->
     <!-- // spring-boot start >> -->
-    <!--<packaging>jar</packaging>-->
+    <packaging>jar</packaging>
     <properties>
         <main.class>com.ccx.security.Application</main.class>
     </properties>
