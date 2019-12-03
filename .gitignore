@@ -27,6 +27,7 @@ target/
 /log
 logs
 temp/
+docker/
 node_modules
 nodejs/yarn.lock
 
