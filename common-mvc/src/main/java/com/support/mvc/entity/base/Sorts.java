@@ -74,7 +74,7 @@ public class Sorts implements Serializable {
      * @param jpa  {@link Enum} JPA模式使用 OrderBy 枚举名作为排除字段
      * @return {@link Sorts}
      */
-    public static Sorts asc(final ComparableExpressionBase qdsl, final Enum jpa) {
+    public static Sorts asc(final ComparableExpressionBase<?> qdsl, final Enum<?> jpa) {
         return Sorts.builder().qdsl(qdsl.asc()).jpa(Sort.Order.asc(jpa.name())).build();
     }
 
@@ -85,14 +85,14 @@ public class Sorts implements Serializable {
      * @param jpa  {@link Enum} JPA模式使用 OrderBy 枚举名作为排除字段
      * @return {@link Sorts}
      */
-    public static Sorts desc(final ComparableExpressionBase qdsl, final Enum jpa) {
+    public static Sorts desc(final ComparableExpressionBase<?> qdsl, final Enum<?> jpa) {
         return Sorts.builder().qdsl(qdsl.desc()).jpa(Sort.Order.desc(jpa.name())).build();
     }
 
     /**
      * QueryDSL 查询模式排序对象
      */
-    private OrderSpecifier qdsl;
+    private OrderSpecifier<?> qdsl;
     /**
      * Spring JPA 查询模式排序对象
      */

@@ -12,6 +12,10 @@
     <properties>
         <!-- 指定编译和打包时的编码 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
     </properties>
 
     <dependencies>
@@ -20,7 +24,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.8</version>
-            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
         <!-- 日志工具包 -->
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->

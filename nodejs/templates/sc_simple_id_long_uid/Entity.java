@@ -136,7 +136,7 @@ public final class <%=TabName%> implements
             return Stream.of(OrderBy.values()).map(Enum::name).toArray(String[]::new);
         }
 
-        OrderBy(final ComparableExpressionBase qdsl) {
+        OrderBy(final ComparableExpressionBase<?> qdsl) {
             asc = Sorts.asc(qdsl, this);
             desc = Sorts.desc(qdsl, this);
         }

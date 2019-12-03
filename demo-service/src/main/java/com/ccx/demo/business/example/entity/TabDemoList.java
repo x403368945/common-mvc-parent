@@ -260,7 +260,7 @@ public class TabDemoList implements
             return Stream.of(OrderBy.values()).map(Enum::name).toArray(String[]::new);
         }
 
-        OrderBy(ComparableExpressionBase qdsl) {
+        OrderBy(final ComparableExpressionBase<?> qdsl) {
             asc = Sorts.asc(qdsl, this);
             desc = Sorts.desc(qdsl, this);
         }
