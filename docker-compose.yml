@@ -1,0 +1,60 @@
+# mkdir -p ./docker/logs && mkdir -p ./docker/logs && docker-compose up --build
+# version 参考：https://docs.docker.com/compose/compose-file/#reference-and-guidelines
+version: '3.7'
+# 可以指定多个服务
+services:
+  # 服务名称
+  app-security:
+    build: app-security/.
+    # 容器名称
+    container_name: app-security
+    # 容器镜像
+    image: app-security:1.0
+    # 容器重启方式
+    restart: 'no'
+    # 端口映射【宿主:容器】
+    ports:
+      - 18081:8080
+    #    environment:
+    #      CATALINA_HOME: ~/docker/app-tomcat
+    # 目录映射【宿主:容器】
+    volumes:
+      - "./docker/logs:/logs"
+      - "./docker/files:/app/files"
+  app-socket:
+    build: app-socket/.
+    container_name: app-socket
+    image: app-socket:1.0
+    restart: 'no'
+    ports:
+      - 18082:8080
+  app-demo:
+    build: app-demo/.
+    container_name: app-demo
+    image: app-demo:1.0
+    restart: 'no'
+    ports:
+      - 18083:8080
+    volumes:
+      - "./docker/logs:/logs"
+      - "./docker/files:/app/files"
+  app-db-master-slave:
+    build: app-db-master-slave/.
+    container_name: app-db-master-slave
+    image: app-db-master-slave:1.0
+    restart: 'no'
+    ports:
+      - 18084:8080
+    volumes:
+      - "./docker/logs:/logs"
+      - "./docker/files:/app/files"
+#  app-sharding-jdbc:
+#    build: app-sharding-jdbc/.
+#    container_name: app-sharding-jdbc
+#    image: app-sharding-jdbc:1.0
+#    restart: 'no'
+#    ports:
+#      - 18085:8080
+#    volumes:
+#      - "./docker/logs:/logs"
+#      - "./docker/files:/app/files"
