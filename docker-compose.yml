@@ -1,4 +1,4 @@
-# mkdir -p ./docker/logs && mkdir -p ./docker/logs && docker-compose up --build
+# mkdir -p ./docker/logs && mkdir -p ./docker/logs && mvn clean package -Dmaven.test.skip=true && docker-compose up --build
 # version 参考：https://docs.docker.com/compose/compose-file/#reference-and-guidelines
 version: '3.7'
 # 可以指定多个服务
