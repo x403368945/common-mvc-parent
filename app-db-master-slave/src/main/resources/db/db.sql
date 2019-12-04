@@ -19,9 +19,10 @@
 -- character_set_server	    (默认的内部操作字符集)
 -- *********************************************************************************************************************
 
--- DROP DATABASE IF EXISTS demo_main_master_db;
--- CREATE DATABASE demo_main_master_db CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_general_ci';
-
+/*
+DROP DATABASE IF EXISTS master_slave_db;
+CREATE DATABASE master_slave_db CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_general_ci';
+*/
 -- 用户表
 DROP TABLE IF EXISTS tab_user;
 CREATE TABLE tab_user (
