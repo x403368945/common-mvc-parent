@@ -22,6 +22,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -250,7 +251,12 @@ public final class Dates {
                 try {
                     return Dates.of(YearMonth.parse(value, getFormatter()).atDay(1));
                 } catch (Exception e) {
-                    return yyyy_MM_dd.parse(value);
+                    try {
+                        return yyyy_MM_dd.parse(value);
+                    } catch (Exception e1) {
+//                        java.util.regex.Pattern.compile("\\d{4}-\\d+")
+                        return null;
+                    }
                 }
             }
         }),

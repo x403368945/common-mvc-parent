@@ -1,17 +1,9 @@
 package com.ccx.demo.config;
 
-import com.alibaba.druid.filter.logging.Slf4jLogFilter;
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
-import com.alibaba.druid.support.http.StatViewServlet;
-import com.alibaba.druid.support.http.WebStatFilter;
 import com.ccx.demo.tl.DBContext;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -19,10 +11,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.servlet.Filter;
-import javax.servlet.Servlet;
 import javax.sql.DataSource;
 import java.util.HashMap;
 
@@ -132,61 +120,52 @@ public class DBConfig {
     }
 
     /**
-     * 注册 {@link com.alibaba.druid.support.http.StatViewServlet}
-     *
-     * @return {@link org.springframework.boot.web.servlet.ServletRegistrationBean}
-     */
-    @Bean
-    public ServletRegistrationBean druidStatViewServlet() {
-        // {@link org.springframework.boot.web.servlet.ServletRegistrationBean} 提供类的进行注册.
-        final ServletRegistrationBean<Servlet> servlet = new ServletRegistrationBean<>(new StatViewServlet(), "/druid/*");
-        // 添加初始化参数：initParams
-//        // 白名单：
-//        servlet.addInitParameter("allow", "127.0.0.1");
-//        // IP黑名单 (存在共同时，deny优先于allow) : 如果满足deny的话提示:Sorry, you are not permitted to view this page.
-//        servlet.addInitParameter("deny", "192.168.1.73");
-        // 登录查看信息的账号密码.
-        servlet.addInitParameter("loginUsername", "druid");
-        servlet.addInitParameter("loginPassword", "druid");
-        // 是否能够重置数据.
-        servlet.addInitParameter("resetEnable", "false");
-        return servlet;
-    }
-
-    /**
-     * 注册 {@link com.alibaba.druid.support.http.WebStatFilter}
-     *
-     * @return {@link org.springframework.boot.web.servlet.FilterRegistrationBean}
-     */
-    @Bean
-    public FilterRegistrationBean druidStatFilter() {
-        final FilterRegistrationBean<Filter> filter = new FilterRegistrationBean<>(new WebStatFilter());
-        // 添加过滤规则.
-        filter.addUrlPatterns("/druid/*");
-        // 添加不需要忽略的格式信息.
-        filter.addInitParameter("exclusions", "/druid/*,*.html,*.htm,*.js,*.css,*.gif,*.jpg,*.bmp,*.png,*.ico,*.svg,*.ttf,*.woff,*.woff2");
-        return filter;
-    }
-
-    /**
      * 注册日志打印格式，
      * 参考：{@link com.alibaba.druid.spring.boot.autoconfigure.stat.DruidFilterConfiguration}
      *
      * @return {@link com.alibaba.druid.filter.logging.Slf4jLogFilter}
      */
-    @Bean
-    @ConfigurationProperties("spring.datasource.druid.filter.slf4j")
-    @ConditionalOnProperty(prefix = "spring.datasource.druid.filter.slf4j", name = "enabled")
-    @ConditionalOnMissingBean
-    public Slf4jLogFilter slf4jLogFilter() {
-        return new Slf4jLogFilter();
-    }
+//    @Bean
+//    @ConfigurationProperties("spring.datasource.druid.filter.slf4j")
+//    @ConditionalOnProperty(prefix = "spring.datasource.druid.filter.slf4j", name = "enabled")
+//    @ConditionalOnMissingBean
+//    public Slf4jLogFilter slf4jLogFilter() {
+//        return new Slf4jLogFilter();
+//    }
+//
+//    @Bean
+//    @ConfigurationProperties("spring.datasource.druid.filter.stat")
+//    @ConditionalOnProperty(prefix = "spring.datasource.druid.filter.stat", name = "enabled")
+//    @ConditionalOnMissingBean
+//    public StatFilter statFilter() {
+//        return new StatFilter();
+//    }
+//
+//    @Bean
+//    @ConfigurationProperties("spring.datasource.druid.stat-view-servlet")
+//    @ConditionalOnProperty(prefix = "spring.datasource.druid.stat-view-servlet", name = "enabled")
+//    @ConditionalOnMissingBean
+//    public DruidStatProperties.StatViewServlet statViewServlet() {
+//        return new DruidStatProperties.StatViewServlet();
+//    }
+//
+//    @Bean
+//    @ConfigurationProperties("spring.datasource.druid.web-stat-filter")
+//    @ConditionalOnProperty(prefix = "spring.datasource.druid.web-stat-filter", name = "enabled")
+//    @ConditionalOnMissingBean
+//    public DruidStatProperties.WebStatFilter webStatFilter() {
+//        return new DruidStatProperties.WebStatFilter();
+//    }
 
-    @PersistenceContext
-    private EntityManager entityManager;
+//    @Bean
+//    public DruidStatProperties druidStatProperties(
+//            DruidStatProperties.StatViewServlet statViewServlet,
+//            DruidStatProperties.WebStatFilter webStatFilter
+//    ) {
+//        final DruidStatProperties properties = new DruidStatProperties();
+//        properties.setStatViewServlet(statViewServlet);
+//        properties.setWebStatFilter(webStatFilter);
+//        return properties;
+//    }
 
-    @Bean
-    public JPAQueryFactory jpaQueryFactory() {
-        return new JPAQueryFactory(entityManager);
-    }
 }
