@@ -77,7 +77,7 @@ public class BeanInitializer implements InitConfig.Initializer {
          *
          * @return ApplicationContext
          */
-        public ApplicationContext getAppContext() {
+        public static ApplicationContext getAppContext() {
             return APP_CONTEXT;
         }
     }

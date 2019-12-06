@@ -5,32 +5,26 @@ import Asserts from '../utils/entity/Asserts';
 
 /**
  * 请求 url 定义
- * @author 谢长春 2019-7-28
+ * @author 谢长春 2019-8-30
  */
-const DEMO_LIST_URL = Object.freeze({
-  save: '/demo-list/1', // 新增
-  update: '/demo-list/1/{id}', // 修改
-  deleteById: '/demo-list/1/{id}', // 按 id 删除
-  deleteByUid: '/demo-list/1/{id}/{uid}', // 按 id + uid 删除
-  markDeleteById: '/demo-list/1/{id}', // 按 id 逻辑删除
-  markDeleteByUid: '/demo-list/1/{id}/{uid}', // 按 id + uid 逻辑删除
-  markDelete: '/demo-list/1', // 按 id + uid 批量逻辑删除
-  // findById: '/demo-list/1/{id}', // 按 id 查询单条记录
-  findByIdTimestamp: '/demo-list/1/{id}/{timestamp}', // 按 id + 时间戳 查询单条记录
-  findByUidTimestamp: '/demo-list/1/{id}/{uid}/{timestamp}', // 按 id + uid + 时间戳 查询单条记录
-  search: '/demo-list/1', // 多条件批量查询，不分页
-  page: '/demo-list/1/page/{number}/{size}' // 分页：多条件批量查询
+const ROLE_URL = Object.freeze({
+  save: '/role/1', // 新增
+  update: '/role/1/{id}', // 修改
+  markDeleteByUid: '/role/1/{id}/{uid}', // 按 id + uid 逻辑删除
+  findByUid: '/role/1/{id}/{uid}', // 按 id + uid + 时间戳 查询单条记录
+  page: '/role/1/page/{number}/{size}', // 分页：多条件批量查询
+  options: '/role/1/options', // 角色下拉列表选项
 });
 
 /**
- * 后台服务请求：参考案例：实体表操作
+ * 后台服务请求：角色
  * @author 谢长春 2019-7-28
  */
-export class DemoListService {
+export class RoleService {
   /**
    * js 中， 类对象在经过方法传递后无法推断类型，造成类方法和变量提示不准确，这里 self 转换之后可以得到正确的提示
-   * @param self {DemoListService}
-   * @return {DemoListService}
+   * @param self {RoleService}
+   * @return {RoleService}
    */
   static self(self) {
     return self;
@@ -38,22 +32,22 @@ export class DemoListService {
 
   /**
    * 静态构造函数
-   * @param vo {DemoListVO} 参考案例对象
-   * @return {DemoListService}
+   * @param vo {RoleVO} 参考案例对象
+   * @return {RoleService}
    */
   static of(vo) {
-    return new DemoListService(vo);
+    return new RoleService(vo);
   }
 
   /**
    * 静态构造函数
-   * @param vo {DemoListVO} 参考案例对象
+   * @param vo {RoleVO} 参考案例对象
    */
   constructor(vo) {
     Asserts.of().hasFalse(vo, () => 'vo');
     /**
      * 参考案例对象
-     * @type {DemoListVO}
+     * @type {RoleVO}
      */
     this.vo = vo;
   }
@@ -67,9 +61,9 @@ export class DemoListService {
    * @return {Promise<Result>}
    */
   async save() {
-    const {name, phone} = this.vo;
+    const {name, authorityTree} = this.vo;
     return await axios
-      .post(DEMO_LIST_URL.save, {json: {name, phone}})
+      .post(ROLE_URL.save, {json: {name, authorityTree}})
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -81,43 +75,7 @@ export class DemoListService {
   async update() {
     const {id, ...json} = this.vo;
     return await axios
-      .put(DEMO_LIST_URL.update.format(id || 0), {json})
-      .then(Result.ofResponse)
-      .catch(Result.ofCatch);
-  }
-
-  /**
-   * 按 id 删除
-   * @return {Promise<Result>}
-   */
-  async deleteById() {
-    const {id} = this.vo;
-    return await axios
-      .delete(DEMO_LIST_URL.deleteById.format(id || 0))
-      .then(Result.ofResponse)
-      .catch(Result.ofCatch);
-  }
-
-  /**
-   * 按 id + uid 删除
-   * @return {Promise<Result>}
-   */
-  async deleteByUid() {
-    const {id, uid} = this.vo;
-    return await axios
-      .delete(DEMO_LIST_URL.deleteByUid.format(id || 0, uid))
-      .then(Result.ofResponse)
-      .catch(Result.ofCatch);
-  }
-
-  /**
-   * 按 id 逻辑删除
-   * @return {Promise<Result>}
-   */
-  async markDeleteById() {
-    const {id} = this.vo;
-    return await axios
-      .patch(DEMO_LIST_URL.markDeleteById.format(id || 0))
+      .put(ROLE_URL.update.format(id || 0), {json})
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -129,66 +87,19 @@ export class DemoListService {
   async markDeleteByUid() {
     const {id, uid} = this.vo;
     return await axios
-      .patch(DEMO_LIST_URL.markDeleteByUid.format(id || 0, uid))
+      .patch(ROLE_URL.markDeleteByUid.format(id || 0, uid))
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
 
   /**
-   * 按 id + uid 批量逻辑删除
+   * 按 id + uid 查询单条记录
    * @return {Promise<Result>}
    */
-  async markDelete() {
-    const {uids} = this.vo;
+  async findByUid() {
+    const {id, uid} = this.vo;
     return await axios
-      .patch(DEMO_LIST_URL.markDelete, {json: uids})
-      .then(Result.ofResponse)
-      .catch(Result.ofCatch);
-  }
-
-  /**
-   * 按 id + 时间戳 查询单条记录
-   * @return {Promise<Result>}
-   */
-  async findByIdTimestamp() {
-    const {id, timestamp} = this.vo;
-    return await axios
-      .get(DEMO_LIST_URL.findByIdTimestamp.format(id || 0, timestamp))
-      .then(Result.ofResponse)
-      .catch(Result.ofCatch);
-  }
-
-  /**
-   * 按 id + uid + 时间戳 查询单条记录
-   * @return {Promise<Result>}
-   */
-  async findByUidTimestamp() {
-    const {id, uid, timestamp} = this.vo;
-    return await axios
-      .get(DEMO_LIST_URL.findByUidTimestamp.format(id || 0, uid, timestamp))
-      .then(Result.ofResponse)
-      .catch(Result.ofCatch);
-  }
-
-  /**
-   * 多条件批量查询，不分页
-   * @return {Promise<Result>}
-   */
-  async search() {
-    const {id, name, phone, amountRange, createTimeRange, sorts} = this.vo;
-    return await axios
-      .get(DEMO_LIST_URL.search, {
-        params: {
-          json: {
-            id: id || undefined,
-            name: name || undefined,
-            phone: name || undefined,
-            amountRange,
-            createTimeRange,
-            sorts
-          }
-        }
-      })
+      .get(ROLE_URL.findByUid.format(id || 0, uid))
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -200,7 +111,7 @@ export class DemoListService {
   async pageable() {
     const {id, name, phone, amountRange, createTimeRange, sorts, page} = this.vo;
     return await axios
-      .get(DEMO_LIST_URL.page.formatObject(page || Page.ofDefault()),
+      .get(ROLE_URL.page.formatObject(page || Page.ofDefault()),
         {
           params: {
             json: {
@@ -217,17 +128,28 @@ export class DemoListService {
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
+
+  /**
+   * 角色下拉列表选项
+   * @return {Promise<Result>}
+   */
+  async options() {
+    return await axios
+      .get(ROLE_URL.options)
+      .then(Result.ofResponse)
+      .catch(Result.ofCatch);
+  }
 }
 
 /**
- * 后台服务请求：参考案例：实体表操作
+ * 后台服务请求：角色
  * @author 谢长春 2019-7-28
  */
-export default class DemoListVO {
+export default class RoleVO {
   /**
    * js 中， 类对象在经过方法传递后无法推断类型，造成类方法和变量提示不准确，这里 self 转换之后可以得到正确的提示
-   * @param self {DemoListVO}
-   * @return {DemoListVO}
+   * @param self {RoleVO}
+   * @return {RoleVO}
    */
   static self(self) {
     return self;
@@ -236,10 +158,10 @@ export default class DemoListVO {
   /**
    * 将 result 对象中的 data 集合转换为当前对象集合
    * @param data {Array<object>}
-   * @return {Array<DemoListVO>}
+   * @return {Array<RoleVO>}
    */
   static parseList(data) {
-    return data.map(new DemoListVO(data || {}));
+    return data.map(new RoleVO(data || {}));
   }
 
   /**
@@ -247,9 +169,8 @@ export default class DemoListVO {
    * @param id {number} 数据 ID
    * @param uid {string} 数据UUID，缓存和按ID查询时可使用强校验
    * @param name {string} 名称
-   * @param content {string} 内容
-   * @param amount {number} 金额
-   * @param status {string} 状态，参考 {@link DemoStatus}.*.value
+   * @param authorities {Array<String>} 权限指令代码集合，同 {@link AuthorityVO#code}
+   * @param authorityTree {Array<AuthorityVO>} 权限指令树
    * @param createTime {string} 创建时间
    * @param createUserId {number} 创建用户ID
    * @param createUserName {string} 创建用户昵称
@@ -258,9 +179,6 @@ export default class DemoListVO {
    * @param modifyUserName {string} 修改用户昵称
    * @param deleted {string} 逻辑删除状态，参考 {@link Radio}.*.value
    * @param timestamp {number} 按 id 查询时可能使用时间戳缓存
-   * @param uids {Array<Object>} id + uid批量带参，=> [{id:1,uid:''},{id:1,uid:''}]
-   * @param amountRange {NumRange} 金额查询区间
-   * @param createTimeRange {DateRange} 创建时间查询区间
    * @param sorts {Array<OrderBy>} 排序字段集合
    * @param page {Page} 分页对象
    */
@@ -268,9 +186,8 @@ export default class DemoListVO {
                 id = undefined,
                 uid = undefined,
                 name = undefined,
-                content = undefined,
-                amount = undefined,
-                status = undefined,
+                authorities = undefined,
+                authorityTree = undefined,
                 createTime = undefined,
                 createUserId = undefined,
                 createUserName = undefined,
@@ -279,9 +196,6 @@ export default class DemoListVO {
                 modifyUserName = undefined,
                 deleted = undefined,
                 timestamp = undefined,
-                uids = undefined,
-                amountRange = undefined,
-                createTimeRange = undefined,
                 sorts = undefined,
                 page = undefined
               } = {}) {
@@ -301,20 +215,15 @@ export default class DemoListVO {
      */
     this.name = name;
     /**
-     * 内容
-     * @type {string}
+     * 权限指令代码集合，同 {@link AuthorityVO#code}
+     * @type {Array<String>}
      */
-    this.content = content;
+    this.authorities = authorities;
     /**
-     * 金额
-     * @type {number}
+     * 权限指令树
+     * @type {Array<AuthorityVO>}
      */
-    this.amount = amount;
-    /**
-     * 状态，参考 {@link DemoStatus}.*.value
-     * @type {string}
-     */
-    this.status = status;
+    this.authorityTree = authorityTree;
     /**
      * 创建时间
      * @type {string}
@@ -356,21 +265,6 @@ export default class DemoListVO {
      */
     this.timestamp = timestamp;
     /**
-     * id + uid批量带参，=> [{id:1,uid:''},{id:1,uid:''}]
-     * @type {Array<Object>}
-     */
-    this.uids = uids;
-    /**
-     * 金额查询区间
-     * @type {NumRange}
-     */
-    this.amountRange = amountRange;
-    /**
-     * 创建时间查询区间
-     * @type {DateRange}
-     */
-    this.createTimeRange = createTimeRange;
-    /**
      * 排序字段集合
      * @type {Array<OrderBy>}
      */
@@ -388,9 +282,9 @@ export default class DemoListVO {
 
   /**
    * 获取 api 服务对象
-   * @return {DemoListService}
+   * @return {RoleService}
    */
   getService() {
-    return new DemoListService(this);
+    return new RoleService(this);
   }
 }

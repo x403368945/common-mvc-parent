@@ -202,20 +202,7 @@ export default class OpenDemoVO {
    * @return {Array<OpenDemoVO>}
    */
   static parseList(data) {
-    return data.map(OpenDemoVO.of);
-  }
-
-  /**
-   * 构造参考案例参数
-   * @param id {number} 数据 ID
-   * @param name {string} 姓名
-   * @param phone {string} 手机号
-   * @param ids {Array<number>} 批量操作 ids
-   * @param page {Page} 分页对象
-   * @return {OpenDemoVO}
-   */
-  static of({id = undefined, name = undefined, phone = undefined, ids = undefined, page = undefined} = {}) {
-    return new OpenDemoVO(id, name, phone, ids, page);
+    return data.map(new OpenDemoVO(data || {}));
   }
 
   /**
@@ -226,7 +213,7 @@ export default class OpenDemoVO {
    * @param ids {Array<number>} 批量操作 ids
    * @param page {Page} 分页对象
    */
-  constructor(id, name, phone, ids, page) {
+  constructor({id = undefined, name = undefined, phone = undefined, ids = undefined, page = undefined} = {}) {
     /**
      * 数据 ID
      * @type {number}

@@ -2,8 +2,7 @@
  * Created by Conor Xie on 2018/4/1.
  */
 import {parse} from 'path';
-import Paths from './Paths';
-import Dates from './Dates';
+import Paths from './entity/Paths';
 
 /**
  * 写入响应结果到文件
@@ -18,7 +17,7 @@ export const write = function (hasTrue, filename, name, data) {
     if (process.env.BROWSER) {
       console.log(['{filename}#{name}'.format(filename, name), data])
     } else {
-      const uname = '{name}-{timestamp}.json'.format(name, Dates.of().format('yyyyMMddHHmmssSSS'));
+      const uname = '{name}-{timestamp}.json'.format(name, new Date().format('yyyyMMddHHmmssSSS'));
       console.log(uname);
       console.log(
         Paths.resolve('logs', parse(filename).base)

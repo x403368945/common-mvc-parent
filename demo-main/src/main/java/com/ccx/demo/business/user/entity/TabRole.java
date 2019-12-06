@@ -1,24 +1,20 @@
-package com.ccx.demo.business.example.entity;
+package com.ccx.demo.business.user.entity;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
-import com.ccx.demo.business.example.entity.convert.ItemJsonConvert;
-import com.ccx.demo.business.example.entity.convert.ListItemJsonConvert;
-import com.ccx.demo.business.example.entity.convert.ListStringJsonConvert;
 import com.ccx.demo.enums.Radio;
 import com.ccx.demo.business.user.cache.IUserCache;
 import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
-import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.support.mvc.entity.ITable;
 import com.support.mvc.entity.ITimestamp;
 import com.support.mvc.entity.IWhere;
 import com.support.mvc.entity.IWhere.QdslWhere;
-import com.support.mvc.entity.base.Item;
 import com.support.mvc.entity.base.Prop;
 import com.support.mvc.entity.base.Sorts;
+import com.support.mvc.entity.convert.MysqlListStringConvert;
 import com.support.mvc.entity.validated.IMarkDelete;
 import com.support.mvc.entity.validated.ISave;
 import com.support.mvc.entity.validated.IUpdate;
@@ -29,30 +25,26 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.ccx.demo.business.example.entity.QTabConvert.tabConvert;
+import static com.ccx.demo.business.user.entity.QTabRole.tabRole;
 import static com.support.mvc.entity.base.Prop.SORTS;
 import static com.support.mvc.entity.base.Prop.Type.*;
 import static com.support.mvc.enums.Code.ORDER_BY;
 
 /**
- * 实体类：测试自定义 Convert 表
+ * 实体类：角色表
  *
- * @author 谢长春 on 2019-08-21
+ * @author 谢长春 on 2019-08-29
  */
-@Table(name = "tab_convert")
+@Table(name = "tab_role")
 @Entity
 @QueryEntity
 @DynamicInsert
@@ -61,14 +53,14 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 @AllArgsConstructor
 @Builder
 @Data
-@JSONType(orders = {"id", "uid", "ids", "images", "items", "item", "createTime", "createUserId", "createUserName", "modifyTime", "modifyUserId", "modifyUserName", "deleted"})
-public final class TabConvert implements
+@JSONType(orders = {"id", "uid", "name", "authorities", "createTime", "createUserId", "modifyTime", "modifyUserId", "deleted"})
+public final class TabRole implements
         ITable, // 所有与数据库表 - 实体类映射的表都实现该接口；方便后续一键查看所有表的实体
         IUserCache,
         ITimestamp, // 所有需要更新时间戳的实体类
         // JPAUpdateClause => com.support.mvc.dao.IRepository#update 需要的动态更新字段；采用 方案2 时需要实现该接口
         // QdslWhere       => com.support.mvc.dao.IViewRepository 需要的查询条件
-        IWhere<JPAUpdateClause, QdslWhere> {
+        IWhere<TabRole, QdslWhere> {
     /**
      * 数据ID，主键自增
      */
@@ -78,38 +70,28 @@ public final class TabConvert implements
     @Positive
     private Long id;
     /**
-     * 数据UUID，缓存和按ID查询时可使用强校验
+     * 用户UUID，缓存和按ID查询时可使用强校验
      */
     @Column(updatable = false)
     @NotNull(groups = {IUpdate.class, IMarkDelete.class})
     @Size(min = 32, max = 32)
     private String uid;
     /**
-     * {@link List<Long>}
+     * 名称
      */
-//    @Convert(converter = ListLongJsonConvert.class)
-    @Type(type = "Long[]")
-    private Long[] ids;
+    @NotNull
+    @Size(max = 200)
+    private String name;
     /**
-     * {@link List<String>}
+     * 权限指令集合，tab_authority.id，{@link List<String>}
      */
-    @Convert(converter = ListStringJsonConvert.class)
-    private List<String> images;
-    /**
-     * {@link List<com.support.mvc.entity.base.Item>}
-     */
-    @Convert(converter = ListItemJsonConvert.class)
-    private List<Item> items;
-    /**
-     * {@link com.support.mvc.entity.base.Item}
-     */
-    @Convert(converter = ItemJsonConvert.class)
-    private Item item;
+    @Convert(converter = MysqlListStringConvert.class)
+    private List<String> authorities;
     /**
      * 创建时间
      */
     @Column(insertable = false, updatable = false)
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @Null(groups = {ISave.class})
     private Timestamp createTime;
     /**
@@ -133,7 +115,7 @@ public final class TabConvert implements
     @Positive
     private Long modifyUserId;
     /**
-     * 是否逻辑删除（1、已删除， 0、未删除）
+     * 是否逻辑删除（1、已删除， 0、未删除），参考：Enum{@link com.ccx.demo.enums.Radio}
      */
     @Column(insertable = false, updatable = false)
     @Null(groups = {ISave.class})
@@ -145,6 +127,13 @@ public final class TabConvert implements
     @QueryTransient
     @Transient
     private List<Sorts.Order> sorts;
+    /**
+     * 前端配置的权限树
+     */
+    @NotEmpty(groups = {ISave.class})
+    @QueryTransient
+    @Transient
+    private List<Authority> authorityTree;
 
     @Override
     public String toString() {
@@ -159,11 +148,9 @@ public final class TabConvert implements
      */
     public enum Props {
         id(LONG.build(true, "数据ID，主键自增")),
-        uid(STRING.build(true, "数据UUID，缓存和按ID查询时可使用强校验")),
-        ids(ARRAY.build("{@link List<Long>}")),
-        images(ARRAY.build("{@link List<String>}")),
-        items(ARRAY.build("{@link List<com.support.mvc.entity.base.Item>}")),
-        item(OBJECT.build("{@link com.support.mvc.entity.base.Item}")),
+        uid(STRING.build(true, "用户UUID，缓存和按ID查询时可使用强校验")),
+        name(STRING.build(true, "名称")),
+        authorities(STRING.build(true, "权限 ID 集合，tab_authority.id，{@link List<String>}")),
         createTime(TIMESTAMP.build("创建时间")),
         createUserId(LONG.build("创建用户ID")),
         modifyTime(TIMESTAMP.build("修改时间")),
@@ -173,6 +160,7 @@ public final class TabConvert implements
         //        timestamp(LONG.build("数据最后一次更新时间戳")),
 //        numRange(RANGE_NUM.apply("数字查询区间")),
 //        createTimeRange(RANGE_DATE.apply("创建时间查询区间")),
+        authorityTree(ARRAY.build("前端配置的权限树")),
         sorts(SORTS.apply(OrderBy.names())),
         ;
         private final Prop prop;
@@ -196,17 +184,15 @@ public final class TabConvert implements
      */
     public enum OrderBy {
         // 按 id 排序可替代按创建时间排序
-        id(tabConvert.id),
-//        uid(tabConvert.uid),
-//        ids(tabConvert.ids),
-//        images(tabConvert.images),
-//        items(tabConvert.items),
-//        item(tabConvert.item),
-//        createTime(tabConvert.createTime),
-//        createUserId(tabConvert.createUserId),
-//        modifyTime(tabConvert.modifyTime),
-//        modifyUserId(tabConvert.modifyUserId),
-//        deleted(tabConvert.deleted),
+        id(tabRole.id),
+//        uid(tabRole.uid),
+//        name(tabRole.name),
+//        authorities(tabRole.authorities),
+//        createTime(tabRole.createTime),
+//        createUserId(tabRole.createUserId),
+//        modifyTime(tabRole.modifyTime),
+//        modifyUserId(tabRole.modifyUserId),
+//        deleted(tabRole.deleted),
         ;
         public final Sorts asc;
         public final Sorts desc;
@@ -241,16 +227,13 @@ public final class TabConvert implements
 // Enum End : DB Start *************************************************************************************************
 
     @Override
-    public Then<JPAUpdateClause> update(final JPAUpdateClause jpaUpdateClause) {
-        final QTabConvert q = tabConvert;
+    public Then<TabRole> update(final TabRole dest) {
         // 动态拼接 update 语句
         // 以下案例中 只有 name 属性 为 null 时才不会加入 update 语句；
-        return Then.of(jpaUpdateClause)
-                .then(ids, update -> update.set(q.ids, ids))
-                .then(images, update -> update.set(q.images, images))
-                .then(items, update -> update.set(q.items, items))
-                .then(item, update -> update.set(q.item, item))
-                .then(modifyUserId, update -> update.set(q.modifyUserId, modifyUserId))
+        return Then.of(dest)
+                .then(name, update -> dest.setName(name))
+                .then(authorities, update -> dest.setAuthorities(authorities))
+                .then(update -> dest.setModifyUserId(modifyUserId))
 //                // 当 name != null 时更新 name 属性
 //                .then(name, update -> update.set(q.name, name))
 //                .then(update -> update.set(q.modifyUserId, modifyUserId))
@@ -263,20 +246,18 @@ public final class TabConvert implements
 
     @Override
     public QdslWhere where() {
-        final QTabConvert q = tabConvert;
+        final QTabRole q = tabRole;
         // 构建查询顺序规则请参考：com.support.mvc.entity.IWhere#where
         return QdslWhere.of()
                 .and(id, () -> q.id.eq(id))
-                .and(uid, () -> uid.endsWith("%") || uid.startsWith("%") ? q.uid.like(uid) : q.uid.eq(uid))
-//                .and(ids, () -> q.ids.eq(ids))
-//                .and(images, () -> q.images.eq(images))
-//                .and(items, () -> q.items.eq(items))
-//                .and(item, () -> q.item.eq(item))
+                .and(uid, () -> q.uid.eq(uid))
+                .and(name, () -> name.endsWith("%") || name.startsWith("%") ? q.name.like(name) : q.name.startsWith(name))
+//                .and(authorities, () -> q.authorities.eq(authorities))
 //                .and(createTimeRange, () -> q.createTime.between(createTimeRange.rebuild().getBegin(), createTimeRange.getEnd()))
 //                .and(createUserId, () -> q.createUserId.eq(createUserId))
 //                .and(modifyTimeRange, () -> q.modifyTime.between(modifyTimeRange.rebuild().getBegin(), modifyTimeRange.getEnd()))
 //                .and(modifyUserId, () -> q.modifyUserId.eq(modifyUserId))
-                .and(deleted, () -> q.deleted.eq(deleted))
+                .and(q.deleted.eq(Objects.isNull(getDeleted()) ? Radio.NO : deleted))
 //                .and(phone, () -> q.phone.eq(phone))
 //                .and(createUserId, () -> q.createUserId.eq(createUserId))
 //                .and(modifyUserId, () -> q.modifyUserId.eq(modifyUserId))

@@ -26,6 +26,8 @@ import Asserts from './src/utils/entity/Asserts';
 import OpenDemoTest from './test/api/OpenDemo.test';
 import UserTest from './test/api/User.test';
 import DemoListTest from './test/api/DemoList.test';
+import AuthorityTest from './test/api/Authority.test';
+import RoleTest from './test/api/Role.test';
 
 const web = browser.create();
 
@@ -75,14 +77,18 @@ gulp.task('server', gulp.series('listener', () => {
 
 gulp.task('test', async () => {
   devConfig();
-  await OpenDemoTest.of().testAll();
-  await UserTest.of().testAll(); // 测试用户相关的接口
+  // await OpenDemoTest.of().testAll();
   await DemoListTest.of().testAll(); //
+  await UserTest.of().testAll(); // 测试用户相关的接口
+  await AuthorityTest.of().testAll();
+  await RoleTest.of().testAll();
 });
 gulp.task('test:one', async () => {
   devConfig();
-  (await UserTest.of().loginUserBasic())
-    .updateNickname(); // 测试用户相关的接口
+  // (await UserTest.of().loginUserBasic())
+  //   .updateNickname(); // 测试用户相关的接口
+
+  await AuthorityTest.of().testAll();
 });
 
 gulp.task('mysql:read:write', async () => {

@@ -1,5 +1,6 @@
-package com.ccx.demo.support.entity;
+package com.ccx.demo.business.user.cache;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.ccx.demo.business.user.dao.jpa.UserRepository;
 import com.ccx.demo.business.user.entity.TabUser;
 import com.querydsl.core.annotations.QueryTransient;
@@ -14,7 +15,7 @@ import static com.ccx.demo.config.init.BeanInitializer.Beans.userRepository;
  *
  * @author 谢长春 2017-9-26
  */
-public interface IUser {
+public interface IUserCache {
     /**
      * 获取缓存用户昵称
      *
@@ -23,6 +24,7 @@ public interface IUser {
      */
     @Transient
     @QueryTransient
+    @JSONField(serialize = false, deserialize = false)
     default String getNickNameByCache(final Long userId) {
         return Optional.ofNullable(userId).map(id -> userRepository.<UserRepository>get().getNickame(id)).orElse(null);
     }

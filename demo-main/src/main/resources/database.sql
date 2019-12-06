@@ -34,13 +34,14 @@ CREATE TABLE tab_user (
     `nickname`       VARCHAR(30)                       NOT NULL DEFAULT '' COMMENT '昵称',
     `phone`          VARCHAR(11)                       NOT NULL DEFAULT '' COMMENT '手机号',
     `email`          VARCHAR(30)                       NOT NULL DEFAULT '' COMMENT '邮箱',
-    `role`           TINYINT(2) UNSIGNED               NOT NULL COMMENT '角色',
+    `roles`          JSON                              NOT NULL COMMENT '角色 ID 集合，tab_role.id，{@link List<Long>}',
     `registerSource` TINYINT(1) UNSIGNED               NOT NULL DEFAULT 0 COMMENT '账户注册渠道',
     `createTime`     TIMESTAMP                         NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `createUserId`   BIGINT                            NOT NULL COMMENT '创建用户ID',
     `modifyTime`     TIMESTAMP(3)                      NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '修改时间',
     `modifyUserId`   BIGINT                            NOT NULL COMMENT '修改用户ID',
     `deleted`        TINYINT(1) UNSIGNED               NOT NULL DEFAULT 0 COMMENT '是否逻辑删除（1、已删除， 0、未删除）',
+    KEY (`uid`),
     KEY (`username`),
     KEY (`phone`),
     KEY (`email`)
@@ -48,6 +49,25 @@ CREATE TABLE tab_user (
     ENGINE InnoDB
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_general_ci COMMENT '用户表';
+
+-- 角色
+DROP TABLE IF EXISTS tab_role;
+CREATE TABLE tab_role
+(
+    id           BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL COMMENT '数据ID，主键自增',
+    uid          VARCHAR(32)                       NOT NULL COMMENT '用户UUID，缓存和按ID查询时可使用强校验',
+    name         VARCHAR(200)                      NOT NULL COMMENT '名称',
+    authorities  JSON                              NOT NULL COMMENT '权限代码集合，{@link List<String>}',
+    createTime   TIMESTAMP                         NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    createUserId BIGINT                            NOT NULL COMMENT '创建用户ID',
+    modifyTime   TIMESTAMP(3)                         NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '修改时间',
+    modifyUserId BIGINT                            NOT NULL COMMENT '修改用户ID',
+    deleted      TINYINT(1) UNSIGNED               NOT NULL DEFAULT 0 COMMENT '是否逻辑删除（1、已删除， 0、未删除），参考：Enum{@link com.ccx.demo.enums.Radio}',
+    KEY (uid)
+)
+    ENGINE InnoDB
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_general_ci COMMENT '角色表';
 
 -- 用户登录记录表
 DROP TABLE IF EXISTS tab_user_login;
@@ -135,11 +155,12 @@ CREATE OR REPLACE VIEW view_vip AS
 ;
 SELECT * FROM view_vip;
 */
+INSERT INTO tab_user(id, uid, username, password, nickname, roles, createUserId, modifyUserId) VALUES
 -- 初始化超级管理员账户，密码：admin
-INSERT INTO tab_user(id, uid, username, password, nickname, role, createUserId, modifyUserId)
-VALUES (1, replace(uuid(), '-', ''), 'admin', '$2a$10$VQ.Rj7bc73B.WwU99k7R.eEAwqXBNmvihobk3SZ4m30b9tCR6..h2', '超级管理员',0, 1, 1);
-
+(1, replace(uuid(), '-', ''), 'admin', '$2a$10$VQ.Rj7bc73B.WwU99k7R.eEAwqXBNmvihobk3SZ4m30b9tCR6..h2', '超级管理员', '[1]', 1, 1),
 -- user:111111
-INSERT INTO tab_user(uid, username, password, nickname, role, createUserId, modifyUserId)
-VALUES (replace(uuid(), '-', ''), 'user', '$2a$10$6unbpf74Dc7NEBywaCHl..FzzprMb69gA.Qi09U7ud7vlKHP9PXfu', '普通用户',2, 1, 1);
+(2, replace(uuid(), '-', ''), 'user', '$2a$10$6unbpf74Dc7NEBywaCHl..FzzprMb69gA.Qi09U7ud7vlKHP9PXfu', '普通用户', '[2]', 1, 1);
 
+INSERT INTO tab_role(id, uid, name, authorities, createUserId, modifyUserId) VALUES
+(1, replace(uuid(), '-', ''), '超级管理员', '["ROLE_ADMIN"]', 1,1),
+(2, replace(uuid(), '-', ''), '普通用户', '["ROLE_USER"]', 1,1);

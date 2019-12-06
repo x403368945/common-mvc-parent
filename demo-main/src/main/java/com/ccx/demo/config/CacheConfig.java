@@ -29,13 +29,18 @@ public class CacheConfig {
      * 用户昵称缓存
      */
     public static final String nicknameCache = "nicknameCache";
+    /**
+     * 角色权限缓存
+     */
+    public static final String roleCache = "roleCache";
 
     @Bean
     public CacheManager cacheManager() {
         final SimpleCacheManager manager = new SimpleCacheManager();
         manager.setCaches(Stream.of(
                 loginCache,
-                nicknameCache
+                nicknameCache,
+                roleCache
         ).map(ConcurrentMapCache::new).collect(Collectors.toList()));
         return manager;
     }

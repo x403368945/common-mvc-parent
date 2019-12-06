@@ -34,13 +34,14 @@ CREATE TABLE tab_user (
     `nickname`       VARCHAR(30)                       NOT NULL DEFAULT '' COMMENT '昵称',
     `phone`          VARCHAR(11)                       NOT NULL DEFAULT '' COMMENT '手机号',
     `email`          VARCHAR(30)                       NOT NULL DEFAULT '' COMMENT '邮箱',
-    `role`           TINYINT(2) UNSIGNED               NOT NULL COMMENT '角色',
+    `roles`          JSON                              NOT NULL COMMENT '角色 ID 集合，tab_role.id，{@link List<Long>}',
     `registerSource` TINYINT(1) UNSIGNED               NOT NULL DEFAULT 0 COMMENT '账户注册渠道',
     `createTime`     TIMESTAMP                         NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `createUserId`   BIGINT                            NOT NULL COMMENT '创建用户ID',
     `modifyTime`     TIMESTAMP(3)                      NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '修改时间',
     `modifyUserId`   BIGINT                            NOT NULL COMMENT '修改用户ID',
     `deleted`        TINYINT(1) UNSIGNED               NOT NULL DEFAULT 0 COMMENT '是否逻辑删除（1、已删除， 0、未删除）',
+    KEY (`uid`),
     KEY (`username`),
     KEY (`phone`),
     KEY (`email`)
@@ -48,6 +49,25 @@ CREATE TABLE tab_user (
     ENGINE InnoDB
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_general_ci COMMENT '用户表';
+
+-- 角色
+DROP TABLE IF EXISTS tab_role;
+CREATE TABLE tab_role
+(
+    id           BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL COMMENT '数据ID，主键自增',
+    uid          VARCHAR(32)                       NOT NULL COMMENT '用户UUID，缓存和按ID查询时可使用强校验',
+    name         VARCHAR(200)                      NOT NULL COMMENT '名称',
+    authorities  JSON                              NOT NULL COMMENT '权限代码集合，{@link List<String>}',
+    createTime   TIMESTAMP                         NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    createUserId BIGINT                            NOT NULL COMMENT '创建用户ID',
+    modifyTime   TIMESTAMP(3)                         NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '修改时间',
+    modifyUserId BIGINT                            NOT NULL COMMENT '修改用户ID',
+    deleted      TINYINT(1) UNSIGNED               NOT NULL DEFAULT 0 COMMENT '是否逻辑删除（1、已删除， 0、未删除），参考：Enum{@link com.ccx.demo.enums.Radio}',
+    KEY (uid)
+)
+    ENGINE InnoDB
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_general_ci COMMENT '角色表';
 
 -- 用户登录记录表
 DROP TABLE IF EXISTS tab_user_login;
