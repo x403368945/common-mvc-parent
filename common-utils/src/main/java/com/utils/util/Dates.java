@@ -516,6 +516,9 @@ public final class Dates {
             }
         }),
         U_yyyy_MM_dd_HH_mm_ss("yyyy/MM/dd HH:mm:ss", new IDateTimePatternAdapter() {
+
+            private final java.util.regex.Pattern PATTERN = java.util.regex.Pattern.compile("(\\d{4})/(\\d+)/(\\d+) (\\d+):(\\d+):(\\d+).*");
+
             @Override
             public DateTimeFormatter getFormatter() {
                 return U_yyyy_MM_dd_HH_mm_ss.formatter;
@@ -529,12 +532,34 @@ public final class Dates {
                     try {
                         return Dates.of(LocalDateTime.parse(value, U_yyyy_MM_dd_HH_mm_ss_SSS.formatter));
                     } catch (DateTimeParseException ex) {
-                        return Dates.of(LocalDate.parse(value, U_yyyy_MM_dd.formatter));
+                        try {
+                            return Dates.of(LocalDate.parse(value, U_yyyy_MM_dd.formatter));
+                        } catch (DateTimeParseException exc) {
+                            try {
+                                return Dates.of(LocalDate.parse(value, yyyy_MM_dd.formatter));
+                            } catch (Exception e1) {
+                                final Matcher matcher = PATTERN.matcher(value);
+                                if (matcher.find()) {
+                                    return Dates.of(LocalDateTime.of(
+                                            Integer.parseInt(matcher.group(1)),
+                                            Integer.parseInt(matcher.group(2)),
+                                            Integer.parseInt(matcher.group(3)),
+                                            Integer.parseInt(matcher.group(4)),
+                                            Integer.parseInt(matcher.group(5)),
+                                            Integer.parseInt(matcher.group(6))
+                                    ));
+                                } else {
+                                    throw new DateTimeException("格式解析失败:".concat(value));
+                                }
+                            }
+                        }
                     }
                 }
             }
         }),
         U_yyyy_MM_dd("yyyy/MM/dd", new IDatePatternAdapter() {
+            private final java.util.regex.Pattern PATTERN = java.util.regex.Pattern.compile("(\\d{4})/(\\d+)/(\\d+).*");
+
             @Override
             public DateTimeFormatter getFormatter() {
                 return U_yyyy_MM_dd.formatter;
@@ -548,7 +573,20 @@ public final class Dates {
                     try {
                         return Dates.of(LocalDateTime.parse(value, U_yyyy_MM_dd_HH_mm_ss.formatter));
                     } catch (DateTimeParseException ex) {
-                        return Dates.of(LocalDateTime.parse(value, U_yyyy_MM_dd_HH_mm_ss_SSS.formatter));
+                        try {
+                            return Dates.of(LocalDateTime.parse(value, U_yyyy_MM_dd_HH_mm_ss_SSS.formatter));
+                        } catch (Exception exc) {
+                            final Matcher matcher = PATTERN.matcher(value);
+                            if (matcher.find()) {
+                                return Dates.of(LocalDate.of(
+                                        Integer.parseInt(matcher.group(1)),
+                                        Integer.parseInt(matcher.group(2)),
+                                        Integer.parseInt(matcher.group(3))
+                                ));
+                            } else {
+                                throw new DateTimeException("格式解析失败:".concat(value));
+                            }
+                        }
                     }
                 }
             }
@@ -1737,6 +1775,12 @@ public final class Dates {
                 log.info("{}.parse({}) => {}", pattern.name(), pattern.comment, pattern.parse(value));
             });
         });
+
+        log.info("{}.parse({}) => {}", yyyy_MM.name(), yyyy_MM.comment, yyyy_MM.parse("2019-1-2"));
+        log.info("{}.parse({}) => {}", yyyy_MM_dd.name(), yyyy_MM_dd.comment, yyyy_MM_dd.parse("2019-1-2"));
+        log.info("{}.parse({}) => {}", yyyy_MM_dd_HH_mm_ss.name(), yyyy_MM_dd_HH_mm_ss.comment, yyyy_MM_dd_HH_mm_ss.parse("2019-1-2 3:4:5.6"));
+        log.info("{}.parse({}) => {}", HH_mm.name(), HH_mm.comment, HH_mm.parse("3:4:5.6"));
+        log.info("{}.parse({}) => {}", HH_mm_ss.name(), HH_mm_ss.comment, HH_mm_ss.parse("3:4:5.6"));
     }
 
 }
