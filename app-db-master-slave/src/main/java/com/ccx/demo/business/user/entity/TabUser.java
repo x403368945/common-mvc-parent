@@ -141,7 +141,6 @@ public class TabUser extends UserDetail implements ITabUser, ITable, IUser, IWhe
         return json();
     }
 
-
 // DB Start *************************************************************************************************
 
     @Override

@@ -14,5 +14,5 @@ public interface IConfig<R, P> {
      * @param userId Long 用户ID
      * @return Result<R>
      */
-    IResult<R> config(P param, final Long userId);
+    R config(P param, final Long userId);
 }

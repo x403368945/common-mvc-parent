@@ -53,10 +53,6 @@ public class Test {
         private String name;
         private long value;
 
-        @Override
-        public String toString() {
-            return JSON.toJSONString(this);
-        }
     }
 
 }

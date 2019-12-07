@@ -765,10 +765,6 @@ public final class Dates {
             return this;
         }
 
-        @Override
-        public String toString() {
-            return JSON.toJSONString(this);
-        }
     }
 
     /**
@@ -1039,7 +1035,34 @@ public final class Dates {
     }
 
     /**
-     * 获取：时
+     * 获取：时 alias {@link this#h()}
+     *
+     * @return int
+     */
+    public int hour() {
+        return value.getHour();
+    }
+
+    /**
+     * 获取：分 alias {@link this#m()}
+     *
+     * @return int
+     */
+    public int minute() {
+        return value.getMinute();
+    }
+
+    /**
+     * 获取：秒 alias {@link this#s()}
+     *
+     * @return int
+     */
+    public int second() {
+        return value.getSecond();
+    }
+
+    /**
+     * 获取：时 alias {@link this#hour()}
      *
      * @return int
      */
@@ -1048,7 +1071,7 @@ public final class Dates {
     }
 
     /**
-     * 获取：分
+     * 获取：分 alias {@link this#minute()}
      *
      * @return int
      */
@@ -1057,7 +1080,7 @@ public final class Dates {
     }
 
     /**
-     * 获取：秒
+     * 获取：秒 alias {@link this#second()}
      *
      * @return int
      */
@@ -1108,7 +1131,40 @@ public final class Dates {
     }
 
     /**
-     * 指定：时
+     * 指定：时 alias {@link this#h(int)}
+     *
+     * @param value int
+     * @return {@link Dates}
+     */
+    public Dates hour(int value) {
+        this.value = this.value.withHour(Math.min(23, value));
+        return this;
+    }
+
+    /**
+     * 指定：分 alias {@link this#m(int)}
+     *
+     * @param value int
+     * @return {@link Dates}
+     */
+    public Dates minute(int value) {
+        this.value = this.value.withMinute(Math.min(59, value));
+        return this;
+    }
+
+    /**
+     * 指定：秒 alias {@link this#s(int)}
+     *
+     * @param value int
+     * @return {@link Dates}
+     */
+    public Dates second(int value) {
+        this.value = this.value.withSecond(Math.min(59, value));
+        return this;
+    }
+
+    /**
+     * 指定：时 alias {@link this#hour(int)}
      *
      * @param value int
      * @return {@link Dates}
@@ -1119,7 +1175,7 @@ public final class Dates {
     }
 
     /**
-     * 指定：分
+     * 指定：分 alias {@link this#minute(int)}
      *
      * @param value int
      * @return {@link Dates}
@@ -1130,7 +1186,7 @@ public final class Dates {
     }
 
     /**
-     * 指定：秒
+     * 指定：秒 alias {@link this#second(int)}
      *
      * @param value int
      * @return {@link Dates}

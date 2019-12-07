@@ -14,5 +14,5 @@ public interface ISearch<R, P> {
      * @param userId Long 用户ID
      * @return Result<R>
      */
-    IResult<R> search(P param, final Long userId);
+    R search(P param, final Long userId);
 }

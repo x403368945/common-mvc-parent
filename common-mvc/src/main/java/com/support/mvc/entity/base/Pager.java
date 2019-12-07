@@ -128,8 +128,4 @@ public class Pager {
         );
     }
 
-    @Override
-    public String toString() {
-        return String.format("{\"number\":%d, \"size\":%d}", number, size);
-    }
 }

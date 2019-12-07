@@ -12,5 +12,5 @@ public interface ISay<R> {
      * @param userId Long 用户ID
      * @return Result<R>
      */
-    IResult<R> say(final Long userId);
+    R say(final Long userId);
 }

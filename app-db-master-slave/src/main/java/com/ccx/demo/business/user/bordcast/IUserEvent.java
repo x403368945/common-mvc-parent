@@ -57,10 +57,6 @@ public interface IUserEvent {
          */
         private String nickname;
 
-        @Override
-        public String toString() {
-            return json();
-        }
     }
 
     @NoArgsConstructor
@@ -86,9 +82,5 @@ public interface IUserEvent {
          */
         private String nickname;
 
-        @Override
-        public String toString() {
-            return json();
-        }
     }
 }

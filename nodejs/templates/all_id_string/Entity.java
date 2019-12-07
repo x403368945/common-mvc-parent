@@ -71,11 +71,6 @@ public final class <%=TabName%> implements
     @Transient
     private List<Sorts.Order> sorts;
 
-    @Override
-    public String toString() {
-        return json();
-    }
-
 // Enum Start **********************************************************************************************************
 
     /**

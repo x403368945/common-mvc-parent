@@ -14,5 +14,5 @@ public interface IReport<R, P> {
      * @param userId Long 用户ID
      * @return Result<R>
      */
-    IResult<R> report(P param, final Long userId);
+    R report(P param, final Long userId);
 }

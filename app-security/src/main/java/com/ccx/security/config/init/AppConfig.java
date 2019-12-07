@@ -37,53 +37,6 @@ public class AppConfig {
     }
 
     /**
-     * 判断当前是否属于调试模式
-     *
-     * @return boolean true：调试模式，false：非调试模式
-     */
-    public static boolean isDebug() {
-        return properties.isDebug();
-    }
-
-    /**
-     * 设置 DEBUG 模式；生产环境无法开启 DEBUG 模式
-     *
-     * @param debug boolean true：调试模式，false：非调试模式
-     * @return boolean true：调试模式，false：非调试模式
-     */
-    public static boolean setDebug(final boolean debug) {
-        if (isProd()) {
-            return false; // 生产环境无法切调试模式
-        }
-        properties.setDebug(debug);
-        return debug;
-    }
-
-    /**
-     * 判断当前是否属于单元测试模式
-     *
-     * @return boolean true：单元测试模式
-     */
-    public static boolean isJunit() {
-        return properties.isJunit();
-    }
-
-    /**
-     * 设置 JUNIT 模式；生产环境无法开启 JUNIT 模式
-     * true：单元测试模式，false：非单元测试模式
-     *
-     * @param junit boolean
-     * @return boolean
-     */
-    public static boolean setJunit(final boolean junit) {
-        if (isProd()) {
-            return false; // 生产环境无法切单元测试模式
-        }
-        properties.setJunit(junit);
-        return junit;
-    }
-
-    /**
      * 判断当前是否属于本地开发环境
      *
      * @return boolean true：本地开发环境
@@ -129,10 +82,6 @@ public class AppConfig {
                 "app.path-root", () -> properties.getPathRoot()),
         MARKDOWN("markdown 文档存放地址",
                 "app.markdown", () -> properties.getMarkdown()),
-        DEBUG("调试模式开关：true开启调试模式，false关闭调试模式",
-                "app.debug", () -> Objects.toString(properties.isDebug())),
-        JUNIT("单元测试模式开关：true开启单元测试模式，false关闭单元测试模式",
-                "app.junit", () -> Objects.toString(properties.isJunit())),
         ;
         public final String key;
         public final String comment;

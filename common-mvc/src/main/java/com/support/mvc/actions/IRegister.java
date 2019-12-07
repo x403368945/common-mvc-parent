@@ -11,11 +11,11 @@ import com.support.mvc.entity.base.Message;
  *
  * @author 谢长春 on 2017/11/14.
  */
-public interface IRegist {
+public interface IRegister {
     /**
      * 注册模型，返回注册状态消息
      *
      * @return {@link Message}
      */
-    Message regist();
+    Message register();
 }

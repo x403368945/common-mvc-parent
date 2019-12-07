@@ -116,11 +116,6 @@ public class Prop implements IJson {
      */
     private List<Prop> props;
 
-    @Override
-    public String toString() {
-        return JSON.toJSONString(this);
-    }
-
 //    public enum Props {
 //        id(LONG.build(true, "数据ID，主键自增")),
 //        uid(STRING.build(true, "数据UUID，缓存和按ID查询时可使用强校验")),

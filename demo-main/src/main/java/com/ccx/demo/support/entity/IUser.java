@@ -98,8 +98,4 @@ public interface IUser {
 //    @NotNull(groups = {ISave.class})
 //    private Radio deleted;
 //
-//    @Override
-//    public String toString() {
-//        return this.json();
-//    }
 }

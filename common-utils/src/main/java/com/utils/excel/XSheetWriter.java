@@ -151,7 +151,7 @@ public final class XSheetWriter implements ISheetWriter<XSheetWriter>, ISheetWri
         return this;
     }
 
-    @SuppressWarnings({"unchecked", "deprecation"})
+    @SuppressWarnings({"deprecation"})
     public static void main(String[] args) {
         Paths.get("logs").toFile().mkdir();
         { // 测试公式行号替换
@@ -174,7 +174,7 @@ public final class XSheetWriter implements ISheetWriter<XSheetWriter>, ISheetWri
         }
         List<Cell> cellDatas = new ArrayList<>();
         { // 普通写入
-            Supplier supplier = () -> {
+            Supplier<?> supplier = () -> {
                 try {
                     @Cleanup final XSSFWorkbook workbook = new XSSFWorkbook();
                     workbook.createSheet("Sheet1");

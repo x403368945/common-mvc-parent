@@ -103,8 +103,8 @@ mvn clean install # 安装依赖包到本地仓库，web子项目打成war包
 >> 属性注解
 @Setter：生成当前属性的 get 方法
 @Getter：生成当前属性的 set 方法
-@Transient > @org.springframework.data.annotation.Transient：spirng-data mongodb 声明 JPA + Mongo 不与数据库建立映射，且 insert 和 update 忽略该属性
-@Transient > @javax.persistence.Transient：spirng-data jpa hibernate 声明 JPA + Hibernate 不与数据库建立映射，且 insert 和 update 忽略该属性
+@Transient > @org.springframework.data.annotation.Transient：spring-data mongodb 声明 JPA + Mongo 不与数据库建立映射，且 insert 和 update 忽略该属性
+@Transient > @javax.persistence.Transient：spring-data jpa hibernate 声明 JPA + Hibernate 不与数据库建立映射，且 insert 和 update 忽略该属性
 @Indexed > @org.springframework.data.mongodb.core.index.Indexed：声明 mongodb 数据库生成索引
  
 >> 属性或 get 方法都适用的注解

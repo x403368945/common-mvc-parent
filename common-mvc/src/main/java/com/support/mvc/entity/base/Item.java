@@ -1,6 +1,5 @@
 package com.support.mvc.entity.base;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -84,8 +83,4 @@ public class Item {
         return Objects.toString(value, defaultValue);
     }
 
-    @Override
-    public String toString() {
-        return JSON.toJSONString(this);
-    }
 }

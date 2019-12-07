@@ -6,8 +6,6 @@ app: # 本地开发环境
   domain: http://localhost:8080 # 应用路径，域名；可使用 frp 服务器域名
   markdown: http://localhost:8080/md/ # markdown 文档地址
   path-root: /app/files # 应用文件根目录
-  debug: false # 调试模式开关：true开启调试模式，false关闭调试模式
-  junit: false # 单元测试开关：true开启单元测试模式，false关闭单元测试模式
 
 druid-config: &druid-config
   driver-class-name: com.mysql.cj.jdbc.Driver

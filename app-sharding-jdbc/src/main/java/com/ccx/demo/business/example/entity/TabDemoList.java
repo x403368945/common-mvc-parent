@@ -173,11 +173,6 @@ public class TabDemoList implements
     @QueryTransient
     @Transient
     private List<Sorts.Order> sorts;
-
-    @Override
-    public String toString() {
-        return json();
-    }
 // Enum Start **********************************************************************************************************
 
     /**

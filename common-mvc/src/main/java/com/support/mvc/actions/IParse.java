@@ -16,5 +16,5 @@ public interface IParse<R, P> {
      * @param userId Long 用户ID
      * @return Result<R>
      */
-    IResult<R> parse(P param, final Long userId);
+    R parse(P param, final Long userId);
 }

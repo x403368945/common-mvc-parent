@@ -56,11 +56,6 @@ public interface IUserEvent {
          * 新用户姓名【昵称】
          */
         private String nickname;
-
-        @Override
-        public String toString() {
-            return json();
-        }
     }
 
     @NoArgsConstructor
@@ -85,10 +80,5 @@ public interface IUserEvent {
          * 修改用户姓名【昵称】
          */
         private String nickname;
-
-        @Override
-        public String toString() {
-            return json();
-        }
     }
 }

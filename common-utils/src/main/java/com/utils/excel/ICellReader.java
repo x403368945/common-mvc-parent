@@ -18,8 +18,7 @@ import static com.utils.util.Dates.Pattern.yyyy_MM_dd_HH_mm_ss;
  *
  * @author 谢长春 on 2018-8-8 .
  */
-@SuppressWarnings("unchecked")
-public interface ICellReader<T extends ICellReader> {
+public interface ICellReader<T extends ICellReader<T>> {
     /**
      * 获取当前操作单元格
      *
@@ -162,7 +161,7 @@ public interface ICellReader<T extends ICellReader> {
             case NUMERIC:
                 return (DateUtil.isCellDateFormatted(getCell()))
                         ? Dates.of(getCell().getDateCellValue().getTime()).format(yyyy_MM_dd_HH_mm_ss)
-                        : Num.of(getCell().getNumericCellValue()).toBigDecimal().toPlainString(); // 解决科学计数法 toString()问题
+                        : Optional.ofNullable(Num.of(getCell().getNumericCellValue()).toBigDecimal()).map(BigDecimal::toPlainString).orElse(null); // 解决科学计数法 toString()问题
 //                        : Num.of(getCell().getNumericCellValue()).toBigDecimal().setScale(4, ROUND_HALF_UP).toPlainString(); // 解决科学计数法 toString()问题
 //                        : Optional.ofNullable(Num.of(getCell().getNumericCellValue()).toBigDecimal()).map(bigDecimal -> bigDecimal.setScale(4, ROUND_HALF_UP).toPlainString() /* 解决科学计数法 toString()问题*/).orElse(null);
             case BOOLEAN:

@@ -15,7 +15,7 @@ public class SelectRowsException extends RuntimeException {
      *
      * @param collection {@link Collection} 查询结果集
      */
-    public static void asserts(final Collection collection) {
+    public static void asserts(final Collection<?> collection) {
         if (collection.size() > 1) {
             throw new SelectRowsException(String.format("数据查询失败，预期查询行数不大于1，实际查询行数:%d", collection.size()));
         }
@@ -26,7 +26,7 @@ public class SelectRowsException extends RuntimeException {
      *
      * @param collection {@link Collection} 查询结果集
      */
-    public static void assertOne(final Collection collection) {
+    public static void assertOne(final Collection<?> collection) {
         if (Objects.isNull(collection) || collection.isEmpty()) {
             throw new SelectRowsException("数据查询失败，预期查询行数等于1，实际查询行数:0");
         }

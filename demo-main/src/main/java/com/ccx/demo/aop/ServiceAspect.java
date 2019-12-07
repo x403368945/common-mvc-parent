@@ -36,10 +36,11 @@ public class ServiceAspect implements IServiceAspect {
      * 如果在子线程中调用 service 中的方法，且该方法必须要有用户名，需要子线程外先设置好用户姓名，假如用户信息有放在缓存中，也可以通过用户ID获取缓存用户的信息
      */
     @Override
-    public Optional<String> getNickname() {
+    public String getNickname() {
         return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
                 .map(Authentication::getPrincipal)
                 .map(o -> o instanceof TabUser ? ((TabUser) o).getNickname() : null)
+                .orElse(null)
                 ;
     }
 

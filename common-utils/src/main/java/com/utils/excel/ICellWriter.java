@@ -1,14 +1,16 @@
 package com.utils.excel;
 
 import com.utils.excel.enums.DataType;
-import com.utils.util.Dates;
 import com.utils.util.Num;
 import com.utils.util.Util;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddressList;
 
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 import static com.utils.util.Dates.Pattern.yyyy_MM_dd;
@@ -18,8 +20,7 @@ import static com.utils.util.Dates.Pattern.yyyy_MM_dd;
  *
  * @author 谢长春 on 2018-8-8 .
  */
-@SuppressWarnings("unchecked")
-public interface ICellWriter<T extends ICellWriter> {
+public interface ICellWriter<T extends ICellWriter<T>> {
     /**
      * 获取当前操作单元格
      *
@@ -81,11 +82,11 @@ public interface ICellWriter<T extends ICellWriter> {
      * @return <T extends ICellWriter>
      */
     default T write(final com.utils.excel.entity.Cell data) {
-        writeStyle(data.getSindex()); // 必须先指定样式库（StylesTable），这里写入才有效
         if (Objects.isNull(data)) {
             setCellBlank();
             return (T) this;
         }
+        writeStyle(data.getSindex()); // 必须先指定样式库（StylesTable），这里写入才有效
         if (Objects.nonNull(data.getFormula())) {
             writeFormula(data.getFormula());
             return (T) this; // 如果单元格有公式，则写完公式就跳出，所以需要提前return (T) this;

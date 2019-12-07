@@ -313,7 +313,7 @@ public final class Util {
      * @param collection Collection
      * @return boolean true：args中包含value， false：args不包含value
      */
-    public static boolean in(final Object value, final Collection collection) {
+    public static boolean in(final Object value, final Collection<?> collection) {
         return Objects.nonNull(value) && Objects.nonNull(collection) && collection.contains(value);
     }
 
@@ -324,7 +324,7 @@ public final class Util {
      * @param collection {@link Collection}
      * @return boolean true：args不包含value， false：args中包含value
      */
-    public static boolean notIn(final Object value, final Collection collection) {
+    public static boolean notIn(final Object value, final Collection<?> collection) {
         return !in(value, collection);
     }
 
@@ -515,7 +515,6 @@ public final class Util {
      * @param value {@link String} 需要编码的字符串
      * @return {@link String} 编码后的 unicode 字符串
      */
-//    @SuppressWarnings("deprecation")
     public static String encodeUnicode(final String value) {
         Objects.requireNonNull(value, "参数【value】不能为null");
         final StringBuilder unicode = new StringBuilder();

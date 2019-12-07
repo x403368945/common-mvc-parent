@@ -1,4 +1,5 @@
 package web;
+/*
 
 import com.ccx.demo.config.WebMvcConfig;
 import com.ccx.demo.config.init.AppConfig;
@@ -19,9 +20,11 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
 
+*/
 /**
  * @author 谢长春 on 2017/10/13.
- */
+ *//*
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {WebMvcConfig.class})
 @WebAppConfiguration
@@ -53,3 +56,4 @@ public class AdminConfigControllerTest implements ITest {
         ;
     }
 }
+*/

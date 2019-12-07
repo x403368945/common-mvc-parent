@@ -452,8 +452,7 @@ public class Result<E> implements IJson {
      *
      * @return {@link Result}{@link Result<E>}
      */
-    @SuppressWarnings("unchecked")
-    public Result<E> version(final Class clazz, final Function<Version.VersionBuilder, Version> version) {
+    public Result<E> version(final Class<?> clazz, final Function<Version.VersionBuilder, Version> version) {
         try {
             Assert.isTrue(v > 0, "指定版本前先指定【v】字段，当前接口最新版本号，版本号最小值为1");
             Objects.requireNonNull(version, "参数【version】不能为null");
@@ -549,11 +548,6 @@ public class Result<E> implements IJson {
         return this;
     }
     // 扩展方法：end *************************************************************************************************************************************************
-
-    @Override
-    public String toString() {
-        return JSON.toJSONString(this);
-    }
 
     public static void main(String[] args) {
         {

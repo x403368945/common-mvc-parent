@@ -14,7 +14,6 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -38,7 +37,7 @@ public class AuthHandler implements
     @Override
     public void handle(final HttpServletRequest request,
                        final HttpServletResponse response,
-                       final AccessDeniedException e) throws IOException, ServletException {
+                       final AccessDeniedException e) throws IOException {
         response.setContentType(ContentType.json.utf8());
         @Cleanup final PrintWriter writer = response.getWriter();
         writer.write(Code.ACCESS_DENIED.toResult("未授权的接口禁止访问").jsonFormat());
@@ -51,7 +50,7 @@ public class AuthHandler implements
     @Override
     public void commence(final HttpServletRequest request,
                          final HttpServletResponse response,
-                         final AuthenticationException e) throws IOException, ServletException {
+                         final AuthenticationException e) throws IOException {
 //        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
         response.setContentType(ContentType.json.utf8());
         @Cleanup final PrintWriter writer = response.getWriter();
@@ -66,7 +65,7 @@ public class AuthHandler implements
     public void onAuthenticationSuccess(
             final HttpServletRequest request,
             final HttpServletResponse response,
-            final Authentication authentication) throws IOException, ServletException {
+            final Authentication authentication) throws IOException {
         response.setContentType(ContentType.json.utf8());
         @Cleanup final PrintWriter writer = response.getWriter();
         writer.write(new Result<>().setSuccess(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).jsonFormat());
@@ -79,7 +78,7 @@ public class AuthHandler implements
     @Override
     public void onAuthenticationFailure(final HttpServletRequest request,
                                         final HttpServletResponse response,
-                                        final AuthenticationException e) throws IOException, ServletException {
+                                        final AuthenticationException e) throws IOException {
         response.setContentType(ContentType.json.utf8());
         @Cleanup final PrintWriter writer = response.getWriter();
         writer.write(Code.FAILURE.toResult("登录失败").jsonFormat());
@@ -92,7 +91,7 @@ public class AuthHandler implements
     @Override
     public void onLogoutSuccess(final HttpServletRequest request,
                                 final HttpServletResponse response,
-                                final Authentication e) throws IOException, ServletException {
+                                final Authentication e) throws IOException {
         response.setContentType(ContentType.json.utf8());
         @Cleanup final PrintWriter writer = response.getWriter();
         writer.write(Code.SUCCESS.toResult().toString());

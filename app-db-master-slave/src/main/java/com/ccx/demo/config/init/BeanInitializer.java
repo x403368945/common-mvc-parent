@@ -50,10 +50,9 @@ public class BeanInitializer implements InitConfig.Initializer {
         ;
         // 枚举属性说明
         public final String comment;
-        private final Supplier supplier;
+        private final Supplier<?> supplier;
 
-        @SuppressWarnings("unchecked")
-        Beans(final String comment, final Class clazz) {
+        Beans(final String comment, final Class<?> clazz) {
             this.comment = comment;
             if (Objects.equals("appContext", this.name())) supplier = () -> APP_CONTEXT;
             else supplier = () -> APP_CONTEXT.getBean(this.name(), clazz);

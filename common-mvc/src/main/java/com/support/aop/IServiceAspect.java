@@ -3,8 +3,6 @@ package com.support.aop;
 import com.alibaba.fastjson.JSON;
 import com.support.aop.annotations.MongoServiceAspect;
 import com.support.aop.annotations.ServiceAspect;
-import com.support.mvc.service.str.IService;
-import com.support.mvc.service.str.ISimpleService;
 import com.utils.util.Dates;
 import com.utils.util.Util;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -25,27 +23,27 @@ import java.util.Optional;
  * <pre>
  * {@link com.support.mvc.service.IService#save(Object, Long)}
  * {@link com.support.mvc.service.ISimpleService#save(Object)}
- * {@link IService#save(Object, Long)}
- * {@link ISimpleService#save(Object)}
+ * {@link com.support.mvc.service.IService#save(Object, Long)}
+ * {@link com.support.mvc.service.ISimpleService#save(Object)}
  *
  * {@link com.support.mvc.service.IService#saveAll(List, Long)}
  * {@link com.support.mvc.service.ISimpleService#saveAll(List)}
- * {@link IService#saveAll(List, Long)}
- * {@link ISimpleService#saveAll(List)}
+ * {@link com.support.mvc.service.IService#saveAll(List, Long)}
+ * {@link com.support.mvc.service.ISimpleService#saveAll(List)}
  *
  * {@link com.support.mvc.service.IService#update(Long, Long, Object)}
  * {@link com.support.mvc.service.ISimpleService#update(Long, Object)}
- * {@link IService#update(String, Long, Object)}
- * {@link ISimpleService#update(String, Object)}
+ * {@link com.support.mvc.service.IService#update(Long, Long, Object)}
+ * {@link com.support.mvc.service.ISimpleService#update(Long, Object)}
  *
  * {@link com.support.mvc.service.IService#deleteById(Long, Long)}
  * {@link com.support.mvc.service.IService#deleteByUid(Long, String, Long)}
  * {@link com.support.mvc.service.ISimpleService#deleteById(Long)}
  * {@link com.support.mvc.service.ISimpleService#deleteByUid(Long, String)}
- * {@link IService#deleteById(String, Long)}
- * {@link IService#deleteByUid(String, String, Long)}
- * {@link ISimpleService#deleteById(String)}
- * {@link ISimpleService#deleteByUid(String, String)}
+ * {@link com.support.mvc.service.IService#deleteById(Long, Long)}
+ * {@link com.support.mvc.service.IService#deleteByUid(Long, String, Long)}
+ * {@link com.support.mvc.service.ISimpleService#deleteById(Long)}
+ * {@link com.support.mvc.service.ISimpleService#deleteByUid(Long, String)}
  *
  *
  * @author 谢长春 2018-10-4
@@ -60,8 +58,8 @@ public interface IServiceAspect {
      *
      * @return String
      */
-    default Optional<String> getNickname() {
-        return Optional.empty();
+    default String getNickname() {
+        return null;
     }
 
     //    @Before(value = "point()")
@@ -100,10 +98,10 @@ public interface IServiceAspect {
                 .orElseGet(() -> joinPoint.getTarget().getClass().getAnnotation(ServiceAspect.class)); // 当方法没有添加注解时从类头部获取
         if (Objects.nonNull(mysql)) { // 没有添加 @ServiceAspect 注解的直接跳出
             if (!mysql.sync()) { // 标记为同步状态锁定的直接跳出
-                final List<?> list = (List) joinPoint.getArgs()[0]; // 当前新增对象集合
+                final List<?> list = (List<?>) joinPoint.getArgs()[0]; // 当前新增对象集合
                 final Object userId = joinPoint.getArgs().length > 1 ? joinPoint.getArgs()[1] : null; // 当前操作用户id
                 if (Objects.nonNull(list)) {
-                    final Optional<String> nickname = getNickname();
+                    final String nickname = getNickname();
                     list.forEach(obj -> Setter.beanSaveMysql(mysql, obj, userId, nickname));
                 }
             }
@@ -112,10 +110,10 @@ public interface IServiceAspect {
                     .orElseGet(() -> joinPoint.getTarget().getClass().getAnnotation(MongoServiceAspect.class)); // 当方法没有添加注解时从类头部获取
             if (Objects.nonNull(mongo)) { // 没有添加 @ServiceAspect 注解的直接跳出
                 if (!mongo.sync()) { // 标记为同步状态锁定的直接跳出
-                    final List<?> list = (List) joinPoint.getArgs()[0]; // 当前新增对象集合
+                    final List<?> list = (List<?>) joinPoint.getArgs()[0]; // 当前新增对象集合
                     final Object userId = joinPoint.getArgs().length > 1 ? joinPoint.getArgs()[1] : null; // 当前操作用户id
                     if (Objects.nonNull(list)) {
-                        final Optional<String> nickname = getNickname();
+                        final String nickname = getNickname();
                         list.forEach(obj -> Setter.beanSaveMongo(mongo, obj, userId, nickname));
                     }
                 }
@@ -178,7 +176,7 @@ public interface IServiceAspect {
             }
         }
 
-        private static void beanSaveMysql(final ServiceAspect service, final Object obj, final Object userId, final Optional<String> nickname) {
+        private static void beanSaveMysql(final ServiceAspect service, final Object obj, final Object userId, final String nickname) {
             if (service.id()) { // 将新增对象中的 id 置空
                 set(obj, "id", null);
             }
@@ -188,10 +186,10 @@ public interface IServiceAspect {
             if (service.user()) { // 将当前操作用户填充到新增对象 createUserId|modifyUserId 字段
                 set(obj, "createUserId", userId);
                 set(obj, "modifyUserId", userId);
-                nickname.ifPresent(name -> {
-                    set(obj, "createUserName", name);
-                    set(obj, "modifyUserName", name);
-                });
+                if (Objects.nonNull(nickname)) {
+                    set(obj, "createUserName", nickname);
+                    set(obj, "modifyUserName", nickname);
+                }
             }
             if (service.timestamp()) {
                 set(obj, "createTime", null);
@@ -199,34 +197,34 @@ public interface IServiceAspect {
             }
         }
 
-        private static void beanUpdateMysql(final ServiceAspect service, final Object id, final Object userId, final Object obj, final Optional<String> nickname) {
+        private static void beanUpdateMysql(final ServiceAspect service, final Object id, final Object userId, final Object obj, final String nickname) {
             if (service.id()) { // 指定要更新的数据ID
                 set(obj, "id", id);
             }
             if (service.user()) { // 将当前操作用户填充到编辑对象 modifyUserId 字段
                 set(obj, "modifyUserId", userId);
-                nickname.ifPresent(name -> {
-                    set(obj, "modifyUserName", name);
-                });
+                if (Objects.nonNull(nickname)) {
+                    set(obj, "modifyUserName", nickname);
+                }
             }
         }
 
-        @SuppressWarnings("unchecked")
-        private static void beanSaveMongo(final MongoServiceAspect service, final Object obj, final Object userId, final Optional<String> nickname) {
+        @SuppressWarnings({"unchecked"})
+        private static void beanSaveMongo(final MongoServiceAspect service, final Object obj, final Object userId, final String nickname) {
             if (service.id()) { // mongodb 不支持自增，设置为uuid
                 set(obj, "id", Util.uuid32());
             }
             if (service.user()) { // 将当前操作用户填充到新增对象 createUserId|modifyUserId 字段
                 set(obj, "createUserId", userId);
                 set(obj, "modifyUserId", userId);
-                nickname.ifPresent(name -> {
-                    set(obj, "createUserName", name);
-                    set(obj, "modifyUserName", name);
-                });
+                if (Objects.nonNull(nickname)) {
+                    set(obj, "createUserName", nickname);
+                    set(obj, "modifyUserName", nickname);
+                }
 
             }
             if (service.timestamp()) { // MongoDB 没有自动更新时间戳的功能，将当前时间戳填充到新增对象 createTime|modifyTime 字段
-                final Timestamp timestamp = Dates.now ().timestamp();
+                final Timestamp timestamp = Dates.now().timestamp();
                 set(obj, "createTime", timestamp);
                 set(obj, "modifyTime", timestamp);
             }
@@ -234,15 +232,15 @@ public interface IServiceAspect {
             set(obj, "deleted", Enum.valueOf(service.deleted(), "NO"));  // 只有 mongodb 才需要，mysql 可以在建表的时候设置默认值
         }
 
-        private static void beanUpdateMongo(final MongoServiceAspect service, final Object id, final Object userId, final Object obj, final Optional<String> nickname) {
+        private static void beanUpdateMongo(final MongoServiceAspect service, final Object id, final Object userId, final Object obj, final String nickname) {
             if (service.id()) { // 指定要更新的数据ID
                 set(obj, "id", id);
             }
             if (service.user()) { // 将当前操作用户填充到编辑对象 modifyUserId 字段
                 set(obj, "modifyUserId", userId);
-                nickname.ifPresent(name -> {
-                    set(obj, "modifyUserName", name);
-                });
+                if (Objects.nonNull(nickname)) {
+                    set(obj, "modifyUserName", nickname);
+                }
             }
             // 更新是，时间戳可能作为 where 条件，不能在这里覆盖数据时间戳
 //            if (service.timestamp()) { // // MongoDB 没有自动更新时间戳的功能，将当前时间戳填充到编辑对象 modifyTime 字段

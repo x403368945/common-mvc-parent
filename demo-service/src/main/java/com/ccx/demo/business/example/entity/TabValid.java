@@ -46,8 +46,4 @@ public class TabValid implements ITable, IJson {
         return this;
     }
 
-    @Override
-    public String toString() {
-        return json();
-    }
 }

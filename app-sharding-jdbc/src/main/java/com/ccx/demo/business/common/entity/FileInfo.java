@@ -86,8 +86,4 @@ public class FileInfo implements IJson {
         return JSON.parseObject(json(), clazz);
     }
 
-    @Override
-    public String toString() {
-        return json();
-    }
 }

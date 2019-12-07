@@ -80,11 +80,6 @@ public class TabUserLogin implements ITable, IWhere<JPAUpdateClause, QdslWhere> 
     @Transient
     private List<Sorts.Order> sorts;
 
-    @Override
-    public String toString() {
-        return json();
-    }
-
 // Enum Start **********************************************************************************************************
 
     /**

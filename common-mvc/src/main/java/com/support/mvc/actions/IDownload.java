@@ -14,5 +14,5 @@ public interface IDownload<R, P> {
      * @param userId Long 用户ID
      * @return Result<R>
      */
-    IResult<R> download(P param, final Long userId);
+    R download(P param, final Long userId);
 }

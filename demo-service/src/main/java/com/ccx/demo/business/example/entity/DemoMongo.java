@@ -141,13 +141,8 @@ public class DemoMongo implements
      * 排序字段
      */
     @QueryTransient // 声明生成 Q{ClassName}.java 时忽略该属性
-    @org.springframework.data.annotation.Transient // mongodb(spirng-data)忽略字段
+    @org.springframework.data.annotation.Transient // mongodb(spring-data)忽略字段
     private List<Sorts.Order> sorts;
-
-    @Override
-    public String toString() {
-        return json();
-    }
 
 // Enum Start **********************************************************************************************************
 

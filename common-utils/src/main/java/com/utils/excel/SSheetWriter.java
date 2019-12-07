@@ -148,7 +148,7 @@ public final class SSheetWriter implements ISheetWriter<SSheetWriter>, ISheetWri
         return this;
     }
 
-    @SuppressWarnings({"unchecked", "deprecation"})
+    @SuppressWarnings({"deprecation"})
     public static void main(String[] args) {
         Paths.get("logs").toFile().mkdir();
         { // 测试公式行号替换

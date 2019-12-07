@@ -54,8 +54,4 @@ public class Message implements IJson {
         return this;
     }
 
-    @Override
-    public String toString() {
-        return json();
-    }
 }

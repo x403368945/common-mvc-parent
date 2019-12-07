@@ -14,5 +14,5 @@ public interface IUpdate<R, P> {
      * @param userId Long 用户ID
      * @return Result<R>
      */
-    IResult<R> update(P param, final Long userId);
+    R update(P param, final Long userId);
 }

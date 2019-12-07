@@ -12,8 +12,7 @@ import java.util.function.Consumer;
  *
  * @author 谢长春 on 2018-8-8 .
  */
-@SuppressWarnings("unchecked")
-public interface ISheetReader<T extends ISheetReader> extends ISheet<T>, ICellReader<T> {
+public interface ISheetReader<T extends ISheetReader<T>> extends ISheet<T>, ICellReader<T> {
 
     /**
      * 数据是否已读完
@@ -40,7 +39,6 @@ public interface ISheetReader<T extends ISheetReader> extends ISheet<T>, ICellRe
      *
      * @return <T extends ISheetReader>
      */
-    @SuppressWarnings("unchecked")
     default T next() {
         setRowIndex(getRowIndex() + 1); // 设置下一行 rowIndex ，判断是否已读完
         if (hasEnd()) {

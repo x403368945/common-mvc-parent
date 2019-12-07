@@ -16,5 +16,5 @@ public interface ICompute<R, P> {
      * @param userId Long 用户ID
      * @return Result<R>
      */
-    IResult<R> compute(P param, final Long userId);
+    R compute(P param, final Long userId);
 }
