@@ -5,7 +5,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
 import com.ccx.demo.business.example.enums.DemoStatus;
 import com.ccx.demo.enums.Radio;
-import com.ccx.demo.support.entity.IUser;
+import com.ccx.demo.business.user.cache.IUserCache;
 import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
@@ -59,7 +59,7 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 @JSONType(orders = {"id", "name", "phone", "age", "status", "createTime", "createUserId", "modifyTime", "modifyUserId", "deleted"})
 public class DemoMongo implements
         IMongo, // 所有与数据库表 - 实体类映射的表都实现该接口；方便后续一键查看所有表的实体
-        IUser,
+        IUserCache,
         ITimestamp, // 所有需要更新时间戳的实体类
         IWhere<Update, QdslWhere> // 声明用于实现构建 com.support.mvc.dao.ISearchRepository 需要的查询条件
 {

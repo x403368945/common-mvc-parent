@@ -362,6 +362,15 @@ export default class Result {
   }
 
   /**
+   * 完整请求及相应对象打印到控制台
+   * @return {Result}
+   */
+  printAjax() {
+    console.debug(this.res);
+    return this;
+  }
+
+  /**
    * 将 data 以表格形式打印到控制台
    * @return {Result}
    */

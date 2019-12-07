@@ -80,28 +80,28 @@ public interface UserRepository extends
                 .fetchResults();
     }
 
-    /**
-     * 查询部分字段，这些字段会被缓存到 redis
-     *
-     * @return List<TabUser>
-     */
-    default List<TabUser> getSimpleList() {
-        return jpaQueryFactory.<JPAQueryFactory>get()
-                .select(Projections.bean(TabUser.class, q.id, q.uid, q.username, q.nickname, q.phone, q.email, q.role))
-                .from(q)
-                .fetch();
-//                .stream()
-//                .map(row -> TabUser.builder()
-//                        .id(row.get(q.id))
-//                        .subdomain(row.get(q.subdomain))
-//                        .username(row.get(q.username))
-//                        .phone(row.get(q.phone))
-//                        .email(row.get(q.email))
-//                        .nickname(row.get(q.nickname))
-//                        .role(row.get(q.role))
-//                        .build()
-//                ).collect(Collectors.toList());
-    }
+//    /**
+//     * 查询部分字段，这些字段会被缓存到 redis
+//     *
+//     * @return List<TabUser>
+//     */
+//    default List<TabUser> getSimpleList() {
+//        return jpaQueryFactory.<JPAQueryFactory>get()
+//                .select(Projections.bean(TabUser.class, q.id, q.uid, q.username, q.nickname, q.phone, q.email, q.roles))
+//                .from(q)
+//                .fetch();
+////                .stream()
+////                .map(row -> TabUser.builder()
+////                        .id(row.get(q.id))
+////                        .subdomain(row.get(q.subdomain))
+////                        .username(row.get(q.username))
+////                        .phone(row.get(q.phone))
+////                        .email(row.get(q.email))
+////                        .nickname(row.get(q.nickname))
+////                        .role(row.get(q.role))
+////                        .build()
+////                ).collect(Collectors.toList());
+//    }
 
     /**
      * 按【登录账户、手机号、邮箱】查找用户

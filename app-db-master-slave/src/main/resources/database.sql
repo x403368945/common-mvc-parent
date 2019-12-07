@@ -19,9 +19,10 @@
 -- character_set_server	    (默认的内部操作字符集)
 -- *********************************************************************************************************************
 
--- DROP DATABASE IF EXISTS demo_main_master_db;
--- CREATE DATABASE demo_main_master_db CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_general_ci';
-
+/*
+DROP DATABASE IF EXISTS master_slave_db;
+CREATE DATABASE master_slave_db CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_general_ci';
+*/
 -- 用户表
 DROP TABLE IF EXISTS tab_user;
 CREATE TABLE tab_user (
@@ -101,11 +102,9 @@ SELECT * FROM view_vip;
 */
 -- 初始化超级管理员账户，密码：admin
 INSERT INTO tab_user(id, uid, username, password, nickname, role, createUserId, modifyUserId)
-VALUES (1, replace(uuid(), '-', ''), 'admin', '$2a$10$VQ.Rj7bc73B.WwU99k7R.eEAwqXBNmvihobk3SZ4m30b9tCR6..h2', '超级管理员',
-        0, 1, 1);
+VALUES (1, replace(uuid(), '-', ''), 'admin', '$2a$10$VQ.Rj7bc73B.WwU99k7R.eEAwqXBNmvihobk3SZ4m30b9tCR6..h2', '超级管理员',0, 1, 1);
 
 -- user:111111
 INSERT INTO tab_user(uid, username, password, nickname, role, createUserId, modifyUserId)
-VALUES (replace(uuid(), '-', ''), 'user', '$2a$10$6unbpf74Dc7NEBywaCHl..FzzprMb69gA.Qi09U7ud7vlKHP9PXfu', '普通用户', 2, 1,
-        1);
+VALUES (replace(uuid(), '-', ''), 'user', '$2a$10$6unbpf74Dc7NEBywaCHl..FzzprMb69gA.Qi09U7ud7vlKHP9PXfu', '普通用户',2, 1, 1);
 

@@ -24,13 +24,13 @@ import javax.persistence.PersistenceContext;
  *
  * @author 谢长春 2019/1/23
  */
-//@Configuration
-//public class QueryDSLConfig {
-//    @PersistenceContext
-//    private EntityManager entityManager;
-//
-//    @Bean
-//    public JPAQueryFactory jpaQueryFactory() {
-//        return new JPAQueryFactory(entityManager);
-//    }
-//}
+@Configuration
+public class QueryDSLConfig {
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Bean
+    public JPAQueryFactory jpaQueryFactory() {
+        return new JPAQueryFactory(entityManager);
+    }
+}

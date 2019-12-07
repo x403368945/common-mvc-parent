@@ -89,25 +89,22 @@ spring:
       names: master,second,third,remote
       master:
         type: com.alibaba.druid.pool.DruidDataSource
-        url: jdbc:mysql://localhost:3306/demo_main_master_db?serverTimezone=GMT%2B8&useSSL=false
         # 使用 @ConfigurationProperties 装配数据源时必须使用 jdbc-url 替代 url ，参考：https://docs.spring.io/spring-boot/docs/2.1.5.RELEASE/reference/htmlsingle/#howto-configure-a-datasource
-        jdbc-url: jdbc:mysql://localhost:3306/demo_main_master_db?serverTimezone=GMT%2B8&useSSL=false
+        jdbc-url: jdbc:mysql://localhost:3306/master_slave_db?serverTimezone=GMT%2B8&useSSL=false
         username: root
         password: 111111
         <<: *druid-config
       second:
         type: com.alibaba.druid.pool.DruidDataSource
-        url: jdbc:mysql://localhost:3307/demo_main_slave1_db?serverTimezone=GMT%2B8&useSSL=false
         # 使用 @ConfigurationProperties 装配数据源时必须使用 jdbc-url 替代 url ，参考：https://docs.spring.io/spring-boot/docs/2.1.5.RELEASE/reference/htmlsingle/#howto-configure-a-datasource
-        jdbc-url: jdbc:mysql://localhost:3307/demo_main_slave1_db?serverTimezone=GMT%2B8&useSSL=false
+        jdbc-url: jdbc:mysql://localhost:3307/master_slave_db?serverTimezone=GMT%2B8&useSSL=false
         username: root
         password: 111111
         <<: *druid-config
       third:
         type: com.alibaba.druid.pool.DruidDataSource
-        url: jdbc:mysql://localhost:3308/demo_main_slave2_db?serverTimezone=GMT%2B8&useSSL=false
         # 使用 @ConfigurationProperties 装配数据源时必须使用 jdbc-url 替代 url ，参考：https://docs.spring.io/spring-boot/docs/2.1.5.RELEASE/reference/htmlsingle/#howto-configure-a-datasource
-        jdbc-url: jdbc:mysql://localhost:3308/demo_main_slave2_db?serverTimezone=GMT%2B8&useSSL=false
+        jdbc-url: jdbc:mysql://localhost:3308/master_slave_db?serverTimezone=GMT%2B8&useSSL=false
         username: root
         password: 111111
         <<: *druid-config

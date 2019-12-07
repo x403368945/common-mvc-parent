@@ -22,6 +22,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
+import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -202,6 +203,8 @@ public final class Dates {
             }
         }),
         yyyy_MM_dd_HH_mm_ss("yyyy-MM-dd HH:mm:ss", new IDateTimePatternAdapter() {
+            private final java.util.regex.Pattern PATTERN = java.util.regex.Pattern.compile("(\\d{4})-(\\d+)-(\\d+) (\\d+):(\\d+):(\\d+).*");
+
             @Override
             public DateTimeFormatter getFormatter() {
                 return yyyy_MM_dd_HH_mm_ss.formatter;
@@ -215,12 +218,30 @@ public final class Dates {
                     try {
                         return Dates.of(LocalDateTime.parse(value, yyyy_MM_dd_HH_mm_ss_SSS.formatter));
                     } catch (DateTimeParseException ex) {
-                        return Dates.of(LocalDate.parse(value, yyyy_MM_dd.formatter));
+                        try {
+                            return Dates.of(LocalDate.parse(value, yyyy_MM_dd.formatter));
+                        } catch (Exception e1) {
+                            final Matcher matcher = PATTERN.matcher(value);
+                            if (matcher.find()) {
+                                return Dates.of(LocalDateTime.of(
+                                        Integer.parseInt(matcher.group(1)),
+                                        Integer.parseInt(matcher.group(2)),
+                                        Integer.parseInt(matcher.group(3)),
+                                        Integer.parseInt(matcher.group(4)),
+                                        Integer.parseInt(matcher.group(5)),
+                                        Integer.parseInt(matcher.group(6))
+                                ));
+                            } else {
+                                throw new DateTimeException("格式解析失败:".concat(value));
+                            }
+                        }
                     }
                 }
             }
         }),
         yyyy_MM_dd("yyyy-MM-dd", new IDatePatternAdapter() {
+            private final java.util.regex.Pattern PATTERN = java.util.regex.Pattern.compile("(\\d{4})-(\\d+)-(\\d+).*");
+
             @Override
             public DateTimeFormatter getFormatter() {
                 return yyyy_MM_dd.formatter;
@@ -234,12 +255,27 @@ public final class Dates {
                     try {
                         return Dates.of(LocalDateTime.parse(value, yyyy_MM_dd_HH_mm_ss_SSS.formatter));
                     } catch (DateTimeParseException ex) {
-                        return Dates.of(LocalDateTime.parse(value, yyyy_MM_dd_HH_mm_ss.formatter));
+                        try {
+                            return Dates.of(LocalDateTime.parse(value, yyyy_MM_dd_HH_mm_ss.formatter));
+                        } catch (Exception exc) {
+                            final Matcher matcher = PATTERN.matcher(value);
+                            if (matcher.find()) {
+                                return Dates.of(LocalDate.of(
+                                        Integer.parseInt(matcher.group(1)),
+                                        Integer.parseInt(matcher.group(2)),
+                                        Integer.parseInt(matcher.group(3))
+                                ));
+                            } else {
+                                throw new DateTimeException("格式解析失败:".concat(value));
+                            }
+                        }
                     }
                 }
             }
         }),
         yyyy_MM("yyyy-MM", new IDatePatternAdapter() {
+            private final java.util.regex.Pattern PATTERN = java.util.regex.Pattern.compile("(\\d{4})-(\\d+).*");
+
             @Override
             public DateTimeFormatter getFormatter() {
                 return yyyy_MM.formatter;
@@ -250,11 +286,26 @@ public final class Dates {
                 try {
                     return Dates.of(YearMonth.parse(value, getFormatter()).atDay(1));
                 } catch (Exception e) {
-                    return yyyy_MM_dd.parse(value);
+                    try {
+                        return yyyy_MM_dd.parse(value);
+                    } catch (Exception exc) {
+                        final Matcher matcher = PATTERN.matcher(value);
+                        if (matcher.find()) {
+                            return Dates.of(LocalDate.of(
+                                    Integer.parseInt(matcher.group(1)),
+                                    Integer.parseInt(matcher.group(2)),
+                                    0
+                            ));
+                        } else {
+                            throw new DateTimeException("格式解析失败:".concat(value));
+                        }
+                    }
                 }
             }
         }),
         yy_MM_dd("yy-MM-dd", new IDatePatternAdapter() {
+            private final java.util.regex.Pattern PATTERN = java.util.regex.Pattern.compile("(\\d{2})-(\\d+)-(\\d+).*");
+
             @Override
             public DateTimeFormatter getFormatter() {
                 return yy_MM_dd.formatter;
@@ -262,10 +313,25 @@ public final class Dates {
 
             @Override
             public Dates parse(final String value) {
-                return Dates.of(LocalDate.parse(value, getFormatter()));
+                try {
+                    return Dates.of(LocalDate.parse(value, getFormatter()));
+                } catch (Exception e) {
+                    final Matcher matcher = PATTERN.matcher(value);
+                    if (matcher.find()) {
+                        return Dates.of(LocalDate.of(
+                                Integer.parseInt("20".concat(matcher.group(1))),
+                                Integer.parseInt(matcher.group(2)),
+                                Integer.parseInt(matcher.group(3))
+                        ));
+                    } else {
+                        throw new DateTimeException("格式解析失败:".concat(value));
+                    }
+                }
             }
         }),
         HH_mm_ss("HH:mm:ss", new ITimePatternAdapter() {
+            private final java.util.regex.Pattern PATTERN = java.util.regex.Pattern.compile("(\\d+):(\\d+):(\\d+).*");
+
             @Override
             public DateTimeFormatter getFormatter() {
                 return HH_mm_ss.formatter;
@@ -279,12 +345,27 @@ public final class Dates {
                     try {
                         return Dates.of(LocalDateTime.parse(value, yyyy_MM_dd_HH_mm_ss_SSS.formatter));
                     } catch (DateTimeParseException ex) {
-                        return Dates.of(LocalDateTime.parse(value, yyyy_MM_dd_HH_mm_ss.formatter));
+                        try {
+                            return Dates.of(LocalDateTime.parse(value, yyyy_MM_dd_HH_mm_ss.formatter));
+                        } catch (Exception exc) {
+                            final Matcher matcher = PATTERN.matcher(value);
+                            if (matcher.find()) {
+                                return Dates.of(LocalTime.of(
+                                        Integer.parseInt(matcher.group(1)),
+                                        Integer.parseInt(matcher.group(2)),
+                                        Integer.parseInt(matcher.group(3))
+                                ));
+                            } else {
+                                throw new DateTimeException("格式解析失败:".concat(value));
+                            }
+                        }
                     }
                 }
             }
         }),
         HH_mm("HH:mm", new ITimePatternAdapter() {
+            private final java.util.regex.Pattern PATTERN = java.util.regex.Pattern.compile("(\\d+):(\\d+).*");
+
             @Override
             public DateTimeFormatter getFormatter() {
                 return HH_mm.formatter;
@@ -295,7 +376,20 @@ public final class Dates {
                 try {
                     return Dates.of(LocalTime.parse(value, getFormatter()));
                 } catch (Exception e) {
-                    return Dates.of(LocalTime.parse(value));
+                    try {
+                        return Dates.of(LocalTime.parse(value));
+                    } catch (Exception exc) {
+                        final Matcher matcher = PATTERN.matcher(value);
+                        if (matcher.find()) {
+                            return Dates.of(LocalTime.of(
+                                    Integer.parseInt(matcher.group(1)),
+                                    Integer.parseInt(matcher.group(2)),
+                                    0
+                            ));
+                        } else {
+                            throw new DateTimeException("格式解析失败:".concat(value));
+                        }
+                    }
                 }
             }
         }),
@@ -422,6 +516,9 @@ public final class Dates {
             }
         }),
         U_yyyy_MM_dd_HH_mm_ss("yyyy/MM/dd HH:mm:ss", new IDateTimePatternAdapter() {
+
+            private final java.util.regex.Pattern PATTERN = java.util.regex.Pattern.compile("(\\d{4})/(\\d+)/(\\d+) (\\d+):(\\d+):(\\d+).*");
+
             @Override
             public DateTimeFormatter getFormatter() {
                 return U_yyyy_MM_dd_HH_mm_ss.formatter;
@@ -435,12 +532,34 @@ public final class Dates {
                     try {
                         return Dates.of(LocalDateTime.parse(value, U_yyyy_MM_dd_HH_mm_ss_SSS.formatter));
                     } catch (DateTimeParseException ex) {
-                        return Dates.of(LocalDate.parse(value, U_yyyy_MM_dd.formatter));
+                        try {
+                            return Dates.of(LocalDate.parse(value, U_yyyy_MM_dd.formatter));
+                        } catch (DateTimeParseException exc) {
+                            try {
+                                return Dates.of(LocalDate.parse(value, yyyy_MM_dd.formatter));
+                            } catch (Exception e1) {
+                                final Matcher matcher = PATTERN.matcher(value);
+                                if (matcher.find()) {
+                                    return Dates.of(LocalDateTime.of(
+                                            Integer.parseInt(matcher.group(1)),
+                                            Integer.parseInt(matcher.group(2)),
+                                            Integer.parseInt(matcher.group(3)),
+                                            Integer.parseInt(matcher.group(4)),
+                                            Integer.parseInt(matcher.group(5)),
+                                            Integer.parseInt(matcher.group(6))
+                                    ));
+                                } else {
+                                    throw new DateTimeException("格式解析失败:".concat(value));
+                                }
+                            }
+                        }
                     }
                 }
             }
         }),
         U_yyyy_MM_dd("yyyy/MM/dd", new IDatePatternAdapter() {
+            private final java.util.regex.Pattern PATTERN = java.util.regex.Pattern.compile("(\\d{4})/(\\d+)/(\\d+).*");
+
             @Override
             public DateTimeFormatter getFormatter() {
                 return U_yyyy_MM_dd.formatter;
@@ -454,7 +573,20 @@ public final class Dates {
                     try {
                         return Dates.of(LocalDateTime.parse(value, U_yyyy_MM_dd_HH_mm_ss.formatter));
                     } catch (DateTimeParseException ex) {
-                        return Dates.of(LocalDateTime.parse(value, U_yyyy_MM_dd_HH_mm_ss_SSS.formatter));
+                        try {
+                            return Dates.of(LocalDateTime.parse(value, U_yyyy_MM_dd_HH_mm_ss_SSS.formatter));
+                        } catch (Exception exc) {
+                            final Matcher matcher = PATTERN.matcher(value);
+                            if (matcher.find()) {
+                                return Dates.of(LocalDate.of(
+                                        Integer.parseInt(matcher.group(1)),
+                                        Integer.parseInt(matcher.group(2)),
+                                        Integer.parseInt(matcher.group(3))
+                                ));
+                            } else {
+                                throw new DateTimeException("格式解析失败:".concat(value));
+                            }
+                        }
                     }
                 }
             }
@@ -565,7 +697,7 @@ public final class Dates {
          */
         public Dates parse(final String value) {
             return Objects.requireNonNull(
-                    adapter.parse(Objects.requireNonNull(value,"date string value is not null")),
+                    adapter.parse(Objects.requireNonNull(value, "date string value is not null")),
                     "return Dates is not null"
             );
         }
@@ -1699,6 +1831,12 @@ public final class Dates {
                 log.info("{}.parse({}) => {}", pattern.name(), pattern.comment, pattern.parse(value));
             });
         });
+
+        log.info("{}.parse({}) => {}", yyyy_MM.name(), yyyy_MM.comment, yyyy_MM.parse("2019-1-2"));
+        log.info("{}.parse({}) => {}", yyyy_MM_dd.name(), yyyy_MM_dd.comment, yyyy_MM_dd.parse("2019-1-2"));
+        log.info("{}.parse({}) => {}", yyyy_MM_dd_HH_mm_ss.name(), yyyy_MM_dd_HH_mm_ss.comment, yyyy_MM_dd_HH_mm_ss.parse("2019-1-2 3:4:5.6"));
+        log.info("{}.parse({}) => {}", HH_mm.name(), HH_mm.comment, HH_mm.parse("3:4:5.6"));
+        log.info("{}.parse({}) => {}", HH_mm_ss.name(), HH_mm_ss.comment, HH_mm_ss.parse("3:4:5.6"));
     }
 
 }

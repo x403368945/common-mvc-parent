@@ -57,7 +57,7 @@ public interface UserLoginRepository extends
         final QTabUser user = tabUser;
         return Pager.toQueryResults(
                 jpaQueryFactory.<JPAQueryFactory>get()
-                        .select(q, Projections.bean(TabUser.class, user.id, user.username, user.nickname, user.role, user.deleted))
+                        .select(q, Projections.bean(TabUser.class, user.id, user.username, user.nickname, user.roles, user.deleted))
                         .from(q)
                         .leftJoin(user).on(user.id.eq(q.userId))
                         .where(condition.where().toArray())
