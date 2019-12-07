@@ -2,7 +2,6 @@ package com.ccx.demo.business.user.dao.jpa;
 
 import com.ccx.demo.business.user.entity.QTabRole;
 import com.ccx.demo.business.user.entity.TabRole;
-import com.ccx.demo.config.CacheConfig;
 import com.ccx.demo.enums.Radio;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Expression;
@@ -32,7 +31,7 @@ public interface RoleRepository extends
         IRepository<TabRole, Long> {
     QTabRole q = QTabRole.tabRole;
 
-    @CacheEvict(cacheNames = CacheConfig.roleCache, key = "#id")
+    @CacheEvict(cacheNames = "roleCache", key = "#id")
     @Override
     default long update(final Long id, final Long userId, final TabRole obj) {
         return findById(id)
@@ -45,7 +44,7 @@ public interface RoleRepository extends
                 .orElse(0L);
     }
 
-    @CacheEvict(cacheNames = CacheConfig.roleCache, key = "#id")
+    @CacheEvict(cacheNames = "roleCache", key = "#id")
     @Override
     default long markDeleteByUid(final Long id, final String uid, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
@@ -56,7 +55,7 @@ public interface RoleRepository extends
                 .execute();
     }
 
-    @CacheEvict(cacheNames = CacheConfig.roleCache, allEntries = true)
+    @CacheEvict(cacheNames = "roleCache", allEntries = true)
     @Override
     default long markDelete(final List<TabRole> list, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
@@ -127,7 +126,7 @@ public interface RoleRepository extends
      *
      * @return {@link String} 角色名称 {@link TabRole#getName()}
      */
-    @Cacheable(cacheNames = CacheConfig.roleCache, key = "#id")
+    @Cacheable(cacheNames = "roleCache", key = "#id")
     default TabRole findCacheRoleById(final Long id) {
         jpaQueryFactory.<JPAQueryFactory>get()
                 .select(Projections.bean(

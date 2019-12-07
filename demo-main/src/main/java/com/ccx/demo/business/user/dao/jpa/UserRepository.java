@@ -2,10 +2,8 @@ package com.ccx.demo.business.user.dao.jpa;
 
 import com.ccx.demo.business.user.entity.QTabUser;
 import com.ccx.demo.business.user.entity.TabUser;
-import com.ccx.demo.config.CacheConfig;
 import com.ccx.demo.enums.Radio;
 import com.querydsl.core.QueryResults;
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.support.mvc.dao.IRepository;
 import com.support.mvc.entity.base.Pager;
@@ -33,7 +31,7 @@ public interface UserRepository extends
     QTabUser q = tabUser;
 
 
-    @Cacheable(cacheNames = CacheConfig.nicknameCache, key = "#id")
+    @Cacheable(cacheNames = "nicknameCache", key = "#id")
     @Query
     default String getNickame(final Long id) {
         return jpaQueryFactory.<JPAQueryFactory>get().select(q.nickname).from(q).where(q.id.eq(id)).fetchOne();
@@ -109,7 +107,7 @@ public interface UserRepository extends
      * @param username String 登录账户名
      * @return Optional<TabUser>
      */
-    @Cacheable(cacheNames = CacheConfig.loginCache, key = "#username")
+    @Cacheable(cacheNames = "loginCache", key = "#username")
     default Optional<TabUser> findUser(final String username) {
         return Op.of(findOne(q.username.eq(username)))
                 .orElseOf(() -> findOne(q.phone.eq(username)))
@@ -123,7 +121,7 @@ public interface UserRepository extends
      *
      * @param username String 登录账户名
      */
-    @CacheEvict(cacheNames = CacheConfig.loginCache, key = "#username")
+    @CacheEvict(cacheNames = "loginCache", key = "#username")
     default void clearLoginCache(final String username) {
     }
 
@@ -154,7 +152,7 @@ public interface UserRepository extends
      * @param userId   Long 修改者ID
      * @return long 影响行数
      */
-    @CacheEvict(cacheNames = CacheConfig.nicknameCache, key = "#id")
+    @CacheEvict(cacheNames = "nicknameCache", key = "#id")
     @Modifying
     @Query
     default long updateNickname(final Long id, final String nickname, final Long userId) {

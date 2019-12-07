@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Import;
 @SpringBootApplication
 @Import(value = {InitConfig.class, BusConfig.class})
 @EnableConfigurationProperties(value = {AppProperties.class})
+//@EnableCaching
 public class DemoMainApplication extends SpringBootServletInitializer {
     public static void main(String[] args) {
         SpringApplication.run(DemoMainApplication.class, args);

@@ -1,31 +1,37 @@
 spring:
-  profiles:
+  profiles: # 动态环境
     active: @env@ # 采坑记录，使用 @@ 获取 pom.xml 环境变量时，必须指定 build > resources > resource > <filtering>true</filtering>
   mvc:
     throw-exception-if-no-handler-found: true # 出现错误时, 直接抛出异常(便于异常统一处理，否则捕获不到404)
   resources:
     add-mappings: false # 404关闭资源映射，否则会去寻找静态资源
   servlet:
-    multipart:
+    multipart: # 文件上传配置
       enabled: true
       max-file-size: 10MB
       max-request-size: 50MB
-  thymeleaf:
+  thymeleaf: # 响应渲染模板配置
     enabled: true
     prefix: "classpath:"
     suffix: .html
     encoding: utf-8
     mode: HTML
-  jpa:
+  jpa: # jpa + hibernate 配置
     open-in-view: false
-    database-platform: org.hibernate.dialect.MySQLDialect
+    database-platform: org.hibernate.dialect.MySQLDialect # hibernate 方言代理
     hibernate:
       ddl-auto: none
       naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl # 数据库与实体映射命名策略
     # 参考： https://www.docs4dev.com/docs/zh/hibernate-orm/5.4/reference/hibernate_user_guide.html  {@link org.hibernate.cfg.AvailableSettings}
     properties:
-      "hibernate.cache.use_second_level_cache": false
+      "hibernate.cache.use_second_level_cache": false # 禁用二级缓存
   autoconfigure:
     exclude:
-      - org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration
+      - org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration # 禁止自动装配 jackson
+  cache: # 缓存配置 <diskStore path="java.io.tmpdir" />
+    type: simple
+    cache-names: # 缓存名称， 使用 @CacheEvict 注解的 cacheNames 必须在这里定义
+      - loginCache
+      - roleCache
+      - nicknameCache
