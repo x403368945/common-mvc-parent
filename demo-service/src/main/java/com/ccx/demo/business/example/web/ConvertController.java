@@ -6,7 +6,7 @@ import com.ccx.demo.business.example.service.ConvertService;
 import com.ccx.demo.business.user.entity.TabUser;
 import com.ccx.demo.config.init.AppConfig.URL;
 import com.ccx.demo.enums.Radio;
-import com.ccx.demo.support.web.IAuthController;
+import com.ccx.demo.business.user.web.IAuthController;
 import com.support.mvc.entity.base.*;
 import com.utils.util.Dates;
 import com.utils.util.Util;

@@ -6,7 +6,6 @@ import com.ccx.demo.business.user.entity.extend.ITabUser;
 import com.ccx.demo.business.user.service.UserLoginService;
 import com.ccx.demo.business.user.service.UserService;
 import com.ccx.demo.config.init.AppConfig.URL;
-import com.ccx.demo.support.web.IAuthController;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.entity.base.Param;
 import com.support.mvc.entity.base.Result;
@@ -18,9 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
-
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
 
 /**
  * 请求操作响应:用户

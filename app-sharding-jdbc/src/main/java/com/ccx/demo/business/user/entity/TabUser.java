@@ -7,7 +7,7 @@ import com.ccx.demo.business.user.entity.extend.ITabUser;
 import com.ccx.demo.enums.Radio;
 import com.ccx.demo.enums.RegisterSource;
 import com.ccx.demo.enums.Role;
-import com.ccx.demo.support.entity.IUser;
+import com.ccx.demo.business.user.cache.IUserCache;
 import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;
 import com.querydsl.jpa.impl.JPAUpdateClause;
@@ -48,7 +48,7 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @JSONType(orders = {"id", "uid", "subdomain", "username", "nickname", "phone", "email", "role", "registerSource", "deleted"})
-public class TabUser extends UserDetail implements ITabUser, ITable, IUser, IWhere<JPAUpdateClause, QdslWhere> {
+public class TabUser extends UserDetail implements ITabUser, ITable, IUserCache, IWhere<JPAUpdateClause, QdslWhere> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -4,7 +4,6 @@ import com.ccx.demo.business.user.entity.Authority;
 import com.ccx.demo.business.user.entity.TabUser;
 import com.ccx.demo.business.user.service.AuthorityService;
 import com.ccx.demo.config.init.AppConfig.URL;
-import com.ccx.demo.support.web.IAuthController;
 import com.support.mvc.entity.base.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

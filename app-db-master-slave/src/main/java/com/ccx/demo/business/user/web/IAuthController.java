@@ -1,4 +1,4 @@
-package com.ccx.demo.support.web;
+package com.ccx.demo.business.user.web;
 
 import com.ccx.demo.business.user.entity.TabUser;
 
