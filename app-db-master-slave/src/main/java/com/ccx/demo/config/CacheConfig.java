@@ -5,13 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.concurrent.ConcurrentMapCache;
-import org.springframework.cache.support.SimpleCacheManager;
+import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * <pre>
@@ -32,12 +28,10 @@ public class CacheConfig {
 
     @Bean
     public CacheManager cacheManager() {
-        final SimpleCacheManager manager = new SimpleCacheManager();
-        manager.setCaches(Stream.of(
+        return new ConcurrentMapCacheManager(
                 loginCache,
                 nicknameCache
-        ).map(ConcurrentMapCache::new).collect(Collectors.toList()));
-        return manager;
+        );
     }
 
     /**
