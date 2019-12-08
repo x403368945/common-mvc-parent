@@ -148,7 +148,7 @@ public class RoleController implements IAuthController<Long> {
                 );
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'Menu_Role')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'Menu_Role', 'RoleController_page')")
     @GetMapping("/page/{number}/{size}")
     @ResponseBody
     @Override

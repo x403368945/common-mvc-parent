@@ -39,8 +39,6 @@ public interface <%=JavaName%>Repository extends
     default Optional<<%=TabName%>> findByUid(final <%=id%> id, final String uid) {
         return findOne(
                 q.id.eq(id).and(q.uid.eq(uid))
-                // 下面一行代码与上面效果是一样的，如果参数较多或本身就是一个对象，可以用 Example.of 构建简单查询对象，简单查询对象中的所有参数都使用 = 匹配，null 值忽略
-                // Example.of(<%=TabName%>.builder().id(id).uid(uid).build())
         );
     }
 //

@@ -28,14 +28,14 @@ package com.ccx.demo.config;
 //    /**
 //     * 角色权限缓存
 //     */
-//    public static final String roleCache = "roleCache";
+//    public static final String ITabRoleCache = "ITabRoleCache";
 //
 //    @Bean
 //    public CacheManager cacheManager() {
 //        return new ConcurrentMapCacheManager(
 //                loginCache,
 //                nicknameCache,
-//                roleCache
+//                ITabRoleCache
 //        );
 //    }
 //

@@ -19,7 +19,6 @@ class JsonOrders {
 
     public static void main(String[] args) {
 //        JUnit.set();
-        AppConfig.setDebug(true);
 
 //		printFields(Result.class, "{\"code\":\"SUCCESS\",\"data\":[],\"message\":\"成功\",\"exception\":\"成功\",\"pageCount\":15,\"rowCount\":20,\"totalCount\":295}", new String[]{});
 //        Result();
@@ -94,7 +93,7 @@ class JsonOrders {
             } else fieldNames.add("modifyUserName");
             obj.remove("modifyUserName");
         }
-        obj.keySet().forEach(key -> fieldNames.add(key));
+        fieldNames.addAll(obj.keySet());
         System.out.println("属性序列化排序:\n@JSONType(orders = {\"" + String.join("\",\"", fieldNames) + "\"})");
         System.out.println("扩展属性:\n\"" + String.join("\",\"", obj.keySet()) + "\"");
         return fieldNames.toArray(new String[fieldNames.size()]);

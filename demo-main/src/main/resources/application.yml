@@ -32,6 +32,6 @@ spring:
   cache: # 缓存配置 <diskStore path="java.io.tmpdir" />
     type: simple
     cache-names: # 缓存名称， 使用 @CacheEvict 注解的 cacheNames 必须在这里定义
-      - loginCache
-      - roleCache
-      - nicknameCache
+      - "ITabUserCache"
+      - "ITabUserCache.login"
+      - "ITabRoleCache"

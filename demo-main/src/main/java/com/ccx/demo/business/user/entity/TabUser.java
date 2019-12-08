@@ -6,7 +6,7 @@ import com.alibaba.fastjson.annotation.JSONType;
 import com.ccx.demo.business.user.entity.extend.ITabUser;
 import com.ccx.demo.enums.Radio;
 import com.ccx.demo.enums.RegisterSource;
-import com.ccx.demo.business.user.cache.IUserCache;
+import com.ccx.demo.business.user.cache.ITabUserCache;
 import com.querydsl.core.annotations.PropertyType;
 import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;
@@ -53,7 +53,7 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @JSONType(orders = {"id", "uid", "subdomain", "username", "nickname", "phone", "email", "role", "registerSource", "deleted"})
-public class TabUser extends UserDetail implements ITabUser, ITable, IUserCache, IWhere<JPAUpdateClause, QdslWhere> {
+public class TabUser extends UserDetail implements ITabUser, ITable, ITabUserCache, IWhere<JPAUpdateClause, QdslWhere> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

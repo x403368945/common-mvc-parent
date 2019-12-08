@@ -5,7 +5,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
 import com.ccx.demo.business.example.enums.DemoStatus;
 import com.ccx.demo.enums.Radio;
-import com.ccx.demo.business.user.cache.IUserCache;
+import com.ccx.demo.business.user.cache.ITabUserCache;
 import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
@@ -70,7 +70,7 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 public class TabDemoList implements
 //        ITabDemoList
         ITable, // 所有与数据库表 - 实体类映射的表都实现该接口；方便后续一键查看所有表的实体
-        IUserCache, // 所有需要返回操作用户信息的，都实现此接口，会自动从缓存中获取操作用户信息
+        ITabUserCache, // 所有需要返回操作用户信息的，都实现此接口，会自动从缓存中获取操作用户信息
         ITimestamp, // 所有需要更新时间戳的实体类
         // JPAUpdateClause => IRepository#update 需要的动态更新字段；采用 方案2 时需要实现该接口
         // QdslWhere       => com.support.mvc.dao.IViewRepository 需要的查询条件

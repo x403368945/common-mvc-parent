@@ -1,5 +1,7 @@
 package com.ccx.demo.business.user.dao.jpa;
 
+import com.ccx.demo.business.user.cache.ITabRoleCache;
+import com.ccx.demo.business.user.cache.ITabUserCache;
 import com.ccx.demo.business.user.entity.QTabRole;
 import com.ccx.demo.business.user.entity.TabRole;
 import com.ccx.demo.enums.Radio;
@@ -31,7 +33,7 @@ public interface RoleRepository extends
         IRepository<TabRole, Long> {
     QTabRole q = QTabRole.tabRole;
 
-    @CacheEvict(cacheNames = "roleCache", key = "#id")
+    @CacheEvict(cacheNames = ITabRoleCache.ROW, key = "#id")
     @Override
     default long update(final Long id, final Long userId, final TabRole obj) {
         return findById(id)
@@ -44,7 +46,7 @@ public interface RoleRepository extends
                 .orElse(0L);
     }
 
-    @CacheEvict(cacheNames = "roleCache", key = "#id")
+    @CacheEvict(cacheNames = ITabRoleCache.ROW, key = "#id")
     @Override
     default long markDeleteByUid(final Long id, final String uid, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
@@ -55,7 +57,6 @@ public interface RoleRepository extends
                 .execute();
     }
 
-    @CacheEvict(cacheNames = "roleCache", allEntries = true)
     @Override
     default long markDelete(final List<TabRole> list, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
@@ -69,14 +70,17 @@ public interface RoleRepository extends
                 .execute();
     }
 
+    @Cacheable(cacheNames = ITabUserCache.ROW, key = "#id")
     @Override
     default Optional<TabRole> findByUid(final Long id, final String uid) {
         return findOne(
                 q.id.eq(id).and(q.uid.eq(uid))
-                // 下面一行代码与上面效果是一样的，如果参数较多或本身就是一个对象，可以用 Example.of 构建简单查询对象，简单查询对象中的所有参数都使用 = 匹配，null 值忽略
-                // Example.of(TabRole.builder().id(id).uid(uid).build())
         );
     }
+
+    @Cacheable(cacheNames = ITabUserCache.ROW, key = "#id")
+    @Override
+    Optional<TabRole> findById(Long id);
 
     @Override
     default List<TabRole> findList(final TabRole condition) {
@@ -119,29 +123,16 @@ public interface RoleRepository extends
                 .orderBy(condition.buildQdslSorts())
                 .fetchResults();
     }
-
-
-    /**
-     * 查询角色
-     *
-     * @return {@link String} 角色名称 {@link TabRole#getName()}
-     */
-    @Cacheable(cacheNames = "roleCache", key = "#id")
-    default TabRole findCacheRoleById(final Long id) {
-        jpaQueryFactory.<JPAQueryFactory>get()
-                .select(Projections.bean(
-                        TabRole.class,
-                        q.id,
-                        q.uid,
-                        q.name,
-                        q.authorities,
-                        q.deleted
-                ))
-                .from(q)
-                .where(q.id.eq(id))
-                .fetchOne();
-        return findById(id).orElse(null);
-    }
+//
+//    /**
+//     * 查询角色
+//     *
+//     * @return {@link String} 角色名称 {@link TabRole#getName()}
+//     */
+//    @Cacheable(cacheNames = ITabRoleCache.ROW, key = "#id")
+//    default TabRole findCacheRoleById(final Long id) {
+//        return findById(id).orElse(null);
+//    }
 
     /**
      * 按 id 批量查询指定字段，

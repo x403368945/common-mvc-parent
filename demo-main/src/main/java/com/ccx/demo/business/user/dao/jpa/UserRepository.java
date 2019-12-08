@@ -1,5 +1,6 @@
 package com.ccx.demo.business.user.dao.jpa;
 
+import com.ccx.demo.business.user.cache.ITabUserCache;
 import com.ccx.demo.business.user.entity.QTabUser;
 import com.ccx.demo.business.user.entity.TabUser;
 import com.ccx.demo.enums.Radio;
@@ -30,13 +31,11 @@ public interface UserRepository extends
         IRepository<TabUser, Long> {
     QTabUser q = tabUser;
 
+    @Cacheable(cacheNames = ITabUserCache.ROW, key = "#id")
+    @Override
+    Optional<TabUser> findById(Long id);
 
-    @Cacheable(cacheNames = "nicknameCache", key = "#id")
-    @Query
-    default String getNickame(final Long id) {
-        return jpaQueryFactory.<JPAQueryFactory>get().select(q.nickname).from(q).where(q.id.eq(id)).fetchOne();
-    }
-
+    @CacheEvict(cacheNames = ITabUserCache.ROW, key = "#id")
     @Override
     default long markDeleteById(final Long id, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
@@ -47,6 +46,7 @@ public interface UserRepository extends
                 .execute();
     }
 
+    @CacheEvict(cacheNames = ITabUserCache.ROW, key = "#id")
     @Override
     default long markDeleteByIds(final List<Long> ids, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
@@ -107,7 +107,7 @@ public interface UserRepository extends
      * @param username String 登录账户名
      * @return Optional<TabUser>
      */
-    @Cacheable(cacheNames = "loginCache", key = "#username")
+    @Cacheable(cacheNames = ITabUserCache.LOGIN, key = "#username")
     default Optional<TabUser> findUser(final String username) {
         return Op.of(findOne(q.username.eq(username)))
                 .orElseOf(() -> findOne(q.phone.eq(username)))
@@ -121,7 +121,7 @@ public interface UserRepository extends
      *
      * @param username String 登录账户名
      */
-    @CacheEvict(cacheNames = "loginCache", key = "#username")
+    @CacheEvict(cacheNames = ITabUserCache.LOGIN, key = "#username")
     default void clearLoginCache(final String username) {
     }
 
@@ -133,6 +133,7 @@ public interface UserRepository extends
      * @param userId   Long 修改者ID
      * @return long 影响行数
      */
+    @CacheEvict(cacheNames = ITabUserCache.ROW, key = "#id")
     @Modifying
     @Query
     default long updatePassword(final Long id, final String password, final Long userId) {
@@ -152,7 +153,7 @@ public interface UserRepository extends
      * @param userId   Long 修改者ID
      * @return long 影响行数
      */
-    @CacheEvict(cacheNames = "nicknameCache", key = "#id")
+    @CacheEvict(cacheNames = ITabUserCache.ROW, key = "#id")
     @Modifying
     @Query
     default long updateNickname(final Long id, final String nickname, final Long userId) {
@@ -200,6 +201,7 @@ public interface UserRepository extends
 //                .execute();
 //    }
 
+    @Cacheable(cacheNames = ITabUserCache.ROW, key = "#id")
     @Override
     default Optional<TabUser> findByUid(final Long id, final String uid) {
         return Optional.ofNullable(jpaQueryFactory.<JPAQueryFactory>get()

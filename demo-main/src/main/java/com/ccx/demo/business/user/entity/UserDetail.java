@@ -1,7 +1,7 @@
 package com.ccx.demo.business.user.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.ccx.demo.business.user.cache.IRoleCache;
+import com.ccx.demo.business.user.cache.ITabRoleCache;
 import com.ccx.demo.enums.Radio;
 import com.querydsl.core.annotations.QueryTransient;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,10 +17,9 @@ import java.util.stream.Collectors;
 /**
  * Spring Security 鉴权信息
  *
- *
  * @author 谢长春 on 2018/3/15.
  */
-public class UserDetail implements UserDetails, IRoleCache {
+public class UserDetail implements UserDetails, ITabRoleCache {
 
     public TabUser loadUserDetail() {
         return null;
@@ -29,8 +28,10 @@ public class UserDetail implements UserDetails, IRoleCache {
     public TabUser toLoginResult() {
         return null;
     }
+
     public void setAuthorityList(final List<String> authorityList) {
     }
+
     @QueryTransient
     @JSONField(serialize = false, deserialize = false)
     @Override

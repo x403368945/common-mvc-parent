@@ -15,7 +15,10 @@ import static com.ccx.demo.config.init.BeanInitializer.Beans.userRepository;
  *
  * @author 谢长春 2017-9-26
  */
-public interface IUserCache {
+public interface ITabUserCache {
+    String ROW = "ITabUserCache";
+    String LOGIN = "ITabUserCache.login";
+
     /**
      * 获取缓存用户昵称
      *
@@ -26,7 +29,7 @@ public interface IUserCache {
     @QueryTransient
     @JSONField(serialize = false, deserialize = false)
     default String getNickNameByCache(final Long userId) {
-        return Optional.ofNullable(userId).map(id -> userRepository.<UserRepository>get().getNickame(id)).orElse(null);
+        return userRepository.<UserRepository>get().findById(userId).map(TabUser::getNickname).orElse(null);
     }
 
     /**

@@ -123,7 +123,7 @@ public class FileUpload<T> {
             localFile = FPath.of(to, fileInfo.getUname());
             // 将文件写入到本地
             uploadFile.transferTo(localFile.file());
-            log.debug("上传文件路径：" + localFile.chmod().absolute());
+            if (log.isDebugEnabled()) log.debug("上传文件路径：{}",localFile.chmod().absolute());
             resultList.add(fileInfo.parse(clazz));
         }
         return this;
