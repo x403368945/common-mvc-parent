@@ -19,6 +19,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.ccx.demo.business.user.entity.QTabUser.tabUser;
+import static com.ccx.demo.config.init.BeanInitializer.Beans.getAppContext;
 import static com.ccx.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 
 /**
@@ -31,10 +32,6 @@ public interface UserRepository extends
         IRepository<TabUser, Long> {
     QTabUser q = tabUser;
 
-    @Cacheable(cacheNames = ITabUserCache.CACHE_ROW_BY_ID, key = "#id")
-    @Override
-    Optional<TabUser> findById(Long id);
-
     @Override
     default long update(final Long id, final Long userId, final TabUser obj) {
         return findById(id)
@@ -42,7 +39,7 @@ public interface UserRepository extends
                 .filter(dest -> Objects.equals(dest.getDeleted(), Radio.NO))
                 .map(dest -> {
                     obj.update(dest);
-                    dest.setModifyUserId(userId);
+                    dest.setUpdateUserId(userId);
                     return 1L;
                 })
                 .orElse(0L)
@@ -54,8 +51,8 @@ public interface UserRepository extends
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Radio.YES)
-                .set(q.modifyUserId, userId)
-                .where(q.id.eq(id).and(q.createUserId.eq(userId)))
+                .set(q.updateUserId, userId)
+                .where(q.id.eq(id).and(q.insertUserId.eq(userId)))
                 .execute();
     }
 
@@ -64,12 +61,22 @@ public interface UserRepository extends
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Radio.YES)
-                .set(q.modifyUserId, userId)
-                .where(q.id.in(ids).and(q.createUserId.eq(userId)))
+                .set(q.updateUserId, userId)
+                .where(q.id.in(ids).and(q.insertUserId.eq(userId)))
                 .execute();
     }
 
-    //    @Query
+    @Override
+    default Optional<TabUser> findById(final Long id) {
+        return Optional.ofNullable(getAppContext().getBean(UserRepository.class).findCacheById(id));
+    }
+
+    @Cacheable(cacheNames = ITabUserCache.CACHE_ROW_BY_ID, key = "#id")
+    default TabUser findCacheById(final Long id) {
+        return findOne(q.id.eq(id)).orElse(null);
+    }
+
+//    @Query
 //    @Override
 //    default List<TabUser> findList( final TabUser condition) {
 //        final QTabUser q = tabUser;
@@ -141,7 +148,7 @@ public interface UserRepository extends
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.password, password)
-                .set(q.modifyUserId, userId)
+                .set(q.updateUserId, userId)
                 .where(q.id.eq(id))
                 .execute();
     }
@@ -160,7 +167,7 @@ public interface UserRepository extends
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.nickname, nickname)
-                .set(q.modifyUserId, userId)
+                .set(q.updateUserId, userId)
                 .where(q.id.eq(id))
                 .execute();
     }
@@ -178,7 +185,7 @@ public interface UserRepository extends
 //        return jpaQueryFactory.<JPAQueryFactory>get()
 //                .update(q)
 //                .set(q.deleted, Radio.NO)
-//                .set(q.modifyUserId, userId)
+//                .set(q.updateUserId, userId)
 //                .where(q.id.eq(id))
 //                .execute();
 //    }
@@ -196,7 +203,7 @@ public interface UserRepository extends
 //        return jpaQueryFactory.<JPAQueryFactory>get()
 //                .update(q)
 //                .set(q.expired, Radio.NO)
-//                .set(q.modifyUserId, userId)
+//                .set(q.updateUserId, userId)
 //                .where(q.id.eq(id))
 //                .execute();
 //    }

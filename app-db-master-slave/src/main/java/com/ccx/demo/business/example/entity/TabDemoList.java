@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
 import com.ccx.demo.business.example.enums.DemoStatus;
-import com.ccx.demo.enums.Radio;
 import com.ccx.demo.business.user.cache.IUserCache;
+import com.ccx.demo.enums.Radio;
 import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
@@ -66,7 +66,7 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 @Builder // 生成链式类构造器
 @Data // 生成 get & set & toString & hashCode & equals 方法
 // @JSONType(orders ={})：声明实体类属性在 JSON 序列化时的排序；警告：必须声明所有返回字段的顺序，否则此声明不起作用；版本升级后再次测试发现该 bug 有修正，会对 orders 的字段优先，orders 不存在的字段才会乱序
-@JSONType(orders = {"id", "uid", "name", "content", "amount", "status", "createTime", "createUserId", "createUserName", "modifyTime", "modifyUserId", "modifyUserName", "deleted"})
+@JSONType(orders = {"id", "uid", "name", "content", "amount", "status", "insertTime", "insertUserId", "insertUserName", "updateTime", "updateUserId", "updateUserName", "deleted"})
 public class TabDemoList implements
 //        ITabDemoList
         ITable, // 所有与数据库表 - 实体类映射的表都实现该接口；方便后续一键查看所有表的实体
@@ -114,41 +114,39 @@ public class TabDemoList implements
      */
     @Column(insertable = false, updatable = false)
     @JSONField(format = "yyyy-MM-dd HH:mm:ss") // 声明 JSON 序列化和反序列化的格式
-    @Null(groups = {ISave.class})
-    private Timestamp createTime;
+    private Timestamp insertTime;
     /**
      * 创建用户ID
      */
     @Column(updatable = false)
     @NotNull(groups = {ISave.class})
     @Positive
-    private Long createUserId;
+    private Long insertUserId;
     /**
      * 创建用户昵称
      */
     @Column(updatable = false)
     @NotNull(groups = {ISave.class})
     @Size(max = 30)
-    private String createUserName;
+    private String insertUserName;
     /**
      * 修改时间
      */
     @Column(insertable = false, updatable = false)
     @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")
-    @Null(groups = {ISave.class})
-    private Timestamp modifyTime;
+    private Timestamp updateTime;
     /**
      * 修改用户ID
      */
     @NotNull(groups = {ISave.class, IUpdate.class})
     @Positive
-    private Long modifyUserId;
+    private Long updateUserId;
     /**
      * 修改用户昵称
      */
     @NotNull(groups = {ISave.class, IUpdate.class})
     @Size(max = 30)
-    private String modifyUserName;
+    private String updateUserName;
     /**
      * 是否逻辑删除（1、已删除， 0、未删除）
      */
@@ -166,7 +164,7 @@ public class TabDemoList implements
      */
     @QueryTransient // 声明生成 Q{ClassName}.java 时忽略该属性
     @Transient // 声明 JPA + Hibernate 不与数据库建立映射，且 insert 和 update 忽略该属性
-    private Dates.Range createTimeRange;
+    private Dates.Range insertTimeRange;
     /**
      * 排序字段
      */
@@ -187,16 +185,16 @@ public class TabDemoList implements
         content(STRING.build("内容")),
         amount(DOUBLE.build("金额")),
         status(ENUM.build(true, "状态").setOptions(DemoStatus.comments())),
-        createTime(TIMESTAMP.build("创建时间")),
-        createUserId(LONG.build("创建用户ID")),
-        createUserName(STRING.build("创建用户昵称")),
-        modifyTime(TIMESTAMP.build("修改时间")),
-        modifyUserId(LONG.build("修改用户ID")),
-        modifyUserName(STRING.build("修改用户昵称")),
+        insertTime(TIMESTAMP.build("创建时间")),
+        insertUserId(LONG.build("创建用户ID")),
+        insertUserName(STRING.build("创建用户昵称")),
+        updateTime(TIMESTAMP.build("修改时间")),
+        updateUserId(LONG.build("修改用户ID")),
+        updateUserName(STRING.build("修改用户昵称")),
         deleted(ENUM.build("是否逻辑删除").setOptions(Radio.comments())),
         timestamp(LONG.build("数据最后一次更新时间戳")),
         amountRange(RANGE_NUM.apply("金额查询区间")),
-        createTimeRange(RANGE_DATE.apply("创建时间查询区间")),
+        insertTimeRange(RANGE_DATE.apply("创建时间查询区间")),
         sorts(SORTS.apply(OrderBy.names())),
         ;
         private final Prop prop;
@@ -226,12 +224,12 @@ public class TabDemoList implements
 //		content(tabDemoList.content),
 //		amount(tabDemoList.amount),
 //		status(tabDemoList.status),
-//		createTime(tabDemoList.createTime),
-//		createUserId(tabDemoList.createUserId),
-//		createUserName(tabDemoList.createUserName),
-        modifyTime(tabDemoList.modifyTime),
-//		modifyUserId(tabDemoList.modifyUserId),
-//		modifyUserName(tabDemoList.modifyUserName),
+//		insertTime(tabDemoList.insertTime),
+//		insertUserId(tabDemoList.insertUserId),
+//		insertUserName(tabDemoList.insertUserName),
+        updateTime(tabDemoList.updateTime),
+//		updateUserId(tabDemoList.updateUserId),
+//		updateUserName(tabDemoList.updateUserName),
 //		deleted(tabDemoList.deleted)
         ;
         public final Sorts asc;
@@ -240,9 +238,11 @@ public class TabDemoList implements
         public Sorts get(final Sorts.Direction direction) {
             return Objects.equals(direction, Sorts.Direction.ASC) ? asc : desc;
         }
+
         public Sorts.Order asc() {
             return Sorts.Order.builder().name(this.name()).direction(Sorts.Direction.ASC).build();
         }
+
         public Sorts.Order desc() {
             return Sorts.Order.builder().name(this.name()).direction(Sorts.Direction.DESC).build();
         }
@@ -276,8 +276,8 @@ public class TabDemoList implements
                 .then(amount, update -> update.set(q.amount, amount))
                 .then(status, update -> update.set(q.status, status))
                 // 强制更新操作人信息
-                .then(update -> update.set(q.modifyUserId, modifyUserId))
-                .then(update -> update.set(q.modifyUserName, modifyUserName))
+                .then(update -> update.set(q.updateUserId, updateUserId))
+                .then(update -> update.set(q.updateUserName, updateUserName))
 
                 // 假设数据库中 content is not null；可以在属性为null时替换为 ""
 //                .then(update -> update.set(q.content, Optional.ofNullable(content).orElse("")))
@@ -293,8 +293,8 @@ public class TabDemoList implements
         return QdslWhere.of()
                 .and(status, () -> q.status.eq(status))
                 .and(uid, () -> q.uid.eq(uid))
-                .and(createUserId, () -> q.createUserId.eq(createUserId))
-                .and(modifyUserId, () -> q.modifyUserId.eq(modifyUserId))
+                .and(insertUserId, () -> q.insertUserId.eq(insertUserId))
+                .and(updateUserId, () -> q.updateUserId.eq(updateUserId))
                 // 强制带默认值的查询字段
                 .and(q.deleted.eq(Objects.isNull(getDeleted()) ? Radio.NO : deleted))
                 // 模糊匹配查询：后面带 % ；建议优先使用
@@ -303,7 +303,7 @@ public class TabDemoList implements
                 // 数字区间查询
                 .and(amountRange, () -> q.amount.between(amountRange.getMin(), amountRange.getMax()))
                 // 日期区间查询；Range.rebuild() : 先将时间区间重置到 00:00:00.000 - 23:59:59.999 ; 大多数情况都需要重置时间
-                .and(createTimeRange, () -> q.createTime.between(createTimeRange.rebuild().getBegin(), createTimeRange.getEnd()))
+                .and(insertTimeRange, () -> q.insertTime.between(insertTimeRange.rebuild().getBegin(), insertTimeRange.getEnd()))
 //                .and(name, () -> q.name.endsWith(name)) // 模糊匹配查询：前面带 %
 //                .and(name, () -> q.name.like(MessageFormat.format("%{0}%", name))) // 模糊匹配查询：前后带 %
                 ;

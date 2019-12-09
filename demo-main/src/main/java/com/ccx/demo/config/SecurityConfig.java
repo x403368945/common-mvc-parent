@@ -1,7 +1,7 @@
 package com.ccx.demo.config;
 
 import com.ccx.demo.config.init.AppConfig;
-import com.log.RequestId;
+import com.support.filter.RequestIdFilter;
 import com.support.config.security.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -168,7 +168,7 @@ public class SecurityConfig {
                         UsernamePasswordAuthenticationFilter.class
                 );
                 // 请求标记过滤器注册到 Spring Security 过滤器前面； ChannelProcessingFilter.class, SecurityContextPersistenceFilter.class
-                http.addFilterBefore(new RequestId(), ChannelProcessingFilter.class);
+                http.addFilterBefore(new RequestIdFilter(), ChannelProcessingFilter.class);
 //                http.addFilterAfter(authTokenFilter, BasicAuthenticationFilter.class);
             }
         }

@@ -73,7 +73,7 @@ Authorization: basic YWRtaW46YWRtaW4=
 {
   "json": {
     "uid": "c2c98f52381b4ffead6aaaea027bdc03",
-    "modifyTime": "2019-08-21 23:12:53.861",
+    "updateTime": "2019-08-21 23:12:53.861",
     "item": {
       "key": "SUCCESS",
       "value": "1",
@@ -90,7 +90,7 @@ Authorization: basic YWRtaW46YWRtaW4=
 {
   "json": {
     "uid": "dde9f290c6314f9bab88dd698941c6cb",
-    "modifyTime": "2019-08-21 18:04:38.116",
+    "updateTime": "2019-08-21 18:04:38.116",
     "ids": [
       200,
       201,

@@ -91,7 +91,7 @@ package web;
 //                                        .content(RandomStringUtils.randomAlphabetic(15))
 //                                        .status(DemoStatus.RUNNING)
 //                                        .amount((double) Util.randomMax(9999))
-//                                        .modifyTime(yyyy_MM_dd_HH_mm_ss.parse("2018-12-18 10:45:10").timestamp())
+//                                        .updateTime(yyyy_MM_dd_HH_mm_ss.parse("2018-12-18 10:45:10").timestamp())
 //                                        .build()
 //                        ))
 //                )
@@ -232,7 +232,7 @@ package web;
 //                .get(
 //                        Param.of(BeanMap.create(
 //                                TabDemoList.builder()
-//                                        .createTimeRange(Dates.Range.today())
+//                                        .insertTimeRange(Dates.Range.today())
 //                                        .build()
 //                        ))
 //                )

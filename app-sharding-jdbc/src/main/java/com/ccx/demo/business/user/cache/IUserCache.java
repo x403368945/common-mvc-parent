@@ -34,7 +34,7 @@ public interface IUserCache {
      *
      * @return Long
      */
-    default Long getCreateUserId() {
+    default Long getInsertUserId() {
         return null;
     }
 
@@ -45,8 +45,8 @@ public interface IUserCache {
      */
     @Transient
     @QueryTransient
-    default String getCreateUserName() {
-        return getNickNameCacheById(getCreateUserId());
+    default String getInsertUserName() {
+        return getNickNameCacheById(getInsertUserId());
     }
 
     /**
@@ -54,7 +54,7 @@ public interface IUserCache {
      *
      * @return Long
      */
-    default Long getModifyUserId() {
+    default Long getUpdateUserId() {
         return null;
     }
 
@@ -65,8 +65,8 @@ public interface IUserCache {
      */
     @Transient
     @QueryTransient
-    default String getModifyUserName() {
-        return getNickNameCacheById(getModifyUserId());
+    default String getUpdateUserName() {
+        return getNickNameCacheById(getUpdateUserId());
     }
 
 //    /**
@@ -74,25 +74,25 @@ public interface IUserCache {
 //     */
 //    @NotNull(groups = {ISave.class})
 //    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-//    private Timestamp createTime;
+//    private Timestamp insertTime;
 //    /**
 //     * 创建用户ID
 //     */
 //    @NotNull(groups = {ISave.class})
 //    @Positive
-//    private Long createUserId;
+//    private Long insertUserId;
 //    /**
 //     * 修改时间
 //     */
 //    @NotNull(groups = {ISave.class, IUpdate.class})
 //    @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")
-//    private Timestamp modifyTime;
+//    private Timestamp updateTime;
 //    /**
 //     * 修改用户ID
 //     */
 //    @NotNull(groups = {ISave.class, IUpdate.class})
 //    @Positive
-//    private Long modifyUserId;
+//    private Long updateUserId;
 //    /**
 //     * 是否逻辑删除（1、已删除， 0、未删除）
 //     */

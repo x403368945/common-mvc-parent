@@ -45,8 +45,8 @@ public interface UserRepository extends
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Radio.YES)
-                .set(q.modifyUserId, userId)
-                .where(q.id.eq(id).and(q.createUserId.eq(userId)))
+                .set(q.updateUserId, userId)
+                .where(q.id.eq(id).and(q.insertUserId.eq(userId)))
                 .execute();
     }
 
@@ -55,8 +55,8 @@ public interface UserRepository extends
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Radio.YES)
-                .set(q.modifyUserId, userId)
-                .where(q.id.in(ids).and(q.createUserId.eq(userId)))
+                .set(q.updateUserId, userId)
+                .where(q.id.in(ids).and(q.insertUserId.eq(userId)))
                 .execute();
     }
 
@@ -143,7 +143,7 @@ public interface UserRepository extends
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.password, password)
-                .set(q.modifyUserId, userId)
+                .set(q.updateUserId, userId)
                 .where(q.id.eq(id))
                 .execute();
     }
@@ -163,7 +163,7 @@ public interface UserRepository extends
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.nickname, nickname)
-                .set(q.modifyUserId, userId)
+                .set(q.updateUserId, userId)
                 .where(q.id.eq(id))
                 .execute();
     }
@@ -181,7 +181,7 @@ public interface UserRepository extends
 //        return jpaQueryFactory.<JPAQueryFactory>get()
 //                .update(q)
 //                .set(q.deleted, Radio.NO)
-//                .set(q.modifyUserId, userId)
+//                .set(q.updateUserId, userId)
 //                .where(q.id.eq(id))
 //                .execute();
 //    }
@@ -199,7 +199,7 @@ public interface UserRepository extends
 //        return jpaQueryFactory.<JPAQueryFactory>get()
 //                .update(q)
 //                .set(q.expired, Radio.NO)
-//                .set(q.modifyUserId, userId)
+//                .set(q.updateUserId, userId)
 //                .where(q.id.eq(id))
 //                .execute();
 //    }

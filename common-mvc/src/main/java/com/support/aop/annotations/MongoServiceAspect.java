@@ -23,7 +23,6 @@ public @interface MongoServiceAspect {
      * 当值为 true 时，忽略以下配置
      *   {@link MongoServiceAspect#id()}
      *   {@link MongoServiceAspect#user()}
-     *   {@link MongoServiceAspect#timestamp()}
      * @return boolean
      */
     boolean sync() default false;
@@ -37,8 +36,8 @@ public @interface MongoServiceAspect {
     boolean id() default true;
 
     /**
-     * save | saveAll 方法是否自动设置用户 id 到 [createUserId|modifyUserId] 字段
-     * update 方法是否自动设置用户 id 到 modifyUserId 字段
+     * save | saveAll 方法是否自动设置用户 id 到 [insertUserId|updateUserId] 字段
+     * update 方法是否自动设置用户 id 到 updateUserId 字段
      *
      * @return boolean
      */
@@ -49,11 +48,4 @@ public @interface MongoServiceAspect {
      */
     Class<? extends Enum> deleted() default Deleted.class;
 
-    /**
-     * save | saveAll 方法是否自动设置当前时间到 [createTime|modifyTime] 字段
-     * update 方法是否自动设置当前时间到 modifyTime 字段
-     *
-     * @return boolean
-     */
-    boolean timestamp() default true;
 }

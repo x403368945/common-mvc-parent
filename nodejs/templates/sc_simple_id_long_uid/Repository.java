@@ -77,7 +77,7 @@ public interface <%=JavaName%>Repository extends
 //        return jpaQueryFactory.<JPAQueryFactory>get()
 //                .update(q)
 //                .set(q.deleted, Radio.YES)
-//                .set(q.modifyUserId, userId)
+//                .set(q.updateUserId, userId)
 //                .where(q.id.eq(id).and(q.deleted.eq(Radio.NO)))
 //                .execute();
 //    }
@@ -87,7 +87,7 @@ public interface <%=JavaName%>Repository extends
 //        return jpaQueryFactory.<JPAQueryFactory>get()
 //                .update(q)
 //                .set(q.deleted, Radio.YES)
-//                .set(q.modifyUserId, userId)
+//                .set(q.updateUserId, userId)
 //                .where(q.id.eq(id).and(q.uid.eq(uid)).and(q.deleted.eq(Radio.NO)))
 //                .execute();
 //    }
@@ -97,7 +97,7 @@ public interface <%=JavaName%>Repository extends
 //        return jpaQueryFactory.<JPAQueryFactory>get()
 //                .update(q)
 //                .set(q.deleted, Radio.YES)
-//                .set(q.modifyUserId, userId)
+//                .set(q.updateUserId, userId)
 //                .where(q.id.in(ids).and(q.deleted.eq(Radio.NO)))
 //                .execute();
 //    }
@@ -107,7 +107,7 @@ public interface <%=JavaName%>Repository extends
 //        return jpaQueryFactory.<JPAQueryFactory>get()
 //                .update(q)
 //                .set(q.deleted, Radio.YES)
-//                .set(q.modifyUserId, userId)
+//                .set(q.updateUserId, userId)
 //                .where(q.id.in(list.stream().map(<%=TabName%>::getId).toArray(Long[]::new))
 //                        .and(q.deleted.eq(Radio.NO))
 //                        .and(q.uid.in(list.stream().map(<%=TabName%>::getUid).toArray(String[]::new)))

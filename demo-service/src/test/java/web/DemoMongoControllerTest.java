@@ -88,7 +88,7 @@ package web;
 //                                        .name(RandomStringUtils.randomAlphabetic(10))
 //                                        .status(DemoStatus.RUNNING)
 //                                        .age((short) Util.randomMax(100))
-//                                        .modifyTime(yyyy_MM_dd_HH_mm_ss_SSS.parse("2019-01-06 14:02:41.914").timestamp())
+//                                        .updateTime(yyyy_MM_dd_HH_mm_ss_SSS.parse("2019-01-06 14:02:41.914").timestamp())
 //                                        .build()
 //                        ))
 //                )
@@ -181,7 +181,7 @@ package web;
 //                .get(
 //                        Param.of(BeanMap.create(
 //                                DemoMongo.builder()
-//                                        .createTimeRange(Dates.Range.builder()
+//                                        .insertTimeRange(Dates.Range.builder()
 //                                                .begin(yyyy_MM_dd.parse("2019-01-04").timestamp())
 //                                                .end(yyyy_MM_dd.parse("2019-01-04").timestamp())
 //                                                .build())

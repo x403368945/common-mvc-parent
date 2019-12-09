@@ -61,7 +61,7 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 @AllArgsConstructor
 @Builder
 @Data
-@JSONType(orders = {"id", "uid", "ids", "images", "items", "item", "createTime", "createUserId", "createUserName", "modifyTime", "modifyUserId", "modifyUserName", "deleted"})
+@JSONType(orders = {"id", "uid", "ids", "images", "items", "item", "insertTime", "insertUserId", "insertUserName", "updateTime", "updateUserId", "updateUserName", "deleted"})
 public final class TabConvert implements
         ITable, // 所有与数据库表 - 实体类映射的表都实现该接口；方便后续一键查看所有表的实体
         ITabUserCache,
@@ -111,27 +111,27 @@ public final class TabConvert implements
     @Column(insertable = false, updatable = false)
     @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")
     @Null(groups = {ISave.class})
-    private Timestamp createTime;
+    private Timestamp insertTime;
     /**
      * 创建用户ID
      */
     @Column(updatable = false)
     @NotNull(groups = {ISave.class})
     @Positive
-    private Long createUserId;
+    private Long insertUserId;
     /**
      * 修改时间
      */
     @Column(insertable = false, updatable = false)
     @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")
     @Null(groups = {ISave.class})
-    private Timestamp modifyTime;
+    private Timestamp updateTime;
     /**
      * 修改用户ID
      */
     @NotNull(groups = {ISave.class, IUpdate.class})
     @Positive
-    private Long modifyUserId;
+    private Long updateUserId;
     /**
      * 是否逻辑删除（1、已删除， 0、未删除）
      */
@@ -159,15 +159,15 @@ public final class TabConvert implements
         images(ARRAY.build("{@link List<String>}")),
         items(ARRAY.build("{@link List<com.support.mvc.entity.base.Item>}")),
         item(OBJECT.build("{@link com.support.mvc.entity.base.Item}")),
-        createTime(TIMESTAMP.build("创建时间")),
-        createUserId(LONG.build("创建用户ID")),
-        modifyTime(TIMESTAMP.build("修改时间")),
-        modifyUserId(LONG.build("修改用户ID")),
+        insertTime(TIMESTAMP.build("创建时间")),
+        insertUserId(LONG.build("创建用户ID")),
+        updateTime(TIMESTAMP.build("修改时间")),
+        updateUserId(LONG.build("修改用户ID")),
         deleted(ENUM.build("是否逻辑删除").setOptions(Radio.comments())),
 
         //        timestamp(LONG.build("数据最后一次更新时间戳")),
 //        numRange(RANGE_NUM.apply("数字查询区间")),
-//        createTimeRange(RANGE_DATE.apply("创建时间查询区间")),
+//        insertTimeRange(RANGE_DATE.apply("创建时间查询区间")),
         sorts(SORTS.apply(OrderBy.names())),
         ;
         private final Prop prop;
@@ -197,10 +197,10 @@ public final class TabConvert implements
 //        images(tabConvert.images),
 //        items(tabConvert.items),
 //        item(tabConvert.item),
-//        createTime(tabConvert.createTime),
-//        createUserId(tabConvert.createUserId),
-//        modifyTime(tabConvert.modifyTime),
-//        modifyUserId(tabConvert.modifyUserId),
+//        insertTime(tabConvert.insertTime),
+//        insertUserId(tabConvert.insertUserId),
+//        updateTime(tabConvert.updateTime),
+//        updateUserId(tabConvert.updateUserId),
 //        deleted(tabConvert.deleted),
         ;
         public final Sorts asc;
@@ -245,10 +245,10 @@ public final class TabConvert implements
                 .then(images, update -> update.set(q.images, images))
                 .then(items, update -> update.set(q.items, items))
                 .then(item, update -> update.set(q.item, item))
-                .then(modifyUserId, update -> update.set(q.modifyUserId, modifyUserId))
+                .then(updateUserId, update -> update.set(q.updateUserId, updateUserId))
 //                // 当 name != null 时更新 name 属性
 //                .then(name, update -> update.set(q.name, name))
-//                .then(update -> update.set(q.modifyUserId, modifyUserId))
+//                .then(update -> update.set(q.updateUserId, updateUserId))
 //                // 假设数据库中 content is not null；可以在属性为null时替换为 ""
 //                .then(update -> update.set(q.content, Optional.ofNullable(content).orElse("")))
 //                // 数据库中 amount 可以为 null
@@ -267,20 +267,20 @@ public final class TabConvert implements
 //                .and(images, () -> q.images.eq(images))
 //                .and(items, () -> q.items.eq(items))
 //                .and(item, () -> q.item.eq(item))
-//                .and(createTimeRange, () -> q.createTime.between(createTimeRange.rebuild().getBegin(), createTimeRange.getEnd()))
-//                .and(createUserId, () -> q.createUserId.eq(createUserId))
-//                .and(modifyTimeRange, () -> q.modifyTime.between(modifyTimeRange.rebuild().getBegin(), modifyTimeRange.getEnd()))
-//                .and(modifyUserId, () -> q.modifyUserId.eq(modifyUserId))
+//                .and(insertTimeRange, () -> q.insertTime.between(insertTimeRange.rebuild().getBegin(), insertTimeRange.getEnd()))
+//                .and(insertUserId, () -> q.insertUserId.eq(insertUserId))
+//                .and(updateTimeRange, () -> q.updateTime.between(updateTimeRange.rebuild().getBegin(), updateTimeRange.getEnd()))
+//                .and(updateUserId, () -> q.updateUserId.eq(updateUserId))
                 .and(deleted, () -> q.deleted.eq(deleted))
 //                .and(phone, () -> q.phone.eq(phone))
-//                .and(createUserId, () -> q.createUserId.eq(createUserId))
-//                .and(modifyUserId, () -> q.modifyUserId.eq(modifyUserId))
+//                .and(insertUserId, () -> q.insertUserId.eq(insertUserId))
+//                .and(updateUserId, () -> q.updateUserId.eq(updateUserId))
 //                // 强制带默认值的查询字段
 //                .and(q.deleted.eq(Objects.isNull(getDeleted()) ? Radio.NO : deleted))
 //                // 数字区间查询
 //                .and(amountRange, () -> q.amount.between(amountRange.getMin(), amountRange.getMax()))
 //                // 日期区间查询；Range.rebuild() : 先将时间区间重置到 00:00:00.000 - 23:59:59.999 ; 大多数情况都需要重置时间
-//                .and(createTimeRange, () -> q.createTime.between(createTimeRange.rebuild().getBegin(), createTimeRange.getEnd()))
+//                .and(insertTimeRange, () -> q.insertTime.between(insertTimeRange.rebuild().getBegin(), insertTimeRange.getEnd()))
 //                // 模糊匹配查询：后面带 % ；建议优先使用
 //                .and(name, () -> q.name.startsWith(name)) // 模糊匹配查询：后面带 %
 //                .and(name, () -> q.name.endsWith(name)) // 模糊匹配查询：前面带 %

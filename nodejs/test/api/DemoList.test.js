@@ -158,8 +158,8 @@ export default class DemoListTest {
    */
   async search() {
     console.log('> 多条件批量查询，不分页 ----------------------------------------------------------------------------------------------------');
-    const createTimeRange = new DateRange(new Date().addMonth(-1).formatDate(), new Date().formatDate());
-    (await new DemoListVO({createTimeRange}).getService().search()).print().assertVersion().assertData();
+    const insertTimeRange = new DateRange(new Date().addMonth(-1).formatDate(), new Date().formatDate());
+    (await new DemoListVO({insertTimeRange}).getService().search()).print().assertVersion().assertData();
     return this;
   }
 
@@ -169,14 +169,14 @@ export default class DemoListTest {
    */
   async pageable() {
     console.log('> 分页：多条件批量查询 ----------------------------------------------------------------------------------------------------');
-    const createTimeRange = new DateRange(new Date().addMonth(-1).formatDate(), new Date().formatDate());
+    const insertTimeRange = new DateRange(new Date().addMonth(-1).formatDate(), new Date().formatDate());
     const amountRange = new NumRange(0, 9999);
-    const sorts = [OrderBy.desc('modifyTime')];
+    const sorts = [OrderBy.desc('updateTime')];
     (await new DemoListVO().getService().pageable()).print().assertVersion().assertData();
     (await new DemoListVO({sorts}).getService().pageable()).print().assertVersion().assertData();
     (await new DemoListVO({amountRange, sorts}).getService().pageable()).print().assertVersion().assertData();
     (await new DemoListVO({
-      createTimeRange,
+      insertTimeRange,
       amountRange,
       sorts
     }).getService().pageable()).print().assertVersion().assertData();

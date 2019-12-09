@@ -183,17 +183,13 @@ public interface IServiceAspect {
             if (service.uid()) { // 生成 uuid 填充到新增对象 uid 字段
                 set(obj, "uid", Util.uuid32());
             }
-            if (service.user()) { // 将当前操作用户填充到新增对象 createUserId|modifyUserId 字段
-                set(obj, "createUserId", userId);
-                set(obj, "modifyUserId", userId);
+            if (service.user()) { // 将当前操作用户填充到新增对象 insertUserId|updateUserId 字段
+                set(obj, "insertUserId", userId);
+                set(obj, "updateUserId", userId);
                 if (Objects.nonNull(nickname)) {
-                    set(obj, "createUserName", nickname);
-                    set(obj, "modifyUserName", nickname);
+                    set(obj, "insertUserName", nickname);
+                    set(obj, "updateUserName", nickname);
                 }
-            }
-            if (service.timestamp()) {
-                set(obj, "createTime", null);
-                set(obj, "modifyTime", null);
             }
         }
 
@@ -201,10 +197,10 @@ public interface IServiceAspect {
             if (service.id()) { // 指定要更新的数据ID
                 set(obj, "id", id);
             }
-            if (service.user()) { // 将当前操作用户填充到编辑对象 modifyUserId 字段
-                set(obj, "modifyUserId", userId);
+            if (service.user()) { // 将当前操作用户填充到编辑对象 updateUserId 字段
+                set(obj, "updateUserId", userId);
                 if (Objects.nonNull(nickname)) {
-                    set(obj, "modifyUserName", nickname);
+                    set(obj, "updateUserName", nickname);
                 }
             }
         }
@@ -214,19 +210,13 @@ public interface IServiceAspect {
             if (service.id()) { // mongodb 不支持自增，设置为uuid
                 set(obj, "id", Util.uuid32());
             }
-            if (service.user()) { // 将当前操作用户填充到新增对象 createUserId|modifyUserId 字段
-                set(obj, "createUserId", userId);
-                set(obj, "modifyUserId", userId);
+            if (service.user()) { // 将当前操作用户填充到新增对象 insertUserId|updateUserId 字段
+                set(obj, "insertUserId", userId);
+                set(obj, "updateUserId", userId);
                 if (Objects.nonNull(nickname)) {
-                    set(obj, "createUserName", nickname);
-                    set(obj, "modifyUserName", nickname);
+                    set(obj, "insertUserName", nickname);
+                    set(obj, "updateUserName", nickname);
                 }
-
-            }
-            if (service.timestamp()) { // MongoDB 没有自动更新时间戳的功能，将当前时间戳填充到新增对象 createTime|modifyTime 字段
-                final Timestamp timestamp = Dates.now().timestamp();
-                set(obj, "createTime", timestamp);
-                set(obj, "modifyTime", timestamp);
             }
             // 填充 Radio.NO 到新增对象 deleted 字段
             set(obj, "deleted", Enum.valueOf(service.deleted(), "NO"));  // 只有 mongodb 才需要，mysql 可以在建表的时候设置默认值
@@ -236,16 +226,12 @@ public interface IServiceAspect {
             if (service.id()) { // 指定要更新的数据ID
                 set(obj, "id", id);
             }
-            if (service.user()) { // 将当前操作用户填充到编辑对象 modifyUserId 字段
-                set(obj, "modifyUserId", userId);
+            if (service.user()) { // 将当前操作用户填充到编辑对象 updateUserId 字段
+                set(obj, "updateUserId", userId);
                 if (Objects.nonNull(nickname)) {
-                    set(obj, "modifyUserName", nickname);
+                    set(obj, "updateUserName", nickname);
                 }
             }
-            // 更新是，时间戳可能作为 where 条件，不能在这里覆盖数据时间戳
-//            if (service.timestamp()) { // // MongoDB 没有自动更新时间戳的功能，将当前时间戳填充到编辑对象 modifyTime 字段
-//                set(obj, "modifyTime", Dates.now().timestamp());
-//            }
         }
     }
 

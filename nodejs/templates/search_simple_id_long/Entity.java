@@ -82,7 +82,7 @@ public final class <%=TabName%> implements
 
 //        timestamp(LONG.build("数据最后一次更新时间戳")),
 //        numRange(RANGE_NUM.apply("数字查询区间")),
-//        createTimeRange(RANGE_DATE.apply("创建时间查询区间")),
+//        insertTimeRange(RANGE_DATE.apply("创建时间查询区间")),
         sorts(SORTS.apply(OrderBy.names())),
         ;
         private final Prop prop;
@@ -149,7 +149,7 @@ public final class <%=TabName%> implements
 <%=update%>
 ////                // 当 name != null 时更新 name 属性
 ////                .then(name, update -> update.set(q.name, name))
-////                .then(update -> update.set(q.modifyUserId, modifyUserId))
+////                .then(update -> update.set(q.updateUserId, updateUserId))
 ////                // 假设数据库中 content is not null；可以在属性为null时替换为 ""
 ////                .then(update -> update.set(q.content, Optional.ofNullable(content).orElse("")))
 ////                // 数据库中 amount 可以为 null
@@ -165,14 +165,14 @@ public final class <%=TabName%> implements
 //        return QdslWhere.of()
 <%=where%>
 ////                .and(phone, () -> q.phone.eq(phone))
-////                .and(createUserId, () -> q.createUserId.eq(createUserId))
-////                .and(modifyUserId, () -> q.modifyUserId.eq(modifyUserId))
+////                .and(insertUserId, () -> q.insertUserId.eq(insertUserId))
+////                .and(updateUserId, () -> q.updateUserId.eq(updateUserId))
 ////                // 强制带默认值的查询字段
 ////                .and(q.deleted.eq(Objects.isNull(getDeleted()) ? Radio.NO : deleted))
 ////                // 数字区间查询
 ////                .and(amountRange, () -> q.amount.between(amountRange.getMin(), amountRange.getMax()))
 ////                // 日期区间查询；Range.rebuild() : 先将时间区间重置到 00:00:00.000 - 23:59:59.999 ; 大多数情况都需要重置时间
-////                .and(createTimeRange, () -> q.createTime.between(createTimeRange.rebuild().getBegin(), createTimeRange.getEnd()))
+////                .and(insertTimeRange, () -> q.insertTime.between(insertTimeRange.rebuild().getBegin(), insertTimeRange.getEnd()))
 ////                // 模糊匹配查询：后面带 % ；建议优先使用
 ////                .and(name, () -> q.name.startsWith(name)) // 模糊匹配查询：后面带 %
 ////                .and(name, () -> q.name.endsWith(name)) // 模糊匹配查询：前面带 %

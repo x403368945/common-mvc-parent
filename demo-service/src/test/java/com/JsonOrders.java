@@ -32,15 +32,15 @@ class JsonOrders {
      */
     enum Ignores {
         deleted,
-        createTime,
-        createUserId,
-        createUserName,
-        modifyTime,
-        modifyUserId,
-        modifyUserName;
+        insertTime,
+        insertUserId,
+        insertUserName,
+        updateTime,
+        updateUserId,
+        updateUserName;
 
         public static String[] toArrays() {
-            return new String[]{deleted.name(), createTime.name(), createUserId.name(), createUserName.name(), modifyTime.name(), modifyUserId.name(), modifyUserName.name()};
+            return new String[]{deleted.name(), insertTime.name(), insertUserId.name(), insertUserName.name(), updateTime.name(), updateUserId.name(), updateUserName.name()};
         }
 
         public static String[] toArrays(Ignores... igs) {
@@ -77,21 +77,21 @@ class JsonOrders {
         for (String key : ignores) {
             obj.remove(key);
         }
-        if (obj.containsKey("createUserName")) {
-            if (fieldNames.indexOf("createUserId") > 0) {
-                fieldNames.add(fieldNames.indexOf("createUserId") + 1, "createUserName");
-            } else if (fieldNames.indexOf("createTime") > 0) {
-                fieldNames.add(fieldNames.indexOf("createTime") + 1, "createUserName");
-            } else fieldNames.add("createUserName");
-            obj.remove("createUserName");
+        if (obj.containsKey("insertUserName")) {
+            if (fieldNames.indexOf("insertUserId") > 0) {
+                fieldNames.add(fieldNames.indexOf("insertUserId") + 1, "insertUserName");
+            } else if (fieldNames.indexOf("insertTime") > 0) {
+                fieldNames.add(fieldNames.indexOf("insertTime") + 1, "insertUserName");
+            } else fieldNames.add("insertUserName");
+            obj.remove("insertUserName");
         }
-        if (obj.containsKey("modifyUserName")) {
-            if (fieldNames.lastIndexOf("modifyUserId") > 0) {
-                fieldNames.add(fieldNames.indexOf("modifyUserId") + 1, "modifyUserName");
-            } else if (fieldNames.indexOf("modifyTime") > 0) {
-                fieldNames.add(fieldNames.indexOf("modifyTime") + 1, "modifyUserName");
-            } else fieldNames.add("modifyUserName");
-            obj.remove("modifyUserName");
+        if (obj.containsKey("updateUserName")) {
+            if (fieldNames.lastIndexOf("updateUserId") > 0) {
+                fieldNames.add(fieldNames.indexOf("updateUserId") + 1, "updateUserName");
+            } else if (fieldNames.indexOf("updateTime") > 0) {
+                fieldNames.add(fieldNames.indexOf("updateTime") + 1, "updateUserName");
+            } else fieldNames.add("updateUserName");
+            obj.remove("updateUserName");
         }
         fieldNames.addAll(obj.keySet());
         System.out.println("属性序列化排序:\n@JSONType(orders = {\"" + String.join("\",\"", fieldNames) + "\"})");

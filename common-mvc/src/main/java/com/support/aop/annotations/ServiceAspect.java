@@ -30,7 +30,6 @@ public @interface ServiceAspect {
      *  {@link ServiceAspect#id()}
      *  {@link ServiceAspect#uid()}
      *  {@link ServiceAspect#user()}
-     *  {@link ServiceAspect#timestamp()}
      * @return boolean
      */
     boolean sync() default false;
@@ -51,17 +50,11 @@ public @interface ServiceAspect {
     boolean uid() default true;
 
     /**
-     * save | saveAll 方法是否自动设置用户 id 到 [createUserId|modifyUserId] 字段
-     * update 方法是否自动设置用户 id 到 modifyUserId 字段
+     * save | saveAll 方法是否自动设置用户 id 到 [insertUserId|updateUserId] 字段
+     * update 方法是否自动设置用户 id 到 updateUserId 字段
      *
      * @return boolean
      */
     boolean user() default true;
 
-    /**
-     * save | saveAll 方法是否自动设置当前对象 [createTime|modifyTime] = null
-     *
-     * @return boolean
-     */
-    boolean timestamp() default true;
 }

@@ -3,16 +3,15 @@ package com.ccx.demo.business.user.entity;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
+import com.ccx.demo.business.user.cache.ITabUserCache;
 import com.ccx.demo.business.user.entity.extend.ITabUser;
 import com.ccx.demo.enums.Radio;
 import com.ccx.demo.enums.RegisterSource;
-import com.ccx.demo.business.user.cache.ITabUserCache;
 import com.querydsl.core.annotations.PropertyType;
 import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;
 import com.querydsl.core.annotations.QueryType;
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.support.mvc.entity.ITable;
 import com.support.mvc.entity.IWhere;
 import com.support.mvc.entity.IWhere.QdslWhere;
@@ -28,6 +27,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
@@ -62,6 +63,8 @@ public class TabUser extends UserDetail implements ITabUser, ITable, ITabUserCac
     /**
      * 用户UUID，缓存和按ID查询时可使用强校验
      */
+    @NotNull(groups = {ISave.class})
+    @Size(min = 32, max = 32)
     @Column(updatable = false)
     private String uid;
     /**
@@ -72,6 +75,7 @@ public class TabUser extends UserDetail implements ITabUser, ITable, ITabUserCac
     /**
      * 登录名
      */
+    @NotNull(groups = {ISave.class})
     @Column(updatable = false)
     @NotBlank(groups = {ISave.class})
     private String username;
@@ -79,8 +83,9 @@ public class TabUser extends UserDetail implements ITabUser, ITable, ITabUserCac
      * 登录密码
      */
     @Column(updatable = false)
+    @Size(min = 5, max = 15)
     @NotBlank(groups = {ISave.class})
-    @JSONField(serialize = false, deserialize = false)
+    @JSONField(serialize = false)
     private String password;
     /**
      * 用户昵称
@@ -114,25 +119,25 @@ public class TabUser extends UserDetail implements ITabUser, ITable, ITabUserCac
      */
     @JSONField(serialize = false, deserialize = false, format = "yyyy-MM-dd HH:mm:ss")
     @Column(insertable = false, updatable = false)
-    private Timestamp createTime;
+    private Timestamp insertTime;
     /**
      * 创建用户ID
      */
     @JSONField(serialize = false, deserialize = false)
     @Column(updatable = false)
-    private Long createUserId;
+    private Long insertUserId;
     /**
      * 修改时间
      */
     @JSONField(serialize = false, deserialize = false, format = "yyyy-MM-dd HH:mm:ss.SSS")
     @Column(insertable = false, updatable = false)
-    private Timestamp modifyTime;
+    private Timestamp updateTime;
     /**
      * 修改用户ID
      */
     @JSONField(serialize = false, deserialize = false)
     @Column(updatable = false)
-    private Long modifyUserId;
+    private Long updateUserId;
     /**
      * 是否有效
      */
@@ -171,7 +176,7 @@ public class TabUser extends UserDetail implements ITabUser, ITable, ITabUserCac
                 .then(phone, dest -> dest.setPhone(phone))
                 .then(email, dest -> dest.setEmail(email))
                 .then(roles, dest -> dest.setRoles(roles))
-                .then(dest -> dest.setModifyUserId(modifyUserId))
+                .then(dest -> dest.setUpdateUserId(updateUserId))
                 ;
     }
 
@@ -185,8 +190,8 @@ public class TabUser extends UserDetail implements ITabUser, ITable, ITabUserCac
                 .and(phone, () -> q.phone.eq(phone))
                 .and(email, () -> q.email.eq(email))
                 .and(subdomain, () -> q.subdomain.eq(subdomain))
-                .and(createUserId, () -> q.createUserId.eq(createUserId))
-                .and(modifyUserId, () -> q.modifyUserId.eq(modifyUserId))
+                .and(insertUserId, () -> q.insertUserId.eq(insertUserId))
+                .and(updateUserId, () -> q.updateUserId.eq(updateUserId))
                 .and(q.deleted.eq(Objects.isNull(getDeleted()) ? Radio.NO : deleted))
                 .and(nickname, () -> q.nickname.containsIgnoreCase(nickname))
 //              Expressions.booleanTemplate("JSON_CONTAINS({0},{1})>0",q.roles,roleId)

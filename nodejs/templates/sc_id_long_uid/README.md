@@ -2,7 +2,7 @@
 id:Long  
 uid:String  
 delete:Radio  
-createTime:Timestamp  
-createUserId:Long  
-modifyTime:Timestamp  
-modifyUserId:Long  
+insertTime:Timestamp  
+insertUserId:Long  
+updateTime:Timestamp  
+updateUserId:Long  

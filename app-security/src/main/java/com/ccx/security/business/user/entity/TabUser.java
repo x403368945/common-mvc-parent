@@ -49,10 +49,10 @@ public class TabUser extends UserDetail implements IJson {
         phone(STRING.build("手机号")),
         email(STRING.build("邮箱")),
         role(ENUM.build("角色").setOptions(Role.comments())),
-        createTime(TIMESTAMP.build("创建时间")),
-        createUserId(LONG.build("创建用户ID")),
-        modifyTime(TIMESTAMP.build("修改时间")),
-        modifyUserId(LONG.build("修改用户ID")),
+        insertTime(TIMESTAMP.build("创建时间")),
+        insertUserId(LONG.build("创建用户ID")),
+        updateTime(TIMESTAMP.build("修改时间")),
+        updateUserId(LONG.build("修改用户ID")),
         deleted(ENUM.build("是否逻辑删除").setOptions(Radio.comments()));
         private final Prop prop;
 
@@ -86,7 +86,7 @@ public class TabUser extends UserDetail implements IJson {
      * 登录密码
      */
     @Column(updatable = false)
-    @JSONField(serialize = false, deserialize = false)
+    @JSONField(serialize = false)
     private String password;
     /**
      * 用户昵称
@@ -112,25 +112,25 @@ public class TabUser extends UserDetail implements IJson {
      */
     @JSONField(serialize = false, deserialize = false, format = "yyyy-MM-dd HH:mm:ss")
     @Column(insertable = false, updatable = false)
-    private Timestamp createTime;
+    private Timestamp insertTime;
     /**
      * 创建用户ID
      */
     @JSONField(serialize = false, deserialize = false)
     @Column(updatable = false)
-    private Long createUserId;
+    private Long insertUserId;
     /**
      * 修改时间
      */
     @JSONField(serialize = false, deserialize = false, format = "yyyy-MM-dd HH:mm:ss.SSS")
     @Column(insertable = false, updatable = false)
-    private Timestamp modifyTime;
+    private Timestamp updateTime;
     /**
      * 修改用户ID
      */
     @JSONField(serialize = false, deserialize = false)
     @Column(updatable = false)
-    private Long modifyUserId;
+    private Long updateUserId;
     /**
      * 是否有效
      */

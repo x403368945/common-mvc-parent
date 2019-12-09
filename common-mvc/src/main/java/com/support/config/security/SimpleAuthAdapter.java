@@ -1,7 +1,7 @@
 package com.support.config.security;
 
 import com.google.common.collect.Sets;
-import com.log.RequestId;
+import com.support.filter.RequestIdFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -138,7 +138,7 @@ public class SimpleAuthAdapter extends WebSecurityConfigurerAdapter {
                     UsernamePasswordAuthenticationFilter.class
             );
             // 请求标记过滤器注册到 Spring Security 过滤器前面； ChannelProcessingFilter.class, SecurityContextPersistenceFilter.class
-            http.addFilterBefore(new RequestId(), ChannelProcessingFilter.class);
+            http.addFilterBefore(new RequestIdFilter(), ChannelProcessingFilter.class);
         }
     }
 

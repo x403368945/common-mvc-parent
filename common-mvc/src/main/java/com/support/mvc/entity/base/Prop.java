@@ -120,14 +120,14 @@ public class Prop implements IJson {
 //        id(LONG.build(true, "数据ID，主键自增")),
 //        uid(STRING.build(true, "数据UUID，缓存和按ID查询时可使用强校验")),
 //        name(STRING.build(true, "名称")),
-//        createTime(TIMESTAMP.build("创建时间")),
-//        createUserId(LONG.build("创建用户ID")),
-//        modifyTime(TIMESTAMP.build("修改时间")),
-//        modifyUserId(LONG.build("修改用户ID")),
+//        insertTime(TIMESTAMP.build("创建时间")),
+//        insertUserId(LONG.build("创建用户ID")),
+//        updateTime(TIMESTAMP.build("修改时间")),
+//        updateUserId(LONG.build("修改用户ID")),
 //        deleted(ENUM.build(Radio.comments())),
 //        timestamp(TIMESTAMP.build("数据最后一次更新时间戳")),
 //        ageRange(RANGE_NUM.apply("年龄查询区间")),
-//        createTimeRange(RANGE_DATE.apply("创建时间查询区间")),
+//        insertTimeRange(RANGE_DATE.apply("创建时间查询区间")),
 ////        sorts(VERSION.apply(DemoList.OrderBy.names())),
 //        ;
 //        private final Prop extend;
@@ -161,7 +161,7 @@ public class Prop implements IJson {
                                                 Prop.builder().name("max").type(SHORT).comment("最大值").build()
                                         ))
                                         .build(),
-                                Prop.builder().name("createTimeRange").type(OBJECT).comment("创建时间查询区间")
+                                Prop.builder().name("insertTimeRange").type(OBJECT).comment("创建时间查询区间")
                                         .props(Arrays.asList(
                                                 Prop.builder().name("begin").type(TIMESTAMP).comment("开始日期").build(),
                                                 Prop.builder().name("end").type(TIMESTAMP).comment("截止日期").build()

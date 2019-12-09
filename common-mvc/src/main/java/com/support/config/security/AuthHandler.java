@@ -91,7 +91,7 @@ public class AuthHandler implements
     @Override
     public void onLogoutSuccess(final HttpServletRequest request,
                                 final HttpServletResponse response,
-                                final Authentication e) throws IOException {
+                                final Authentication authentication) throws IOException {
         response.setContentType(ContentType.json.utf8());
         @Cleanup final PrintWriter writer = response.getWriter();
         writer.write(Code.SUCCESS.toResult().json());

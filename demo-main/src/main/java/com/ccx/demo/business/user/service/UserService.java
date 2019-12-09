@@ -8,6 +8,7 @@ import com.ccx.demo.business.user.entity.TabUser;
 import com.google.common.collect.Sets;
 import com.google.common.eventbus.EventBus;
 import com.querydsl.core.QueryResults;
+import com.support.aop.annotations.ServiceAspect;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.exception.DeleteRowsException;
 import com.support.mvc.exception.UpdateRowsException;
@@ -37,6 +38,7 @@ import static com.ccx.demo.config.init.BeanInitializer.Beans.cacheManager;
  */
 @Slf4j
 @Service
+@ServiceAspect
 public class UserService implements IService<TabUser>, ITabUserCache {
 
     @Autowired

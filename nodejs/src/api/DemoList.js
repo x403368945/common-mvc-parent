@@ -175,7 +175,7 @@ export class DemoListService {
    * @return {Promise<Result>}
    */
   async search() {
-    const {id, name, phone, amountRange, createTimeRange, sorts} = this.vo;
+    const {id, name, phone, amountRange, insertTimeRange, sorts} = this.vo;
     return await axios
       .get(DEMO_LIST_URL.search, {
         params: {
@@ -184,7 +184,7 @@ export class DemoListService {
             name: name || undefined,
             phone: name || undefined,
             amountRange,
-            createTimeRange,
+            insertTimeRange,
             sorts
           }
         }
@@ -198,7 +198,7 @@ export class DemoListService {
    * @return {Promise<Result>}
    */
   async pageable() {
-    const {id, name, phone, amountRange, createTimeRange, sorts, page} = this.vo;
+    const {id, name, phone, amountRange, insertTimeRange, sorts, page} = this.vo;
     return await axios
       .get(DEMO_LIST_URL.page.formatObject(page || Page.ofDefault()),
         {
@@ -208,7 +208,7 @@ export class DemoListService {
               name: name || undefined,
               phone: name || undefined,
               amountRange,
-              createTimeRange,
+              insertTimeRange,
               sorts
             }
           }
@@ -250,17 +250,17 @@ export default class DemoListVO {
    * @param content {string} 内容
    * @param amount {number} 金额
    * @param status {string} 状态，参考 {@link DemoStatus}.*.value
-   * @param createTime {string} 创建时间
-   * @param createUserId {number} 创建用户ID
-   * @param createUserName {string} 创建用户昵称
-   * @param modifyTime {string} 修改时间
-   * @param modifyUserId {number} 修改用户ID
-   * @param modifyUserName {string} 修改用户昵称
+   * @param insertTime {string} 创建时间
+   * @param insertUserId {number} 创建用户ID
+   * @param insertUserName {string} 创建用户昵称
+   * @param updateTime {string} 修改时间
+   * @param updateUserId {number} 修改用户ID
+   * @param updateUserName {string} 修改用户昵称
    * @param deleted {string} 逻辑删除状态，参考 {@link Radio}.*.value
    * @param timestamp {number} 按 id 查询时可能使用时间戳缓存
    * @param uids {Array<Object>} id + uid批量带参，=> [{id:1,uid:''},{id:1,uid:''}]
    * @param amountRange {NumRange} 金额查询区间
-   * @param createTimeRange {DateRange} 创建时间查询区间
+   * @param insertTimeRange {DateRange} 创建时间查询区间
    * @param sorts {Array<OrderBy>} 排序字段集合
    * @param page {Page} 分页对象
    */
@@ -271,17 +271,17 @@ export default class DemoListVO {
                 content = undefined,
                 amount = undefined,
                 status = undefined,
-                createTime = undefined,
-                createUserId = undefined,
-                createUserName = undefined,
-                modifyTime = undefined,
-                modifyUserId = undefined,
-                modifyUserName = undefined,
+                insertTime = undefined,
+                insertUserId = undefined,
+                insertUserName = undefined,
+                updateTime = undefined,
+                updateUserId = undefined,
+                updateUserName = undefined,
                 deleted = undefined,
                 timestamp = undefined,
                 uids = undefined,
                 amountRange = undefined,
-                createTimeRange = undefined,
+                insertTimeRange = undefined,
                 sorts = undefined,
                 page = undefined
               } = {}) {
@@ -319,32 +319,32 @@ export default class DemoListVO {
      * 创建时间
      * @type {string}
      */
-    this.createTime = createTime;
+    this.insertTime = insertTime;
     /**
      * 创建用户ID
      * @type {number}
      */
-    this.createUserId = createUserId;
+    this.insertUserId = insertUserId;
     /**
      * 创建用户昵称
      * @type {string}
      */
-    this.createUserName = createUserName;
+    this.insertUserName = insertUserName;
     /**
      * 修改时间
      * @type {string}
      */
-    this.modifyTime = modifyTime;
+    this.updateTime = updateTime;
     /**
      * 修改用户ID
      * @type {number}
      */
-    this.modifyUserId = modifyUserId;
+    this.updateUserId = updateUserId;
     /**
      * 修改用户昵称
      * @type {string}
      */
-    this.modifyUserName = modifyUserName;
+    this.updateUserName = updateUserName;
     /**
      * 逻辑删除状态，参考 {@link Radio}.*.value
      * @type {string}
@@ -369,7 +369,7 @@ export default class DemoListVO {
      * 创建时间查询区间
      * @type {DateRange}
      */
-    this.createTimeRange = createTimeRange;
+    this.insertTimeRange = insertTimeRange;
     /**
      * 排序字段集合
      * @type {Array<OrderBy>}

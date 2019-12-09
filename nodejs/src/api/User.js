@@ -145,13 +145,13 @@ export class UserService {
    * @return {Promise<Result>}
    */
   async pageable() {
-    const {id, uid, username, phone, email, createUserId, modifyUserId, expired, locked, nickname, sorts, page} = this.vo;
+    const {id, uid, username, phone, email, insertUserId, updateUserId, expired, locked, nickname, sorts, page} = this.vo;
     return await axios
       .get(USER_URL.page.formatObject(page || Page.ofDefault()),
         {
           params: {
             json: {
-              id, uid, username, phone, email, createUserId, modifyUserId, expired, locked, nickname, sorts, page
+              id, uid, username, phone, email, insertUserId, updateUserId, expired, locked, nickname, sorts, page
             }
           }
         }

@@ -2,18 +2,24 @@ package com.ccx.demo.config;
 
 import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.CustomConversions;
+import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver;
 import org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper;
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
+import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 
@@ -26,113 +32,55 @@ import java.util.Date;
  * @author 谢长春
  */
 // spring-mvc start >> mvc 将 MySQL 和 MongoDB 配置分离
-//@Configuration
-//@EnableMongoRepositories(basePackages = {"com.ccx.**.dao.mongo"})
-////,repositoryFactoryBeanClass= CustomMongoRepositoryFactoryBean.class
-//public class MongodbConfig extends AbstractMongoConfiguration {
-//
-//    @Value("${mongo.host}")
-//    private String host;
-//    @Value("${mongo.port}")
-//    private Integer port;
-//    @Value("${mongo.database}")
-//    private String database;
-//
-//    @Override
-//    protected String getDatabaseName() {
-//        return database;
-//    }
-//
-//    @Bean
-//    @Override
-//    public CustomConversions customConversions() {
-//        return new MongoCustomConversions(Collections.singletonList(
-//                new TimestampConverter()
-////                new TimestampWriteConverter(),
-////                new TimestampReadConverter(),
-////                new DateWriteConverter(),
-////                new DateReadConverter()
-//        ));
-//    }
-//
-//    class TimestampConverter implements Converter<Date, Timestamp> {
+@Configuration
+@EnableMongoRepositories(basePackages = {"com.ccx.**.dao.mongo"})
+public class MongodbConfig {
+
+    public class TimestampConverter implements Converter<Date, Timestamp> {
+        @Override
+        public Timestamp convert(Date date) {
+            return new Timestamp(date.getTime());
+        }
+    }
+
+    //
+//    @ReadingConverter
+//    public class InstantConverter implements Converter<LocalDateTime, Instant> {
 //        @Override
-//        public Timestamp convert(Date date) {yyyy_MM_dd_HH_mm_ss
-//            return new Timestamp(date.getTime());
+//        public Instant convert(LocalDateTime localDateTime) {
+//            return Instant.from(localDateTime);
 //        }
 //    }
 //
-////    class TimestampWriteConverter implements Converter<Timestamp, String> {
-////        @Nullable
-////        @Override
-////        public String convert(Timestamp timestamp) {
-////            return Dates.of(timestamp).format(yyyyMMddHHmmssSSS);
-////        }
-////    }
-////    class TimestampReadConverter implements Converter<String, Timestamp> {
-////        @Nullable
-////        @Override
-////        public Timestamp convert(String s) {
-////            return Dates.of(s, yyyyMMddHHmmssSSS).timestamp();
-////        }
-////    }
-////    class DateWriteConverter implements Converter<Date, String> {
-////        @Nullable
-////        @Override
-////        public String convert(Date date) {
-////            return Dates.of(date).format(yyyyMMddHHmmssSSS);
-////        }
-////    }
-////    class DateReadConverter implements Converter<String, Date> {
-////        @Nullable
-////        @Override
-////        public Date convert(String s) {
-////            return Dates.of(s, yyyyMMddHHmmssSSS).date();
-////        }
-////    }
-//
-//    @Bean
-//    @Override
-//    public MongoClient mongoClient() {
-//        return new MongoClient(
-//                new ServerAddress(host, port)
-////                , MongoCredential.createCredential("name", "jpa", "pwd".toCharArray())
-//        );
+//    @WritingConverter
+//    public class LocalDateTimeConverter implements Converter<Instant, LocalDateTime> {
+//        @Override
+//        public LocalDateTime convert(Instant instant) {
+//            return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+//        }
 //    }
 //
-//    //    @Bean
-////    public MongoTypeMapper customTypeMapper() {
-////        return new DefaultMongoTypeMapper(null); // typeKey为null的时候，插入mongodb 不会产生 _class 属性
-////    }
-//    @Bean
-//    @Override
-//    public MappingMongoConverter mappingMongoConverter() throws Exception {
-//        final MappingMongoConverter converter = super.mappingMongoConverter();
-//        converter.setTypeMapper(new DefaultMongoTypeMapper(null)); // typeKey为null的时候，插入mongodb 不会产生 _class 属性
-//        return converter;
-//    }
-//
-////    @Bean
-////    public Morphia morphiaMongo() {
-////        return new Morphia();
-////    }
-////
-////    @Bean
-////    public Datastore morphiaDatastore(@Autowired Morphia morphiaMongo, @Autowired MongoClient mongoClient) {
-////        return morphiaMongo.createDatastore(mongoClient, database);
-////    }
-//
-////    /**
-////     * QueryDSL 查询对象
-////     * @return MorphiaQuery<ActivityData>
-////     */
-////    public MorphiaQuery<ActivityData> morphiaQuery(){
-////        final QActivityData q = QActivityData.activityData;
-////        return new MorphiaQuery<ActivityData>(
-////                morphiaMongo(),
-////                morphiaDatastore(),
-////                q
-////        ).where(q.activityId.eq(""));
-////    }
-//}
-// spring-mvc end <<<<
+    @Bean
+    public MongoCustomConversions mongoCustomConversions() {
+        return new MongoCustomConversions(Arrays.asList(
+                new TimestampConverter()
+//                new InstantConverter(),
+//                new LocalDateTimeConverter()
+        ));
+    }
+
+    @Bean
+    public MappingMongoConverter mappingMongoConverter(MongoDbFactory mongoDbFactory, MongoMappingContext context, MongoCustomConversions mongoCustomConversions, BeanFactory beanFactory) {
+        final MappingMongoConverter converter = new MappingMongoConverter(new DefaultDbRefResolver(mongoDbFactory), context);
+//        converter.setCustomConversions(beanFactory.getBean(MongoCustomConversions.class));
+        converter.setTypeMapper(new DefaultMongoTypeMapper(null)); // typeKey为null的时候，插入mongodb 不会产生 _class 属性
+        converter.setCustomConversions(mongoCustomConversions); // 添加自定义的转换器
+        return converter;
+    }
+
+    @Bean
+    public MongoTemplate mongoTemplate(MongoDbFactory dbFactory, MappingMongoConverter converter) {
+        return new MongoTemplate(dbFactory, converter);
+    }
+
+}

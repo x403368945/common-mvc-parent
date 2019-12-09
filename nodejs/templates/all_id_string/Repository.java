@@ -31,7 +31,7 @@ public interface <%=JavaName%>Repository extends
     default long update(final <%=id%> id, final Long userId, final <%=TabName%> obj) {
         return obj.update(jpaQueryFactory.<JPAQueryFactory>get().update(q))
                 .get()
-                .where(q.id.eq(id).and(q.createUserId.eq(userId)).and(q.modifyTime.eq(obj.getModifyTime())))
+                .where(q.id.eq(id).and(q.insertUserId.eq(userId)).and(q.updateTime.eq(obj.getUpdateTime())))
                 .execute();
     }
 
@@ -41,7 +41,7 @@ public interface <%=JavaName%>Repository extends
         return Optional
                 .ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
                         .selectFrom(q)
-                        .where(q.id.eq(id).and(q.createUserId.eq(userId)))
+                        .where(q.id.eq(id).and(q.insertUserId.eq(userId)))
                         .fetchOne()
                 )
                 .map(obj -> {
@@ -49,7 +49,7 @@ public interface <%=JavaName%>Repository extends
                     return obj;
                 })
                 .orElseThrow(() -> new NullPointerException("数据物理删除失败：".concat(
-                        <%=TabName%>.builder().id(id).createUserId(userId).build().json())
+                        <%=TabName%>.builder().id(id).insertUserId(userId).build().json())
                 ));
     }
 
@@ -58,8 +58,8 @@ public interface <%=JavaName%>Repository extends
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Radio.YES)
-                .set(q.modifyUserId, userId)
-                .where(q.id.eq(id).and(q.createUserId.eq(userId)).and(q.deleted.eq(Radio.NO)))
+                .set(q.updateUserId, userId)
+                .where(q.id.eq(id).and(q.insertUserId.eq(userId)).and(q.deleted.eq(Radio.NO)))
                 .execute();
     }
 
@@ -68,8 +68,8 @@ public interface <%=JavaName%>Repository extends
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Radio.YES)
-                .set(q.modifyUserId, userId)
-                .where(q.id.in(ids).and(q.createUserId.eq(userId)).and(q.deleted.eq(Radio.NO)))
+                .set(q.updateUserId, userId)
+                .where(q.id.in(ids).and(q.insertUserId.eq(userId)).and(q.deleted.eq(Radio.NO)))
                 .execute();
     }
 
@@ -78,9 +78,9 @@ public interface <%=JavaName%>Repository extends
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Radio.YES)
-                .set(q.modifyUserId, userId)
+                .set(q.updateUserId, userId)
                 .where(q.id.in(list.stream().map(<%=TabName%>::getId).toArray(String[]::new))
-                        .and(q.createUserId.eq(userId)).and(q.deleted.eq(Radio.NO))
+                        .and(q.insertUserId.eq(userId)).and(q.deleted.eq(Radio.NO))
                 )
                 .execute();
     }

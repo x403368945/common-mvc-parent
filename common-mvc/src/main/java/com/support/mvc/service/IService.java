@@ -38,8 +38,8 @@ public interface IService<E> extends ISearch<E> {
 /* 以下字段将会在 @ServiceAspect 中设置
         obj.setId(null);
         obj.setUid(Util.uuid());
-        obj.setCreateUserId(userId);
-        obj.setModifyUserId(userId);
+        obj.setInsertUserId(userId);
+        obj.setUpdateUserId(userId);
 */
 //        return repository.save(obj);
         throw new NullPointerException(this.getClass().getName().concat("：方法【save(final E obj, final Long userId)】未实现"));
@@ -60,8 +60,8 @@ public interface IService<E> extends ISearch<E> {
 /* 以下字段将会在 @ServiceAspect 中设置
         obj.setId(null);
         obj.setUid(Util.uuid());
-        obj.setCreateUserId(userId);
-        obj.setModifyUserId(userId);
+        obj.setInsertUserId(userId);
+        obj.setUpdateUserId(userId);
 */
 //        return repository.saveAll(list);
         throw new NullPointerException(this.getClass().getName().concat("：方法【saveAll(final List<E> list, final Long userId)】未实现"));
@@ -81,7 +81,7 @@ public interface IService<E> extends ISearch<E> {
                         @Valid @NotNull(message = "【obj】不能为null") final E obj) {
 /* 以下字段将会在 @ServiceAspect 中设置
         obj.setId(id);
-        obj.setModifyUserId(userId);
+        obj.setUpdateUserId(userId);
 */
 //        UpdateRowsException.asserts(repository.update(id, userId, obj));
         throw new NullPointerException(this.getClass().getName().concat("：方法【update(final Long id, final Long userId, final E obj)】未实现"));

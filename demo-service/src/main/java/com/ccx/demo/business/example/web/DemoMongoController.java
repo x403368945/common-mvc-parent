@@ -88,7 +88,7 @@ public class DemoMongoController implements IAuthController<String> {
                                 URL.SERVER.append(v.formatUrl(Util.uuid32())), // 当前接口参考案例请求地址；
                                 DemoMongo.builder() // 当前接口参考案例请求参数，一般demo中存放必填字段或者所有字段
                                         .name("JX")
-                                        .modifyTime(Dates.now().timestamp())
+                                        .updateTime(Dates.now().timestamp())
                                         .build()
                         ))
                 )
@@ -244,7 +244,7 @@ public class DemoMongoController implements IAuthController<String> {
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl()), // 当前接口参考案例请求地址；
                                 DemoMongo.builder() // 当前接口参考案例请求参数，demo中设置支持查询的字段
                                         .deleted(Radio.NO)
-                                        .sorts(Collections.singletonList(Sorts.Order.builder().name(OrderBy.createTime.name()).direction(DESC).build()))
+                                        .sorts(Collections.singletonList(Sorts.Order.builder().name(OrderBy.insertTime.name()).direction(DESC).build()))
                                         .build()
                         ))
                 )
@@ -277,7 +277,7 @@ public class DemoMongoController implements IAuthController<String> {
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(1, 20)), // 当前接口参考案例请求地址；
                                 DemoMongo.builder() // 当前接口参考案例请求参数，demo中设置支持查询的字段
                                         .deleted(Radio.NO)
-                                        .sorts(Collections.singletonList(Sorts.Order.builder().name(OrderBy.createTime.name()).direction(DESC).build()))
+                                        .sorts(Collections.singletonList(Sorts.Order.builder().name(OrderBy.insertTime.name()).direction(DESC).build()))
                                         .build()
                         ))
                 )

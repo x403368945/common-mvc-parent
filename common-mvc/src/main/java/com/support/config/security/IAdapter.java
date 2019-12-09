@@ -1,6 +1,6 @@
 package com.support.config.security;
 
-import com.log.RequestId;
+import com.support.filter.RequestIdFilter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 
@@ -48,7 +48,7 @@ public interface IAdapter {
                     .anyRequest().permitAll()
             ;
             // 请求标记过滤器注册到 Spring Security 过滤器前面； ChannelProcessingFilter.class, SecurityContextPersistenceFilter.class
-            http.addFilterBefore(new RequestId(), ChannelProcessingFilter.class);
+            http.addFilterBefore(new RequestIdFilter(), ChannelProcessingFilter.class);
         }
     }
 
@@ -75,7 +75,7 @@ public interface IAdapter {
             ;
             if (cors()) http.cors().and();
             // 请求标记过滤器注册到 Spring Security 过滤器前面； ChannelProcessingFilter.class, SecurityContextPersistenceFilter.class
-            http.addFilterBefore(new RequestId(), ChannelProcessingFilter.class);
+            http.addFilterBefore(new RequestIdFilter(), ChannelProcessingFilter.class);
         }
 
         /**

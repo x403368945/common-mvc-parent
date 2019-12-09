@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver;
@@ -41,6 +42,7 @@ import java.util.Date;
  */
 // spring-boot start >> spring-boot 在 yml 文件简化了配置，所以将 MySQL 和 MongoDB 配置合并
 @Configuration
+@EnableJpaRepositories(basePackages = {"com.ccx.**.dao.jpa"})
 public class DBConfig {
     @PersistenceContext
     private EntityManager entityManager;
@@ -50,50 +52,5 @@ public class DBConfig {
         return new JPAQueryFactory(entityManager);
     }
 
-    public class TimestampConverter implements Converter<Date, Timestamp> {
-        @Override
-        public Timestamp convert(Date date) {
-            return new Timestamp(date.getTime());
-        }
-    }
-//
-//    @ReadingConverter
-//    public class InstantConverter implements Converter<LocalDateTime, Instant> {
-//        @Override
-//        public Instant convert(LocalDateTime localDateTime) {
-//            return Instant.from(localDateTime);
-//        }
-//    }
-//
-//    @WritingConverter
-//    public class LocalDateTimeConverter implements Converter<Instant, LocalDateTime> {
-//        @Override
-//        public LocalDateTime convert(Instant instant) {
-//            return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-//        }
-//    }
-//
-    @Bean
-    public MongoCustomConversions mongoCustomConversions() {
-        return new MongoCustomConversions(Arrays.asList(
-                new TimestampConverter()
-//                new InstantConverter(),
-//                new LocalDateTimeConverter()
-        ));
-    }
-
-    @Bean
-    public MappingMongoConverter mappingMongoConverter(MongoDbFactory mongoDbFactory, MongoMappingContext context, MongoCustomConversions mongoCustomConversions, BeanFactory beanFactory) {
-        final MappingMongoConverter converter = new MappingMongoConverter(new DefaultDbRefResolver(mongoDbFactory), context);
-//        converter.setCustomConversions(beanFactory.getBean(MongoCustomConversions.class));
-        converter.setTypeMapper(new DefaultMongoTypeMapper(null)); // typeKey为null的时候，插入mongodb 不会产生 _class 属性
-        converter.setCustomConversions(mongoCustomConversions); // 添加自定义的转换器
-        return converter;
-    }
-
-    @Bean
-    public MongoTemplate mongoTemplate(MongoDbFactory dbFactory, MappingMongoConverter converter) {
-        return new MongoTemplate(dbFactory, converter);
-    }
 }
 // spring-boot end <<<<

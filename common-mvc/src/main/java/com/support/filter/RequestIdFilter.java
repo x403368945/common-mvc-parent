@@ -1,4 +1,4 @@
-package com.log;
+package com.support.filter;
 
 import ch.qos.logback.classic.helpers.MDCInsertingServletFilter;
 import com.google.common.base.Strings;
@@ -33,7 +33,8 @@ import java.util.Optional;
  * @author 谢长春 2019/6/6
  */
 @Slf4j
-public class RequestId extends MDCInsertingServletFilter {
+//@WebFilter(urlPatterns = "/*", filterName="RequestIdFilter")
+public class RequestIdFilter extends MDCInsertingServletFilter {
 
     /**
      * 获取请求标记生成适配器
@@ -53,7 +54,7 @@ public class RequestId extends MDCInsertingServletFilter {
             }
             MDC.put("rid", rid);
             super.doFilter(request, response, chain);
-            ((HttpServletResponse) response).addHeader("rid", RequestId.get());
+            ((HttpServletResponse) response).addHeader("rid", RequestIdFilter.get());
         } finally {
             MDC.remove("rid");
         }

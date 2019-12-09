@@ -22,6 +22,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Null;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
@@ -74,7 +75,7 @@ public class TabUser extends UserDetail implements ITabUser, ITable, IUserCache,
      */
     @Column(updatable = false)
     @NotBlank(groups = {ISave.class})
-    @JSONField(serialize = false, deserialize = false)
+    @JSONField(serialize = false)
     private String password;
     /**
      * 用户昵称
@@ -105,25 +106,25 @@ public class TabUser extends UserDetail implements ITabUser, ITable, IUserCache,
      */
     @JSONField(serialize = false, deserialize = false, format = "yyyy-MM-dd HH:mm:ss")
     @Column(insertable = false, updatable = false)
-    private Timestamp createTime;
+    private Timestamp insertTime;
     /**
      * 创建用户ID
      */
     @JSONField(serialize = false, deserialize = false)
     @Column(updatable = false)
-    private Long createUserId;
+    private Long insertUserId;
     /**
      * 修改时间
      */
     @JSONField(serialize = false, deserialize = false, format = "yyyy-MM-dd HH:mm:ss.SSS")
     @Column(insertable = false, updatable = false)
-    private Timestamp modifyTime;
+    private Timestamp updateTime;
     /**
      * 修改用户ID
      */
     @JSONField(serialize = false, deserialize = false)
     @Column(updatable = false)
-    private Long modifyUserId;
+    private Long updateUserId;
     /**
      * 是否有效
      */
@@ -152,8 +153,8 @@ public class TabUser extends UserDetail implements ITabUser, ITable, IUserCache,
                 .and(email, () -> q.email.eq(email))
                 .and(subdomain, () -> q.subdomain.eq(subdomain))
                 .and(role, () -> q.role.eq(role))
-                .and(createUserId, () -> q.createUserId.eq(createUserId))
-                .and(modifyUserId, () -> q.modifyUserId.eq(modifyUserId))
+                .and(insertUserId, () -> q.insertUserId.eq(insertUserId))
+                .and(updateUserId, () -> q.updateUserId.eq(updateUserId))
                 .and(q.deleted.eq(Objects.isNull(getDeleted()) ? Radio.NO : deleted))
                 .and(nickname, () -> q.nickname.containsIgnoreCase(nickname));
     }

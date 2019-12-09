@@ -89,9 +89,9 @@ public class TabUserLogin implements ITable, IWhere<JPAUpdateClause, QdslWhere> 
     public enum Props {
         id(LONG.build(true, "数据ID，主键自增")),
         userId(LONG.build(true, "用户ID，tab_user.id")),
-        createTime(TIMESTAMP.build("登录时间")),
+        insertTime(TIMESTAMP.build("登录时间")),
         user(OBJECT.build("用户信息").setProps(TabUser.Props.list())),
-        createTimeRange(RANGE_DATE.apply("登录时间查询区间")),
+        insertTimeRange(RANGE_DATE.apply("登录时间查询区间")),
         sorts(SORTS.apply(OrderBy.names())),
         ;
         private final Prop prop;

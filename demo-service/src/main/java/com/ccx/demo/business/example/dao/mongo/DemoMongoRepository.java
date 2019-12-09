@@ -35,8 +35,8 @@ public interface DemoMongoRepository extends
     default long update(final String id, final Long userId, final DemoMongo obj) {
         return mongoTemplate.<MongoTemplate>get()
                 .updateFirst(
-                        // 注意【MongoDB】：如果 modifyTime 在 where 条件中，则日期格式必须精确到毫秒 yyyy-MM-dd HH:mm:ss.SSS，因为 Example 查询使用的是 equals 匹配；MySQL不存在该问题
-                        new Query(byExample(Example.of(DemoMongo.builder().id(id).createUserId(userId).modifyTime(obj.getModifyTime()).build()))),
+                        // 注意【MongoDB】：如果 updateTime 在 where 条件中，则日期格式必须精确到毫秒 yyyy-MM-dd HH:mm:ss.SSS，因为 Example 查询使用的是 equals 匹配；MySQL不存在该问题
+                        new Query(byExample(Example.of(DemoMongo.builder().id(id).insertUserId(userId).updateTime(obj.getUpdateTime()).build()))),
                         obj.update(new Update()).get(),
                         DemoMongo.class
                 )
@@ -46,13 +46,13 @@ public interface DemoMongoRepository extends
     @Override
     default DemoMongo deleteById(final String id, final Long userId) {
         // 只能删除自己创建的数据
-        return findOne(Example.of(DemoMongo.builder().id(id).createUserId(userId).build()))
+        return findOne(Example.of(DemoMongo.builder().id(id).insertUserId(userId).build()))
                 .map(obj -> {
                     delete(obj);
                     return obj;
                 })
                 .orElseThrow(() -> new NullPointerException("数据物理删除失败：".concat(
-                        DemoMongo.builder().id(id).createUserId(userId).build().json())
+                        DemoMongo.builder().id(id).insertUserId(userId).build().json())
                 ));
     }
 
@@ -60,11 +60,11 @@ public interface DemoMongoRepository extends
     default long markDeleteById(final String id, final Long userId) {
         return mongoTemplate.<MongoTemplate>get()
                 .updateFirst(
-                        new Query(byExample(Example.of(DemoMongo.builder().id(id).createUserId(userId).build()))),
+                        new Query(byExample(Example.of(DemoMongo.builder().id(id).insertUserId(userId).build()))),
                         new Update()
                                 .set(deleted.name(), Radio.YES)
-                                .set(modifyUserId.name(), userId)
-                                .set(modifyTime.name(), Timestamp.valueOf(LocalDateTime.now()))
+                                .set(updateUserId.name(), userId)
+                                .set(updateTime.name(), Timestamp.valueOf(LocalDateTime.now()))
                         ,
                         DemoMongo.class
                 )
@@ -75,11 +75,11 @@ public interface DemoMongoRepository extends
     default long markDeleteByIds(final List<String> ids, final Long userId) {
         return mongoTemplate.<MongoTemplate>get()
                 .updateMulti(
-                        new Query(where(id.name()).in(ids).and(createUserId.name()).is(userId)),
+                        new Query(where(id.name()).in(ids).and(insertUserId.name()).is(userId)),
                         new Update()
                                 .set(deleted.name(), Radio.YES)
-                                .set(modifyUserId.name(), userId)
-                                .set(modifyTime.name(), Timestamp.valueOf(LocalDateTime.now()))
+                                .set(updateUserId.name(), userId)
+                                .set(updateTime.name(), Timestamp.valueOf(LocalDateTime.now()))
                         ,
                         DemoMongo.class
                 )

@@ -84,7 +84,7 @@ public class ConvertController implements IAuthController<Long> {
                                 URL.SERVER.append(v.formatUrl(100)), // 当前接口参考案例请求地址；
                                 TabConvert.builder() // 当前接口参考案例请求参数，一般demo中存放必填字段或者所有字段
                                         .uid(Util.uuid32())
-//                                            .modifyTime(Dates.now().timestamp())
+//                                            .updateTime(Dates.now().timestamp())
                                         .build()
                         ))
                 )

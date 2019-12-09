@@ -78,7 +78,7 @@ gulp.task('server', gulp.series('listener', () => {
 gulp.task('test', async () => {
   devConfig();
   // await OpenDemoTest.of().testAll();
-  await DemoListTest.of().testAll(); //
+  // await DemoListTest.of().testAll(); //
   await UserTest.of().testAll(); // 测试用户相关的接口
   await AuthorityTest.of().testAll();
   await RoleTest.of().testAll();
@@ -88,7 +88,7 @@ gulp.task('test:one', async () => {
   // (await UserTest.of().loginUserBasic())
   //   .updateNickname(); // 测试用户相关的接口
 
-  await UserTest.of().testAll(); // 测试用户相关的接口
+  await UserTest.of().testAll();
 });
 
 gulp.task('mysql:read:write', async () => {

@@ -129,8 +129,8 @@ export class Table {
         comment: this.comment,
         date: new Date().formatDate(),
         orders: this.columns.map(({name}) => `"${name}"`).join(', '),
-        IUser: this.columns.some(({name}) => ['createUserId', 'modifyUserId'].includes(name)) ? 'IUser,' : '',
-        ITimestamp: this.columns.some(({name}) => name === 'modifyTime') ? 'ITimestamp, // 所有需要更新时间戳的实体类' : '',
+        IUser: this.columns.some(({name}) => ['insertUserId', 'updateUserId'].includes(name)) ? 'IUser,' : '',
+        ITimestamp: this.columns.some(({name}) => name === 'updateTime') ? 'ITimestamp, // 所有需要更新时间戳的实体类' : '',
         fields: this.columns.map(column => column.field(this.adapters)).filter(Boolean).join('\n'),
         props: this.columns.map(column => column.prop(this.adapters)).filter(Boolean).join(',\n'),
         orderBy: this.columns.map(column => column.orderBy(this)).filter(Boolean).join(',\n'),
@@ -187,12 +187,12 @@ export class Table {
   /**
    * 写入 Repository
    *
-   * .and(q.createUserId.eq(userId)) =>
-   * .createUserId(userId)           =>
-   * .set(q.modifyUserId, userId)    =>
+   * .and(q.insertUserId.eq(userId)) =>
+   * .insertUserId(userId)           =>
+   * .set(q.updateUserId, userId)    =>
    *
-   * modifyTime 字段不存在
-   *.and(q.modifyTime.eq(obj.getModifyTime())) =>
+   * updateTime 字段不存在
+   *.and(q.updateTime.eq(obj.getUpdateTime())) =>
    *
    * @param templateDirName {string} 模板目录
    * @param pkg {string} 输出包名
@@ -332,7 +332,7 @@ export class Column {
    * @param excludes {Array<String>} 指定不在更新范围的字段
    * @return {string}
    */
-  update(excludes = ['id', 'uid', 'deleted', 'createTime', 'createUserId', 'modifyTime']) {
+  update(excludes = ['id', 'uid', 'deleted', 'insertTime', 'insertUserId', 'updateTime']) {
     return excludes.includes(this.name) ? '' : '//                .then({name}, update -> update.set(q.{name}, {name}))'.formatObject({name: this.name})
   }
 
@@ -456,24 +456,24 @@ export class BaseAdapter {
       },
       uid: ({name}) => `    @Column(updatable = false)\n    @NotNull(groups = {IUpdate.class, IMarkDelete.class})\n    @Size(min = 32, max = 32)\n    private String ${name};`,
       deleted: ({name}) => `    @Column(insertable = false, updatable = false)\n    @Null(groups = {ISave.class})\n    private Radio ${name};`,
-      createTime: ({name}) => `    @Column(insertable = false, updatable = false)\n    @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")\n    @Null(groups = {ISave.class})\n    private Timestamp ${name};`,
-      modifyTime: (column) => this.fields.createTime(column),
-      createUserId: ({name}) => `    @Column(updatable = false)\n    @NotNull(groups = {ISave.class})\n    @Positive\n    private Long ${name};`,
-      modifyUserId: ({name}) => `    @NotNull(groups = {ISave.class, IUpdate.class})\n    @Positive\n    private Long ${name};`,
-      createUserName: ({name, length}) => `    @Column(updatable = false)\n    @NotNull(groups = {ISave.class})\n    @Size(max = ${length})\n    private String ${name};`,
-      modifyUserName: ({name, length}) => `    @NotNull(groups = {ISave.class, IUpdate.class})\n    @Size(max = ${length})\n    private String ${name};`
+      insertTime: ({name}) => `    @Column(insertable = false, updatable = false)\n    @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")\n    @Null(groups = {ISave.class})\n    private Timestamp ${name};`,
+      updateTime: (column) => this.fields.insertTime(column),
+      insertUserId: ({name}) => `    @Column(updatable = false)\n    @NotNull(groups = {ISave.class})\n    @Positive\n    private Long ${name};`,
+      updateUserId: ({name}) => `    @NotNull(groups = {ISave.class, IUpdate.class})\n    @Positive\n    private Long ${name};`,
+      insertUserName: ({name, length}) => `    @Column(updatable = false)\n    @NotNull(groups = {ISave.class})\n    @Size(max = ${length})\n    private String ${name};`,
+      updateUserName: ({name, length}) => `    @NotNull(groups = {ISave.class, IUpdate.class})\n    @Size(max = ${length})\n    private String ${name};`
     };
     this.props = {
       default: ({name, dataType, notNull, comment}) => `        ${name}(${dataType.value.toUpperCase()}.build(${notNull ? 'true, ' : ''}"${comment}"))`,
       id: ({name, dataType, comment}) => `        ${name}(${[DataType.BIGINT.name, DataType.INT.name].includes(dataType.name) ? 'LONG' : 'STRING'}.build(true, "${comment}"))`,
       uid: ({name, comment}) => `        ${name}(STRING.build(true, "${comment}"))`,
       deleted: ({name, comment}) => `        ${name}(ENUM.build("是否逻辑删除").setOptions(Radio.comments()))`,
-      createTime: ({name, comment}) => `        ${name}(TIMESTAMP.build("${comment}"))`,
-      modifyTime: (column) => this.props.createTime(column),
-      createUserId: ({name, comment}) => `        ${name}(LONG.build("${comment}"))`,
-      modifyUserId: (column) => this.props.createUserId(column),
-      createUserName: ({name, comment}) => `        ${name}(STRING.build("${comment}"))`,
-      modifyUserName: (column) => this.props.createUserName(column)
+      insertTime: ({name, comment}) => `        ${name}(TIMESTAMP.build("${comment}"))`,
+      updateTime: (column) => this.props.insertTime(column),
+      insertUserId: ({name, comment}) => `        ${name}(LONG.build("${comment}"))`,
+      updateUserId: (column) => this.props.insertUserId(column),
+      insertUserName: ({name, comment}) => `        ${name}(STRING.build("${comment}"))`,
+      updateUserName: (column) => this.props.insertUserName(column)
     };
   }
 }

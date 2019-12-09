@@ -69,7 +69,7 @@ public interface ISimpleService<E> extends ISearch<E> {
                         @Valid @NotNull(message = "【obj】不能为null") final E obj) {
 /* 以下字段将会在 @ServiceAspect 中设置
         obj.setId(id);
-        obj.setModifyUserId(userId);
+        obj.setUpdateUserId(userId);
 */
 //        UpdateRowsException.asserts(repository.update(id, userId, obj));
         throw new NullPointerException(this.getClass().getName().concat("：方法【update(final String id, final E obj)】未实现"));

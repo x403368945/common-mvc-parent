@@ -41,7 +41,6 @@ public class BeanInitializer implements InitConfig.Initializer {
      * TODO 枚举：定义单例类、实体类、接口需要的bean，因为单例类无法直接注入bean
      */
     public enum Beans {
-        appContext("Spring AppContext", null),
         eventBus("EventBus", EventBus.class),
         //        jedisPool("redis 缓存池", JedisPool.class),
         singleThread("单线程服务", ExecutorService.class),
@@ -57,14 +56,13 @@ public class BeanInitializer implements InitConfig.Initializer {
 
         <T> Beans(final String comment, final Class<T> clazz) {
             this.comment = comment;
-            if (Objects.equals("appContext", this.name())) supplier = () -> APP_CONTEXT;
-            else supplier = () -> APP_CONTEXT.getBean(this.name(), clazz);
+            supplier = () -> APP_CONTEXT.getBean(this.name(), clazz);
         }
 
         /**
          * 获得 bean，示例：
          * <pre>
-         *     Beans.appContext.getAppContext().getBean("userService", UserService.class)
+         *     Beans.getAppContext().getBean("userService", UserService.class)
          *     Beans.jpaQueryFactory.<JPAQueryFactory>get().selectFrom(QTabUser.tabUser).fetch()
          *
          * @param <T> 泛型类型
@@ -73,10 +71,6 @@ public class BeanInitializer implements InitConfig.Initializer {
         @SuppressWarnings("unchecked")
         public <T> T get() {
             return (T) supplier.get();
-//            if (appContext == this) {
-//                throw new IllegalArgumentException("枚举 appContext 只能调用 getAppContext() 方法；不能直接使用 getBean() 方法");
-//            }
-//            return (T) APP_CONTEXT.getBean(this.name(), clazz);
         }
 
         /**

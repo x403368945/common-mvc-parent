@@ -1,6 +1,5 @@
 package com.support.config.interceptor;
 
-import com.log.RequestId;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.HandlerInterceptor;

@@ -31,7 +31,7 @@ public interface <%=JavaName%>Repository extends
 //    default long update(final <%=id%> id, final <%=TabName%> obj) {
 //        return obj.update(jpaQueryFactory.<JPAQueryFactory>get().update(q))
 //        .get()
-//        .where(q.id.eq(id).and(q.uid.eq(obj.getUid())).and(q.modifyTime.eq(obj.getModifyTime())))
+//        .where(q.id.eq(id).and(q.uid.eq(obj.getUid())).and(q.updateTime.eq(obj.getUpdateTime())))
 //        .execute();
 //    }
 //

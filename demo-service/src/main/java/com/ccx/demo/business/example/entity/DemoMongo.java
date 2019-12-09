@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
 import com.ccx.demo.business.example.enums.DemoStatus;
-import com.ccx.demo.enums.Radio;
 import com.ccx.demo.business.user.cache.ITabUserCache;
+import com.ccx.demo.enums.Radio;
 import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
@@ -25,11 +25,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.query.Update;
 
+import javax.persistence.EntityListeners;
 import javax.validation.constraints.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -56,7 +60,8 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 @AllArgsConstructor
 @Builder
 @Data
-@JSONType(orders = {"id", "name", "phone", "age", "status", "createTime", "createUserId", "modifyTime", "modifyUserId", "deleted"})
+@EntityListeners(AuditingEntityListener.class)
+@JSONType(orders = {"id", "name", "phone", "age", "status", "insertTime", "insertUserId", "updateTime", "updateUserId", "deleted"})
 public class DemoMongo implements
         IMongo, // 所有与数据库表 - 实体类映射的表都实现该接口；方便后续一键查看所有表的实体
         ITabUserCache,
@@ -97,27 +102,28 @@ public class DemoMongo implements
     /**
      * 创建时间
      */
-    @NotNull(groups = {ISave.class})
+    @CreatedDate
+    @Null(groups = {ISave.class})
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-    private Timestamp createTime;
+    private Timestamp insertTime;
     /**
      * 创建用户ID
      */
     @NotNull(groups = {ISave.class})
     @Positive
-    private Long createUserId;
+    private Long insertUserId;
     /**
      * 修改时间
      */
-    @NotNull(groups = {ISave.class, IUpdate.class})
+    @LastModifiedDate
     @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")
-    private Timestamp modifyTime;
+    private Timestamp updateTime;
     /**
      * 修改用户ID
      */
     @NotNull(groups = {ISave.class, IUpdate.class})
     @Positive
-    private Long modifyUserId;
+    private Long updateUserId;
     /**
      * 是否逻辑删除（1、已删除， 0、未删除）
      */
@@ -136,7 +142,7 @@ public class DemoMongo implements
      */
     @QueryTransient
     @org.springframework.data.annotation.Transient
-    private Dates.Range createTimeRange;
+    private Dates.Range insertTimeRange;
     /**
      * 排序字段
      */
@@ -156,15 +162,15 @@ public class DemoMongo implements
         phone(STRING.build("手机")),
         age(SHORT.build("年龄")),
         status(ENUM.build(true, "状态").setOptions(DemoStatus.comments())),
-        createTime(TIMESTAMP.build("创建时间")),
-        createUserId(LONG.build("创建用户ID")),
-        modifyTime(TIMESTAMP.build("修改时间")),
-        modifyUserId(LONG.build("修改用户ID")),
+        insertTime(TIMESTAMP.build("创建时间")),
+        insertUserId(LONG.build("创建用户ID")),
+        updateTime(TIMESTAMP.build("修改时间")),
+        updateUserId(LONG.build("修改用户ID")),
         deleted(ENUM.build("是否逻辑删除").setOptions(Radio.comments())),
 
         //        timestamp(LONG.build("数据最后一次更新时间戳")),
 //        numRange(RANGE_NUM.apply("数字查询区间")),
-//        createTimeRange(RANGE_DATE.apply("创建时间查询区间")),
+//        insertTimeRange(RANGE_DATE.apply("创建时间查询区间")),
         sorts(SORTS.apply(OrderBy.names())),
         ;
         private final Prop prop;
@@ -191,10 +197,10 @@ public class DemoMongo implements
 //        name(demoMongo.name),
 //        phone(demoMongo.phone),
 //        age(demoMongo.age),
-        createTime(demoMongo.createTime),
-        //        createUserId(demoMongo.createUserId),
-        modifyTime(demoMongo.modifyTime),
-//        modifyUserId(demoMongo.modifyUserId),
+        insertTime(demoMongo.insertTime),
+        //        insertUserId(demoMongo.insertUserId),
+        updateTime(demoMongo.updateTime),
+//        updateUserId(demoMongo.updateUserId),
 //        deleted(demoMongo.deleted)
         ;
         public final Sorts asc;
@@ -203,9 +209,11 @@ public class DemoMongo implements
         public Sorts get(final Sorts.Direction direction) {
             return Objects.equals(direction, Sorts.Direction.ASC) ? asc : desc;
         }
+
         public Sorts.Order asc() {
             return Sorts.Order.builder().name(this.name()).direction(Sorts.Direction.ASC).build();
         }
+
         public Sorts.Order desc() {
             return Sorts.Order.builder().name(this.name()).direction(Sorts.Direction.DESC).build();
         }
@@ -234,8 +242,8 @@ public class DemoMongo implements
         return Then.of(mongoUpdate)
                 // 当 name 不为空时更新 name属性
                 .then(name, update -> update.set(Props.name.name(), name))
-                .then(update -> update.set(Props.modifyUserId.name(), modifyUserId))
-                .then(update -> update.set(Props.modifyTime.name(), Timestamp.valueOf(LocalDateTime.now())))
+                .then(update -> update.set(Props.updateUserId.name(), updateUserId))
+                .then(update -> update.set(Props.updateTime.name(), Timestamp.valueOf(LocalDateTime.now())))
                 // 假设数据库中 content is not null；可以在属性为null时替换为 ""
                 .then(update -> update.set(Props.phone.name(), Optional.ofNullable(phone).orElse("")))
                 // 数据库中 amount 可以为 null
@@ -249,14 +257,14 @@ public class DemoMongo implements
         // 构建查询顺序规则请参考：IWhere#where
         return QdslWhere.of()
                 .and(phone, () -> q.phone.eq(phone))
-                .and(createUserId, () -> q.createUserId.eq(createUserId))
-                .and(modifyUserId, () -> q.modifyUserId.eq(modifyUserId))
+                .and(insertUserId, () -> q.insertUserId.eq(insertUserId))
+                .and(updateUserId, () -> q.updateUserId.eq(updateUserId))
                 // 强制带默认值的查询字段
                 .and(q.deleted.eq(Objects.isNull(getDeleted()) ? Radio.NO : deleted))
                 // 年龄区间查询
                 .and(ageRange, () -> q.age.between(ageRange.getMin(), ageRange.getMax()))
                 // 日期区间查询；Range.rebuild() : 先将时间区间重置到 00:00:00.000 - 23:59:59.999 ; 大多数情况都需要重置时间
-                .and(createTimeRange, () -> q.createTime.between(createTimeRange.rebuild().getBegin(), createTimeRange.getEnd()))
+                .and(insertTimeRange, () -> q.insertTime.between(insertTimeRange.rebuild().getBegin(), insertTimeRange.getEnd()))
                 // 模糊匹配查询：后面带 % ；建议优先使用
                 .and(name, () -> q.name.startsWith(name)) // 模糊匹配查询：后面带 %
 //                .and(name, () -> q.name.endsWith(name)) // 模糊匹配查询：前面带 %
@@ -266,7 +274,7 @@ public class DemoMongo implements
 
     @Override
     public List<Sorts> defaultSorts() {
-        return Collections.singletonList(OrderBy.createTime.desc);
+        return Collections.singletonList(OrderBy.insertTime.desc);
     }
 
     @Override

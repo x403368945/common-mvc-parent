@@ -11,6 +11,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.util.stream.Stream;
 
@@ -26,6 +27,7 @@ import java.util.stream.Stream;
 @SpringBootApplication
 @Import(value = {InitConfig.class, BusConfig.class})
 @EnableConfigurationProperties(value = {AppProperties.class})
+@EnableJpaAuditing
 public class Application extends SpringBootServletInitializer {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

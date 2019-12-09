@@ -13,7 +13,7 @@ import org.springframework.web.socket.WebSocketSession;
 import java.io.IOException;
 import java.util.Objects;
 
-import static com.ccx.socket.config.init.BeanInitializer.Beans.appContext;
+import static com.ccx.socket.config.init.BeanInitializer.Beans.getAppContext;
 
 /**
  *
@@ -35,7 +35,7 @@ public class RouterAdapter implements IAdapter {
 
     @Override
     public void textMessage(final WebSocketSession session, final String jsonText) throws IOException {
-        final ICommand command = appContext.getAppContext().getBean(serviceClass);
+        final ICommand command = getAppContext().getBean(serviceClass);
         command.command(Param.of(jsonText), new ICallback.AbstractCallback() {
             @Override
             public Message sendMessage(final Message message) {

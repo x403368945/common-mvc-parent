@@ -6,17 +6,24 @@ import com.ccx.demo.business.user.entity.extend.ITabUser;
 import com.ccx.demo.business.user.service.UserLoginService;
 import com.ccx.demo.business.user.service.UserService;
 import com.ccx.demo.config.init.AppConfig.URL;
+import com.ccx.demo.enums.Radio;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.entity.base.Param;
 import com.support.mvc.entity.base.Result;
+import com.support.mvc.entity.base.Sorts;
 import com.utils.util.Maps;
+import com.utils.util.Util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.Collections;
+
+import static com.support.mvc.entity.base.Sorts.Direction.DESC;
 
 /**
  * 请求操作响应:用户
@@ -94,11 +101,134 @@ public class UserController implements IAuthController<Long> {
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
                         .setSuccess(
-                            userLoginService.findPage(
-                                    Param.of(json).parseObject(TabUserLogin.class),
-                                    Pager.builder().number(number).size(size).build()
-                            )
+                                userLoginService.findPage(
+                                        Param.of(json).parseObject(TabUserLogin.class),
+                                        Pager.builder().number(number).size(size).build()
+                                )
                         )
                 );
     }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'UserController_save')")
+    @PostMapping
+    @ResponseBody
+    public Result<?> save(@AuthenticationPrincipal final TabUser user,
+                          @PathVariable final int version,
+                          @RequestBody(required = false) final Param param) {
+        return new Result<>(1) // 指定接口最新版本号
+                .version(this.getClass(), builder -> builder
+                        .props(TabUser.Props.list()) // 当前返回对象属性说明
+                        .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
+                                "保存数据，url带参说明:/{version【response.version.id】}",
+                                "1.用户表"
+                        ))
+                        .build()
+                        .demo(v -> v.setDemo(
+                                URL.SERVER.append(v.formatUrl()), // 当前接口参考案例请求地址；
+                                TabUser.builder() // 当前接口参考案例请求参数，一般demo中存放必填字段或者所有字段
+                                        .build()
+                        ))
+                )
+                .execute(result -> result
+                        .versionAssert(version) // 弱校验版本号
+                        .setSuccess(service.save(
+                                Param.of(param).required().parseObject(TabUser.class), user.getId()
+                        ))
+                );
+    }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'UserController_update')")
+    @PutMapping("/{id}")
+    @ResponseBody
+    @Override
+    public Result<?> update(@AuthenticationPrincipal final TabUser user,
+                            @PathVariable final int version,
+                            @PathVariable final Long id,
+                            // required = false 可以让请求先过来，如果参数为空再抛出异常，保证本次请求能得到响应
+                            @RequestBody(required = false) final Param param) {
+        return new Result<>(1) // 指定接口最新版本号
+                .version(this.getClass(), builder -> builder
+                                .props(TabUser.Props.list()) // 当前返回对象属性说明
+                                .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
+                                        "更新数据，带 uid 强校验，但可能会带当前操作人校验，url带参说明:/{version【response.version.id】}/{id【response.data[*].id】}",
+                                        "1. 用户表"
+                                ))
+                                .build()
+                                .demo(v -> v.setDemo(
+                                        URL.SERVER.append(v.formatUrl(100)), // 当前接口参考案例请求地址；
+                                        TabUser.builder() // 当前接口参考案例请求参数，一般demo中存放必填字段或者所有字段
+                                                .uid(Util.uuid32())
+//                                            .modifyTime(Dates.now().timestamp())
+                                                .build()
+                                ))
+                )
+                .execute(result -> result
+                        .versionAssert(version, false) // 弱校验版本号
+                        .call(() -> service.update(
+                                id,
+                                user.getId(),
+                                Param.of(param).required().parseObject(TabUser.class)
+                        ))
+                );
+    }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'UserController_findByUid')")
+    @GetMapping("/{id}/{uid}")
+    @ResponseBody
+    @Override
+    public Result<?> findByUid(@AuthenticationPrincipal final TabUser user,
+                               @PathVariable final int version,
+                               @PathVariable final Long id,
+                               @PathVariable final String uid) {
+        return new Result<TabUser>(1) // 指定接口最新版本号
+                .version(this.getClass(), builder -> builder
+                        .props(TabUser.Props.list()) // 当前返回对象属性说明
+                        .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
+                                "按ID + uid 查询单条数据，url带参说明:/{version【response.version.id】}/{id【response.data[*].id】}/{id【response.data[*].uid】}",
+                                "1. 用户表"
+                        ))
+                        .build()
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100, Util.uuid32())))) // 当前接口参考案例请求地址；
+                )
+                .execute(result -> result
+                        .versionAssert(version, false) // 弱校验版本号
+                        .setSuccess(service.findByUid(id, uid).orElse(null))
+                );
+    }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'Menu_User')")
+    @GetMapping("/page/{number}/{size}")
+    @ResponseBody
+    @Override
+    public Result<?> page(
+            @AuthenticationPrincipal final TabUser user,
+            @PathVariable final int version,
+            @PathVariable final int number,
+            @PathVariable final int size,
+            @RequestParam(required = false, defaultValue = "{}") final String json
+    ) {
+        return new Result<TabUser>(1) // 指定接口最新版本号
+                .version(this.getClass(), builder -> builder
+                        .props(TabUser.Props.list()) // 当前返回对象属性说明
+                        .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
+                                "分页查询数据，url带参必须使用 encodeURI 格式化【?json=encodeURI(JSON.stringify({}))】，url带参说明:/{version【response.version.id】}/page/{number【当前页码】}/{size【每页显示条数】}",
+                                "1. 用户表"
+                        ))
+                        .build()
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(1, 20)), // 当前接口参考案例请求地址；
+                                TabUser.builder() // 当前接口参考案例请求参数，demo中设置支持查询的字段
+                                        .deleted(Radio.NO)
+                                        .sorts(Collections.singletonList(Sorts.Order.builder().name(ITabUser.OrderBy.id.name()).direction(DESC).build()))
+                                        .build()
+                        ))
+                )
+                .execute(result -> result
+                        .versionAssert(version, false) // 弱校验版本号
+                        .setSuccess(service.findPage(
+                                Param.of(json).parseObject(TabUser.class),
+                                Pager.builder().number(number).size(size).build()
+                        ))
+                );
+    }
+
 }

@@ -23,7 +23,7 @@ Authorization: basic YWRtaW46YWRtaW4=
     "content": "OyTlwNFavgqaHgc",
     "status": "RUNNING",
     "age": 100,
-    "modifyTime": "2019-07-12 18:13:54.329"
+    "updateTime": "2019-07-12 18:13:54.329"
   }
 }
 
@@ -56,7 +56,7 @@ GET http://localhost:8080/demo-mongo/1
 Authorization: basic YWRtaW46YWRtaW4=
 
 ### 查询:不分页
-GET http://localhost:8080/demo-mongo/1?json={"createTimeRange":{"begin":"2019-01-04", "end":"2019-01-04"}}
+GET http://localhost:8080/demo-mongo/1?json={"insertTimeRange":{"begin":"2019-01-04", "end":"2019-01-04"}}
 Authorization: basic YWRtaW46YWRtaW4=
 
 ### 查询:分页

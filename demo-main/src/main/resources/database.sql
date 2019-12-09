@@ -36,10 +36,10 @@ CREATE TABLE tab_user (
     `email`          VARCHAR(30)                       NOT NULL DEFAULT '' COMMENT '邮箱',
     `roles`          JSON                              NOT NULL COMMENT '角色 ID 集合，tab_role.id，{@link List<Long>}',
     `registerSource` TINYINT(1) UNSIGNED               NOT NULL DEFAULT 0 COMMENT '账户注册渠道',
-    `createTime`     TIMESTAMP                         NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `createUserId`   BIGINT                            NOT NULL COMMENT '创建用户ID',
-    `modifyTime`     TIMESTAMP(3)                      NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '修改时间',
-    `modifyUserId`   BIGINT                            NOT NULL COMMENT '修改用户ID',
+    `insertTime`     TIMESTAMP                         NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `insertUserId`   BIGINT                            NOT NULL COMMENT '创建用户ID',
+    `updateTime`     TIMESTAMP(3)                      NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '修改时间',
+    `updateUserId`   BIGINT                            NOT NULL COMMENT '修改用户ID',
     `deleted`        TINYINT(1) UNSIGNED               NOT NULL DEFAULT 0 COMMENT '是否逻辑删除（1、已删除， 0、未删除）',
     KEY (`uid`),
     KEY (`username`),
@@ -58,10 +58,10 @@ CREATE TABLE tab_role
     uid          VARCHAR(32)                       NOT NULL COMMENT '用户UUID，缓存和按ID查询时可使用强校验',
     name         VARCHAR(200)                      NOT NULL COMMENT '名称',
     authorities  JSON                              NOT NULL COMMENT '权限代码集合，{@link List<String>}',
-    createTime   TIMESTAMP                         NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    createUserId BIGINT                            NOT NULL COMMENT '创建用户ID',
-    modifyTime   TIMESTAMP(3)                         NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '修改时间',
-    modifyUserId BIGINT                            NOT NULL COMMENT '修改用户ID',
+    insertTime   TIMESTAMP                         NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    insertUserId BIGINT                            NOT NULL COMMENT '创建用户ID',
+    updateTime   TIMESTAMP(3)                         NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '修改时间',
+    updateUserId BIGINT                            NOT NULL COMMENT '修改用户ID',
     deleted      TINYINT(1) UNSIGNED               NOT NULL DEFAULT 0 COMMENT '是否逻辑删除（1、已删除， 0、未删除），参考：Enum{@link com.ccx.demo.enums.Radio}',
     KEY (uid)
 )
@@ -89,10 +89,10 @@ CREATE TABLE tab_user_login (
 --   `name`           VARCHAR(50)                       NOT NULL COMMENT '姓名',
 --   `phone`          VARCHAR(50)                       NOT NULL DEFAULT '' COMMENT '手机',
 --   `age`            TINYINT(3) UNSIGNED               NULL COMMENT '年龄',
---   `createTime`     TIMESTAMP                         NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
---   `createUserId`   BIGINT                            NOT NULL COMMENT '创建用户ID',
---   `modifyTime`     TIMESTAMP(3)                         NOT NULL DEFAULT CURRENT_TIMESTAMP(3)  ON UPDATE CURRENT_TIMESTAMP(3)  COMMENT '修改时间',
---   `modifyUserId`   BIGINT                            NOT NULL COMMENT '修改用户ID',
+--   `insertTime`     TIMESTAMP                         NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+--   `insertUserId`   BIGINT                            NOT NULL COMMENT '创建用户ID',
+--   `updateTime`     TIMESTAMP(3)                         NOT NULL DEFAULT CURRENT_TIMESTAMP(3)  ON UPDATE CURRENT_TIMESTAMP(3)  COMMENT '修改时间',
+--   `updateUserId`   BIGINT                            NOT NULL COMMENT '修改用户ID',
 --   `deleted`        TINYINT(1) UNSIGNED               NOT NULL DEFAULT 0 COMMENT '是否逻辑删除（1、已删除， 0、未删除）'
 -- ) ENGINE InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '测试案例表：将mysql数据与mongodb同步';
 
@@ -105,12 +105,12 @@ CREATE TABLE tab_demo_list (
   `content`        TEXT                NULL COMMENT '内容',
   `amount`         DECIMAL(18, 2)      NULL COMMENT '金额',
   `status`         TINYINT(2) UNSIGNED NOT NULL DEFAULT 0 COMMENT '状态（0：无效，1：等待中，2：执行中，3：成功，4：失败）',
-  `createTime`     TIMESTAMP           NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `createUserId`   BIGINT              NOT NULL COMMENT '创建用户ID',
-  `createUserName` VARCHAR(30)         NOT NULL COMMENT '创建用户昵称',
-  `modifyTime`     TIMESTAMP(3)        NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '修改时间',
-  `modifyUserId`   BIGINT              NOT NULL COMMENT '修改用户ID',
-  `modifyUserName` VARCHAR(30)         NOT NULL COMMENT '修改用户昵称',
+  `insertTime`     TIMESTAMP           NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `insertUserId`   BIGINT              NOT NULL COMMENT '创建用户ID',
+  `insertUserName` VARCHAR(30)         NOT NULL COMMENT '创建用户昵称',
+  `updateTime`     TIMESTAMP(3)        NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '修改时间',
+  `updateUserId`   BIGINT              NOT NULL COMMENT '修改用户ID',
+  `updateUserName` VARCHAR(30)         NOT NULL COMMENT '修改用户昵称',
   `deleted`        TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否逻辑删除（1、已删除， 0、未删除）',
   KEY (`uid`)
 )
@@ -128,10 +128,10 @@ CREATE TABLE tab_convert (
   `codes`        JSON                NULL COMMENT '{@link List<com.support.mvc.enums.Code>}',
   `items`        JSON                NULL COMMENT '{@link List<com.support.mvc.entity.base.Item>}',
   `item`         JSON                NULL COMMENT '{@link com.support.mvc.entity.base.Item}',
-  `createTime`   TIMESTAMP           NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `createUserId` BIGINT              NOT NULL COMMENT '创建用户ID',
-  `modifyTime`   TIMESTAMP(3)        NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '修改时间',
-  `modifyUserId` BIGINT              NOT NULL COMMENT '修改用户ID',
+  `insertTime`   TIMESTAMP           NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `insertUserId` BIGINT              NOT NULL COMMENT '创建用户ID',
+  `updateTime`   TIMESTAMP(3)        NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '修改时间',
+  `updateUserId` BIGINT              NOT NULL COMMENT '修改用户ID',
   `deleted`      TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否逻辑删除（1、已删除， 0、未删除）',
   KEY (`uid`)
 )
@@ -155,12 +155,12 @@ CREATE OR REPLACE VIEW view_vip AS
 ;
 SELECT * FROM view_vip;
 */
-INSERT INTO tab_user(id, uid, username, password, nickname, roles, createUserId, modifyUserId) VALUES
+INSERT INTO tab_user(id, uid, username, password, nickname, roles, insertUserId, updateUserId) VALUES
 -- 初始化超级管理员账户，密码：admin
 (1, replace(uuid(), '-', ''), 'admin', '$2a$10$VQ.Rj7bc73B.WwU99k7R.eEAwqXBNmvihobk3SZ4m30b9tCR6..h2', '超级管理员', '[1]', 1, 1),
 -- user:111111
 (2, replace(uuid(), '-', ''), 'user', '$2a$10$6unbpf74Dc7NEBywaCHl..FzzprMb69gA.Qi09U7ud7vlKHP9PXfu', '普通用户', '[2]', 1, 1);
 
-INSERT INTO tab_role(id, uid, name, authorities, createUserId, modifyUserId) VALUES
+INSERT INTO tab_role(id, uid, name, authorities, insertUserId, updateUserId) VALUES
 (1, replace(uuid(), '-', ''), '超级管理员', '["ROLE_ADMIN"]', 1,1),
 (2, replace(uuid(), '-', ''), '普通用户', '["ROLE_USER"]', 1,1);

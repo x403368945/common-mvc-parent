@@ -30,7 +30,7 @@ public interface ConvertRepository extends
     default long update(final Long id, final Long userId, final TabConvert obj) {
         return obj.update(jpaQueryFactory.<JPAQueryFactory>get().update(q))
                 .get()
-                .where(q.id.eq(id).and(q.uid.eq(obj.getUid())).and(q.createUserId.eq(userId)).and(q.modifyTime.eq(obj.getModifyTime())))
+                .where(q.id.eq(id).and(q.uid.eq(obj.getUid())).and(q.insertUserId.eq(userId)).and(q.updateTime.eq(obj.getUpdateTime())))
                 .execute();
     }
 
@@ -40,7 +40,7 @@ public interface ConvertRepository extends
         return Optional
                 .ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
                         .selectFrom(q)
-                        .where(q.id.eq(id).and(q.createUserId.eq(userId)))
+                        .where(q.id.eq(id).and(q.insertUserId.eq(userId)))
                         .fetchOne()
                 )
                 .map(obj -> {
@@ -48,7 +48,7 @@ public interface ConvertRepository extends
                     return obj;
                 })
                 .orElseThrow(() -> new NullPointerException("数据物理删除失败：".concat(
-                        TabConvert.builder().id(id).createUserId(userId).build().json())
+                        TabConvert.builder().id(id).insertUserId(userId).build().json())
                 ));
     }
 
@@ -59,7 +59,7 @@ public interface ConvertRepository extends
         return Optional
                 .ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
                         .selectFrom(q)
-                        .where(q.id.eq(id).and(q.uid.eq(uid)).and(q.createUserId.eq(userId)))
+                        .where(q.id.eq(id).and(q.uid.eq(uid)).and(q.insertUserId.eq(userId)))
                         .fetchOne()
                 )
                 .map(obj -> {
@@ -67,7 +67,7 @@ public interface ConvertRepository extends
                     return obj;
                 })
                 .orElseThrow(() -> new NullPointerException("数据物理删除失败：".concat(
-                        TabConvert.builder().id(id).uid(uid).createUserId(userId).build().json())
+                        TabConvert.builder().id(id).uid(uid).insertUserId(userId).build().json())
                 ));
     }
 
@@ -76,8 +76,8 @@ public interface ConvertRepository extends
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Radio.YES)
-                .set(q.modifyUserId, userId)
-                .where(q.id.eq(id).and(q.createUserId.eq(userId)).and(q.deleted.eq(Radio.NO)))
+                .set(q.updateUserId, userId)
+                .where(q.id.eq(id).and(q.insertUserId.eq(userId)).and(q.deleted.eq(Radio.NO)))
                 .execute();
     }
 
@@ -86,8 +86,8 @@ public interface ConvertRepository extends
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Radio.YES)
-                .set(q.modifyUserId, userId)
-                .where(q.id.eq(id).and(q.uid.eq(uid).and(q.createUserId.eq(userId))).and(q.deleted.eq(Radio.NO)))
+                .set(q.updateUserId, userId)
+                .where(q.id.eq(id).and(q.uid.eq(uid).and(q.insertUserId.eq(userId))).and(q.deleted.eq(Radio.NO)))
                 .execute();
     }
 
@@ -96,8 +96,8 @@ public interface ConvertRepository extends
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Radio.YES)
-                .set(q.modifyUserId, userId)
-                .where(q.id.in(ids).and(q.createUserId.eq(userId)).and(q.deleted.eq(Radio.NO)))
+                .set(q.updateUserId, userId)
+                .where(q.id.in(ids).and(q.insertUserId.eq(userId)).and(q.deleted.eq(Radio.NO)))
                 .execute();
     }
 
@@ -106,9 +106,9 @@ public interface ConvertRepository extends
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Radio.YES)
-                .set(q.modifyUserId, userId)
+                .set(q.updateUserId, userId)
                 .where(q.id.in(list.stream().map(TabConvert::getId).toArray(Long[]::new))
-                        .and(q.createUserId.eq(userId)).and(q.deleted.eq(Radio.NO))
+                        .and(q.insertUserId.eq(userId)).and(q.deleted.eq(Radio.NO))
                         .and(q.uid.in(list.stream().map(TabConvert::getUid).toArray(String[]::new)))
                 )
                 .execute();

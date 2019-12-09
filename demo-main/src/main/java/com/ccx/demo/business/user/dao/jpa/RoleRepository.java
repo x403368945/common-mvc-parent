@@ -4,12 +4,14 @@ import com.ccx.demo.business.user.cache.ITabRoleCache;
 import com.ccx.demo.business.user.entity.QTabRole;
 import com.ccx.demo.business.user.entity.TabRole;
 import com.ccx.demo.enums.Radio;
+import com.ccx.demo.enums.Role;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.support.mvc.dao.IRepository;
 import com.support.mvc.entity.base.Pager;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -38,7 +40,7 @@ public interface RoleRepository extends
     default long update(final Long id, final Long userId, final TabRole obj) {
         return findById(id)
                 .filter(dest -> Objects.equals(obj.getUid(), dest.getUid()))
-                .filter(dest -> Objects.equals(obj.getModifyTime(), dest.getModifyTime()))
+                .filter(dest -> Objects.equals(obj.getUpdateTime(), dest.getUpdateTime()))
                 .map(dest -> {
                     obj.update(dest);
                     return 1L;
@@ -52,7 +54,7 @@ public interface RoleRepository extends
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Radio.YES)
-                .set(q.modifyUserId, userId)
+                .set(q.updateUserId, userId)
                 .where(q.id.eq(id).and(q.uid.eq(uid)).and(q.deleted.eq(Radio.NO)))
                 .execute();
     }
@@ -62,21 +64,23 @@ public interface RoleRepository extends
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Radio.YES)
-                .set(q.modifyUserId, userId)
+                .set(q.updateUserId, userId)
                 .where(q.id.in(list.stream().map(TabRole::getId).toArray(Long[]::new))
-                        .and(q.createUserId.eq(userId)).and(q.deleted.eq(Radio.NO))
+                        .and(q.insertUserId.eq(userId)).and(q.deleted.eq(Radio.NO))
                         .and(q.uid.in(list.stream().map(TabRole::getUid).toArray(String[]::new)))
                 )
                 .execute();
     }
 
     @Override
-    default Optional<TabRole> findById(Long id) {
-        return Optional.ofNullable(getAppContext().getBean(this.getClass()).findCacheById(id));
+    default Optional<TabRole> findById(final Long id) {
+        return Optional.ofNullable(getAppContext().getBean(RoleRepository.class).findCacheById(id));
     }
 
     @Cacheable(cacheNames = ITabRoleCache.CACHE_ROW_BY_ID, key = "#id")
-    TabRole findCacheById(Long id);
+    default TabRole findCacheById(final Long id){
+        return findOne(q.id.eq(id)).orElse(null);
+    }
 
     @Override
     default List<TabRole> findList(final TabRole condition) {
@@ -131,7 +135,7 @@ public interface RoleRepository extends
 //    }
 
     /**
-     * 按 id 批量查询指定字段，
+     * 查询有效的角色集合，需要完全匹配 id:uid
      *
      * @param roles {@link List<TabRole>} 角色集合
      * @return {@link List<Long>}
@@ -139,7 +143,7 @@ public interface RoleRepository extends
     default List<Long> findValidRoleIds(final List<TabRole> roles) {
         final Set<String> roleKeys = roles.stream()
                 // 拼接 id:uid
-                .map(row -> String.format("%d:%s", row.getId(), row.getUid()))
+                .map(row -> StringUtils.joinWith(":", row.getId(), row.getUid()))
                 .collect(Collectors.toSet());
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .select(Projections.bean(TabRole.class, q.id, q.uid))
@@ -148,7 +152,7 @@ public interface RoleRepository extends
                 .fetch()
                 .stream()
                 // 过滤有效的角色
-                .filter(row -> roleKeys.contains(String.format("%d:%s", row.getId(), row.getUid())))
+                .filter(row -> roleKeys.contains(StringUtils.joinWith(":", row.getId(), row.getUid())))
                 .map(TabRole::getId)
                 .collect(Collectors.toList())
                 ;

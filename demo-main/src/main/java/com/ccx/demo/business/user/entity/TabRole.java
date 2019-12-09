@@ -53,7 +53,7 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 @AllArgsConstructor
 @Builder
 @Data
-@JSONType(orders = {"id", "uid", "name", "authorities", "createTime", "createUserId", "modifyTime", "modifyUserId", "deleted"})
+@JSONType(orders = {"id", "uid", "name", "authorities", "insertTime", "insertUserId", "updateTime", "updateUserId", "deleted"})
 public final class TabRole implements
         ITable, // 所有与数据库表 - 实体类映射的表都实现该接口；方便后续一键查看所有表的实体
         ITabUserCache,
@@ -93,27 +93,27 @@ public final class TabRole implements
     @Column(insertable = false, updatable = false)
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @Null(groups = {ISave.class})
-    private Timestamp createTime;
+    private Timestamp insertTime;
     /**
      * 创建用户ID
      */
     @Column(updatable = false)
     @NotNull(groups = {ISave.class})
     @Positive
-    private Long createUserId;
+    private Long insertUserId;
     /**
      * 修改时间
      */
     @Column(insertable = false, updatable = false)
     @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")
     @Null(groups = {ISave.class})
-    private Timestamp modifyTime;
+    private Timestamp updateTime;
     /**
      * 修改用户ID
      */
     @NotNull(groups = {ISave.class, IUpdate.class})
     @Positive
-    private Long modifyUserId;
+    private Long updateUserId;
     /**
      * 是否逻辑删除（1、已删除， 0、未删除），参考：Enum{@link com.ccx.demo.enums.Radio}
      */
@@ -151,15 +151,15 @@ public final class TabRole implements
         uid(STRING.build(true, "用户UUID，缓存和按ID查询时可使用强校验")),
         name(STRING.build(true, "名称")),
         authorities(STRING.build(true, "权限 ID 集合，tab_authority.id，{@link List<String>}")),
-        createTime(TIMESTAMP.build("创建时间")),
-        createUserId(LONG.build("创建用户ID")),
-        modifyTime(TIMESTAMP.build("修改时间")),
-        modifyUserId(LONG.build("修改用户ID")),
+        insertTime(TIMESTAMP.build("创建时间")),
+        insertUserId(LONG.build("创建用户ID")),
+        updateTime(TIMESTAMP.build("修改时间")),
+        updateUserId(LONG.build("修改用户ID")),
         deleted(ENUM.build("是否逻辑删除").setOptions(Radio.comments())),
 
         //        timestamp(LONG.build("数据最后一次更新时间戳")),
 //        numRange(RANGE_NUM.apply("数字查询区间")),
-//        createTimeRange(RANGE_DATE.apply("创建时间查询区间")),
+//        insertTimeRange(RANGE_DATE.apply("创建时间查询区间")),
         authorityTree(ARRAY.build("前端配置的权限树")),
         sorts(SORTS.apply(OrderBy.names())),
         ;
@@ -188,10 +188,10 @@ public final class TabRole implements
 //        uid(tabRole.uid),
 //        name(tabRole.name),
 //        authorities(tabRole.authorities),
-//        createTime(tabRole.createTime),
-//        createUserId(tabRole.createUserId),
-//        modifyTime(tabRole.modifyTime),
-//        modifyUserId(tabRole.modifyUserId),
+//        insertTime(tabRole.insertTime),
+//        insertUserId(tabRole.insertUserId),
+//        updateTime(tabRole.updateTime),
+//        updateUserId(tabRole.updateUserId),
 //        deleted(tabRole.deleted),
         ;
         public final Sorts asc;
@@ -233,10 +233,10 @@ public final class TabRole implements
         return Then.of(dest)
                 .then(name, update -> dest.setName(name))
                 .then(authorities, update -> dest.setAuthorities(authorities))
-                .then(update -> dest.setModifyUserId(modifyUserId))
+                .then(update -> dest.setUpdateUserId(updateUserId))
 //                // 当 name != null 时更新 name 属性
 //                .then(name, update -> update.set(q.name, name))
-//                .then(update -> update.set(q.modifyUserId, modifyUserId))
+//                .then(update -> update.set(q.updateUserId, updateUserId))
 //                // 假设数据库中 content is not null；可以在属性为null时替换为 ""
 //                .then(update -> update.set(q.content, Optional.ofNullable(content).orElse("")))
 //                // 数据库中 amount 可以为 null
@@ -253,20 +253,20 @@ public final class TabRole implements
                 .and(uid, () -> q.uid.eq(uid))
                 .and(name, () -> name.endsWith("%") || name.startsWith("%") ? q.name.like(name) : q.name.startsWith(name))
 //                .and(authorities, () -> q.authorities.eq(authorities))
-//                .and(createTimeRange, () -> q.createTime.between(createTimeRange.rebuild().getBegin(), createTimeRange.getEnd()))
-//                .and(createUserId, () -> q.createUserId.eq(createUserId))
-//                .and(modifyTimeRange, () -> q.modifyTime.between(modifyTimeRange.rebuild().getBegin(), modifyTimeRange.getEnd()))
-//                .and(modifyUserId, () -> q.modifyUserId.eq(modifyUserId))
+//                .and(insertTimeRange, () -> q.insertTime.between(insertTimeRange.rebuild().getBegin(), insertTimeRange.getEnd()))
+//                .and(insertUserId, () -> q.insertUserId.eq(insertUserId))
+//                .and(updateTimeRange, () -> q.updateTime.between(updateTimeRange.rebuild().getBegin(), updateTimeRange.getEnd()))
+//                .and(updateUserId, () -> q.updateUserId.eq(updateUserId))
                 .and(q.deleted.eq(Objects.isNull(getDeleted()) ? Radio.NO : deleted))
 //                .and(phone, () -> q.phone.eq(phone))
-//                .and(createUserId, () -> q.createUserId.eq(createUserId))
-//                .and(modifyUserId, () -> q.modifyUserId.eq(modifyUserId))
+//                .and(insertUserId, () -> q.insertUserId.eq(insertUserId))
+//                .and(updateUserId, () -> q.updateUserId.eq(updateUserId))
 //                // 强制带默认值的查询字段
 //                .and(q.deleted.eq(Objects.isNull(getDeleted()) ? Radio.NO : deleted))
 //                // 数字区间查询
 //                .and(amountRange, () -> q.amount.between(amountRange.getMin(), amountRange.getMax()))
 //                // 日期区间查询；Range.rebuild() : 先将时间区间重置到 00:00:00.000 - 23:59:59.999 ; 大多数情况都需要重置时间
-//                .and(createTimeRange, () -> q.createTime.between(createTimeRange.rebuild().getBegin(), createTimeRange.getEnd()))
+//                .and(insertTimeRange, () -> q.insertTime.between(insertTimeRange.rebuild().getBegin(), insertTimeRange.getEnd()))
 //                // 模糊匹配查询：后面带 % ；建议优先使用
 //                .and(name, () -> q.name.startsWith(name)) // 模糊匹配查询：后面带 %
 //                .and(name, () -> q.name.endsWith(name)) // 模糊匹配查询：前面带 %

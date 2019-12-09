@@ -37,10 +37,10 @@ public interface ITabUser {
         email(STRING.build("邮箱")),
         role(ENUM.build("角色").setOptions(Role.comments())),
         registerSource(ENUM.build("注册渠道").setOptions(RegisterSource.comments())),
-        createTime(TIMESTAMP.build("创建时间")),
-        createUserId(LONG.build("创建用户ID")),
-        modifyTime(TIMESTAMP.build("修改时间")),
-        modifyUserId(LONG.build("修改用户ID")),
+        insertTime(TIMESTAMP.build("创建时间")),
+        insertUserId(LONG.build("创建用户ID")),
+        updateTime(TIMESTAMP.build("修改时间")),
+        updateUserId(LONG.build("修改用户ID")),
         deleted(ENUM.build("是否逻辑删除").setOptions(Radio.comments()));
         private final Prop prop;
 
@@ -68,8 +68,8 @@ public interface ITabUser {
     enum OrderBy {
         id(tabUser.id),
         // 按 id 排序可替代按创建时间排序
-//        createTime(tabUser.createTime),
-        modifyTime(tabUser.modifyTime),
+//        insertTime(tabUser.insertTime),
+        updateTime(tabUser.updateTime),
         ;
         public final Sorts asc;
         public final Sorts desc;

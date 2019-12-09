@@ -34,12 +34,12 @@ public interface DemoListRepository extends
     @Query
     default void updateNickName(final Long userId, final String nickname) {
         jpaQueryFactory.<JPAQueryFactory>get().update(q)
-                .set(q.createUserName, nickname)
-                .where(q.createUserId.eq(userId))
+                .set(q.insertUserName, nickname)
+                .where(q.insertUserId.eq(userId))
                 .execute();
         jpaQueryFactory.<JPAQueryFactory>get().update(q)
-                .set(q.modifyUserName, nickname)
-                .where(q.modifyUserId.eq(userId))
+                .set(q.updateUserName, nickname)
+                .where(q.updateUserId.eq(userId))
                 .execute();
     }
 
@@ -47,7 +47,7 @@ public interface DemoListRepository extends
     default long update(final Long id, final Long userId, final TabDemoList obj) {
         return obj.update(jpaQueryFactory.<JPAQueryFactory>get().update(q))
                 .get()
-                .where(q.id.eq(id).and(q.uid.eq(obj.getUid())).and(q.createUserId.eq(userId)).and(q.modifyTime.eq(obj.getModifyTime())))
+                .where(q.id.eq(id).and(q.uid.eq(obj.getUid())).and(q.insertUserId.eq(userId)).and(q.updateTime.eq(obj.getUpdateTime())))
                 .execute();
     }
 
@@ -57,14 +57,14 @@ public interface DemoListRepository extends
         return Optional
                 .ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
                         .selectFrom(q)
-                        .where(q.id.eq(id).and(q.createUserId.eq(userId)))
+                        .where(q.id.eq(id).and(q.insertUserId.eq(userId)))
                         .fetchOne()
                 )                .map(obj -> {
                     delete(obj);
                     return obj;
                 })
                 .orElseThrow(() -> new NullPointerException("数据物理删除失败：".concat(
-                        TabDemoList.builder().id(id).createUserId(userId).build().json())
+                        TabDemoList.builder().id(id).insertUserId(userId).build().json())
                 ));
     }
 
@@ -75,14 +75,14 @@ public interface DemoListRepository extends
         return Optional
                 .ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
                         .selectFrom(q)
-                        .where(q.id.eq(id).and(q.uid.eq(uid)).and(q.createUserId.eq(userId)))
+                        .where(q.id.eq(id).and(q.uid.eq(uid)).and(q.insertUserId.eq(userId)))
                         .fetchOne()
                 )                .map(obj -> {
                     delete(obj);
                     return obj;
                 })
                 .orElseThrow(() -> new NullPointerException("数据物理删除失败：".concat(
-                        TabDemoList.builder().id(id).uid(uid).createUserId(userId).build().json())
+                        TabDemoList.builder().id(id).uid(uid).insertUserId(userId).build().json())
                 ));
     }
 
@@ -91,8 +91,8 @@ public interface DemoListRepository extends
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Radio.YES)
-                .set(q.modifyUserId, userId)
-                .where(q.id.eq(id).and(q.createUserId.eq(userId)))
+                .set(q.updateUserId, userId)
+                .where(q.id.eq(id).and(q.insertUserId.eq(userId)))
                 .execute();
     }
 
@@ -101,8 +101,8 @@ public interface DemoListRepository extends
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Radio.YES)
-                .set(q.modifyUserId, userId)
-                .where(q.id.eq(id).and(q.uid.eq(uid).and(q.createUserId.eq(userId))))
+                .set(q.updateUserId, userId)
+                .where(q.id.eq(id).and(q.uid.eq(uid).and(q.insertUserId.eq(userId))))
                 .execute();
     }
 
@@ -111,8 +111,8 @@ public interface DemoListRepository extends
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Radio.YES)
-                .set(q.modifyUserId, userId)
-                .where(q.id.in(ids).and(q.createUserId.eq(userId)))
+                .set(q.updateUserId, userId)
+                .where(q.id.in(ids).and(q.insertUserId.eq(userId)))
                 .execute();
     }
 
@@ -121,9 +121,9 @@ public interface DemoListRepository extends
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Radio.YES)
-                .set(q.modifyUserId, userId)
+                .set(q.updateUserId, userId)
                 .where(q.id.in(list.stream().map(TabDemoList::getId).toArray(Long[]::new))
-                        .and(q.createUserId.eq(userId))
+                        .and(q.insertUserId.eq(userId))
                         .and(q.uid.in(list.stream().map(TabDemoList::getUid).toArray(String[]::new)))
                 )
                 .execute();

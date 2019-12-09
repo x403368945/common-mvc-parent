@@ -24,7 +24,7 @@ Authorization: basic YWRtaW46YWRtaW4=
     "content": "OyTlwNFavgqaHgc",
     "status": "RUNNING",
     "amount": 7871.1,
-    "modifyTime": "2019-07-21 15:21:42"
+    "updateTime": "2019-07-21 15:21:42"
   }
 }
 
@@ -75,7 +75,7 @@ GET http://localhost:8080/demo-list/1
 Authorization: basic YWRtaW46YWRtaW4=
 
 ### 查询:不分页
-GET http://localhost:8080/demo-list/1?json={"createTimeRange":{"begin":"2018-12-27", "end":"2018-12-27"}}
+GET http://localhost:8080/demo-list/1?json={"insertTimeRange":{"begin":"2018-12-27", "end":"2018-12-27"}}
 Authorization: basic YWRtaW46YWRtaW4=
 
 ### 查询:分页
@@ -83,7 +83,7 @@ GET http://localhost:8080/demo-list/1/page/1/10?json={"amountRange":{"min":0.0,"
 Authorization: basic YWRtaW46YWRtaW4=
 
 ### 查询:分页 + 排序
-GET http://localhost:8080/demo-list/1/page/1/10?json={"amountRange":{"min":0.0,"max":2000.0}, sorts:[{name:"modifyTime", direction:"DESC"}]}
+GET http://localhost:8080/demo-list/1/page/1/10?json={"amountRange":{"min":0.0,"max":2000.0}, sorts:[{name:"updateTime", direction:"DESC"}]}
 Authorization: basic YWRtaW46YWRtaW4=
 
 ###

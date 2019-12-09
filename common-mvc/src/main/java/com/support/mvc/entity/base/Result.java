@@ -6,7 +6,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.log.RequestId;
+import com.support.filter.RequestIdFilter;
 import com.querydsl.core.QueryResults;
 import com.support.mvc.enums.Code;
 import com.support.mvc.exception.CodeException;
@@ -159,7 +159,7 @@ public class Result<E> implements IJson {
      * @return {@link String}
      */
     public String getRid() {
-        return RequestId.get();
+        return RequestIdFilter.get();
     }
 
 //    /**

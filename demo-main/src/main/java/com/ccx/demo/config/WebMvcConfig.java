@@ -48,8 +48,8 @@ import static com.google.common.base.Charsets.UTF_8;
 // spring-mvc start >>
 //@Import(value = {InitConfig.class, BusConfig.class})
 //@EnableAspectJAutoProxy(proxyTargetClass = true)
-//@ComponentScan(basePackages = {"com.ccx"})
 //@EnableWebMvc
+//@ComponentScan(basePackages = {"com.ccx"})
 //@PropertySource({"classpath:application.properties"})
 // spring-mvc end <<<<
 public class WebMvcConfig extends AbstractMvcConfig
