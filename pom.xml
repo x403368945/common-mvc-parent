@@ -67,7 +67,7 @@
                                     <goal>run</goal>
                                 </goals>
                                 <configuration>
-                                    <tasks>
+                                    <target>
                                         <echo>Using Environment : ${env}</echo> &lt;!&ndash; 复制文件文件夹 &ndash;&gt;
                                         <copy todir="${project.build.outputDirectory}" overwrite="true">
                                             <fileset dir="src/demo/resources/${env}"/>
@@ -76,7 +76,7 @@
                                         <echo>Using ${env}/application.properties</echo> &lt;!&ndash; 复制单个文件 &ndash;&gt;
                                         <copy file="src/demo/resources/${env}/application.properties" tofile="${project.build.outputDirectory}/application.properties" overwrite="true"/>
                                         &ndash;&gt;
-                                    </tasks>
+                                    </target>
                                 </configuration>
                             </execution>
                         </executions>

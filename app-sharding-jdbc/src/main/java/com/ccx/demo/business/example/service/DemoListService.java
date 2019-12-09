@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -94,7 +95,7 @@ public class DemoListService implements IService<TabDemoList> {
 
     @Override
     public Optional<TabDemoList> findByUid(final Long id, final String uid) {
-        return repository.findByUid(id, uid);
+        return repository.findById(id).filter(row -> Objects.equals(row.getUid(), uid));
     }
 
     @Override

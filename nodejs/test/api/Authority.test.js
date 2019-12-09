@@ -37,7 +37,7 @@ export default class AuthorityTest {
    * @return {Promise<AuthorityTest>}
    */
   async getTree() {
-    console.log(`> 查询权限指令树 ----------------------------------------------------------------------------------------------------`);
+    console.log('> 查询权限指令树 ----------------------------------------------------------------------------------------------------');
     (await new AuthorityVO().getService().getTree()).print().assertVersion().assertData();
     return this;
   }
@@ -46,7 +46,7 @@ export default class AuthorityTest {
    * @return {Promise<AuthorityTest>}
    */
   async getList() {
-    console.log(`> 查询权限指令列表 ----------------------------------------------------------------------------------------------------`);
+    console.log('> 查询权限指令列表 ----------------------------------------------------------------------------------------------------');
     (await new AuthorityVO().getService().getList()).print().assertVersion().assertData();
     return this;
   }

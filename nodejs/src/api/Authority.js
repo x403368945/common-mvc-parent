@@ -9,7 +9,7 @@ import Asserts from '../utils/entity/Asserts';
  */
 const AUTHORITY_URL = Object.freeze({
   list: '/authority/1/list', // 权限指令列表
-  tree: '/authority/1/tree', // 权限指令树
+  tree: '/authority/1/tree' // 权限指令树
 });
 
 /**
@@ -73,7 +73,6 @@ export class AuthorityService {
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
-
 }
 
 /**
@@ -160,7 +159,6 @@ export default class AuthorityVO {
      * @type {Array<AuthorityVO>}
      */
     this.nodes = nodes;
-
   }
 
   toString() {

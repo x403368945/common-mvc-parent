@@ -40,7 +40,7 @@ interface ISearch<E> {
      */
     default Optional<E> findByUid(@NotNull(message = "【id】不能为null") @Positive(message = "【id】必须大于0") final Long id,
                                   @NotNull(message = "【uid】不能为null") @Size(min = 32, max = 32, message = "【uid】长度必须是32位") final String uid) {
-//		return repository.findById(id, uid);
+//		return repository.findById(id).filter(row -> Objects.equals(row.getUid(), uid));
         throw new NullPointerException(this.getClass().getName().concat("：方法【findByUid(final Long id, final String uid)】未实现"));
     }
 

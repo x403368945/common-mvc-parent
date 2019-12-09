@@ -13,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+
+import static com.ccx.demo.config.init.BeanInitializer.Beans.cacheManager;
 
 /**
  * 服务接口实现类：<%=comment%>
@@ -23,9 +26,26 @@ import java.util.Optional;
 @Slf4j
 @Service
 @ServiceAspect
-public class <%=JavaName%>Service implements IService<<%=TabName%>> {
+public class <%=JavaName%>Service implements IService<<%=TabName%>>, I<%=TabName%>Cache {
     @Autowired
     private <%=JavaName%>Repository repository;
+    /**
+     * 获取当前缓存管理器，用于代码控制缓存
+     *
+     * @return {@link Cache}
+     */
+    public Cache getCacheManager() {
+        return Objects.requireNonNull(cacheManager.<CacheManager>get().getCache(CACHE_ROW_BY_ID), "未获取到缓存管理对象:".concat(CACHE_ROW_BY_ID));
+    }
+
+    /**
+     * 清除多个 key 对应的缓存
+     *
+     * @param ids {@link <%=TabName%>#getId()}
+     */
+    public void clearKeys(Collection<Long> ids) {
+        ids.stream().distinct().forEach(id -> getCacheManager().evict(id));
+    }
 
     @Override
     public <%=TabName%> save(final <%=TabName%> obj, final Long userId) {
@@ -65,6 +85,7 @@ public class <%=JavaName%>Service implements IService<<%=TabName%>> {
 //    @Override
 //    public void markDeleteByIds(final List<<%=id%>> ids, final Long userId) {
 //        DeleteRowsException.warn(repository.markDeleteByIds(ids, userId), ids.size());
+//        clearKeys(list.stream().map(TabRole::getId).collect(Collectors.toSet()));
 //    }
 
     @Override
@@ -79,7 +100,7 @@ public class <%=JavaName%>Service implements IService<<%=TabName%>> {
 
     @Override
     public Optional<<%=TabName%>> findByUid(final <%=id%> id, final String uid) {
-        return repository.findByUid(id, uid);
+        return repository.findById(id).filter(row -> Objects.equals(row.getUid(), uid));
     }
 
 //    @Override

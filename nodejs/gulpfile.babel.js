@@ -88,7 +88,7 @@ gulp.task('test:one', async () => {
   // (await UserTest.of().loginUserBasic())
   //   .updateNickname(); // 测试用户相关的接口
 
-  await AuthorityTest.of().testAll();
+  await UserTest.of().testAll(); // 测试用户相关的接口
 });
 
 gulp.task('mysql:read:write', async () => {

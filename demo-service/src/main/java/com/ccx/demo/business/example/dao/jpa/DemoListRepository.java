@@ -16,6 +16,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static com.ccx.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 
@@ -108,7 +109,7 @@ public interface DemoListRepository extends
     }
 
     @Override
-    default long markDeleteByIds(final Set<Long> ids, final Long userId) {
+    default long markDeleteByIds(final List<Long> ids, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Radio.YES)
@@ -128,13 +129,6 @@ public interface DemoListRepository extends
                         .and(q.uid.in(list.stream().map(TabDemoList::getUid).toArray(String[]::new)))
                 )
                 .execute();
-    }
-
-    @Override
-    default Optional<TabDemoList> findByUid(final Long id, final String uid) {
-        return findOne(
-                q.id.eq(id).and(q.uid.eq(uid))
-        );
     }
 
     @Override

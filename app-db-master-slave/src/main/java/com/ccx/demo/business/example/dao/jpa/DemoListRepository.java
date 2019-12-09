@@ -129,14 +129,6 @@ public interface DemoListRepository extends
                 .execute();
     }
 
-    @Master
-    @Override
-    default Optional<TabDemoList> findByUid(final Long id, final String uid) {
-        return findOne(
-                q.id.eq(id).and(q.uid.eq(uid))
-        );
-    }
-
     @Override
     default List<TabDemoList> findList(final TabDemoList condition) {
         return jpaQueryFactory.<JPAQueryFactory>get()

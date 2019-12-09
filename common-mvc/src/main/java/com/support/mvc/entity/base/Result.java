@@ -571,63 +571,63 @@ public class Result<E> implements IJson {
             Result<String> result = new Result<>();
             // 设置单一对象，必须是泛型声明的类型
             result.setSuccess("111");
-            log.info(result.toString());
+            log.info(result.json());
             // 设置多个对象，必须是泛型声明的类型
             result.setSuccess(Arrays.asList("222", "333"));
-            log.info(result.toString());
+            log.info(result.json());
             // 设置对象对象数组，必须是泛型声明的类型
             result.setSuccess(new String[]{"444", "555"});
-            log.info(result.toString());
+            log.info(result.json());
             // 设置对象集合，必须是泛型声明的类型
             result.setSuccess(Arrays.asList("666", "777"));
             // 带有附加属性(扩展属性),可以链式调用
             result.addExtras("name", "JX").addExtras("amount", 100).addExtras("roles", new String[]{"ROLE_USER"});
-            log.info(result.toString());
+            log.info(result.json());
         }
         {
             log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 声明data集合中只能是Map<String, Object> <<<<<<<<<<<<<<<<<<");
             Result<Map<String, Object>> result = new Result<>();
             // 设置单一对象，必须是泛型声明的类型
             result.setSuccess(Maps.bySO("key", "111"));
-            log.info(result.toString());
+            log.info(result.json());
             // 设置多个对象，必须是泛型声明的类型
             result.setSuccess(Arrays.asList(Maps.bySO("key", "222"), Maps.bySO("key", "333")));
-            log.info(result.toString());
+            log.info(result.json());
             // 设置对象集合，必须是泛型声明的类型
             result.setSuccess(Arrays.asList(Maps.bySO("key", "444"), Maps.bySO("key", "555")));
             // 带有附加属性(扩展属性),可以链式调用
             result.addExtras("name", "JX").addExtras("amount", 100).addExtras("roles", new String[]{"ROLE_USER"});
-            log.info(result.toString());
+            log.info(result.json());
         }
         {
             log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 声明data集合中只能是 Item <<<<<<<<<<<<<<<<<<");
             Result<Item> result = new Result<>();
             // 设置单一对象，必须是泛型声明的类型
             result.setSuccess(Item.builder().key("key").value(111).build());
-            log.info(result.toString());
+            log.info(result.json());
             // 设置多个对象，必须是泛型声明的类型
             result.setSuccess(Arrays.asList(Item.builder().key("key").value(222).build(), Item.builder().key("key").value(333).build()));
-            log.info(result.toString());
+            log.info(result.json());
             // 设置对象对象数组，必须是泛型声明的类型
             result.setSuccess(new Item[]{Item.builder().key("key").value(444).build(), Item.builder().key("key").value(555).build()});
-            log.info(result.toString());
+            log.info(result.json());
             // 设置对象集合，必须是泛型声明的类型
             result.setSuccess(Arrays.asList(Item.builder().key("key").value(666).build(), Item.builder().key("key").value(777).build()));
             // 带有附加属性(扩展属性),可以链式调用
             result.addExtras("name", "JX").addExtras("amount", 100).addExtras("roles", new String[]{"ROLE_USER"});
-            log.info(result.toString());
+            log.info(result.json());
         }
         {
             log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 将 JSON 字符串反序列化为Result对象 <<<<<<<<<<<<<<<<<<");
-            log.info(Result.valueOfJson("{\"code\":\"SUCCESS\",\"message\":\"成功\",\"rowCount\":90,\"pageCount\":100,\"totalCount\":200,\"data\":[\"A\",\"B\"]}").toString());
-            log.info(Result.valueOfJson("{\"code\":\"SUCCESS\",\"message\":\"成功\",\"rowCount\":90,\"pageCount\":100,\"totalCount\":200,\"data\":[\"A\",\"B\"]}").toString());
-            log.info(Result.valueOfJson("{\"code\":\"FAILURE\",\"message\":\"失败\",\"data\":[{\"name\":\"A\"},{\"name\":\"B\"}]}").toString());
+            log.info(Result.valueOfJson("{\"code\":\"SUCCESS\",\"message\":\"成功\",\"rowCount\":90,\"pageCount\":100,\"totalCount\":200,\"data\":[\"A\",\"B\"]}").json());
+            log.info(Result.valueOfJson("{\"code\":\"SUCCESS\",\"message\":\"成功\",\"rowCount\":90,\"pageCount\":100,\"totalCount\":200,\"data\":[\"A\",\"B\"]}").json());
+            log.info(Result.valueOfJson("{\"code\":\"FAILURE\",\"message\":\"失败\",\"data\":[{\"name\":\"A\"},{\"name\":\"B\"}]}").json());
         }
 //        {
 //            try {
 //                Result<Table> result = JSON.parseObject(FileUtil.read("D:\\project\\files\\upload-com-data\\c9d6ad96-3eed-4d70-879b-bead504f0730\\2018\\BudgetMainIncome\\66f871de-5265-462d-8f55-1e34baa0e286.json"), new TypeReference<Result<Table>>(){});
 //                log.info("{}",result.dataFirst());
-//                log.info(result.toString());
+//                log.info(result.json());
 //            } catch (IOException e) {
 //                e.printStackTrace();
 //            }

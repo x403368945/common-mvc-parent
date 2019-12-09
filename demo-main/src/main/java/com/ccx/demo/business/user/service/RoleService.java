@@ -1,6 +1,5 @@
 package com.ccx.demo.business.user.service;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.ccx.demo.business.user.cache.ITabRoleCache;
 import com.ccx.demo.business.user.dao.jpa.RoleRepository;
 import com.ccx.demo.business.user.entity.Authority;
@@ -23,6 +22,7 @@ import org.springframework.util.Assert;
 import javax.validation.constraints.NotEmpty;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -48,7 +48,7 @@ public class RoleService implements IService<TabRole>, ITabRoleCache {
      * @return {@link Cache}
      */
     public Cache getCacheManager() {
-        return cacheManager.<CacheManager>get().getCache(ROW);
+        return Objects.requireNonNull(cacheManager.<CacheManager>get().getCache(CACHE_ROW_BY_ID), "未获取到缓存管理对象:".concat(CACHE_ROW_BY_ID));
     }
 
     /**
@@ -97,7 +97,7 @@ public class RoleService implements IService<TabRole>, ITabRoleCache {
 
     @Override
     public Optional<TabRole> findByUid(final Long id, final String uid) {
-        return repository.findByUid(id, uid);
+        return repository.findById(id).filter(row -> Objects.equals(uid, row.getUid()));
     }
 
     @Override

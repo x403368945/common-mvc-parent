@@ -1,7 +1,6 @@
 package com.ccx.demo.business.user.dao.jpa;
 
 import com.ccx.demo.business.user.cache.ITabRoleCache;
-import com.ccx.demo.business.user.cache.ITabUserCache;
 import com.ccx.demo.business.user.entity.QTabRole;
 import com.ccx.demo.business.user.entity.TabRole;
 import com.ccx.demo.enums.Radio;
@@ -21,6 +20,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.ccx.demo.config.init.BeanInitializer.Beans.getAppContext;
 import static com.ccx.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 
 /**
@@ -33,7 +33,7 @@ public interface RoleRepository extends
         IRepository<TabRole, Long> {
     QTabRole q = QTabRole.tabRole;
 
-    @CacheEvict(cacheNames = ITabRoleCache.ROW, key = "#id")
+    @CacheEvict(cacheNames = ITabRoleCache.CACHE_ROW_BY_ID, key = "#id")
     @Override
     default long update(final Long id, final Long userId, final TabRole obj) {
         return findById(id)
@@ -46,7 +46,7 @@ public interface RoleRepository extends
                 .orElse(0L);
     }
 
-    @CacheEvict(cacheNames = ITabRoleCache.ROW, key = "#id")
+    @CacheEvict(cacheNames = ITabRoleCache.CACHE_ROW_BY_ID, key = "#id")
     @Override
     default long markDeleteByUid(final Long id, final String uid, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
@@ -70,17 +70,13 @@ public interface RoleRepository extends
                 .execute();
     }
 
-    @Cacheable(cacheNames = ITabUserCache.ROW, key = "#id")
     @Override
-    default Optional<TabRole> findByUid(final Long id, final String uid) {
-        return findOne(
-                q.id.eq(id).and(q.uid.eq(uid))
-        );
+    default Optional<TabRole> findById(Long id) {
+        return Optional.ofNullable(getAppContext().getBean(this.getClass()).findCacheById(id));
     }
 
-    @Cacheable(cacheNames = ITabUserCache.ROW, key = "#id")
-    @Override
-    Optional<TabRole> findById(Long id);
+    @Cacheable(cacheNames = ITabRoleCache.CACHE_ROW_BY_ID, key = "#id")
+    TabRole findCacheById(Long id);
 
     @Override
     default List<TabRole> findList(final TabRole condition) {

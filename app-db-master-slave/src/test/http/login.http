@@ -35,3 +35,7 @@ Authorization: basic YWRtaW46YWRtaW4=
 }
 
 ###
+POST http://localhost:8080/logout
+Content-Type: application/json
+
+###

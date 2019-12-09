@@ -9,13 +9,13 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.support.mvc.dao.IRepository;
 import com.support.mvc.entity.base.Pager;
 import com.utils.util.Op;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.ccx.demo.business.user.entity.QTabUser.tabUser;
@@ -31,11 +31,24 @@ public interface UserRepository extends
         IRepository<TabUser, Long> {
     QTabUser q = tabUser;
 
-    @Cacheable(cacheNames = ITabUserCache.ROW, key = "#id")
+    @Cacheable(cacheNames = ITabUserCache.CACHE_ROW_BY_ID, key = "#id")
     @Override
     Optional<TabUser> findById(Long id);
 
-    @CacheEvict(cacheNames = ITabUserCache.ROW, key = "#id")
+    @Override
+    default long update(final Long id, final Long userId, final TabUser obj) {
+        return findById(id)
+                .filter(dest -> Objects.equals(dest.getUid(), obj.getUid()))
+                .filter(dest -> Objects.equals(dest.getDeleted(), Radio.NO))
+                .map(dest -> {
+                    obj.update(dest);
+                    dest.setModifyUserId(userId);
+                    return 1L;
+                })
+                .orElse(0L)
+                ;
+    }
+
     @Override
     default long markDeleteById(final Long id, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
@@ -46,7 +59,6 @@ public interface UserRepository extends
                 .execute();
     }
 
-    @CacheEvict(cacheNames = ITabUserCache.ROW, key = "#id")
     @Override
     default long markDeleteByIds(final List<Long> ids, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
@@ -107,22 +119,12 @@ public interface UserRepository extends
      * @param username String 登录账户名
      * @return Optional<TabUser>
      */
-    @Cacheable(cacheNames = ITabUserCache.LOGIN, key = "#username")
+    @Cacheable(cacheNames = ITabUserCache.CACHE_LOGIN, key = "#username")
     default Optional<TabUser> findUser(final String username) {
         return Op.of(findOne(q.username.eq(username)))
                 .orElseOf(() -> findOne(q.phone.eq(username)))
                 .orElseOf(() -> findOne(q.email.eq(username)))
                 .optional();
-    }
-
-    /**
-     * 通知清除登录查询缓存，修改密码、修改昵称后都需要触发该方法，清除 {@link UserRepository#findUser(String)} 缓存，
-     * 在 {@link UserRepository} 内方法之间相互调用无法触发 @CacheEvict 代理， 必须在 service 层触发，
-     *
-     * @param username String 登录账户名
-     */
-    @CacheEvict(cacheNames = ITabUserCache.LOGIN, key = "#username")
-    default void clearLoginCache(final String username) {
     }
 
     /**
@@ -133,7 +135,6 @@ public interface UserRepository extends
      * @param userId   Long 修改者ID
      * @return long 影响行数
      */
-    @CacheEvict(cacheNames = ITabUserCache.ROW, key = "#id")
     @Modifying
     @Query
     default long updatePassword(final Long id, final String password, final Long userId) {
@@ -153,7 +154,6 @@ public interface UserRepository extends
      * @param userId   Long 修改者ID
      * @return long 影响行数
      */
-    @CacheEvict(cacheNames = ITabUserCache.ROW, key = "#id")
     @Modifying
     @Query
     default long updateNickname(final Long id, final String nickname, final Long userId) {
@@ -201,12 +201,4 @@ public interface UserRepository extends
 //                .execute();
 //    }
 
-    @Cacheable(cacheNames = ITabUserCache.ROW, key = "#id")
-    @Override
-    default Optional<TabUser> findByUid(final Long id, final String uid) {
-        return Optional.ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
-                .selectFrom(q)
-                .where(q.id.eq(id).and(q.uid.eq(uid)))
-                .fetchOne());
-    }
 }

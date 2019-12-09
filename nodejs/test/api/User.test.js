@@ -6,7 +6,7 @@ import UserVO from '../../src/api/User';
 import axios from 'axios';
 import sample from 'lodash/sample';
 import sampleSize from 'lodash/sampleSize';
-import RoleVO, {RoleService} from "../../src/api/Role";
+import RoleVO, {RoleService} from '../../src/api/Role';
 
 export default class UserTest {
   /**
@@ -30,7 +30,7 @@ export default class UserTest {
    * @return {Promise<UserTest>}
    */
   async login() {
-    console.log(`> 登录：管理员(admin:admin) ----------------------------------------------------------------------------------------------------`);
+    console.log('> 登录：管理员(admin:admin) ----------------------------------------------------------------------------------------------------');
     (await UserVO.of({username: 'admin', password: 'admin'}).getService().login()).print().assertData();
     return this;
   }
@@ -39,7 +39,7 @@ export default class UserTest {
    * @return {Promise<UserTest>}
    */
   async loginAdminBasic() {
-    console.log(`> 登录[basic]）：用户(admin:admin) ----------------------------------------------------------------------------------------------------`);
+    console.log('> 登录[basic]）：用户(admin:admin) ----------------------------------------------------------------------------------------------------');
     axios.defaults.auth = {username: 'admin', password: 'admin'};
     return this;
   }
@@ -48,7 +48,7 @@ export default class UserTest {
    * @return {Promise<UserTest>}
    */
   async loginUserBasic() {
-    console.log(`> 登录[basic]：用户(user:111111) ----------------------------------------------------------------------------------------------------`);
+    console.log('> 登录[basic]：用户(user:111111) ----------------------------------------------------------------------------------------------------');
     axios.defaults.auth = {username: 'user', password: '111111'};
     return this;
   }
@@ -57,7 +57,7 @@ export default class UserTest {
    * @return {Promise<UserTest>}
    */
   async logout() {
-    console.log(`> 退出 ----------------------------------------------------------------------------------------------------`);
+    console.log('> 退出 ----------------------------------------------------------------------------------------------------');
     (await UserVO.of().getService().logout()).print().assertVersion().assertCode();
     return this;
   }
@@ -66,7 +66,7 @@ export default class UserTest {
    * @return {Promise<UserTest>}
    */
   async getCurrentUser() {
-    console.log(`> 获取当前登录用户信息 ----------------------------------------------------------------------------------------------------`);
+    console.log('> 获取当前登录用户信息 ----------------------------------------------------------------------------------------------------');
     (await UserVO.of().getService().getCurrentUser()).print().assertVersion().assertData();
     return this;
   }
@@ -76,7 +76,7 @@ export default class UserTest {
    * @return {Promise<UserTest>}
    */
   async updateNickname() {
-    console.log(`> 修改昵称 ----------------------------------------------------------------------------------------------------`);
+    console.log('> 修改昵称 ----------------------------------------------------------------------------------------------------');
     (await UserVO.of({nickname: '张三'}).getService().updateNickname()).print().assertVersion().assertCode();
     return this;
   }
@@ -86,7 +86,7 @@ export default class UserTest {
    * @return {Promise<UserTest>}
    */
   async save() {
-    console.log(`> 新增用户 ----------------------------------------------------------------------------------------------------`);
+    console.log('> 新增用户 ----------------------------------------------------------------------------------------------------');
     const {data: roles} = await new RoleVO().getService().options();
     (await UserVO.of({
       username: `${new Date().getTime()}`,
@@ -108,7 +108,7 @@ export default class UserTest {
    * @return {Promise<UserTest>}
    */
   async update() {
-    console.log(`> 修改用户 ----------------------------------------------------------------------------------------------------`);
+    console.log('> 修改用户 ----------------------------------------------------------------------------------------------------');
     const {data: roles} = await new RoleVO().getService().options();
     const {data: users} = await new UserVO().getService().pageable();
     const user = sample(users.filter(row => ![1, 2].includes(row.id)), 1);
@@ -124,7 +124,7 @@ export default class UserTest {
    * @return {Promise<UserTest>}
    */
   async findByUid() {
-    console.log(`> 查看用户详细信息 ----------------------------------------------------------------------------------------------------`);
+    console.log('> 查看用户详细信息 ----------------------------------------------------------------------------------------------------');
     const {data: users} = await new UserVO().getService().pageable();
     const {id, uid} = sample(users, 1);
     (await UserVO.of({
@@ -138,7 +138,7 @@ export default class UserTest {
    * @return {Promise<UserTest>}
    */
   async pageable() {
-    console.log(`> 分页查询用户 ----------------------------------------------------------------------------------------------------`);
+    console.log('> 分页查询用户 ----------------------------------------------------------------------------------------------------');
     (await UserVO.of().getService().pageable()).print().assertVersion().assertCode().assertData();
     return this;
   }
@@ -148,7 +148,7 @@ export default class UserTest {
    * @return {Promise<UserTest>}
    */
   async getUsersFromRole() {
-    console.log(`> 按角色查询用户集合 ----------------------------------------------------------------------------------------------------`);
+    console.log('> 按角色查询用户集合 ----------------------------------------------------------------------------------------------------');
     (await UserVO.of({roleId: 1}).getService().getUsersFromRole()).print().assertVersion().assertCode().assertData();
     return this;
   }

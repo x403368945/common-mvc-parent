@@ -16,8 +16,8 @@ import static com.ccx.demo.config.init.BeanInitializer.Beans.userRepository;
  * @author 谢长春 2017-9-26
  */
 public interface ITabUserCache {
-    String ROW = "ITabUserCache";
-    String LOGIN = "ITabUserCache.login";
+    String CACHE_ROW_BY_ID = "ITabUserCache";
+    String CACHE_LOGIN = "ITabUserCache.login";
 
     /**
      * 获取缓存用户昵称
@@ -28,7 +28,7 @@ public interface ITabUserCache {
     @Transient
     @QueryTransient
     @JSONField(serialize = false, deserialize = false)
-    default String getNickNameByCache(final Long userId) {
+    default String getNickNameCacheById(final Long userId) {
         return userRepository.<UserRepository>get().findById(userId).map(TabUser::getNickname).orElse(null);
     }
 
@@ -49,7 +49,7 @@ public interface ITabUserCache {
     @Transient
     @QueryTransient
     default String getCreateUserName() {
-        return getNickNameByCache(getCreateUserId());
+        return getNickNameCacheById(getCreateUserId());
     }
 
     /**
@@ -69,7 +69,7 @@ public interface ITabUserCache {
     @Transient
     @QueryTransient
     default String getModifyUserName() {
-        return getNickNameByCache(getModifyUserId());
+        return getNickNameCacheById(getModifyUserId());
     }
 
 //    /**

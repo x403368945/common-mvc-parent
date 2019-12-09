@@ -25,7 +25,7 @@ public interface IUserCache {
     @Transient
     @QueryTransient
     @JSONField(serialize = false, deserialize = false)
-    default String getNickNameByCache(final Long userId) {
+    default String getNickNameCacheById(final Long userId) {
         return Optional.ofNullable(userId).map(id -> userRepository.<UserRepository>get().getNickame(id)).orElse(null);
     }
 
@@ -46,7 +46,7 @@ public interface IUserCache {
     @Transient
     @QueryTransient
     default String getCreateUserName() {
-        return getNickNameByCache(getCreateUserId());
+        return getNickNameCacheById(getCreateUserId());
     }
 
     /**
@@ -66,7 +66,7 @@ public interface IUserCache {
     @Transient
     @QueryTransient
     default String getModifyUserName() {
-        return getNickNameByCache(getModifyUserId());
+        return getNickNameCacheById(getModifyUserId());
     }
 
 //    /**

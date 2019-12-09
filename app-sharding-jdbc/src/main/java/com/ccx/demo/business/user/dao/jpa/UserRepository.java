@@ -204,11 +204,4 @@ public interface UserRepository extends
 //                .execute();
 //    }
 
-    @Override
-    default Optional<TabUser> findByUid(final Long id, final String uid) {
-        return Optional.ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
-                .selectFrom(q)
-                .where(q.id.eq(id).and(q.uid.eq(uid)))
-                .fetchOne());
-    }
 }

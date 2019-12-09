@@ -115,13 +115,6 @@ public interface <%=JavaName%>Repository extends
                 .execute();
     }
 
-    @Override
-    default Optional<<%=TabName%>> findByUid(final <%=id%> id, final String uid) {
-        return findOne(
-                q.id.eq(id).and(q.uid.eq(uid))
-        );
-    }
-
 //    @Override
 //    default List<<%=TabName%>> findList(final <%=TabName%> condition) {
 //        return jpaQueryFactory.<JPAQueryFactory>get()

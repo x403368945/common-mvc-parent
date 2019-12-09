@@ -20,6 +20,7 @@ import com.support.mvc.entity.base.Sorts;
 import com.support.mvc.entity.convert.MysqlListLongConvert;
 import com.support.mvc.entity.validated.ISave;
 import com.support.mvc.entity.validated.IUpdate;
+import com.utils.util.Then;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -53,7 +54,7 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @JSONType(orders = {"id", "uid", "subdomain", "username", "nickname", "phone", "email", "role", "registerSource", "deleted"})
-public class TabUser extends UserDetail implements ITabUser, ITable, ITabUserCache, IWhere<JPAUpdateClause, QdslWhere> {
+public class TabUser extends UserDetail implements ITabUser, ITable, ITabUserCache, IWhere<TabUser, QdslWhere> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -162,8 +163,17 @@ public class TabUser extends UserDetail implements ITabUser, ITable, ITabUserCac
         return json();
     }
 
-
-// DB Start *************************************************************************************************
+    // DB Start *************************************************************************************************
+    @Override
+    public Then<TabUser> update(final TabUser update) {
+        return Then.of(update)
+                .then(nickname, dest -> dest.setNickname(nickname))
+                .then(phone, dest -> dest.setPhone(phone))
+                .then(email, dest -> dest.setEmail(email))
+                .then(roles, dest -> dest.setRoles(roles))
+                .then(dest -> dest.setModifyUserId(modifyUserId))
+                ;
+    }
 
     @Override
     public QdslWhere where() {
@@ -225,7 +235,7 @@ public class TabUser extends UserDetail implements ITabUser, ITable, ITabUserCac
                         Objects.nonNull(authorityList) && !authorityList.isEmpty()
                                 ? authorityList
                                 : Objects.requireNonNull(getRoles(), "当前登录账户未配置权限").stream()
-                                .flatMap(id -> getRoleAuthoritiesByCacheId(id).stream())
+                                .flatMap(id -> getRoleAuthoritiesCacheById(id).stream())
                                 .distinct()
                                 .collect(Collectors.toList())
                 )

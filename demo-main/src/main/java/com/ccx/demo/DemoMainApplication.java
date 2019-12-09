@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Import;
 
 /**
@@ -21,7 +22,7 @@ import org.springframework.context.annotation.Import;
 @SpringBootApplication
 @Import(value = {InitConfig.class, BusConfig.class})
 @EnableConfigurationProperties(value = {AppProperties.class})
-//@EnableCaching
+@EnableCaching
 public class DemoMainApplication extends SpringBootServletInitializer {
     public static void main(String[] args) {
         SpringApplication.run(DemoMainApplication.class, args);

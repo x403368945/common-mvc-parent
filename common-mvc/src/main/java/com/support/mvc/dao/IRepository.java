@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * 数据访问接口方法定义，默认继承 QDSL 查询，建议查询尽量使用 QDSL 语法 <br>
@@ -17,30 +16,6 @@ import java.util.Optional;
  */
 @NoRepositoryBean
 public interface IRepository<E, ID> extends ISearchRepository<E> {
-
-    /**
-     * 按 ID 和 uuid 查询
-     *
-     * @param id  ID 数据ID
-     * @param uid String uuid
-     * @return {@link Optional<E>} 查询结果
-     * @deprecated 方法已重命名，请使用 {@link IRepository#findByUid(Object, String)}
-     */
-    @Deprecated
-    default Optional<E> findById(final ID id, final String uid) {
-        throw new NullPointerException(this.getClass().getName().concat("：方法【findById(final ID id, final String uid)】未实现"));
-    }
-
-    /**
-     * 按 ID 和 uuid 查询
-     *
-     * @param id  ID 数据ID
-     * @param uid String uuid
-     * @return {@link Optional<E>} 查询结果
-     */
-    default Optional<E> findByUid(final ID id, final String uid) {
-        throw new NullPointerException(this.getClass().getName().concat("：方法【findByUidId(final ID id, final String uid)】未实现"));
-    }
 
     /**
      * 修改数据

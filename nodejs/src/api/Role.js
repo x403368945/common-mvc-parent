@@ -13,7 +13,7 @@ const ROLE_URL = Object.freeze({
   markDeleteByUid: '/role/1/{id}/{uid}', // 按 id + uid 逻辑删除
   findByUid: '/role/1/{id}/{uid}', // 按 id + uid + 时间戳 查询单条记录
   page: '/role/1/page/{number}/{size}', // 分页：多条件批量查询
-  options: '/role/1/options', // 角色下拉列表选项
+  options: '/role/1/options' // 角色下拉列表选项
 });
 
 /**

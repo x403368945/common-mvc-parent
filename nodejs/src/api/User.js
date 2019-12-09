@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Asserts from '../utils/entity/Asserts';
 import Result from '../utils/entity/Result';
-import Page from "../utils/entity/Page";
+import Page from '../utils/entity/Page';
 
 /**
  * 请求 url 定义
@@ -16,7 +16,7 @@ const USER_URL = Object.freeze({
   update: '/user/1/{id}', // 修改用户信息
   findByUid: '/user/1/{id}/{uid}', // 查看用户详细信息
   page: '/user/1/page/{number}/{size}', // 分页查看用户信息
-  users: '/user/1/users/{roleId}', // 按角色查询用户集合
+  users: '/user/1/users/{roleId}' // 按角色查询用户集合
 });
 
 /**

@@ -27,8 +27,8 @@ export default class OpenDemoTest {
    * @return {Promise<OpenDemoTest>}
    */
   async codes() {
-    console.log(`> 查询所有状态码 ----------------------------------------------------------------------------------------------------`);
-    (await OpenDemoVO.of().getService().codes()).print().assertData();
+    console.log('> 查询所有状态码 ----------------------------------------------------------------------------------------------------');
+    (await new OpenDemoVO().getService().codes()).print().assertData();
     return this;
   }
 
@@ -36,8 +36,8 @@ export default class OpenDemoTest {
    * @return {Promise<OpenDemoTest>}
    */
   async save() {
-    console.log(`> 新增 ----------------------------------------------------------------------------------------------------`);
-    (await OpenDemoVO.of({
+    console.log('> 新增 ----------------------------------------------------------------------------------------------------');
+    (await new OpenDemoVO({
       name: 'Conor',
       phone: '18700000000'
     }).getService().save()).print().assertVersion().assertData();
@@ -48,8 +48,8 @@ export default class OpenDemoTest {
    * @return {Promise<OpenDemoTest>}
    */
   async update() {
-    console.log(`> 修改 ----------------------------------------------------------------------------------------------------`);
-    (await OpenDemoVO.of({
+    console.log('> 修改 ----------------------------------------------------------------------------------------------------');
+    (await new OpenDemoVO({
       id: 100,
       name: 'Conor',
       phone: '18700000000'
@@ -61,8 +61,8 @@ export default class OpenDemoTest {
    * @return {Promise<OpenDemoTest>}
    */
   async deleteById() {
-    console.log(`> 按 id 删除 ----------------------------------------------------------------------------------------------------`);
-    (await OpenDemoVO.of({id: 1000}).getService().deleteById()).print().assertVersion().assertData();
+    console.log('> 按 id 删除 ----------------------------------------------------------------------------------------------------');
+    (await new OpenDemoVO({id: 1000}).getService().deleteById()).print().assertVersion().assertData();
     return this;
   }
 
@@ -70,8 +70,8 @@ export default class OpenDemoTest {
    * @return {Promise<OpenDemoTest>}
    */
   async markDeleteById() {
-    console.log(`> 按 id 逻辑删除 ----------------------------------------------------------------------------------------------------`);
-    (await OpenDemoVO.of({id: 1001}).getService().markDeleteById()).print().assertVersion().assertCode();
+    console.log('> 按 id 逻辑删除 ----------------------------------------------------------------------------------------------------');
+    (await new OpenDemoVO({id: 1001}).getService().markDeleteById()).print().assertVersion().assertCode();
     return this;
   }
 
@@ -79,8 +79,8 @@ export default class OpenDemoTest {
    * @return {Promise<OpenDemoTest>}
    */
   async markDelete() {
-    console.log(`> 按 id + uid 批量逻辑删除 ----------------------------------------------------------------------------------------------------`);
-    (await OpenDemoVO.of({ids: [10000, 20000]}).getService().markDelete()).print().assertVersion().assertCode();
+    console.log('> 按 id + uid 批量逻辑删除 ----------------------------------------------------------------------------------------------------');
+    (await new OpenDemoVO({ids: [10000, 20000]}).getService().markDelete()).print().assertVersion().assertCode();
     return this;
   }
 
@@ -88,8 +88,8 @@ export default class OpenDemoTest {
    * @return {Promise<OpenDemoTest>}
    */
   async findById() {
-    console.log(`> 按 id 查询单条记录 ----------------------------------------------------------------------------------------------------`);
-    (await OpenDemoVO.of({id: 100}).getService().findById()).print().assertVersion().assertData();
+    console.log('> 按 id 查询单条记录 ----------------------------------------------------------------------------------------------------');
+    (await new OpenDemoVO({id: 100}).getService().findById()).print().assertVersion().assertData();
     return this;
   }
 
@@ -97,8 +97,8 @@ export default class OpenDemoTest {
    * @return {Promise<OpenDemoTest>}
    */
   async search() {
-    console.log(`> 多条件批量查询，不分页 ----------------------------------------------------------------------------------------------------`);
-    (await OpenDemoVO.of({id: 100, name: 'Conor'}).getService().search()).print().assertVersion().assertData();
+    console.log('> 多条件批量查询，不分页 ----------------------------------------------------------------------------------------------------');
+    (await new OpenDemoVO({id: 100, name: 'Conor'}).getService().search()).print().assertVersion().assertData();
     return this;
   }
 
@@ -107,8 +107,8 @@ export default class OpenDemoTest {
    * @return {Promise<OpenDemoTest>}
    */
   async pageable() {
-    console.log(`> 分页：多条件批量查询 ----------------------------------------------------------------------------------------------------`);
-    (await OpenDemoVO.of({
+    console.log('> 分页：多条件批量查询 ----------------------------------------------------------------------------------------------------');
+    (await new OpenDemoVO({
       id: 100,
       name: 'Conor',
       page: Page.of({number: 1, size: 15})

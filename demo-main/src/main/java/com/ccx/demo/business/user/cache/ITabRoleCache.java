@@ -5,15 +5,15 @@ import com.ccx.demo.business.user.dao.jpa.RoleRepository;
 import com.ccx.demo.business.user.entity.TabRole;
 import com.ccx.demo.enums.Radio;
 import com.querydsl.core.annotations.QueryTransient;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
 import org.springframework.util.CollectionUtils;
 
 import java.beans.Transient;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.ccx.demo.config.init.BeanInitializer.Beans.cacheManager;
 import static com.ccx.demo.config.init.BeanInitializer.Beans.getAppContext;
 
 /**
@@ -23,7 +23,7 @@ import static com.ccx.demo.config.init.BeanInitializer.Beans.getAppContext;
  * @author 谢长春 2019/8/29
  */
 public interface ITabRoleCache {
-    String ROW = "ITabRoleCache";
+    String CACHE_ROW_BY_ID = "ITabRoleCache";
 
     /**
      * 按 ID 获取数据缓存行
@@ -33,7 +33,7 @@ public interface ITabRoleCache {
      */
     @JSONField(serialize = false, deserialize = false)
     default Optional<TabRole> getTabRoleCacheById(final Long id) {
-        return getAppContext().getBean(RoleRepository.class).findById(id);
+        return Optional.of(getAppContext().getBean(RoleRepository.class).findCacheById(id));
     }
 
     /**
@@ -45,7 +45,7 @@ public interface ITabRoleCache {
     @Transient
     @QueryTransient
     @JSONField(serialize = false, deserialize = false)
-    default List<String> getRoleAuthoritiesByCacheId(final Long id) {
+    default List<String> getRoleAuthoritiesCacheById(final Long id) {
         if (Objects.isNull(id)) return Collections.emptyList();
         return getTabRoleCacheById(id)
                 .filter(obj -> Objects.equals(obj.getDeleted(), Radio.NO))
@@ -63,7 +63,7 @@ public interface ITabRoleCache {
     @Transient
     @QueryTransient
     @JSONField(serialize = false, deserialize = false)
-    default String getRoleNameByCacheId(final Long id) {
+    default String getRoleNameCacheById(final Long id) {
         if (Objects.isNull(id)) return null;
         return getTabRoleCacheById(id).map(TabRole::getName).orElse(null);
     }
@@ -77,7 +77,7 @@ public interface ITabRoleCache {
     @Transient
     @QueryTransient
     @JSONField(serialize = false, deserialize = false)
-    default List<String> getRoleNameByCacheIds(final List<Long> ids) {
+    default List<String> getRoleNameCacheByIds(final List<Long> ids) {
         if (CollectionUtils.isEmpty(ids)) return Collections.emptyList();
         final RoleRepository roleRepository = getAppContext().getBean(RoleRepository.class);
         return ids.stream()

@@ -1,9 +1,11 @@
 package com.ccx.demo.business.user.service;
 
 import com.ccx.demo.business.user.bordcast.IUserEvent;
+import com.ccx.demo.business.user.cache.ITabUserCache;
 import com.ccx.demo.business.user.dao.jpa.UserRepository;
+import com.ccx.demo.business.user.entity.TabRole;
 import com.ccx.demo.business.user.entity.TabUser;
-import com.ccx.demo.enums.Role;
+import com.google.common.collect.Sets;
 import com.google.common.eventbus.EventBus;
 import com.querydsl.core.QueryResults;
 import com.support.mvc.entity.base.Pager;
@@ -12,6 +14,8 @@ import com.support.mvc.exception.UpdateRowsException;
 import com.support.mvc.service.IService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,8 +23,12 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+
+import static com.ccx.demo.config.init.BeanInitializer.Beans.cacheManager;
 
 /**
  * 服务接口实现类：用户
@@ -29,7 +37,7 @@ import java.util.Optional;
  */
 @Slf4j
 @Service
-public class UserService implements IService<TabUser> {
+public class UserService implements IService<TabUser>, ITabUserCache {
 
     @Autowired
     private UserRepository repository;
@@ -43,6 +51,39 @@ public class UserService implements IService<TabUser> {
 //    private UserCache userCache;
 //    @Autowired
 //    private PhoneCode phoneCode;
+
+    /**
+     * 获取当前缓存管理器，用于代码控制缓存
+     *
+     * @return {@link Cache}
+     */
+    public Cache getCacheManager() {
+        return Objects.requireNonNull(cacheManager.<CacheManager>get().getCache(CACHE_ROW_BY_ID), "未获取到缓存管理对象:".concat(CACHE_ROW_BY_ID));
+    }
+
+    /**
+     * 清除多个 key 对应的缓存
+     *
+     * @param ids {@link TabRole#getId()}
+     */
+    public void clearKeys(Collection<Long> ids) {
+        ids.stream().distinct().forEach(id -> getCacheManager().evict(id));
+    }
+
+    /**
+     * 清除指定用户的缓存
+     *
+     * @param id Long 用户ID
+     */
+    private void clearCache(final Long id) {
+        clearKeys(Sets.newHashSet(id));
+        final Cache cache = Objects.requireNonNull(cacheManager.<CacheManager>get().getCache(CACHE_LOGIN), "未获取到缓存管理对象:".concat(CACHE_LOGIN));
+        repository.findById(id).ifPresent(obj -> { // 清除登录查询缓存
+            cache.evict(obj.getUsername());
+            cache.evict(obj.getPhone());
+            cache.evict(obj.getEmail());
+        });
+    }
 
     @Override
     public TabUser save(final TabUser obj, final Long userId) {
@@ -68,7 +109,7 @@ public class UserService implements IService<TabUser> {
 
     @Override
     public Optional<TabUser> findByUid(final Long id, final String uid) {
-        return repository.findByUid(id, uid);
+        return repository.findById(id).filter(row -> Objects.equals(row.getUid(), uid));
     }
 
     @Override
@@ -141,18 +182,4 @@ public class UserService implements IService<TabUser> {
         UpdateRowsException.asserts(repository.updatePassword(id, passwordEncoder.encode(password), userId));
         clearCache(id);
     }
-
-    /**
-     * 清除指定用户的缓存
-     *
-     * @param id Long 用户ID
-     */
-    private void clearCache(final Long id) {
-        repository.findById(id).ifPresent(obj -> { // 清除登录查询缓存
-            repository.clearLoginCache(obj.getUsername());
-            repository.clearLoginCache(obj.getPhone());
-            repository.clearLoginCache(obj.getEmail());
-        });
-    }
-
 }

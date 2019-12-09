@@ -34,13 +34,6 @@ public interface <%=JavaName%>Repository extends
 //        .where(q.id.eq(id).and(q.uid.eq(obj.getUid())).and(q.modifyTime.eq(obj.getModifyTime())))
 //        .execute();
 //    }
-
-    @Override
-    default Optional<<%=TabName%>> findByUid(final <%=id%> id, final String uid) {
-        return findOne(
-                q.id.eq(id).and(q.uid.eq(uid))
-        );
-    }
 //
 //    @Override
 //    default <%=TabName%> deleteByUid(final <%=id%> id, final String uid) {

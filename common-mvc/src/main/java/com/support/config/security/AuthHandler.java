@@ -94,7 +94,7 @@ public class AuthHandler implements
                                 final Authentication e) throws IOException {
         response.setContentType(ContentType.json.utf8());
         @Cleanup final PrintWriter writer = response.getWriter();
-        writer.write(Code.SUCCESS.toResult().toString());
+        writer.write(Code.SUCCESS.toResult().json());
         writer.flush();
     }
 
