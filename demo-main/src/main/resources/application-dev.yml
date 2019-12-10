@@ -100,4 +100,7 @@ spring:
       host: localhost
       port: 27017
       database: demo_main_db
+      auto-index-creation: true
+#      username: root
+#      password: 111111
       #uri: mongodb://name:pass@localhost/demo_main_db

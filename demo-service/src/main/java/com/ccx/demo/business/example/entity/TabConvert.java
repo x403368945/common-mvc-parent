@@ -18,6 +18,7 @@ import com.support.mvc.entity.base.Prop;
 import com.support.mvc.entity.base.Sorts;
 import com.support.mvc.entity.convert.ItemJsonConvert;
 import com.support.mvc.entity.convert.ListItemJsonConvert;
+import com.support.mvc.entity.convert.ListLongJsonConvert;
 import com.support.mvc.entity.convert.ListStringJsonConvert;
 import com.support.mvc.entity.validated.IMarkDelete;
 import com.support.mvc.entity.validated.ISave;
@@ -87,9 +88,8 @@ public final class TabConvert implements
     /**
      * {@link List<Long>}
      */
-//    @Convert(converter = ListLongJsonConvert.class)
-    @Type(type = "Long[]")
-    private Long[] ids;
+    @Convert(converter = ListLongJsonConvert.class)
+    private List<Long> ids;
     /**
      * {@link List<String>}
      */
