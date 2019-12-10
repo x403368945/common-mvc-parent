@@ -36,7 +36,7 @@ public class RoleController implements IAuthController<Long> {
     @Autowired
     private RoleService service;
 
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'RoleController_save')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'RoleController', 'RoleController_save')")
     @PostMapping
     @ResponseBody
     @Override
@@ -67,7 +67,7 @@ public class RoleController implements IAuthController<Long> {
                 );
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'RoleController_update')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'RoleController', 'RoleController_update')")
     @PutMapping("/{id}")
     @ResponseBody
     @Override
@@ -148,7 +148,7 @@ public class RoleController implements IAuthController<Long> {
                 );
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'Menu_Role', 'RoleController_page')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'Menu_Role', 'RoleController', 'RoleController_page')")
     @GetMapping("/page/{number}/{size}")
     @ResponseBody
     @Override

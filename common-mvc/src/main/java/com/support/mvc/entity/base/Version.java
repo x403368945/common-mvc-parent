@@ -205,7 +205,7 @@ public class Version implements IJson {
                                         .put("password", "111111")
                                         .build()
                         ))
-                        .write(Paths.get("CATALINA_HOME_IS_UNDEFINED").toAbsolutePath().toString())
+                        .write(Paths.get("logs").toAbsolutePath().toString())
                         .jsonFormat()
         );
     }

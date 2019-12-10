@@ -29,9 +29,11 @@ spring:
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration # 禁止自动装配 jackson
-  cache: # 需要使用 @EnableCaching 开启缓存，缓存配置 <diskStore path="java.io.tmpdir" />
-    type: simple
-    cache-names: # 缓存名称， 使用 @CacheEvict 注解的 cacheNames 必须在这里定义
-      - "ITabUserCache"
-      - "ITabUserCache.login"
-      - "ITabRoleCache"
+  cache: # 需要使用 @EnableCaching 开启缓存，缓存配置
+#    type: simple
+#    cache-names: # 缓存名称， 使用 @CacheEvict 注解的 cacheNames 必须在这里定义
+#      - "ITabUserCache"
+#      - "ITabUserCache.login"
+#      - "ITabRoleCache"
+    ehcache:
+      config: ehcache.xml
