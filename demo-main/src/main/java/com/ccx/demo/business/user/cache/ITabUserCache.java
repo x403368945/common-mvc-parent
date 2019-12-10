@@ -8,6 +8,7 @@ import com.querydsl.core.annotations.QueryTransient;
 import java.beans.Transient;
 import java.util.Optional;
 
+import static com.ccx.demo.config.init.BeanInitializer.Beans.getAppContext;
 import static com.ccx.demo.config.init.BeanInitializer.Beans.userRepository;
 
 /**
@@ -18,6 +19,17 @@ import static com.ccx.demo.config.init.BeanInitializer.Beans.userRepository;
 public interface ITabUserCache {
     String CACHE_ROW_BY_ID = "ITabUserCache";
     String CACHE_LOGIN = "ITabUserCache.login";
+
+    /**
+     * 按 ID 获取数据缓存行
+     *
+     * @param id {@link TabUser#getId()}
+     * @return {@link Optional<TabUser>}
+     */
+    @JSONField(serialize = false, deserialize = false)
+    default Optional<TabUser> getTabUserCacheById(final Long id) {
+        return Optional.of(getAppContext().getBean(UserRepository.class).findCacheById(id));
+    }
 
     /**
      * 获取缓存用户昵称

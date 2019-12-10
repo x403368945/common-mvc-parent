@@ -56,8 +56,9 @@ public class RoleService implements IService<TabRole>, ITabRoleCache {
      *
      * @param ids {@link TabRole#getId()}
      */
-    public void clearKeys(Collection<Long> ids) {
-        ids.stream().distinct().forEach(id -> getCacheManager().evict(id));
+    public void clearKeys(final Collection<Long> ids) {
+        final Cache cache = getCacheManager();
+        ids.stream().distinct().forEach(cache::evict);
     }
 
     @Override
@@ -97,7 +98,7 @@ public class RoleService implements IService<TabRole>, ITabRoleCache {
 
     @Override
     public Optional<TabRole> findByUid(final Long id, final String uid) {
-        return repository.findById(id).filter(row -> Objects.equals(uid, row.getUid()));
+        return Optional.ofNullable(repository.findCacheById(id)).filter(row -> Objects.equals(uid, row.getUid()));
     }
 
     @Override

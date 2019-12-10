@@ -15,8 +15,8 @@ const USER_URL = Object.freeze({
   save: '/user/1', // 新增用户
   update: '/user/1/{id}', // 修改用户信息
   findByUid: '/user/1/{id}/{uid}', // 查看用户详细信息
-  page: '/user/1/page/{number}/{size}', // 分页查看用户信息
-  users: '/user/1/users/{roleId}' // 按角色查询用户集合
+  page: '/user/1/page/{number}/{size}' // 分页查看用户信息
+  // users: '/user/1/users/{roleId}' // 按角色查询用户集合
 });
 
 /**
@@ -160,17 +160,17 @@ export class UserService {
       .catch(Result.ofCatch);
   }
 
-  /**
-   * 按角色查询用户集合
-   * @return {Promise<Result>}
-   */
-  async getUsersFromRole() {
-    const {roleId} = this.vo;
-    return await axios
-      .get(USER_URL.users.format(roleId))
-      .then(Result.ofResponse)
-      .catch(Result.ofCatch);
-  }
+  // /**
+  //  * 按角色查询用户集合
+  //  * @return {Promise<Result>}
+  //  */
+  // async getUsersFromRole() {
+  //   const {roleId} = this.vo;
+  //   return await axios
+  //     .get(USER_URL.users.format(roleId))
+  //     .then(Result.ofResponse)
+  //     .catch(Result.ofCatch);
+  // }
 }
 
 /**

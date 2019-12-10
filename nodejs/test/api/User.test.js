@@ -143,15 +143,15 @@ export default class UserTest {
     return this;
   }
 
-  /**
-   *
-   * @return {Promise<UserTest>}
-   */
-  async getUsersFromRole() {
-    console.log('> 按角色查询用户集合 ----------------------------------------------------------------------------------------------------');
-    (await UserVO.of({roleId: 1}).getService().getUsersFromRole()).print().assertVersion().assertCode().assertData();
-    return this;
-  }
+  // /**
+  //  *
+  //  * @return {Promise<UserTest>}
+  //  */
+  // async getUsersFromRole() {
+  //   console.log('> 按角色查询用户集合 ----------------------------------------------------------------------------------------------------');
+  //   (await UserVO.of({roleId: 1}).getService().getUsersFromRole()).print().assertVersion().assertCode().assertData();
+  //   return this;
+  // }
 
   /**
    *
@@ -194,7 +194,7 @@ export default class UserTest {
       .then(service => service.pageable()).then(s => s.newline())
       .then(service => service.update()).then(s => s.newline())
       .then(service => service.findByUid()).then(s => s.newline())
-      .then(service => service.getUsersFromRole()).then(s => s.newline())
+      // .then(service => service.getUsersFromRole()).then(s => s.newline())
       // 结束
       .then(() => console.info(`${moduleName}：end ${'*'.repeat(200)}\n\n\n\n\n`))
       .catch((e) => {

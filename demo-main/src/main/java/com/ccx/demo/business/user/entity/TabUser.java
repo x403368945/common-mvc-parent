@@ -75,7 +75,6 @@ public class TabUser extends UserDetail implements ITabUser, ITable, ITabUserCac
     /**
      * 登录名
      */
-    @NotNull(groups = {ISave.class})
     @Column(updatable = false)
     @NotBlank(groups = {ISave.class})
     private String username;
@@ -83,7 +82,6 @@ public class TabUser extends UserDetail implements ITabUser, ITable, ITabUserCac
      * 登录密码
      */
     @Column(updatable = false)
-    @Size(min = 5, max = 15)
     @NotBlank(groups = {ISave.class})
     @JSONField(serialize = false)
     private String password;

@@ -68,8 +68,9 @@ public class UserService implements IService<TabUser>, ITabUserCache {
      *
      * @param ids {@link TabRole#getId()}
      */
-    public void clearKeys(Collection<Long> ids) {
-        ids.stream().distinct().forEach(id -> getCacheManager().evict(id));
+    public void clearKeys(final Collection<Long> ids) {
+        final Cache cache = getCacheManager();
+        ids.stream().distinct().forEach(cache::evict);
     }
 
     /**
@@ -111,7 +112,7 @@ public class UserService implements IService<TabUser>, ITabUserCache {
 
     @Override
     public Optional<TabUser> findByUid(final Long id, final String uid) {
-        return repository.findById(id).filter(row -> Objects.equals(row.getUid(), uid));
+        return Optional.ofNullable(repository.findCacheById(id)).filter(row -> Objects.equals(uid, row.getUid()));
     }
 
     @Override

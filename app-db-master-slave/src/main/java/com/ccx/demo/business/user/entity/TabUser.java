@@ -22,7 +22,9 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
@@ -57,6 +59,8 @@ public class TabUser extends UserDetail implements ITabUser, ITable, IUserCache,
     /**
      * 用户UUID，缓存和按ID查询时可使用强校验
      */
+    @NotNull(groups = {ISave.class})
+    @Size(min = 32, max = 32)
     @Column(updatable = false)
     private String uid;
     /**

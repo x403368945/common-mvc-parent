@@ -4,7 +4,6 @@ import com.ccx.demo.business.user.cache.ITabRoleCache;
 import com.ccx.demo.business.user.entity.QTabRole;
 import com.ccx.demo.business.user.entity.TabRole;
 import com.ccx.demo.enums.Radio;
-import com.ccx.demo.enums.Role;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
@@ -18,11 +17,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.ccx.demo.config.init.BeanInitializer.Beans.getAppContext;
 import static com.ccx.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 
 /**
@@ -72,14 +69,9 @@ public interface RoleRepository extends
                 .execute();
     }
 
-    @Override
-    default Optional<TabRole> findById(final Long id) {
-        return Optional.ofNullable(getAppContext().getBean(RoleRepository.class).findCacheById(id));
-    }
-
     @Cacheable(cacheNames = ITabRoleCache.CACHE_ROW_BY_ID, key = "#id")
     default TabRole findCacheById(final Long id){
-        return findOne(q.id.eq(id)).orElse(null);
+        return findById(id).orElse(null);
     }
 
     @Override

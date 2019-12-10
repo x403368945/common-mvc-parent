@@ -66,14 +66,9 @@ public interface UserRepository extends
                 .execute();
     }
 
-    @Override
-    default Optional<TabUser> findById(final Long id) {
-        return Optional.ofNullable(getAppContext().getBean(UserRepository.class).findCacheById(id));
-    }
-
     @Cacheable(cacheNames = ITabUserCache.CACHE_ROW_BY_ID, key = "#id")
     default TabUser findCacheById(final Long id) {
-        return findOne(q.id.eq(id)).orElse(null);
+        return findById(id).orElse(null);
     }
 
 //    @Query
