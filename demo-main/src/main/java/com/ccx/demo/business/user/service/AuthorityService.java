@@ -1,6 +1,6 @@
 package com.ccx.demo.business.user.service;
 
-import com.ccx.demo.business.user.entity.Authority;
+import com.ccx.demo.business.user.vo.Authority;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

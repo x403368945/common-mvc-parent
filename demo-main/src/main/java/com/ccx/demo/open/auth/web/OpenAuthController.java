@@ -2,10 +2,11 @@ package com.ccx.demo.open.auth.web;
 
 
 import com.ccx.demo.business.user.entity.TabUser;
+import com.ccx.demo.business.user.vo.TabUserVO;
 import com.ccx.demo.config.init.AppConfig.URL;
 import com.ccx.demo.enums.Session;
-import com.ccx.demo.open.auth.entity.AuthLogin;
-import com.ccx.demo.open.auth.entity.AuthLogin.Props;
+import com.ccx.demo.open.auth.vo.AuthLogin;
+import com.ccx.demo.open.auth.vo.AuthLogin.Props;
 import com.ccx.demo.open.auth.service.AuthService;
 import com.support.mvc.entity.base.Param;
 import com.support.mvc.entity.base.Result;
@@ -109,7 +110,7 @@ public class OpenAuthController {
             @PathVariable final int version,
             @RequestBody final Param param,
             HttpServletRequest request) {
-        return new Result<TabUser>(1) // 指定接口最新版本号
+        return new Result<TabUserVO>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
                         .props(Props.list())
                         .notes(Arrays.asList(
@@ -135,7 +136,7 @@ public class OpenAuthController {
                     final HttpSession session = request.getSession(true);
 //            session.setMaxInactiveInterval(60); // 测试时，设置 session 超时时间为60s
                     session.setAttribute(Session.user.name(), user);
-                    result.setSuccess(user.toLoginResult());
+                    result.setSuccess(user.toTabUserVO());
                 });
     }
 

@@ -1,7 +1,8 @@
-package com.ccx.demo.business.user.entity;
+package com.ccx.demo.business.user.vo;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.ccx.demo.business.user.cache.ITabRoleCache;
+import com.ccx.demo.business.user.entity.TabUser;
 import com.ccx.demo.enums.Radio;
 import com.querydsl.core.annotations.QueryTransient;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,7 +10,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -25,11 +25,8 @@ public class UserDetail implements UserDetails, ITabRoleCache {
         return null;
     }
 
-    public TabUser toLoginResult() {
-        return null;
-    }
-
-    public void setAuthorityList(final List<String> authorityList) {
+    public TabUserVO toTabUserVO() {
+        return TabUserVO.ofTabUser((TabUser) this);
     }
 
     @QueryTransient
@@ -41,7 +38,7 @@ public class UserDetail implements UserDetails, ITabRoleCache {
                 .flatMap(id -> getRoleAuthoritiesCacheById(id).stream())
                 .distinct()
                 .collect(Collectors.toList());
-        setAuthorityList(authorityList);
+//        setAuthorityList(authorityList);
         return authorityList.stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());

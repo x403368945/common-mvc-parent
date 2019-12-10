@@ -3,6 +3,7 @@ package com.ccx.demo.business.user.entity;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
+import com.ccx.demo.business.user.vo.Authority;
 import com.ccx.demo.enums.Radio;
 import com.ccx.demo.business.user.cache.ITabUserCache;
 import com.querydsl.core.annotations.QueryEntity;

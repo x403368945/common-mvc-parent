@@ -1,4 +1,4 @@
-package com.ccx.demo.open.auth.entity;
+package com.ccx.demo.open.auth.vo;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;

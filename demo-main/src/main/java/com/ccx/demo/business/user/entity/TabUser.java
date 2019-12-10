@@ -5,6 +5,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
 import com.ccx.demo.business.user.cache.ITabUserCache;
 import com.ccx.demo.business.user.entity.extend.ITabUser;
+import com.ccx.demo.business.user.vo.UserDetail;
 import com.ccx.demo.enums.Radio;
 import com.ccx.demo.enums.RegisterSource;
 import com.querydsl.core.annotations.PropertyType;
@@ -154,19 +155,19 @@ public class TabUser extends UserDetail implements ITabUser, ITable, ITabUserCac
     @QueryTransient
     @Transient
     private List<TabRole> roleList;
-    /**
-     * 权限指令集合
-     */
-    @QueryTransient
-    @Transient
-    private List<String> authorityList;
+
 
     @Override
     public String toString() {
         return json();
     }
 
-    // DB Start *************************************************************************************************
+    @Override
+    public TabUser loadUserDetail() {
+        return this;
+    }
+
+    // DB Start ********************************************************************************************************
     @Override
     public Then<TabUser> update(final TabUser update) {
         return Then.of(update)
@@ -213,36 +214,4 @@ public class TabUser extends UserDetail implements ITabUser, ITable, ITabUserCac
     }
 
 // DB End **************************************************************************************************************
-
-    @Override
-    public TabUser loadUserDetail() {
-        return this;
-    }
-
-    /**
-     * 构造登录返回字段
-     *
-     * @return TabUser
-     */
-    @Override
-    public TabUser toLoginResult() {
-        return TabUser.builder()
-                .id(id)
-                .uid(uid)
-                .subdomain(subdomain)
-                .username(username)
-                .nickname(nickname)
-                .phone(phone)
-                .email(email)
-                .authorityList(
-                        Objects.nonNull(authorityList) && !authorityList.isEmpty()
-                                ? authorityList
-                                : Objects.requireNonNull(getRoles(), "当前登录账户未配置权限").stream()
-                                .flatMap(id -> getRoleAuthoritiesCacheById(id).stream())
-                                .distinct()
-                                .collect(Collectors.toList())
-                )
-                .build();
-    }
-
 }

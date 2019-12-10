@@ -1,6 +1,6 @@
 package com.ccx.demo.business.user.web;
 
-import com.ccx.demo.business.user.entity.Authority;
+import com.ccx.demo.business.user.vo.Authority;
 import com.ccx.demo.business.user.entity.TabUser;
 import com.ccx.demo.business.user.service.AuthorityService;
 import com.ccx.demo.config.init.AppConfig.URL;

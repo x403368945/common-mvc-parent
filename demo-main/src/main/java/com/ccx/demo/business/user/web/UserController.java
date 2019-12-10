@@ -5,6 +5,7 @@ import com.ccx.demo.business.user.entity.TabUserLogin;
 import com.ccx.demo.business.user.entity.extend.ITabUser;
 import com.ccx.demo.business.user.service.UserLoginService;
 import com.ccx.demo.business.user.service.UserService;
+import com.ccx.demo.business.user.vo.TabUserVO;
 import com.ccx.demo.config.init.AppConfig.URL;
 import com.ccx.demo.enums.Radio;
 import com.support.mvc.entity.base.Pager;
@@ -44,7 +45,7 @@ public class UserController implements IAuthController<Long> {
     @GetMapping("/current")
     @ResponseBody
     public Result<?> current(@AuthenticationPrincipal final TabUser user, @PathVariable final int version) {
-        return new Result<TabUser>(1) // 指定接口最新版本号
+        return new Result<TabUserVO>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
                         .props(ITabUser.Props.list())
                         .notes(Arrays.asList(
@@ -55,7 +56,7 @@ public class UserController implements IAuthController<Long> {
                 )
                 .execute(result -> result
                         .versionAssert(version)
-                        .setSuccess(user.toLoginResult())
+                        .setSuccess(user.toTabUserVO())
                 );
     }
 

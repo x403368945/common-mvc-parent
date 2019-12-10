@@ -1,6 +1,6 @@
 package com.ccx.demo.business.user.enums;
 
-import com.ccx.demo.business.user.entity.Authority;
+import com.ccx.demo.business.user.vo.Authority;
 
 import java.util.Arrays;
 

@@ -2,7 +2,7 @@ package com.ccx.demo.business.user.service;
 
 import com.ccx.demo.business.user.cache.ITabRoleCache;
 import com.ccx.demo.business.user.dao.jpa.RoleRepository;
-import com.ccx.demo.business.user.entity.Authority;
+import com.ccx.demo.business.user.vo.Authority;
 import com.ccx.demo.business.user.entity.QTabRole;
 import com.ccx.demo.business.user.entity.TabRole;
 import com.ccx.demo.enums.Radio;
