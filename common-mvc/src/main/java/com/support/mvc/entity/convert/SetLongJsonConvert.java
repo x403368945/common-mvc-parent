@@ -9,11 +9,11 @@ import java.util.Set;
 
 /**
  * 支撑 mysql 原生 JSON 数据类型与实体类属性的映射；
- * 需要在实体类属性上添加注解：@Convert(converter = {@link MysqlSetLongConvert}.class)
+ * 需要在实体类属性上添加注解：@Convert(converter = {@link SetLongJsonConvert}.class)
  *
  * @author 谢长春 2019/2/12
  */
-public class MysqlSetLongConvert implements AttributeConverter<Set<Long>, String> {
+public class SetLongJsonConvert implements AttributeConverter<Set<Long>, String> {
     @Override
     public String convertToDatabaseColumn(final Set<Long> attribute) {
         return JSON.toJSONString(attribute);

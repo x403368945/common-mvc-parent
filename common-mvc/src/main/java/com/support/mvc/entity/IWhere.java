@@ -72,7 +72,7 @@ public interface IWhere<U, W> {
      *
      * @return {@link OrderSpecifier[]}
      */
-    default OrderSpecifier[] buildQdslSorts() {
+    default OrderSpecifier<?>[] buildQdslSorts() {
         final List<Sorts> sorts = parseSorts();
         if (Objects.isNull(sorts) || sorts.isEmpty()) {
             // 按默认字段排序
@@ -230,7 +230,7 @@ public interface IWhere<U, W> {
          * @param supplier   {@link Supplier<BooleanExpression>}
          * @return {@link QdslWhere}
          */
-        public QdslWhere andIfNonEmpty(final Collection collection, final Supplier<BooleanExpression> supplier) {
+        public QdslWhere andIfNonEmpty(final Collection<BooleanExpression> collection, final Supplier<BooleanExpression> supplier) {
             return and(Objects.nonNull(collection) && !collection.isEmpty(), supplier);
         }
 
@@ -275,7 +275,7 @@ public interface IWhere<U, W> {
             }
             return (1 == expressions.size())
                     ? expressions.get(0)
-                    : expressions.stream().reduce((s, v) -> s.and(v)).orElse(null);
+                    : expressions.stream().reduce(BooleanExpression::and).orElse(null);
         }
 
         /**
@@ -372,7 +372,7 @@ public interface IWhere<U, W> {
                 }
                 return (1 == expressions.size())
                         ? expressions.get(0)
-                        : expressions.stream().reduce((s, v) -> s.or(v)).orElse(null);
+                        : expressions.stream().reduce(BooleanExpression::or).orElse(null);
             }
         }
     }

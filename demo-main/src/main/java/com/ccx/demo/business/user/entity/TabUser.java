@@ -16,7 +16,7 @@ import com.support.mvc.entity.ITable;
 import com.support.mvc.entity.IWhere;
 import com.support.mvc.entity.IWhere.QdslWhere;
 import com.support.mvc.entity.base.Sorts;
-import com.support.mvc.entity.convert.MysqlListLongConvert;
+import com.support.mvc.entity.convert.ListLongJsonConvert;
 import com.support.mvc.entity.validated.ISave;
 import com.support.mvc.entity.validated.IUpdate;
 import com.utils.util.Then;
@@ -104,7 +104,7 @@ public class TabUser extends UserDetail implements ITabUser, ITable, ITabUserCac
      * 用户角色
      * {@link TabRole#getId()}
      */
-    @Convert(converter = MysqlListLongConvert.class)
+    @Convert(converter = ListLongJsonConvert.class)
     @QueryType(PropertyType.STRING)
     private List<Long> roles;
     /**

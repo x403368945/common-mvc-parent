@@ -8,11 +8,11 @@ import java.util.Set;
 
 /**
  * 支撑 mysql 原生 JSON 数据类型与实体类属性的映射；
- * 需要在实体类属性上添加注解：@Convert(converter = {@link MysqlSetIntegerConvert}.class)
+ * 需要在实体类属性上添加注解：@Convert(converter = {@link SetIntegerJsonConvert}.class)
  *
  * @author 谢长春 2019/2/12
  */
-public class MysqlSetIntegerConvert implements AttributeConverter<Set<Integer>, String> {
+public class SetIntegerJsonConvert implements AttributeConverter<Set<Integer>, String> {
     @Override
     public String convertToDatabaseColumn(final Set<Integer> attribute) {
         return JSON.toJSONString(attribute);

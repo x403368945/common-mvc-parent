@@ -14,7 +14,7 @@ import com.support.mvc.entity.IWhere;
 import com.support.mvc.entity.IWhere.QdslWhere;
 import com.support.mvc.entity.base.Prop;
 import com.support.mvc.entity.base.Sorts;
-import com.support.mvc.entity.convert.MysqlListStringConvert;
+import com.support.mvc.entity.convert.ListStringJsonConvert;
 import com.support.mvc.entity.validated.IMarkDelete;
 import com.support.mvc.entity.validated.ISave;
 import com.support.mvc.entity.validated.IUpdate;
@@ -85,7 +85,7 @@ public final class TabRole implements
     /**
      * 权限指令集合，tab_authority.id，{@link List<String>}
      */
-    @Convert(converter = MysqlListStringConvert.class)
+    @Convert(converter = ListStringJsonConvert.class)
     private List<String> authorities;
     /**
      * 创建时间
