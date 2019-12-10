@@ -1,5 +1,6 @@
 package com.ccx.demo.business.user.entity.extend;
 
+import com.ccx.demo.business.user.entity.TabUser;
 import com.ccx.demo.enums.Radio;
 import com.ccx.demo.enums.RegisterSource;
 import com.ccx.demo.enums.Role;
@@ -54,11 +55,11 @@ public interface ITabUser {
         }
 
         public static List<Prop> list() {
-            return Stream.of(Props.values()).map(Props::getProp).collect(Collectors.toList());
+            return Stream.of(TabUser.Props.values()).map(TabUser.Props::getProp).collect(Collectors.toList());
         }
 
         public static List<Prop> list(final Props... props) {
-            return Stream.of(props).map(Props::getProp).collect(Collectors.toList());
+            return Stream.of(props).map(TabUser.Props::getProp).collect(Collectors.toList());
         }
     }
 
@@ -90,7 +91,7 @@ public interface ITabUser {
          * @return {@link String[]}
          */
         public static String[] names() {
-            return Stream.of(OrderBy.values()).map(Enum::name).toArray(String[]::new);
+            return Stream.of(TabUser.OrderBy.values()).map(Enum::name).toArray(String[]::new);
         }
 
         OrderBy(final ComparableExpressionBase<?> qdsl) {

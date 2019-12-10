@@ -9,14 +9,10 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.support.mvc.dao.IRepository;
 import com.support.mvc.entity.base.Pager;
-import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static com.ccx.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 
@@ -29,19 +25,6 @@ public interface DemoListRepository extends
         JpaRepository<TabDemoList, Long>,
         IRepository<TabDemoList, Long> {
     QTabDemoList q = QTabDemoList.tabDemoList;
-
-    @Modifying
-    @Query
-    default void updateNickName(final Long userId, final String nickname) {
-        jpaQueryFactory.<JPAQueryFactory>get().update(q)
-                .set(q.insertUserName, nickname)
-                .where(q.insertUserId.eq(userId))
-                .execute();
-        jpaQueryFactory.<JPAQueryFactory>get().update(q)
-                .set(q.updateUserName, nickname)
-                .where(q.updateUserId.eq(userId))
-                .execute();
-    }
 
     @Override
     default long update(final Long id, final Long userId, final TabDemoList obj) {

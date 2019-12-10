@@ -34,8 +34,7 @@ import static com.ccx.demo.enums.DBRoute.*;
  * @author 谢长春 2019/1/23
  */
 @Configuration
-//@EnableTransactionManagement(order=2)
-@EnableJpaRepositories(basePackages = {"com.ccx.**.dao"})
+@EnableJpaRepositories(basePackages = {"com.ccx.**.dao.jpa"})
 public class DBConfig {
 
     /**

@@ -1,4 +1,4 @@
-package com.ccx.demo.business.common.entity;
+package com.ccx.demo.business.common.vo;
 
 import com.ccx.demo.config.init.AppConfig.Path;
 import com.support.mvc.enums.Code;

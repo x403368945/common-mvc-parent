@@ -1,8 +1,8 @@
 package com.ccx.demo.business.common.web;
 
-import com.ccx.demo.business.common.entity.FileInfo;
-import com.ccx.demo.business.common.entity.FileInfo.Props;
-import com.ccx.demo.business.common.entity.FileUpload;
+import com.ccx.demo.business.common.vo.FileInfo;
+import com.ccx.demo.business.common.vo.FileInfo.Props;
+import com.ccx.demo.business.common.vo.FileUpload;
 import com.ccx.demo.config.init.AppConfig.URL;
 import com.support.mvc.entity.base.Result;
 import com.utils.util.Util;

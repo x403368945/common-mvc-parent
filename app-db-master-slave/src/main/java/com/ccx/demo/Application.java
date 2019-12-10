@@ -1,12 +1,12 @@
 package com.ccx.demo;
 
 import com.ccx.demo.config.init.AppProperties;
-import com.support.config.BusConfig;
 import com.support.config.InitConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
@@ -20,9 +20,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
  */
 // spring-boot start >>
 @SpringBootApplication
-@Import(value = {InitConfig.class, BusConfig.class})
+@Import(value = {InitConfig.class})
 @EnableConfigurationProperties(value = {AppProperties.class})
 @EnableJpaAuditing
+@EnableCaching
 public class Application extends SpringBootServletInitializer {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

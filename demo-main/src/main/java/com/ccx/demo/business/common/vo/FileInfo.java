@@ -1,4 +1,4 @@
-package com.ccx.demo.business.common.entity;
+package com.ccx.demo.business.common.vo;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;

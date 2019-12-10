@@ -30,19 +30,6 @@ public interface DemoListRepository extends
         IRepository<TabDemoList, Long> {
     QTabDemoList q = QTabDemoList.tabDemoList;
 
-    @Modifying
-    @Query
-    default void updateNickName(final Long userId, final String nickname) {
-        jpaQueryFactory.<JPAQueryFactory>get().update(q)
-                .set(q.insertUserName, nickname)
-                .where(q.insertUserId.eq(userId))
-                .execute();
-        jpaQueryFactory.<JPAQueryFactory>get().update(q)
-                .set(q.updateUserName, nickname)
-                .where(q.updateUserId.eq(userId))
-                .execute();
-    }
-
     @Override
     default long update(final Long id, final Long userId, final TabDemoList obj) {
         return obj.update(jpaQueryFactory.<JPAQueryFactory>get().update(q))

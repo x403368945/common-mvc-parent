@@ -21,7 +21,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
  */
 // spring-boot start >>
 @SpringBootApplication
-@Import(value = {InitConfig.class, BusConfig.class})
+@Import(value = {InitConfig.class})
 @EnableConfigurationProperties(value = {AppProperties.class})
 @EnableJpaAuditing
 @EnableCaching

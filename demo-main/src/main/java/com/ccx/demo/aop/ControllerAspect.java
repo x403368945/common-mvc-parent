@@ -50,11 +50,11 @@ public class ControllerAspect implements IControllerAspect {
         log(joinPoint, result, time);
         if (result instanceof Result) {
             if (AppConfig.isDev()) {
-                Optional.ofNullable(((Result) result).getVersion())
+                Optional.ofNullable(((Result<?>) result).getVersion())
                         .ifPresent(version -> version.write(Path.MD.absolute()));
             } else if (AppConfig.isProd()) {
                 // 生产环境不返回最详细的版本信息
-                Optional.of(((Result) result)).ifPresent(r -> r.setVersion(null));
+                Optional.of(((Result<?>) result)).ifPresent(r -> r.setVersion(null));
             }
         }
     }

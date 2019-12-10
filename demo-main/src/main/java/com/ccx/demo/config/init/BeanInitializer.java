@@ -1,7 +1,6 @@
 package com.ccx.demo.config.init;
 
 import com.ccx.demo.business.user.dao.jpa.UserRepository;
-import com.google.common.eventbus.EventBus;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.support.config.InitConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +40,6 @@ public class BeanInitializer implements InitConfig.Initializer {
      * TODO 枚举：定义单例类、实体类、接口需要的bean，因为单例类无法直接注入bean
      */
     public enum Beans {
-        eventBus("EventBus", EventBus.class),
         //        jedisPool("redis 缓存池", JedisPool.class),
         singleThread("单线程服务", ExecutorService.class),
         multiThread("多线程服务", ExecutorService.class),

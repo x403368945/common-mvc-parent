@@ -347,7 +347,7 @@ public class DemoListController implements IAuthController<Long> {
                         .build()
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl()), // 当前接口参考案例请求地址；
                                 TabDemoList.builder() // 当前接口参考案例请求参数，demo中设置支持查询的字段
-                                        .status(DemoStatus._NONE)
+                                        .status(DemoStatus.NONE)
                                         .insertUserId(1L)
                                         .updateUserId(1L)
                                         .deleted(Radio.NO)
@@ -387,7 +387,7 @@ public class DemoListController implements IAuthController<Long> {
                         .build()
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(1, 20)), // 当前接口参考案例请求地址；
                                 TabDemoList.builder() // 当前接口参考案例请求参数，demo中设置支持查询的字段
-                                        .status(DemoStatus._NONE)
+                                        .status(DemoStatus.NONE)
                                         .insertUserId(1L)
                                         .updateUserId(1L)
                                         .deleted(Radio.NO)

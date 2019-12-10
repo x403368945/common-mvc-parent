@@ -1,26 +1,25 @@
 package com.ccx.demo.business.user.dao.jpa;
 
+import com.ccx.demo.business.user.cache.ITabUserCache;
 import com.ccx.demo.business.user.entity.QTabUser;
 import com.ccx.demo.business.user.entity.TabUser;
-import com.ccx.demo.config.CacheConfig;
 import com.ccx.demo.enums.Radio;
 import com.querydsl.core.QueryResults;
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.support.aop.annotations.Master;
 import com.support.mvc.dao.IRepository;
 import com.support.mvc.entity.base.Pager;
 import com.utils.util.Op;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.ccx.demo.business.user.entity.QTabUser.tabUser;
+import static com.ccx.demo.config.init.BeanInitializer.Beans.getAppContext;
 import static com.ccx.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 
 /**
@@ -33,11 +32,18 @@ public interface UserRepository extends
         IRepository<TabUser, Long> {
     QTabUser q = tabUser;
 
-
-    @Cacheable(cacheNames = CacheConfig.nicknameCache, key = "#id")
-    @Query
-    default String getNickame(final Long id) {
-        return jpaQueryFactory.<JPAQueryFactory>get().select(q.nickname).from(q).where(q.id.eq(id)).fetchOne();
+    @Override
+    default long update(final Long id, final Long userId, final TabUser obj) {
+        return findById(id)
+                .filter(dest -> Objects.equals(dest.getUid(), obj.getUid()))
+                .filter(dest -> Objects.equals(dest.getDeleted(), Radio.NO))
+                .map(dest -> {
+                    obj.update(dest);
+                    dest.setUpdateUserId(userId);
+                    return 1L;
+                })
+                .orElse(0L)
+                ;
     }
 
     @Override
@@ -60,7 +66,12 @@ public interface UserRepository extends
                 .execute();
     }
 
-    //    @Query
+    @Cacheable(cacheNames = ITabUserCache.CACHE_ROW_BY_ID, key = "#id")
+    default TabUser findCacheById(final Long id) {
+        return findById(id).orElse(null);
+    }
+
+//    @Query
 //    @Override
 //    default List<TabUser> findList( final TabUser condition) {
 //        final QTabUser q = tabUser;
@@ -81,28 +92,28 @@ public interface UserRepository extends
                 .fetchResults();
     }
 
-    /**
-     * 查询部分字段，这些字段会被缓存到 redis
-     *
-     * @return List<TabUser>
-     */
-    default List<TabUser> getSimpleList() {
-        return jpaQueryFactory.<JPAQueryFactory>get()
-                .select(Projections.bean(TabUser.class, q.id, q.uid, q.username, q.nickname, q.phone, q.email, q.role))
-                .from(q)
-                .fetch();
-//                .stream()
-//                .map(row -> TabUser.builder()
-//                        .id(row.get(q.id))
-//                        .subdomain(row.get(q.subdomain))
-//                        .username(row.get(q.username))
-//                        .phone(row.get(q.phone))
-//                        .email(row.get(q.email))
-//                        .nickname(row.get(q.nickname))
-//                        .role(row.get(q.role))
-//                        .build()
-//                ).collect(Collectors.toList());
-    }
+//    /**
+//     * 查询部分字段，这些字段会被缓存到 redis
+//     *
+//     * @return List<TabUser>
+//     */
+//    default List<TabUser> getSimpleList() {
+//        return jpaQueryFactory.<JPAQueryFactory>get()
+//                .select(Projections.bean(TabUser.class, q.id, q.uid, q.username, q.nickname, q.phone, q.email, q.roles))
+//                .from(q)
+//                .fetch();
+////                .stream()
+////                .map(row -> TabUser.builder()
+////                        .id(row.get(q.id))
+////                        .subdomain(row.get(q.subdomain))
+////                        .username(row.get(q.username))
+////                        .phone(row.get(q.phone))
+////                        .email(row.get(q.email))
+////                        .nickname(row.get(q.nickname))
+////                        .role(row.get(q.role))
+////                        .build()
+////                ).collect(Collectors.toList());
+//    }
 
     /**
      * 按【登录账户、手机号、邮箱】查找用户
@@ -110,23 +121,12 @@ public interface UserRepository extends
      * @param username String 登录账户名
      * @return Optional<TabUser>
      */
-    @Master
-    @Cacheable(cacheNames = CacheConfig.loginCache, key = "#username")
+    @Cacheable(cacheNames = ITabUserCache.CACHE_LOGIN, key = "#username")
     default Optional<TabUser> findUser(final String username) {
         return Op.of(findOne(q.username.eq(username)))
                 .orElseOf(() -> findOne(q.phone.eq(username)))
                 .orElseOf(() -> findOne(q.email.eq(username)))
                 .optional();
-    }
-
-    /**
-     * 通知清除登录查询缓存，修改密码、修改昵称后都需要触发该方法，清除 {@link UserRepository#findUser(String)} 缓存，
-     * 在 {@link UserRepository} 内方法之间相互调用无法触发 @CacheEvict 代理， 必须在 service 层触发，
-     *
-     * @param username String 登录账户名
-     */
-    @CacheEvict(cacheNames = CacheConfig.loginCache, key = "#username")
-    default void clearLoginCache(final String username) {
     }
 
     /**
@@ -156,7 +156,6 @@ public interface UserRepository extends
      * @param userId   Long 修改者ID
      * @return long 影响行数
      */
-    @CacheEvict(cacheNames = CacheConfig.nicknameCache, key = "#id")
     @Modifying
     @Query
     default long updateNickname(final Long id, final String nickname, final Long userId) {
@@ -203,4 +202,5 @@ public interface UserRepository extends
 //                .where(q.id.eq(id))
 //                .execute();
 //    }
+
 }

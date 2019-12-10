@@ -4,8 +4,8 @@ package com.ccx.demo.open.auth.web;
 import com.ccx.demo.business.user.entity.TabUser;
 import com.ccx.demo.config.init.AppConfig.URL;
 import com.ccx.demo.enums.Session;
-import com.ccx.demo.open.auth.entity.AuthLogin;
-import com.ccx.demo.open.auth.entity.AuthLogin.Props;
+import com.ccx.demo.open.auth.vo.AuthLogin;
+import com.ccx.demo.open.auth.vo.AuthLogin.Props;
 import com.ccx.demo.open.auth.service.AuthService;
 import com.support.mvc.entity.base.Param;
 import com.support.mvc.entity.base.Result;
@@ -135,7 +135,7 @@ public class OpenAuthController {
                     final HttpSession session = request.getSession(true);
 //            session.setMaxInactiveInterval(60); // 测试时，设置 session 超时时间为60s
                     session.setAttribute(Session.user.name(), user);
-                    result.setSuccess(user.toLoginResult());
+                    result.setSuccess(user.toTabUserVO());
                 });
     }
 

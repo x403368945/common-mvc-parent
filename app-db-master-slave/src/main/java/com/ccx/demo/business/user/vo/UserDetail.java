@@ -1,36 +1,47 @@
-package com.ccx.demo.business.user.entity;
+package com.ccx.demo.business.user.vo;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.ccx.demo.business.user.cache.ITabRoleCache;
+import com.ccx.demo.business.user.entity.TabUser;
 import com.ccx.demo.enums.Radio;
 import com.querydsl.core.annotations.QueryTransient;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Spring Security 鉴权信息
  *
- *
  * @author 谢长春 on 2018/3/15.
  */
-public class UserDetail implements UserDetails {
+public class UserDetail implements UserDetails, ITabRoleCache {
 
     public TabUser loadUserDetail() {
         return null;
     }
 
-    public TabUser toLoginResult() {
-        return null;
+    public TabUserVO toTabUserVO() {
+        return TabUserVO.ofTabUser((TabUser) this);
     }
 
     @QueryTransient
     @JSONField(serialize = false, deserialize = false)
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(loadUserDetail().getRole().toAuthority());
+//        return Collections.singletonList(loadUserDetail().getRole().toAuthority());
+        final List<String> authorityList = loadUserDetail().getRoles().stream()
+                .flatMap(id -> getRoleAuthoritiesCacheById(id).stream())
+                .distinct()
+                .collect(Collectors.toList());
+//        setAuthorityList(authorityList);
+        return authorityList.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
     @QueryTransient

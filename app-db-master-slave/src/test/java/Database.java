@@ -22,7 +22,6 @@ public class Database {
         );
         pkgs.forEach(pkg -> {
             try {
-                System.out.println(String.format("%s/%s/src/main/resources/db/db.sql", dir, pkg));
                 writer.write(FPath.of(dir, pkg, "/src/main/resources/db/db.sql").readByte());
             } catch (Exception e) {
                 throw new RuntimeException(e);

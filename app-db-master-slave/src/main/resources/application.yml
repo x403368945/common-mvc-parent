@@ -81,6 +81,14 @@ spring:
       - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 #      - com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
       - org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration
+  cache: # 需要使用 @EnableCaching 开启缓存，缓存配置
+#    type: simple
+#    cache-names: # 缓存名称， 使用 @CacheEvict 注解的 cacheNames 必须在这里定义
+#      - "ITabUserCache"
+#      - "ITabUserCache.login"
+#      - "ITabRoleCache"
+    ehcache:
+      config: ehcache.xml
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     druid: # https://github.com/alibaba/druid/tree/master/druid-spring-boot-starter

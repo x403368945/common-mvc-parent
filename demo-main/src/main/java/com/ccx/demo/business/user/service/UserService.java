@@ -1,12 +1,10 @@
 package com.ccx.demo.business.user.service;
 
-import com.ccx.demo.business.user.bordcast.IUserEvent;
 import com.ccx.demo.business.user.cache.ITabUserCache;
 import com.ccx.demo.business.user.dao.jpa.UserRepository;
 import com.ccx.demo.business.user.entity.TabRole;
 import com.ccx.demo.business.user.entity.TabUser;
 import com.google.common.collect.Sets;
-import com.google.common.eventbus.EventBus;
 import com.querydsl.core.QueryResults;
 import com.support.aop.annotations.ServiceAspect;
 import com.support.mvc.entity.base.Pager;
@@ -43,8 +41,6 @@ public class UserService implements IService<TabUser>, ITabUserCache {
 
     @Autowired
     private UserRepository repository;
-    @Autowired
-    private EventBus eventBus;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -93,11 +89,7 @@ public class UserService implements IService<TabUser>, ITabUserCache {
         final List<Long> validRoleIds = roleService.matchValidRoleIds(obj.getRoleList());
         obj.setRoles(validRoleIds);
         obj.setPassword(passwordEncoder.encode(obj.getPassword()));
-        final TabUser user = repository.save(obj);
-        { // 发送广播
-            eventBus.post(IUserEvent.UserNew.of(user));
-        }
-        return user;
+        return repository.save(obj);
     }
 
     @Override
@@ -165,9 +157,6 @@ public class UserService implements IService<TabUser>, ITabUserCache {
                                @NotNull(message = "【userId】不能为null") @Positive(message = "【userId】必须大于0") final Long userId) {
         UpdateRowsException.asserts(repository.updateNickname(id, nickname, userId));
         clearCache(id);
-        { // 发送广播
-            eventBus.post(IUserEvent.NicknameUpdate.of(TabUser.builder().id(id).nickname(nickname).build()));
-        }
     }
 
     /**

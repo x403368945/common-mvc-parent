@@ -187,10 +187,8 @@ public class TabDemoList implements
         status(ENUM.build(true, "状态").setOptions(DemoStatus.comments())),
         insertTime(TIMESTAMP.build("创建时间")),
         insertUserId(LONG.build("创建用户ID")),
-        insertUserName(STRING.build("创建用户昵称")),
         updateTime(TIMESTAMP.build("修改时间")),
         updateUserId(LONG.build("修改用户ID")),
-        updateUserName(STRING.build("修改用户昵称")),
         deleted(ENUM.build("是否逻辑删除").setOptions(Radio.comments())),
         timestamp(LONG.build("数据最后一次更新时间戳")),
         amountRange(RANGE_NUM.apply("金额查询区间")),
@@ -277,7 +275,6 @@ public class TabDemoList implements
                 .then(status, update -> update.set(q.status, status))
                 // 强制更新操作人信息
                 .then(update -> update.set(q.updateUserId, updateUserId))
-                .then(update -> update.set(q.updateUserName, updateUserName))
 
                 // 假设数据库中 content is not null；可以在属性为null时替换为 ""
 //                .then(update -> update.set(q.content, Optional.ofNullable(content).orElse("")))

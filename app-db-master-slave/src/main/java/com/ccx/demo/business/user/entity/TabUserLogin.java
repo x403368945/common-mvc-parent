@@ -123,12 +123,15 @@ public class TabUserLogin implements ITable, IWhere<JPAUpdateClause, QdslWhere> 
         public Sorts get(final Sorts.Direction direction) {
             return Objects.equals(direction, Sorts.Direction.DESC) ? desc : asc;
         }
+
         public Sorts.Order asc() {
             return Sorts.Order.builder().name(this.name()).direction(Sorts.Direction.ASC).build();
         }
+
         public Sorts.Order desc() {
             return Sorts.Order.builder().name(this.name()).direction(Sorts.Direction.DESC).build();
         }
+
         /**
          * 获取所有排序字段名
          *
@@ -150,9 +153,11 @@ public class TabUserLogin implements ITable, IWhere<JPAUpdateClause, QdslWhere> 
     public QdslWhere where() {
         final QTabUserLogin q = tabUserLogin;
         return QdslWhere.of()
+                .and(id, () -> q.id.eq(id))
+                .and(userId, () -> q.id.eq(userId))
                 .and(timestampRange, () -> {
                     timestampRange.rebuild();
-                    return q.timestamp.between(timestampRange.getBegin(), timestampRange.getEnd());
+                    return q.timestamp.between(timestampRange.rebuild().getBegin(), timestampRange.getEnd());
                 });
     }
 
