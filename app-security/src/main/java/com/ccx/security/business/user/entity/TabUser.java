@@ -33,6 +33,7 @@ import static com.support.mvc.entity.base.Prop.Type.*;
 @Builder
 @Data
 @EqualsAndHashCode(callSuper = false)
+@ToString(exclude = {"password"})
 @JSONType(orders = {"id", "uid", "username", "nickname", "phone", "email", "role", "deleted"})
 public class TabUser extends UserDetail implements IJson {
 
@@ -136,11 +137,6 @@ public class TabUser extends UserDetail implements IJson {
      */
     @Column(insertable = false, updatable = false)
     private Radio deleted;
-
-    @Override
-    public String toString() {
-        return json();
-    }
 
     @Override
     public TabUser loadUserDetail() {

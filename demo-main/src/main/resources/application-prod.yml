@@ -97,7 +97,11 @@ spring:
   #    data: classpath:database-init.sql
   data:
     mongodb:
-      host: localhost
-      port: 27017
-      database: demo_main_db
-      #uri: mongodb://name:pass@localhost/demo_main_db
+      #      host: localhost
+      #      port: 27017
+      #      authentication-database: admin
+      #      username: root
+      #      password: 111111
+      #      database: demo_main_db
+      auto-index-creation: true
+      uri: "mongodb://root:111111@localhost:27017/demo_main_db?authSource=admin&authMechanism=SCRAM-SHA-1"

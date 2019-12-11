@@ -55,6 +55,7 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 @Builder
 @Data
 @EqualsAndHashCode(callSuper = false)
+@ToString(exclude = {"password"})
 @JSONType(orders = {"id", "uid", "subdomain", "username", "nickname", "phone", "email", "role", "registerSource", "deleted"})
 public class TabUser extends UserDetail implements ITabUser, ITable, ITabUserCache, IWhere<TabUser, QdslWhere> {
 
@@ -155,12 +156,6 @@ public class TabUser extends UserDetail implements ITabUser, ITable, ITabUserCac
     @QueryTransient
     @Transient
     private List<TabRole> roleList;
-
-
-    @Override
-    public String toString() {
-        return json();
-    }
 
     @Override
     public TabUser loadUserDetail() {

@@ -47,5 +47,11 @@ public @interface MongoServiceAspect {
      * save | saveAll 方法是否自动设置Radio.NO 到 deleted 字段
      */
     Class<? extends Enum> deleted() default Deleted.class;
+    /**
+     * save | saveAll 方法是否自动设置当前时间到 [createTime] 字段
+     *
+     * @return boolean
+     */
+    boolean timestamp() default true;
 
 }

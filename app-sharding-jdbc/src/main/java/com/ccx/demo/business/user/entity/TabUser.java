@@ -49,6 +49,7 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 @Builder
 @Data
 @EqualsAndHashCode(callSuper = false)
+@ToString(exclude = {"password"})
 @JSONType(orders = {"id", "uid", "subdomain", "username", "nickname", "phone", "email", "role", "registerSource", "deleted"})
 public class TabUser extends UserDetail implements ITabUser, ITable, IUserCache, IWhere<JPAUpdateClause, QdslWhere> {
 
@@ -139,12 +140,6 @@ public class TabUser extends UserDetail implements ITabUser, ITable, IUserCache,
     @QueryTransient
     @Transient
     private List<Sorts.Order> sorts;
-
-    @Override
-    public String toString() {
-        return json();
-    }
-
 
 // DB Start *************************************************************************************************
 

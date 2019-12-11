@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -217,6 +219,9 @@ public interface IServiceAspect {
                     set(obj, "insertUserName", nickname);
                     set(obj, "updateUserName", nickname);
                 }
+            }
+            if (service.timestamp()) { // MongoDB 没有自动更新时间戳的功能，将当前时间戳填充到新增对象 createTime|modifyTime 字段
+                set(obj, "insertTime", Timestamp.from(Instant.now()));
             }
             // 填充 Radio.NO 到新增对象 deleted 字段
             set(obj, "deleted", Enum.valueOf(service.deleted(), "NO"));  // 只有 mongodb 才需要，mysql 可以在建表的时候设置默认值

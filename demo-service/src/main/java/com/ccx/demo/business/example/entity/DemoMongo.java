@@ -25,7 +25,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -34,6 +34,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.query.Update;
 
 import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
 import javax.validation.constraints.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -102,8 +103,6 @@ public class DemoMongo implements
     /**
      * 创建时间
      */
-    @CreatedDate
-    @Null(groups = {ISave.class})
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Timestamp insertTime;
     /**

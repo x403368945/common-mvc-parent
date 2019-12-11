@@ -123,13 +123,6 @@ public class TabDemoList implements
     @Positive
     private Long insertUserId;
     /**
-     * 创建用户昵称
-     */
-    @Column(updatable = false)
-    @NotNull(groups = {ISave.class})
-    @Size(max = 30)
-    private String insertUserName;
-    /**
      * 修改时间
      */
     @Column(insertable = false, updatable = false)
@@ -141,12 +134,6 @@ public class TabDemoList implements
     @NotNull(groups = {ISave.class, IUpdate.class})
     @Positive
     private Long updateUserId;
-    /**
-     * 修改用户昵称
-     */
-    @NotNull(groups = {ISave.class, IUpdate.class})
-    @Size(max = 30)
-    private String updateUserName;
     /**
      * 是否逻辑删除（1、已删除， 0、未删除）
      */

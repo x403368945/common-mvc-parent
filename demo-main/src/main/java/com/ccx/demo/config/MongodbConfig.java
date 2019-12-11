@@ -1,15 +1,10 @@
 package com.ccx.demo.config;
 
-import com.mongodb.MongoClient;
-import com.mongodb.ServerAddress;
 import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.data.convert.CustomConversions;
 import org.springframework.data.mongodb.MongoDbFactory;
-import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver;
 import org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper;
@@ -20,7 +15,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 import java.sql.Timestamp;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 
 /**
@@ -36,7 +30,7 @@ import java.util.Date;
 @EnableMongoRepositories(basePackages = {"com.ccx.**.dao.mongo"})
 public class MongodbConfig {
 
-    public class TimestampConverter implements Converter<Date, Timestamp> {
+    public static class TimestampConverter implements Converter<Date, Timestamp> {
         @Override
         public Timestamp convert(Date date) {
             return new Timestamp(date.getTime());
@@ -82,5 +76,4 @@ public class MongodbConfig {
     public MongoTemplate mongoTemplate(MongoDbFactory dbFactory, MappingMongoConverter converter) {
         return new MongoTemplate(dbFactory, converter);
     }
-
 }
