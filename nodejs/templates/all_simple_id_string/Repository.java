@@ -12,6 +12,7 @@ import com.support.mvc.entity.base.Pager;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static <%=pkg%>.config.init.BeanInitializer.Beans.jpaQueryFactory;
 
@@ -26,32 +27,43 @@ public interface <%=JavaName%>Repository extends
     Q<%=TabName%> q = Q<%=TabName%>.<%=tabName%>;
 
 //     @CacheEvict(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
-    @Override
-    default long update(final <%=id%> id, final <%=TabName%> obj) {
-        return obj.update(jpaQueryFactory.<JPAQueryFactory>get().update(q))
-                .get()
-                .where(q.id.eq(id))
-                .execute();
-    }
+//    @Override
+//    default long update(final <%=id%> id, final <%=TabName%> obj) {
+//        return obj.update(jpaQueryFactory.<JPAQueryFactory>get().update(q))
+//        .get()
+//        .where(q.id.eq(id).and(q.updateTime.eq(obj.getUpdateTime())))
+//        .execute();
+//    }
 
 //     @CacheEvict(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
-    @Override
-    default long markDeleteById(final <%=id%> id) {
-        return jpaQueryFactory.<JPAQueryFactory>get()
-                .update(q)
-                .set(q.deleted, Radio.YES)
-                .where(q.id.eq(id).and(q.deleted.eq(Radio.NO)))
-                .execute();
-    }
+//    @Override
+//    default long markDeleteById(final <%=id%> id) {
+//        return jpaQueryFactory.<JPAQueryFactory>get()
+//                .update(q)
+//                .set(q.deleted, Radio.YES)
+//                .where(q.id.eq(id).and(q.deleted.eq(Radio.NO)))
+//                .execute();
+//    }
 
-    @Override
-    default long markDeleteByIds(final List<<%=id%>> ids) {
-        return jpaQueryFactory.<JPAQueryFactory>get()
-                .update(q)
-                .set(q.deleted, Radio.YES)
-                .where(q.id.in(ids).and(q.deleted.eq(Radio.NO)))
-                .execute();
-    }
+//    @Override
+//    default long markDeleteByIds(final List<<%=id%>> ids) {
+//        return jpaQueryFactory.<JPAQueryFactory>get()
+//                .update(q)
+//                .set(q.deleted, Radio.YES)
+//                .where(q.id.in(ids).and(q.deleted.eq(Radio.NO)))
+//                .execute();
+//    }
+
+//    @Override
+//    default long markDelete(final List<<%=TabName%>> list) {
+//        return jpaQueryFactory.<JPAQueryFactory>get()
+//                   .update(q)
+//                   .set(q.deleted, Radio.YES)
+//                   .where(q.id.in(list.stream().map(<%=TabName%>::getId).toArray(String[]::new))
+//                       .and(q.deleted.eq(Radio.NO))
+//                    )
+//                    .execute();
+//    }
 
 //     @Cacheable(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
 //     default <%=TabName%> findCacheById(final <%=id%> id){
@@ -87,7 +99,6 @@ public interface <%=JavaName%>Repository extends
                 .orderBy(condition.buildQdslSorts())
                 .fetchResults();
     }
-
 
     @Override
     default QueryResults<<%=TabName%>> findPage(final <%=TabName%> condition, final Pager pager, final Expression<?>... exps) {

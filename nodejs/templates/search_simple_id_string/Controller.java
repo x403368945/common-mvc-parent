@@ -45,7 +45,7 @@ public class <%=JavaName%>Controller implements IController<<%=id%>> {
                                 "1. <%=comment%>"
                         ))
                         .build()
-                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100)))) // 当前接口参考案例请求地址；
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl("100")))) // 当前接口参考案例请求地址；
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号

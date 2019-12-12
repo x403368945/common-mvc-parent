@@ -18,7 +18,7 @@
         <module>app-socket</module><!-- Spring Socket 基本应用【参考案例，独立运行】 -->
         <module>app-demo</module><!-- 组合打包所有发布模块，避免出现循环依赖 -->
         <module>app-db-master-slave</module>
-        <module>app-sharding-jdbc</module><!-- 单独打包发布 -->
+        <!--<module>app-sharding-jdbc</module>--><!-- 单独打包发布 -->
     </modules>
 
     <profiles>

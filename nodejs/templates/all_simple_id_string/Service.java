@@ -7,7 +7,7 @@ import com.support.aop.annotations.ServiceAspect;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.exception.DeleteRowsException;
 import com.support.mvc.exception.UpdateRowsException;
-import com.support.mvc.service.IService;
+import com.support.mvc.service.str.ISimpleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @ServiceAspect
-public class <%=JavaName%>Service implements IService<<%=TabName%>>, /* I<%=TabName%>Cache */ {
+public class <%=JavaName%>Service implements ISimpleService<<%=TabName%>>, /* I<%=TabName%>Cache */ {
     @Autowired
     private <%=JavaName%>Repository repository;
 //     /** // 若使用缓存需要解开代码
@@ -48,39 +48,39 @@ public class <%=JavaName%>Service implements IService<<%=TabName%>>, /* I<%=TabN
 //     }
 
     @Override
-    public <%=TabName%> save(final <%=TabName%> obj, final Long userId) {
+    public <%=TabName%> save(final <%=TabName%> obj) {
         return repository.save(obj);
     }
 
     @Override
-    public List<<%=TabName%>> saveAll(final List<<%=TabName%>> list, final Long userId) {
+    public List<<%=TabName%>> saveAll(final List<<%=TabName%>> list) {
         return repository.saveAll(list);
     }
 
     @Override
-    public void update(final <%=id%> id, final Long userId, final <%=TabName%> obj) {
-        UpdateRowsException.asserts(repository.update(id, userId, obj));
+    public void update(final <%=id%> id, final <%=TabName%> obj) {
+        UpdateRowsException.asserts(repository.update(id, obj));
     }
 
     @Override
-    public <%=TabName%> deleteById(final <%=id%> id, final Long userId) {
-        return repository.deleteById(id, userId);
+    public <%=TabName%> deleteById(final <%=id%> id) {
+        return repository.deleteById(id);
     }
 
     @Override
-    public void markDeleteById(final <%=id%> id, final Long userId) {
-        DeleteRowsException.asserts(repository.markDeleteById(id, userId));
+    public void markDeleteById(final <%=id%> id) {
+        DeleteRowsException.asserts(repository.markDeleteById(id));
     }
 
     @Override
-    public void markDeleteByIds(final List<<%=id%>> ids, final Long userId) {
-        DeleteRowsException.warn(repository.markDeleteByIds(ids, userId), ids.size());
+    public void markDeleteByIds(final List<<%=id%>> ids) {
+        DeleteRowsException.warn(repository.markDeleteByIds(ids), ids.size());
         //clearKeys(ids); // 若使用缓存需要解开代码
     }
 
     @Override
-    public void markDelete(final List<<%=TabName%>> list, final Long userId) {
-        DeleteRowsException.warn(repository.markDelete(list, userId), list.size());
+    public void markDelete(final List<<%=TabName%>> list) {
+        DeleteRowsException.warn(repository.markDelete(list), list.size());
         //clearKeys(list.stream().map(<%=TabName%>::getId).collect(Collectors.toSet())); // 若使用缓存需要解开代码
     }
 

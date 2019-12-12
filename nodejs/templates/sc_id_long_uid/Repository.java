@@ -9,7 +9,6 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.support.mvc.dao.IRepository;
 import com.support.mvc.entity.base.Pager;
-import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -27,6 +26,7 @@ public interface <%=JavaName%>Repository extends
         IRepository<<%=TabName%>, <%=id%>> {
     Q<%=TabName%> q = Q<%=TabName%>.<%=tabName%>;
 
+//     @CacheEvict(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
 //    @Override
 //    default long update(final <%=id%> id, final Long userId, final <%=TabName%> obj) {
 //        return obj.update(jpaQueryFactory.<JPAQueryFactory>get().update(q))
@@ -35,6 +35,7 @@ public interface <%=JavaName%>Repository extends
 //                .execute();
 //    }
 
+//     @CacheEvict(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
 //    @Override
 //    default <%=TabName%> deleteById(final <%=id%> id, final Long userId) {
 //        // 只能删除自己创建的数据
@@ -53,6 +54,7 @@ public interface <%=JavaName%>Repository extends
 //                ));
 //    }
 //
+//     @CacheEvict(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
 //    @Override
 //    default <%=TabName%> deleteByUid(final <%=id%> id, final String uid, final Long userId) {
 //        // 只能删除自己创建的数据，且使用 UUID 强校验；
@@ -72,6 +74,7 @@ public interface <%=JavaName%>Repository extends
 //                ));
 //    }
 //
+//     @CacheEvict(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
 //    @Override
 //    default long markDeleteById(final <%=id%> id, final Long userId) {
 //        return jpaQueryFactory.<JPAQueryFactory>get()
@@ -82,6 +85,7 @@ public interface <%=JavaName%>Repository extends
 //                .execute();
 //    }
 
+//     @CacheEvict(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
 //    @Override
 //    default long markDeleteByUid(final <%=id%> id, final String uid, final Long userId) {
 //        return jpaQueryFactory.<JPAQueryFactory>get()
@@ -114,6 +118,11 @@ public interface <%=JavaName%>Repository extends
                 )
                 .execute();
     }
+
+//     @Cacheable(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
+//     default <%=TabName%> findCacheById(final <%=id%> id){
+//         return findById(id).orElse(null);
+//     }
 
 //    @Override
 //    default List<<%=TabName%>> findList(final <%=TabName%> condition) {

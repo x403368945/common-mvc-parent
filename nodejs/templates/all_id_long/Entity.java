@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
 import <%=pkg%>.enums.Radio;
-import <%=pkg%>.support.entity.IUser;
+import <%=pkg%>.support.entity.ITabUserCache;
 import com.support.mvc.entity.ITable;
 import com.support.mvc.entity.ITimestamp;
 import com.support.mvc.entity.IWhere;
@@ -54,9 +54,9 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 @Builder
 @Data
 @JSONType(orders = {<%=orders%>})
-public final class <%=TabName%> implements
+public class <%=TabName%> implements
         ITable, // 所有与数据库表 - 实体类映射的表都实现该接口；方便后续一键查看所有表的实体
-        <%=IUser%>
+        <%=ITabUserCache%>
         <%=ITimestamp%>
         // JPAUpdateClause => com.support.mvc.dao.IRepository#update 需要的动态更新字段；采用 方案2 时需要实现该接口
         // QdslWhere       => com.support.mvc.dao.IViewRepository 需要的查询条件
@@ -198,3 +198,42 @@ public final class <%=TabName%> implements
 // DB End **************************************************************************************************************
 
 }
+/* ehcache 配置
+<cache alias="I<%=TabName%>Cache">
+    <key-type>java.lang.Long</key-type>
+    <value-type><%=pkg%>.code.<%=javaname%>.entity.<%=TabName%></value-type>
+    <expiry>
+        <ttl unit="days">10</ttl>
+    </expiry>
+    <resources>
+        <heap>100</heap>
+        <offheap unit="MB">30</offheap>
+    </resources>
+</cache>
+*/
+/*
+import com.alibaba.fastjson.annotation.JSONField;
+import com.querydsl.core.annotations.QueryTransient;
+import java.beans.Transient;
+
+import static <%=pkg%>.config.init.BeanInitializer.Beans.getAppContext;
+/**
+ * 缓存：<%=comment%>
+ *
+ * @author 谢长春 on <%=date%>
+ *\/
+public interface I<%=TabName%>Cache {
+    String CACHE_ROW_BY_ID = "I<%=TabName%>Cache";
+
+    /**
+     * 按 ID 获取数据缓存行
+     *
+     * @param id {@link <%=TabName%>#getId()}
+     * @return {@link Optional<<%=TabName%>>}
+     *\/
+    @JSONField(serialize = false, deserialize = false)
+    default Optional<<%=TabName%>> get<%=TabName%>CacheById(final Long id) {
+        return Optional.of(getAppContext().getBean(<%=JavaName%>Repository.class).findCacheById(id));
+    }
+}
+*/
