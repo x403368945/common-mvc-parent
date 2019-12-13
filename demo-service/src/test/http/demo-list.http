@@ -86,4 +86,8 @@ Authorization: basic YWRtaW46YWRtaW4=
 GET http://localhost:8080/demo-list/1/page/1/10?json={"amountRange":{"min":0.0,"max":2000.0}, sorts:[{name:"updateTime", direction:"DESC"}]}
 Authorization: basic YWRtaW46YWRtaW4=
 
+### 查询:分页 + 排序
+GET http://localhost:8080/demo-list/1/test
+Authorization: basic YWRtaW46YWRtaW4=
+
 ###

@@ -18,7 +18,7 @@ spring:
     mode: HTML
   jpa: # jpa + hibernate 配置
     open-in-view: false
-    database-platform: org.hibernate.dialect.MySQLDialect # hibernate 方言代理
+    database-platform: org.hibernate.dialect.MySQL57Dialect # hibernate 方言代理
     hibernate:
       ddl-auto: none
       naming:

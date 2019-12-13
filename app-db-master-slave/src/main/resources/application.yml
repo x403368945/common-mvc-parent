@@ -68,7 +68,7 @@ spring:
     mode: HTML
   jpa:
     open-in-view: false
-    database-platform: org.hibernate.dialect.MySQLDialect
+    database-platform: org.hibernate.dialect.MySQL57Dialect
     hibernate:
       ddl-auto: none
       naming:

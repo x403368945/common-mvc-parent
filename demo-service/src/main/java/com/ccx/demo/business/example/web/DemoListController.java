@@ -407,4 +407,27 @@ public class DemoListController implements IAuthController<Long> {
                         ))
                 );
     }
+
+//    @GetMapping("/test")
+//    @ResponseBody
+//    public Result<?> test(
+//            @AuthenticationPrincipal final TabUser user,
+//            @PathVariable final int version,
+//            @RequestParam(required = false, defaultValue = "{}") final String json) {
+//        return new Result<TabDemoList>(1) // 指定接口最新版本号
+////                .version(this.getClass(), builder -> builder
+////                        .props(TabDemoList.Props.list()) // 当前返回对象属性说明
+////                        .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
+////                                "查询多条数据，不分页，url带参必须使用 encodeURI 格式化【?json=encodeURI(JSON.stringify({}))】",
+////                                "1.当前版本变更说明"
+////                        ))
+////                        .build()
+////                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl()) // 当前接口参考案例请求地址；
+////                        ))
+////                )
+//                .execute(result -> result
+//                        .versionAssert(version, false) // 弱校验版本号
+//                        .setSuccess(service.findListTest())
+//                );
+//    }
 }

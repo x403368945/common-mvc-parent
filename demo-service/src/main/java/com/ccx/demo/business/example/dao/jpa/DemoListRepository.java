@@ -6,6 +6,7 @@ import com.ccx.demo.enums.Radio;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.support.mvc.dao.IRepository;
 import com.support.mvc.entity.base.Pager;
@@ -156,4 +157,15 @@ public interface DemoListRepository extends
                 .orderBy(condition.buildQdslSorts())
                 .fetchResults();
     }
+//
+//    default List<TabDemoList> findListTest() {
+//        return jpaQueryFactory.<JPAQueryFactory>get()
+//                .select(Projections.bean(TabDemoList.class,
+//                        q.id,
+//                        Expressions.numberTemplate(Double.class, "ifnull({0},{1})", q.amount, q.id).as("amount")
+//                ))
+//                .from(q)
+//                .fetch();
+//    }
+
 }
