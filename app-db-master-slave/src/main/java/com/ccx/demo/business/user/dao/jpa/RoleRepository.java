@@ -132,7 +132,7 @@ public interface RoleRepository extends
      * @param roles {@link List<TabRole>} 角色集合
      * @return {@link List<Long>}
      */
-    default List<Long> findValidRoleIds(final List<TabRole> roles) {
+    default Set<Long> findValidRoleIds(final List<TabRole> roles) {
         final Set<String> roleKeys = roles.stream()
                 // 拼接 id:uid
                 .map(row -> StringUtils.joinWith(":", row.getId(), row.getUid()))
@@ -146,7 +146,7 @@ public interface RoleRepository extends
                 // 过滤有效的角色
                 .filter(row -> roleKeys.contains(StringUtils.joinWith(":", row.getId(), row.getUid())))
                 .map(TabRole::getId)
-                .collect(Collectors.toList())
+                .collect(Collectors.toSet())
                 ;
     }
 }

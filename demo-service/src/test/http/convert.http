@@ -5,6 +5,10 @@ Authorization: basic YWRtaW46YWRtaW4=
 
 {
   "json": {
+    "ids": [
+      1,
+      2
+    ],
     "item": {
       "key": "SUCCESS",
       "value": "1",
@@ -72,13 +76,45 @@ Authorization: basic YWRtaW46YWRtaW4=
 
 {
   "json": {
-    "uid": "c2c98f52381b4ffead6aaaea027bdc03",
-    "updateTime": "2019-08-21 23:12:53.861",
+    "id": 1,
+    "uid": "c252869c6a154b1b905ada988906cb0a",
+    "ids": [
+      1,
+      2
+    ],
+    "images": [
+      "100000000000000000000000000000000000000.png",
+      "200000000000000000000000000000000000000.png",
+      "300000000000000000000000000000000000000.png"
+    ],
+    "codes": [
+      "CUSTOMIZE",
+      "FILE_COPY",
+      "ORDER_BY"
+    ],
+    "items": [
+      {
+        "key": "SUCCESS",
+        "value": "1",
+        "comment": "成功"
+      },
+      {
+        "key": "FAILURE",
+        "value": "0",
+        "comment": "失败"
+      }
+    ],
     "item": {
       "key": "SUCCESS",
-      "value": "1",
+      "value": "3",
       "comment": "成功"
-    }
+    },
+    "insertTime": "2019-12-12 11:50:09.000",
+    "insertUserId": 1,
+    "updateTime": "2019-12-13 03:53:53.137",
+    "updateUserId": 1,
+    "deleted": "NO",
+    "timestamp": 1576124577146
   }
 }
 
@@ -100,8 +136,7 @@ Authorization: basic YWRtaW46YWRtaW4=
 }
 
 ### 查询:不分页
-GET http://localhost:8080/convert/1
+GET http://localhost:8080/convert/1?json={ids:[1], codes:["CUSTOMIZE"], images:["100000000000000000000000000000000000000.png"]}
 Authorization: basic YWRtaW46YWRtaW4=
 
 ###
-

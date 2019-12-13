@@ -3,11 +3,13 @@ package com.ccx.demo.business.example.entity;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
-import com.ccx.demo.enums.Radio;
+import com.ccx.demo.business.example.entity.convert.ArrayCodeJsonConvert;
 import com.ccx.demo.business.user.cache.ITabUserCache;
+import com.ccx.demo.enums.Radio;
 import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.support.mvc.entity.ITable;
 import com.support.mvc.entity.ITimestamp;
@@ -16,13 +18,14 @@ import com.support.mvc.entity.IWhere.QdslWhere;
 import com.support.mvc.entity.base.Item;
 import com.support.mvc.entity.base.Prop;
 import com.support.mvc.entity.base.Sorts;
+import com.support.mvc.entity.convert.ArrayItemJsonConvert;
+import com.support.mvc.entity.convert.ArrayLongJsonConvert;
+import com.support.mvc.entity.convert.ArrayStringJsonConvert;
 import com.support.mvc.entity.convert.ItemJsonConvert;
-import com.support.mvc.entity.convert.ListItemJsonConvert;
-import com.support.mvc.entity.convert.ListLongJsonConvert;
-import com.support.mvc.entity.convert.ListStringJsonConvert;
 import com.support.mvc.entity.validated.IMarkDelete;
 import com.support.mvc.entity.validated.ISave;
 import com.support.mvc.entity.validated.IUpdate;
+import com.support.mvc.enums.Code;
 import com.utils.util.Then;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,7 +33,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -62,7 +64,7 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 @AllArgsConstructor
 @Builder
 @Data
-@JSONType(orders = {"id", "uid", "ids", "images", "items", "item", "insertTime", "insertUserId", "insertUserName", "updateTime", "updateUserId", "updateUserName", "deleted"})
+@JSONType(orders = {"id", "uid", "ids", "images", "codes", "items", "item", "insertTime", "insertUserId", "insertUserName", "updateTime", "updateUserId", "updateUserName", "deleted"})
 public final class TabConvert implements
         ITable, // 所有与数据库表 - 实体类映射的表都实现该接口；方便后续一键查看所有表的实体
         ITabUserCache,
@@ -88,18 +90,23 @@ public final class TabConvert implements
     /**
      * {@link List<Long>}
      */
-    @Convert(converter = ListLongJsonConvert.class)
-    private List<Long> ids;
+    @Convert(converter = ArrayLongJsonConvert.class)
+    private Long[] ids;
     /**
      * {@link List<String>}
      */
-    @Convert(converter = ListStringJsonConvert.class)
-    private List<String> images;
+    @Convert(converter = ArrayStringJsonConvert.class)
+    private String[] images;
+    /**
+     * {@link List<com.support.mvc.enums.Code>}
+     */
+    @Convert(converter = ArrayCodeJsonConvert.class)
+    private Code[] codes;
     /**
      * {@link List<com.support.mvc.entity.base.Item>}
      */
-    @Convert(converter = ListItemJsonConvert.class)
-    private List<Item> items;
+    @Convert(converter = ArrayItemJsonConvert.class)
+    private Item[] items;
     /**
      * {@link com.support.mvc.entity.base.Item}
      */
@@ -157,6 +164,7 @@ public final class TabConvert implements
         uid(STRING.build(true, "数据UUID，缓存和按ID查询时可使用强校验")),
         ids(ARRAY.build("{@link List<Long>}")),
         images(ARRAY.build("{@link List<String>}")),
+        codes(ARRAY.build("{@link List<com.support.mvc.enums.Code>}")),
         items(ARRAY.build("{@link List<com.support.mvc.entity.base.Item>}")),
         item(OBJECT.build("{@link com.support.mvc.entity.base.Item}")),
         insertTime(TIMESTAMP.build("创建时间")),
@@ -243,6 +251,7 @@ public final class TabConvert implements
         return Then.of(jpaUpdateClause)
                 .then(ids, update -> update.set(q.ids, ids))
                 .then(images, update -> update.set(q.images, images))
+                .then(codes, update -> update.set(q.codes, codes))
                 .then(items, update -> update.set(q.items, items))
                 .then(item, update -> update.set(q.item, item))
                 .then(updateUserId, update -> update.set(q.updateUserId, updateUserId))
@@ -262,9 +271,10 @@ public final class TabConvert implements
         // 构建查询顺序规则请参考：com.support.mvc.entity.IWhere#where
         return QdslWhere.of()
                 .and(id, () -> q.id.eq(id))
-                .and(uid, () -> uid.endsWith("%") || uid.startsWith("%") ? q.uid.like(uid) : q.uid.eq(uid))
-//                .and(ids, () -> q.ids.eq(ids))
-//                .and(images, () -> q.images.eq(images))
+                .and(uid, () -> q.uid.eq(uid))
+                .and(ids, () -> Expressions.booleanTemplate("JSON_CONTAINS({0},{1})>0", q.ids, JSON.toJSONString(ids)))
+                .and(images, () -> Expressions.booleanTemplate("JSON_CONTAINS({0},{1})>0", q.images, JSON.toJSONString(images)))
+                .and(codes, () -> Expressions.booleanTemplate("JSON_CONTAINS({0},{1})>0", q.codes, JSON.toJSONString(codes)))
 //                .and(items, () -> q.items.eq(items))
 //                .and(item, () -> q.item.eq(item))
 //                .and(insertTimeRange, () -> q.insertTime.between(insertTimeRange.rebuild().getBegin(), insertTimeRange.getEnd()))

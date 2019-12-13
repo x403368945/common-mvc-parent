@@ -12,6 +12,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 用户实体
@@ -40,7 +41,7 @@ public class TabUserVO extends TabUser {
 
     public List<String> getAuthorityList() {
         if (CollectionUtils.isEmpty(authorityList)) {
-            authorityList = Objects.requireNonNull(getRoles(), "当前登录账户未配置权限").stream()
+            authorityList = Stream.of(Objects.requireNonNull(getRoles(), "当前登录账户未配置权限"))
                     .flatMap(id -> getRoleAuthoritiesCacheById(id).stream())
                     .distinct()
                     .collect(Collectors.toList());

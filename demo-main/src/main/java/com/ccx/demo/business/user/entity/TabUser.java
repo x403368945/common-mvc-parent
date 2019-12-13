@@ -8,16 +8,15 @@ import com.ccx.demo.business.user.entity.extend.ITabUser;
 import com.ccx.demo.business.user.vo.UserDetail;
 import com.ccx.demo.enums.Radio;
 import com.ccx.demo.enums.RegisterSource;
-import com.querydsl.core.annotations.PropertyType;
 import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;
-import com.querydsl.core.annotations.QueryType;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.support.mvc.entity.ITable;
 import com.support.mvc.entity.IWhere;
 import com.support.mvc.entity.IWhere.QdslWhere;
 import com.support.mvc.entity.base.Sorts;
-import com.support.mvc.entity.convert.ListLongJsonConvert;
+import com.support.mvc.entity.convert.ArrayLongJsonConvert;
 import com.support.mvc.entity.validated.ISave;
 import com.support.mvc.entity.validated.IUpdate;
 import com.utils.util.Then;
@@ -57,7 +56,7 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 @EqualsAndHashCode(callSuper = false)
 @ToString(exclude = {"password"})
 @JSONType(orders = {"id", "uid", "subdomain", "username", "nickname", "phone", "email", "role", "registerSource", "deleted"})
-public class TabUser extends UserDetail implements ITabUser, ITable, ITabUserCache, IWhere<TabUser, QdslWhere> {
+public class TabUser extends UserDetail implements ITabUser, ITable, ITabUserCache, IWhere<JPAUpdateClause, QdslWhere> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -106,9 +105,8 @@ public class TabUser extends UserDetail implements ITabUser, ITable, ITabUserCac
      * 用户角色
      * {@link TabRole#getId()}
      */
-    @Convert(converter = ListLongJsonConvert.class)
-    @QueryType(PropertyType.STRING)
-    private List<Long> roles;
+    @Convert(converter = ArrayLongJsonConvert.class)
+    private Long[] roles;
     /**
      * 注册渠道
      */
@@ -164,13 +162,14 @@ public class TabUser extends UserDetail implements ITabUser, ITable, ITabUserCac
 
     // DB Start ********************************************************************************************************
     @Override
-    public Then<TabUser> update(final TabUser update) {
+    public Then<JPAUpdateClause> update(final JPAUpdateClause update) {
+        final QTabUser q = tabUser;
         return Then.of(update)
-                .then(nickname, dest -> dest.setNickname(nickname))
-                .then(phone, dest -> dest.setPhone(phone))
-                .then(email, dest -> dest.setEmail(email))
-                .then(roles, dest -> dest.setRoles(roles))
-                .then(dest -> dest.setUpdateUserId(updateUserId))
+                .then(nickname, dest -> dest.set(q.nickname, nickname))
+                .then(phone, dest -> dest.set(q.phone, phone))
+                .then(email, dest -> dest.set(q.email, email))
+                .then(roles, dest -> dest.set(q.roles, roles))
+                .then(dest -> dest.set(q.updateUserId, updateUserId))
                 ;
     }
 

@@ -34,16 +34,10 @@ public interface UserRepository extends
 
     @Override
     default long update(final Long id, final Long userId, final TabUser obj) {
-        return findById(id)
-                .filter(dest -> Objects.equals(dest.getUid(), obj.getUid()))
-                .filter(dest -> Objects.equals(dest.getDeleted(), Radio.NO))
-                .map(dest -> {
-                    obj.update(dest);
-                    dest.setUpdateUserId(userId);
-                    return 1L;
-                })
-                .orElse(0L)
-                ;
+        return obj.update(jpaQueryFactory.<JPAQueryFactory>get().update(q))
+                .get()
+                .where(q.id.eq(id).and(q.uid.eq(obj.getUid())).and(q.deleted.eq(Radio.NO)))
+                .execute();
     }
 
     @Override

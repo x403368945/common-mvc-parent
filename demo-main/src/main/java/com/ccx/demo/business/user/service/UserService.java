@@ -22,10 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static com.ccx.demo.config.init.BeanInitializer.Beans.cacheManager;
 
@@ -86,16 +83,16 @@ public class UserService implements IService<TabUser>, ITabUserCache {
 
     @Override
     public TabUser save(final TabUser obj, final Long userId) {
-        final List<Long> validRoleIds = roleService.matchValidRoleIds(obj.getRoleList());
-        obj.setRoles(validRoleIds);
+        final Set<Long> validRoleIds = roleService.matchValidRoleIds(obj.getRoleList());
+        obj.setRoles(validRoleIds.toArray(new Long[]{}));
         obj.setPassword(passwordEncoder.encode(obj.getPassword()));
         return repository.save(obj);
     }
 
     @Override
     public void update(final Long id, final Long userId, final TabUser obj) {
-        final List<Long> validRoleIds = roleService.matchValidRoleIds(obj.getRoleList());
-        obj.setRoles(validRoleIds);
+        final Set<Long> validRoleIds = roleService.matchValidRoleIds(obj.getRoleList());
+        obj.setRoles(validRoleIds.toArray(new Long[]{}));
 
         UpdateRowsException.asserts(repository.update(id, userId, obj));
 

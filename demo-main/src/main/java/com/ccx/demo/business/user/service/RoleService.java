@@ -20,10 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import javax.validation.constraints.NotEmpty;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.ccx.demo.config.init.BeanInitializer.Beans.cacheManager;
@@ -112,7 +109,7 @@ public class RoleService implements IService<TabRole>, ITabRoleCache {
      * @param roles {@link List<TabRole>} 角色集合
      * @return {@link List<Long>}
      */
-    public @NotEmpty(message = "matchValidRoleIds:返回值不能为空集合") List<Long> matchValidRoleIds(
+    public @NotEmpty(message = "matchValidRoleIds:返回值不能为空集合") Set<Long> matchValidRoleIds(
             @NotEmpty(message = "【ids】不能为空") final List<TabRole> roles) {
         return repository.findValidRoleIds(roles);
     }

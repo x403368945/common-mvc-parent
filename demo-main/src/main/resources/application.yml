@@ -26,6 +26,7 @@ spring:
     # 参考： https://www.docs4dev.com/docs/zh/hibernate-orm/5.4/reference/hibernate_user_guide.html  {@link org.hibernate.cfg.AvailableSettings}
     properties:
       "hibernate.cache.use_second_level_cache": false # 禁用二级缓存
+#      "hibernate.dialect.storage_engine": innodb
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration # 禁止自动装配 jackson

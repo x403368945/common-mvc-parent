@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Spring Security 鉴权信息
@@ -34,7 +35,7 @@ public class UserDetail implements UserDetails, ITabRoleCache {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 //        return Collections.singletonList(loadUserDetail().getRole().toAuthority());
-        final List<String> authorityList = loadUserDetail().getRoles().stream()
+        final List<String> authorityList = Stream.of(loadUserDetail().getRoles())
                 .flatMap(id -> getRoleAuthoritiesCacheById(id).stream())
                 .distinct()
                 .collect(Collectors.toList());
