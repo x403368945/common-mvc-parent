@@ -5,14 +5,15 @@ import com.ccx.demo.business.common.vo.FileInfo.Props;
 import com.ccx.demo.business.common.vo.FileUpload;
 import com.ccx.demo.config.init.AppConfig.URL;
 import com.support.mvc.entity.base.Result;
-import com.utils.util.Util;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 import static com.support.mvc.enums.Code.FILE_EMPTY;
 
@@ -45,7 +46,7 @@ public class FileController {
                 )
                 .execute(result -> {
                     result.versionAssert(version);
-                    if (Util.isEmpty(file) || Util.isEmpty(file.getOriginalFilename())) {
+                    if (Objects.isNull(file) || StringUtils.isBlank(file.getOriginalFilename())) {
                         throw FILE_EMPTY.exception("上传文件为空,字段【file】只能是单个文件");
                     }
                     result.setSuccess(
@@ -71,7 +72,7 @@ public class FileController {
                 )
                 .execute(result -> {
                     result.versionAssert(version);
-                    if (Util.isEmpty(files) || Util.isEmpty(files[0].getOriginalFilename())) {
+                    if (Objects.isNull(files) || StringUtils.isBlank(files[0].getOriginalFilename())) {
                         throw FILE_EMPTY.exception("上传文件为空,字段【files】为数组");
                     }
                     result.setSuccess(

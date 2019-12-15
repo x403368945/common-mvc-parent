@@ -1,12 +1,8 @@
 package com.ccx.security.enums;
 
 import com.support.mvc.entity.base.Item;
-import com.utils.util.Util;
 
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,7 +34,7 @@ public enum Radio {
     }
 
     public static Radio valueOf(final Integer value) {
-        return Util.isEmpty(value) ? null : Radio.values()[value];
+        return Objects.isNull(value) ? null : Radio.values()[value];
     }
 
     /**

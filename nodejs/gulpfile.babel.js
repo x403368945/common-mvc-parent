@@ -78,7 +78,7 @@ gulp.task('server', gulp.series('listener', () => {
 gulp.task('test', async () => {
   devConfig();
   // await OpenDemoTest.of().testAll();
-  // await DemoListTest.of().testAll(); //
+  await DemoListTest.of().testAll(); //
   await UserTest.of().testAll(); // 测试用户相关的接口
   await AuthorityTest.of().testAll();
   await RoleTest.of().testAll();

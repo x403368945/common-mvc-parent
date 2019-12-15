@@ -52,7 +52,7 @@ public final class JSEngine {
      * @throws ScriptException 执行异常
      */
     public Num compute(final String formula) throws ScriptException {
-        if (Util.isEmpty(formula)) {
+        if (org.apache.commons.lang3.StringUtils.isEmpty(formula)) {
             throw new NaNException(String.format("%s=NaN", formula));
         }
         final String value = eval(formula);

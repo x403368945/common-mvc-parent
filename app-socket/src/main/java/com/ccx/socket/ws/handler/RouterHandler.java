@@ -80,11 +80,11 @@ public class RouterHandler extends AbstractWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) {
         try {
             final Payload payload = JSON.parseObject(message.getPayload(), Payload.class);
-            if (Util.isEmpty(payload.getModule())) {
+            if (org.apache.commons.lang3.StringUtils.isEmpty(payload.getModule())) {
                 session.sendMessage(new TextMessage(Message.builder().event(ERROR).message("module 参数是必须的").build().json()));
                 throw new NullPointerException("module 参数是必须的");
             }
-            if (Util.isEmpty(payload.getJson())) {
+            if (org.apache.commons.lang3.StringUtils.isEmpty(payload.getJson())) {
                 session.sendMessage(new TextMessage(Message.builder().event(ERROR).message("json 参数是必须的").build().json()));
                 throw new NullPointerException("json 参数是必须的");
             }

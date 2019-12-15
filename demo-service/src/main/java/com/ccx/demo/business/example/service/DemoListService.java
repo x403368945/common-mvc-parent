@@ -94,7 +94,7 @@ public class DemoListService implements IService<TabDemoList> {
         return repository.findPage(condition, Pager.rebuild(pager));
     }
 
-//    public List<TabDemoList> findListTest() {
-//        return repository.findListTest();
-//    }
+    public void findListTest() {
+        repository.findListTest();
+    }
 }

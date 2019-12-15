@@ -8,11 +8,11 @@ import com.alibaba.fastjson.annotation.JSONType;
 import com.mysema.commons.lang.Assert;
 import com.support.mvc.enums.Code;
 import com.utils.util.Maps;
-import com.utils.util.Util;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -120,7 +120,7 @@ public class Param implements Serializable {
      * @return boolean true：是，false：否
      */
     public boolean isEmpty() {
-        return Util.isEmpty(json) || "{}".equals(json) || "[]".equals(json) || "[{}]".equals(json);
+        return StringUtils.isBlank(json) || "{}".equals(json) || "[]".equals(json) || "[{}]".equals(json);
     }
 
     /**
@@ -129,7 +129,7 @@ public class Param implements Serializable {
      * @return boolean true：是，false：否
      */
     public boolean isArray() {
-        return Util.isNotEmpty(json) && json.startsWith("[") && json.endsWith("]");
+        return StringUtils.isNotBlank(json) && json.startsWith("[") && json.endsWith("]");
     }
 
     /**

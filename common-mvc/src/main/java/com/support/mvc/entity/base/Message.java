@@ -2,7 +2,6 @@ package com.support.mvc.entity.base;
 
 import com.alibaba.fastjson.annotation.JSONType;
 import com.utils.IJson;
-import com.utils.util.Util;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -47,7 +46,7 @@ public class Message implements IJson {
      * @return {@link Message}
      */
     public Message addExtras(String key, Object value) {
-        if (Util.isEmpty(this.extras)) {
+        if (org.apache.commons.collections4.MapUtils.isEmpty(this.extras)) {
             this.extras = new LinkedHashMap<>(3);
         }
         extras.put(key, value);

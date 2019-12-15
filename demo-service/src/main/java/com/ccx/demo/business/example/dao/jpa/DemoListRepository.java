@@ -1,19 +1,23 @@
 package com.ccx.demo.business.example.dao.jpa;
 
+import com.alibaba.fastjson.JSON;
 import com.ccx.demo.business.example.entity.QTabDemoList;
 import com.ccx.demo.business.example.entity.TabDemoList;
 import com.ccx.demo.enums.Radio;
 import com.querydsl.core.QueryResults;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.support.mvc.dao.IRepository;
 import com.support.mvc.entity.base.Pager;
+import lombok.Data;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.ccx.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 
@@ -157,15 +161,63 @@ public interface DemoListRepository extends
                 .orderBy(condition.buildQdslSorts())
                 .fetchResults();
     }
-//
-//    default List<TabDemoList> findListTest() {
-//        return jpaQueryFactory.<JPAQueryFactory>get()
-//                .select(Projections.bean(TabDemoList.class,
-//                        q.id,
-//                        Expressions.numberTemplate(Double.class, "ifnull({0},{1})", q.amount, q.id).as("amount")
-//                ))
-//                .from(q)
-//                .fetch();
-//    }
+
+    /**
+     * 自定方言
+     */
+    default void findListTest() {
+        System.out.println("group_concat:" + JSON.toJSONString(
+                jpaQueryFactory.<JPAQueryFactory>get()
+                        .select(
+                                q.deleted,
+                                Expressions.stringTemplate("group_concat({0})", q.id).as("ids")
+                        )
+                        .from(q)
+                        .groupBy(q.deleted)
+                        .fetch()
+                        .stream()
+                        .map(Tuple::toArray)
+                        .collect(Collectors.toList())
+        ));
+        System.out.println("ifnull:" + JSON.toJSONString(
+                jpaQueryFactory.<JPAQueryFactory>get()
+                        .select(Projections.bean(Ifnull.class,
+                                q.id
+                                , Expressions.stringTemplate("ifnull({0}, {1})", q.content, "content is null").as("string")
+                                , Expressions.numberTemplate(Double.class, "ifnull({0}, {1})", q.amount, 0D).as("amount")
+                                , Expressions.numberTemplate(Double.class, "ifnull({0}, {1})", q.amount, q.id).as("otherColumn")
+                        ))
+                        .from(q)
+                        .where(q.id.eq(1L))
+                        .fetch()
+        ));
+        System.out.println("if:" + JSON.toJSONString(
+                jpaQueryFactory.<JPAQueryFactory>get()
+                        .select(
+                                Expressions.stringTemplate("if({0}, {1}, {2})", q.content.isNull(), Expressions.constant("content is null"), Expressions.constant("content not null"))
+                        )
+                        .from(q)
+                        .where(q.id.eq(1L))
+                        .fetch()
+        ));
+//        System.out.println("countif:" + JSON.toJSONString(
+//                jpaQueryFactory.<JPAQueryFactory>get()
+//                        .select(
+//                                Expressions.numberTemplate(Long.class, "countif({0}, {1}, {2})", q.id.lt(5), 1, Expressions.nullExpression())
+//                        )
+//                        .from(q)
+//                        .groupBy(q.deleted)
+//                        .fetch()
+//        ));
+
+    }
+
+    @Data
+    class Ifnull {
+        private Long id;
+        private String string;
+        private Double amount;
+        private Double otherColumn;
+    }
 
 }

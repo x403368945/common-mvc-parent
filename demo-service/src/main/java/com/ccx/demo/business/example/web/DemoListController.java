@@ -28,7 +28,6 @@ import static com.support.mvc.entity.base.Sorts.Direction.DESC;
 /**
  * 请求操作响应：案例
  *
- *
  * @author 谢长春 2018-10-5
  */
 @Controller
@@ -100,7 +99,7 @@ public class DemoListController implements IAuthController<Long> {
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
-                       .call(() -> service.update(
+                        .call(() -> service.update(
                                 id,
                                 user.getId(),
                                 Param.of(param).required().parseObject(TabDemoList.class)
@@ -171,7 +170,7 @@ public class DemoListController implements IAuthController<Long> {
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
-                       .call(() -> service.markDeleteById(id, user.getId()))
+                        .call(() -> service.markDeleteById(id, user.getId()))
                 );
     }
 
@@ -194,7 +193,7 @@ public class DemoListController implements IAuthController<Long> {
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
-                       .call(() -> service.markDeleteByUid(id, uid, user.getId()))
+                        .call(() -> service.markDeleteByUid(id, uid, user.getId()))
                 );
     }
 
@@ -225,7 +224,7 @@ public class DemoListController implements IAuthController<Long> {
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
                         //.call(()->service.markDeleteByIds(Param.of(param).required().hasArray().parseArray(Long.class), user.getId())) // 方案1：按 ID 逻辑删除
-                       .call(() -> service.markDelete(Param.of(param).required().hasArray().parseArray(TabDemoList.class), user.getId())) // 方案2：按 ID 和 UUID 逻辑删除
+                        .call(() -> service.markDelete(Param.of(param).required().hasArray().parseArray(TabDemoList.class), user.getId())) // 方案2：按 ID 和 UUID 逻辑删除
                 );
     }
 
@@ -408,26 +407,26 @@ public class DemoListController implements IAuthController<Long> {
                 );
     }
 
-//    @GetMapping("/test")
-//    @ResponseBody
-//    public Result<?> test(
-//            @AuthenticationPrincipal final TabUser user,
-//            @PathVariable final int version,
-//            @RequestParam(required = false, defaultValue = "{}") final String json) {
-//        return new Result<TabDemoList>(1) // 指定接口最新版本号
-////                .version(this.getClass(), builder -> builder
-////                        .props(TabDemoList.Props.list()) // 当前返回对象属性说明
-////                        .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
-////                                "查询多条数据，不分页，url带参必须使用 encodeURI 格式化【?json=encodeURI(JSON.stringify({}))】",
-////                                "1.当前版本变更说明"
-////                        ))
-////                        .build()
-////                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl()) // 当前接口参考案例请求地址；
-////                        ))
-////                )
-//                .execute(result -> result
-//                        .versionAssert(version, false) // 弱校验版本号
-//                        .setSuccess(service.findListTest())
-//                );
-//    }
+    @GetMapping("/test")
+    @ResponseBody
+    public Result<?> test(
+            @AuthenticationPrincipal final TabUser user,
+            @PathVariable final int version,
+            @RequestParam(required = false, defaultValue = "{}") final String json) {
+        return new Result<TabDemoList>(1) // 指定接口最新版本号
+//                .version(this.getClass(), builder -> builder
+//                        .props(TabDemoList.Props.list()) // 当前返回对象属性说明
+//                        .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
+//                                "查询多条数据，不分页，url带参必须使用 encodeURI 格式化【?json=encodeURI(JSON.stringify({}))】",
+//                                "1.当前版本变更说明"
+//                        ))
+//                        .build()
+//                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl()) // 当前接口参考案例请求地址；
+//                        ))
+//                )
+                .execute(result -> result
+                        .versionAssert(version, false) // 弱校验版本号
+                        .call(() -> service.findListTest())
+                );
+    }
 }

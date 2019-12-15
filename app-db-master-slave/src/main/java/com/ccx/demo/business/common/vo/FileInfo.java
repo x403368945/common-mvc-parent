@@ -6,12 +6,12 @@ import com.ccx.demo.config.init.AppConfig.Path;
 import com.ccx.demo.config.init.AppConfig.URL;
 import com.support.mvc.entity.base.Prop;
 import com.utils.IJson;
-import com.utils.util.Util;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -70,7 +70,7 @@ public class FileInfo implements IJson {
      */
     @JSONField(serialize = false, deserialize = false)
     public String getPath() {
-        return Util.isEmpty(uname) ? null : Path.TEMP.absolute(uname);
+        return StringUtils.isEmpty(uname) ? null : Path.TEMP.absolute(uname);
     }
 
     /**
@@ -79,7 +79,7 @@ public class FileInfo implements IJson {
      * @return String
      */
     public String getUrl() {
-        return Util.isEmpty(uname) ? null : URL.TEMP.append(uname);
+        return StringUtils.isEmpty(uname) ? null : URL.TEMP.append(uname);
     }
 
     public <T> T parse(Class<T> clazz) {

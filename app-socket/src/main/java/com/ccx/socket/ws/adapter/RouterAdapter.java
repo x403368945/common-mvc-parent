@@ -25,7 +25,7 @@ public class RouterAdapter implements IAdapter {
 
     @Override
     public long getSessionId(WebSocketSession session) {
-        return (long) Util.randomMax(10000);
+        return Util.randomMax(10000);
     }
 
     @Override

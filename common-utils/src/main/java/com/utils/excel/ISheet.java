@@ -22,7 +22,8 @@ import java.util.function.Supplier;
  *
  * @author 谢长春 on 2018-8-8 .
  */
-public interface ISheet<T> {
+@SuppressWarnings("unchecked")
+public interface ISheet<T extends ISheet<T>> {
     /**
      * 当前操作对象作为参数，执行完之后返回当前对象；
      * 没啥特别的作用，只是为了让一些不能使用链式一直写完的代码可以包在链式调用里面；

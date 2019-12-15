@@ -2,7 +2,6 @@ package com.support.aop;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Strings;
-import com.utils.util.Util;
 import org.aspectj.lang.JoinPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +43,7 @@ public interface IControllerAspect {
                 String.format("time:%dms", Duration.between(time, LocalTime.now()).toMillis()),
                 "url:".concat(getPath()),
                 "args:".concat(Arrays.toString(joinPoint.getArgs())),
-                "result:".concat(Util.isEmpty(result) ? "" : JSON.toJSONString(result)),
+                "result:".concat(Objects.isNull(result) ? "" : JSON.toJSONString(result)),
                 END
         ));
     }

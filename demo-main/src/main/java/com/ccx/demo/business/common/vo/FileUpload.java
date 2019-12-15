@@ -70,7 +70,7 @@ public class FileUpload<T> {
     }
 
     public FileUpload<T> to(final String path) {
-        if (Util.isNotEmpty(path)) {
+        if (org.apache.commons.lang3.StringUtils.isNotEmpty(path)) {
             this.to = path;
         }
         return this;
@@ -104,7 +104,7 @@ public class FileUpload<T> {
      */
     @SneakyThrows
     public FileUpload<T> upload() {
-        if (Util.isEmpty(to)) {
+        if (Objects.isNull(to)) {
             throw new NullPointerException("未指定文件上传目录");
         }
         if (Objects.isNull(uploadFiles)) {
