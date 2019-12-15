@@ -356,7 +356,7 @@ public interface ICellWriter<T extends ICellWriter<T>> {
      * @return <T extends ICellWriter>
      */
     default T writeFormula(final String formula) {
-        if (Util.isEmpty(formula)) {
+        if (org.apache.commons.lang3.StringUtils.isEmpty(formula)) {
             setCellBlank();
         } else {
             getCell().setCellFormula(formula);
@@ -387,7 +387,7 @@ public interface ICellWriter<T extends ICellWriter<T>> {
 //            }
 //            return formula;
 //        };
-        if (Util.isEmpty(formula)) {
+        if (Objects.isNull(formula)) {
             setCellBlank();
         } else {
             getCell().setCellFormula(formula.get());

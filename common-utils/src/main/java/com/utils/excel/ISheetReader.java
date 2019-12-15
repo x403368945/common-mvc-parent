@@ -86,7 +86,7 @@ public interface ISheetReader<T extends ISheetReader<T>> extends ISheet<T>, ICel
         String label;
         for (int i = 0; i < getRow().getLastCellNum(); i++) {
             cell(i);
-            if (Util.isNotEmpty(label = stringValue())) {
+            if (org.apache.commons.lang3.StringUtils.isNotEmpty(label = stringValue())) {
                 headers.add(Cell.builder().index(i).label(label.trim()).type(DataType.TEXT).sindex(sindex()).build());
             }
         }
