@@ -10,7 +10,7 @@
 
     <!-- spring-boot 特殊处理：pom 文件与mvc差别较大 -->
     <modules>
-        <!--<module>common-utils</module>--><!-- 工具类封装 -->
+        <module>common-utils</module><!-- 工具类封装 -->
         <module>common-mvc</module><!-- Spring MVC 封装 -->
         <module>demo-main</module><!-- 应用入口【独立运行，可选依赖[demo-service]】 -->
         <module>demo-service</module><!-- 参考案例【必须依赖[demo-main]】 -->
@@ -110,15 +110,15 @@
         <springboot.version>2.2.1.RELEASE</springboot.version>
         <querydsl.version>4.2.2</querydsl.version>
     </properties>
-    <repositories>
+    <!--<repositories>
         <repository>
             <id>common-utils-repo</id>
-            <!-- 格式是 https://raw.githubusercontent.com/[github 用户名]/[github 仓库名]/[分支名]/repository -->
+            &lt;!&ndash; 格式是 https://raw.githubusercontent.com/[github 用户名]/[github 仓库名]/[分支名]/repository &ndash;&gt;
             <url>
                 https://raw.githubusercontent.com/x403368945/common-utils/mvn-repo/repository
             </url>
         </repository>
-    </repositories>
+    </repositories>-->
     <dependencyManagement>
         <dependencies>
             <dependency>
