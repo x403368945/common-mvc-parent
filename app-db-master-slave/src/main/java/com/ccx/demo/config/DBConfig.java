@@ -7,7 +7,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
@@ -34,7 +33,6 @@ import static com.ccx.demo.enums.DBRoute.*;
  * @author 谢长春 2019/1/23
  */
 @Configuration
-@EnableJpaRepositories(basePackages = {"com.ccx.**.dao.jpa"})
 public class DBConfig {
 
     /**

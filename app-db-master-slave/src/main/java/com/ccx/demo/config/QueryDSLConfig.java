@@ -3,6 +3,7 @@ package com.ccx.demo.config;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -25,6 +26,7 @@ import javax.persistence.PersistenceContext;
  * @author 谢长春 2019/1/23
  */
 @Configuration
+@EnableJpaRepositories(basePackages = {"com.ccx.**.dao.jpa"})
 public class QueryDSLConfig {
     @PersistenceContext
     private EntityManager entityManager;

@@ -43,7 +43,7 @@ import java.util.Date;
 // spring-boot start >>
 @Configuration
 @EnableJpaRepositories(basePackages = {"com.ccx.**.dao.jpa"})
-public class DBConfig {
+public class QueryDSLConfig {
     @PersistenceContext
     private EntityManager entityManager;
 
