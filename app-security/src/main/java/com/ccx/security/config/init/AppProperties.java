@@ -27,5 +27,6 @@ public class AppProperties implements IJson {
     private String domain;
     private String markdown;
     private String pathRoot;
+    private Integer tokenExpired;
 
 }

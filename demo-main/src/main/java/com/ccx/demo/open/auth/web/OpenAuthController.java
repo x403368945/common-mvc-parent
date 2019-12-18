@@ -77,7 +77,7 @@ public class OpenAuthController {
                                     URL.SERVER.append(v.formatUrl()),
                                     BeanMap.create(new AuthLogin()
                                             .setUsername("admin")
-                                            .setPassword("admin")
+                                            .setPassword("111111")
                                     )
                             ))
                     )
@@ -121,7 +121,7 @@ public class OpenAuthController {
                                 URL.SERVER.append(v.formatUrl()),
                                 BeanMap.create(new AuthLogin()
                                         .setUsername("admin")
-                                        .setPassword("admin")
+                                        .setPassword("111111")
                                 )
                         ))
                 )
@@ -162,7 +162,7 @@ public class OpenAuthController {
                             .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl()),
                                     BeanMap.create(new AuthLogin()
                                             .setUsername("admin")
-                                            .setPassword("admin")
+                                            .setPassword("111111")
                                     )
                                     )
                             ))
@@ -176,7 +176,7 @@ public class OpenAuthController {
 //            session.setMaxInactiveInterval(60); // 测试时，设置 session 超时时间为60s
             session.setAttribute(Session.user.name(), user);
             // 生成token 放在响应头
-            final String token = tokenCache.generate(user);
+            final String token = user.token();
             response.setHeader(Session.token.name(), token);
             result.setSuccess(user.toTabUserVO()).addExtras(Session.token.name(), token);
         } catch (Exception e) {

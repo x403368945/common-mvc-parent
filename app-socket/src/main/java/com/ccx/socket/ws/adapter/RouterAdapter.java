@@ -13,7 +13,7 @@ import org.springframework.web.socket.WebSocketSession;
 import java.io.IOException;
 import java.util.Objects;
 
-import static com.ccx.socket.config.init.BeanInitializer.Beans.getAppContext;
+import static com.ccx.socket.config.init.BeanInitializer.getAppContext;
 
 /**
  *

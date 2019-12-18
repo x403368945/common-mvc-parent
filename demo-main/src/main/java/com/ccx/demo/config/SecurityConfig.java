@@ -4,9 +4,14 @@ import com.alibaba.fastjson.JSON;
 import com.ccx.demo.business.user.entity.TabUser;
 import com.ccx.demo.config.init.AppConfig;
 import com.ccx.demo.enums.Session;
+import com.ccx.demo.open.auth.cache.TokenCache;
+import com.support.config.security.AuthHandler;
+import com.support.config.security.IAdapter;
+import com.support.config.security.JsonUsernamePasswordAuthenticationFilter;
+import com.support.config.security.SimpleAuthAdapter;
 import com.support.filter.RequestIdFilter;
-import com.support.config.security.*;
 import com.support.mvc.enums.Code;
+import com.support.mvc.exception.CodeException;
 import com.support.mvc.exception.TokenNotExistException;
 import com.utils.enums.ContentType;
 import lombok.Cleanup;
@@ -35,10 +40,11 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.LinkedHashMap;
 
 import static com.alibaba.fastjson.serializer.SerializerFeature.PrettyFormat;
 
@@ -218,68 +224,40 @@ public class SecurityConfig {
 
             @Override
             protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-                if (Objects.equals("/", request.getRequestURI())) {
+                if (StringUtils.isBlank(request.getHeader(Session.token.name()))) {
                     filterChain.doFilter(request, response);
                     return;
                 }
                 try {
-                    final HttpSession session = request.getSession(false);
-                    if (Objects.nonNull(session)) {
-                        if (Session.user.get(session).isPresent()) { // session中存在用户信息，表示已登录
-                            log.info(Session.user.getString(session).orElse(null));
-                        } else {
-                            tokenHandler(request);
+                    final String auth = request.getHeader(Session.token.name());
+                    if (log.isDebugEnabled()) {
+                        final Enumeration<String> headerNames = request.getHeaderNames();
+                        final LinkedHashMap<String, String> obj = new LinkedHashMap<>();
+                        while (headerNames.hasMoreElements()) {
+                            val key = headerNames.nextElement();
+                            obj.put(key, request.getHeader(key));
                         }
-                    } else {
-                        final Optional<Object> optional = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
-                                // Basic 没有 session，从 Authentication 获取用户信息，判断是否已认证
-                                .map(authentication -> authentication.getPrincipal() instanceof TabUser ? authentication.getPrincipal() : null);
-                        if (!optional.isPresent()) {
-                            tokenHandler(request);
-                        }
+                        log.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> headers\n{}", JSON.toJSONString(obj, PrettyFormat));
                     }
+
+                    if (StringUtils.isBlank(auth)) {
+                        throw new TokenNotExistException("token 不存在");
+                    }
+                    // token 校验成功之后，将用户信息设置到 SecurityContextHolder
+                    final TabUser user = TokenCache.auth(auth).getUser();
+                    SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
                     filterChain.doFilter(request, response);
                 } catch (Exception e) {
-                    if (e instanceof TokenNotExistException) {
-                        log.error(e.getMessage());
+                    if (e instanceof TokenNotExistException || e instanceof CodeException) {
+                        log.warn(e.getMessage());
                     } else {
                         log.error(e.getMessage(), e);
                     }
                     response.setContentType(ContentType.json.utf8());
                     @Cleanup final PrintWriter writer = response.getWriter();
-                    writer.write(Code.TIMEOUT.toResult().toString());
+                    writer.write(Code.TIMEOUT.toResult().json());
                     writer.flush();
                 }
-            }
-
-            /**
-             * 校验token
-             *
-             * @param request HttpServletRequest
-             */
-            private void tokenHandler(final HttpServletRequest request) {
-                HttpSession session;
-                final String auth = request.getHeader(Session.token.name());
-                if (log.isDebugEnabled()) {
-                    final Enumeration<String> headerNames = request.getHeaderNames();
-                    final LinkedHashMap<String, String> obj = new LinkedHashMap<>();
-                    while (headerNames.hasMoreElements()) {
-                        val key = headerNames.nextElement();
-                        obj.put(key, request.getHeader(key));
-                    }
-                    log.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> headers\n{}", JSON.toJSONString(obj, PrettyFormat));
-                }
-
-                if (StringUtils.isBlank(auth)) {
-                    throw new TokenNotExistException("token 不存在");
-                }
-                // token 校验成功之后，将用户信息放入session
-                final TabUser user = TokenCache.instance().validate(auth);
-                SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
-//        System.out.println(JSON.toJSONString(SecurityContextHolder.getContext().getAuthentication().getPrincipal(), PrettyFormat));
-                session = request.getSession(true);
-//        session.setMaxInactiveInterval(60); // 测试时，设置 session 超时时间为60s
-                session.setAttribute(Session.user.name(), user);
             }
         };
     }

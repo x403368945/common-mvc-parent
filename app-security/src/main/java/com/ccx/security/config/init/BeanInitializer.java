@@ -62,14 +62,14 @@ public class BeanInitializer implements InitConfig.Initializer {
         public <T> T get() {
             return (T) supplier.get();
         }
+    }
 
-        /**
-         * 获取 Spring Context 对象
-         *
-         * @return ApplicationContext
-         */
-        public static ApplicationContext getAppContext() {
-            return APP_CONTEXT;
-        }
+    /**
+     * 获取 Spring Context 对象
+     *
+     * @return ApplicationContext
+     */
+    public static ApplicationContext getAppContext() {
+        return APP_CONTEXT;
     }
 }

@@ -76,7 +76,7 @@ public class OpenAuthController {
                                     URL.SERVER.append(v.formatUrl()),
                                     BeanMap.create(new AuthLogin()
                                             .setUsername("admin")
-                                            .setPassword("admin")
+                                            .setPassword("111111")
                                     )
                             ))
                     )
@@ -120,7 +120,7 @@ public class OpenAuthController {
                                 URL.SERVER.append(v.formatUrl()),
                                 BeanMap.create(new AuthLogin()
                                         .setUsername("admin")
-                                        .setPassword("admin")
+                                        .setPassword("111111")
                                 )
                         ))
                 )
@@ -164,7 +164,7 @@ public class OpenAuthController {
 //                            .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl()),
 //                                    BeanMap.create(new AuthLogin()
 //                                            .setUsername("admin")
-//                                            .setPassword("admin")
+//                                            .setPassword("111111")
 //                                    )
 //                                    )
 //                            ))

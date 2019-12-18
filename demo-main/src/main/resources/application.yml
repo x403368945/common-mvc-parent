@@ -32,12 +32,14 @@ spring:
     exclude:
       - org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration # 禁止自动装配 jackson
   cache: # 需要使用 @EnableCaching 开启缓存，缓存配置
-#    type: simple
+    type: jcache
+#    ehcache:
+#      config: ehcache.xml
+    jcache:
+      config: classpath:ehcache.xml
 #    cache-names: # 缓存名称， 使用 @CacheEvict 注解的 cacheNames 必须在这里定义
 #      - "TokenCache"
 #      - "ITabUserCache"
 #      - "ITabUserCache.login"
 #      - "ITabUserCache.token"
 #      - "ITabRoleCache"
-    ehcache:
-      config: ehcache.xml

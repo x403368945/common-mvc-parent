@@ -5,6 +5,7 @@ import com.ccx.demo.business.user.dao.jpa.RoleRepository;
 import com.ccx.demo.business.user.entity.TabRole;
 import com.ccx.demo.enums.Radio;
 import com.querydsl.core.annotations.QueryTransient;
+import com.support.mvc.entity.ICache;
 import org.springframework.util.CollectionUtils;
 
 import java.beans.Transient;
@@ -14,7 +15,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.ccx.demo.config.init.BeanInitializer.Beans.getAppContext;
+import static com.ccx.demo.config.init.BeanInitializer.getAppContext;
 
 /**
  * <pre>
@@ -22,7 +23,7 @@ import static com.ccx.demo.config.init.BeanInitializer.Beans.getAppContext;
  *
  * @author 谢长春 2019/8/29
  */
-public interface ITabRoleCache {
+public interface ITabRoleCache extends ICache {
     String CACHE_ROW_BY_ID = "ITabRoleCache";
 
     /**

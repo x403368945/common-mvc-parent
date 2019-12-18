@@ -4,11 +4,12 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.ccx.demo.business.user.dao.jpa.UserRepository;
 import com.ccx.demo.business.user.entity.TabUser;
 import com.querydsl.core.annotations.QueryTransient;
+import com.support.mvc.entity.ICache;
 
 import java.beans.Transient;
 import java.util.Optional;
 
-import static com.ccx.demo.config.init.BeanInitializer.Beans.getAppContext;
+import static com.ccx.demo.config.init.BeanInitializer.getAppContext;
 import static com.ccx.demo.config.init.BeanInitializer.Beans.userRepository;
 
 /**
@@ -16,7 +17,7 @@ import static com.ccx.demo.config.init.BeanInitializer.Beans.userRepository;
  *
  * @author 谢长春 2017-9-26
  */
-public interface ITabUserCache {
+public interface ITabUserCache extends ICache {
     String CACHE_ROW_BY_ID = "ITabUserCache";
     String CACHE_LOGIN = "ITabUserCache.login";
 

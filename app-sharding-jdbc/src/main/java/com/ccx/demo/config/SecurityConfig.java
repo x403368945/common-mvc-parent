@@ -222,7 +222,7 @@ public class SecurityConfig {
 //                    }
 //                    response.setContentType(ContentType.json.utf8());
 //                    @Cleanup final PrintWriter writer = response.getWriter();
-//                    writer.write(Code.TIMEOUT.toResult().toString());
+//                    writer.write(Code.TIMEOUT.toResult().json());
 //                    writer.flush();
 //                }
 //            }

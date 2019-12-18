@@ -6,6 +6,7 @@ app: # 测试环境 todo 编辑时注意，请同时变更其他环境对应的�
   domain: http://localhost:8080 # 应用路径，域名；可使用 frp 服务器域名
   markdown: http://localhost:8080/md/ # markdown 文档地址
   path-root: /app/files # 应用文件根目录
+  token-expired: 30 # token 默认过期时间，30 天
 
 spring:
   datasource:

@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Supplier;
 
 /**
  * 初始化单例类、实体类、接口需要的bean，因为单例类无法直接注入bean
+ *
  * @author 谢长春
  */
 @Component
@@ -64,14 +64,15 @@ public class BeanInitializer implements InitConfig.Initializer {
         public <T> T get() {
             return (T) supplier.get();
         }
-
-        /**
-         * 获取 Spring Context 对象
-         *
-         * @return ApplicationContext
-         */
-        public static ApplicationContext getAppContext() {
-            return APP_CONTEXT;
-        }
     }
+
+    /**
+     * 获取 Spring Context 对象
+     *
+     * @return ApplicationContext
+     */
+    public static ApplicationContext getAppContext() {
+        return APP_CONTEXT;
+    }
+
 }

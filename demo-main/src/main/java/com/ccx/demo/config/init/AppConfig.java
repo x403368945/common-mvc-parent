@@ -64,6 +64,15 @@ public class AppConfig {
         return "prod".equals(properties.getEnv());
     }
 
+    /**
+     * 获取 token 默认过期时间
+     *
+     * @return int
+     */
+    public static int getTokenExpired() {
+        return properties.getTokenExpired();
+    }
+
 
     /**
      * 应用程序配置枚举
@@ -84,6 +93,8 @@ public class AppConfig {
                 "app.path-root", () -> properties.getPathRoot()),
         MARKDOWN("markdown 文档存放地址",
                 "app.markdown", () -> properties.getMarkdown()),
+        TOKEN_EXPIRED("token 默认过期时间",
+                "app.token-expired", () -> Objects.toString(properties.getTokenExpired())),
         ;
         public final String key;
         public final String comment;

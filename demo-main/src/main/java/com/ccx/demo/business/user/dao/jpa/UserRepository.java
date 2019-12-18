@@ -19,7 +19,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.ccx.demo.business.user.entity.QTabUser.tabUser;
-import static com.ccx.demo.config.init.BeanInitializer.Beans.getAppContext;
+import static com.ccx.demo.config.init.BeanInitializer.getAppContext;
 import static com.ccx.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 
 /**

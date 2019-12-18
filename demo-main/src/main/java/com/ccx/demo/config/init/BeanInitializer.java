@@ -10,7 +10,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Supplier;
 
@@ -70,14 +69,15 @@ public class BeanInitializer implements InitConfig.Initializer {
         public <T> T get() {
             return (T) supplier.get();
         }
-
-        /**
-         * 获取 Spring Context 对象
-         *
-         * @return ApplicationContext
-         */
-        public static ApplicationContext getAppContext() {
-            return APP_CONTEXT;
-        }
     }
+
+    /**
+     * 获取 Spring Context 对象
+     *
+     * @return ApplicationContext
+     */
+    public static ApplicationContext getAppContext() {
+        return APP_CONTEXT;
+    }
+
 }
