@@ -7,6 +7,7 @@ import com.utils.util.Maps;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
@@ -29,6 +30,7 @@ import static com.support.mvc.entity.base.Prop.Type.STRING;
 @NoArgsConstructor
 @Data
 @Accessors(chain = true)
+@ToString(exclude = {"password"})
 public class AuthLogin implements Serializable {
     /**
      * 实体类所有属性名
@@ -117,11 +119,6 @@ public class AuthLogin implements Serializable {
             return Method.SESSION; // 若未指定会话模式，则默认为SESSION模式
         }
         return method;
-    }
-
-    @Override
-    public String toString() {
-        return JSON.toJSONString(this);
     }
 
     public static void main(String[] args) {

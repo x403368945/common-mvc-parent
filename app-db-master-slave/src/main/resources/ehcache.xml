@@ -1,7 +1,7 @@
 <config xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
         xmlns='http://www.ehcache.org/v3'
         xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core.xsd">
-    <persistence directory="java.io.tmpdir"/> <!-- 缓存文件位置 -->
+    <persistence directory="/app/files/ehcache"/> <!-- 缓存文件位置 -->
 
     <cache alias="ITabUserCache">
         <key-type>java.lang.Long</key-type>

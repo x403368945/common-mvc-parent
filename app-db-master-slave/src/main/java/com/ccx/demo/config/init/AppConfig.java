@@ -124,6 +124,7 @@ public class AppConfig {
     public enum Path {
         ROOT("文件存储根目录:(d:/files | /root/files)", "          /"),
         CONFIG("配置文件路径", "                                   /config/"),
+        EHCACHE("Ehcache缓存文件路径", "                           /ehcache/"),
         EXCEL("Excel模板文件目录", "                               /excel/"),
         JSON("json配置文件目录", "                                 /json/"),
         HTML("html模板文件目录", "                                 /html/"),

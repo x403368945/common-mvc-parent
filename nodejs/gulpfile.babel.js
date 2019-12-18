@@ -146,13 +146,13 @@ gulp.task('mysql:markdown', async () => {
     const {name, engine, collation, comment} = tables[i];
     const writer = fs.createWriteStream(path.resolve(`temp/md/${name}.md`));
     writer.write(`# ${comment}\n`);
-    writer.write(`select * from ${name}\n\n`);
+    writer.write(`select * from ${name};\n\n`);
     { // markdown 字段表格部分
       writer.write('|字段|类型|允许空|默认值|描述|\n');
       writer.write('|----|----|----|----|----|\n');
       const columns = await query(connection, `SHOW FULL COLUMNS FROM  ${name}`);
       columns.forEach(({Field, Type, Collation, Null, Default, Comment}) =>
-        writer.write(`|${Field}|${Type}|${Null}|${Default || ''}|${Collation ? Collation + ',' : ''}${Comment}|\n`));
+        writer.write(`|${Field}|${Type}|${Null}|${Default || '-'}|${Comment || '-'}|\n`));
       // console.log(columns);
     }
     writer.write('\n\n\n');
@@ -314,7 +314,7 @@ gulp.task('xlsx:read', () => {
   writer.end();
 });
 gulp.task('xlsx:write', () => {
-  const array = [];
+  const {data: {errorInfos: array}} = JSON.parse('');
   array.sort((a, b) => a.rowNumber - b.rowNumber);
   const wb = xlsx.utils.book_new();
   xlsx.utils.book_append_sheet(wb, xlsx.utils.json_to_sheet(array), 'Sheet1');
