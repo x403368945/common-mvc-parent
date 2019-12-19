@@ -8,6 +8,7 @@ import com.ccx.demo.business.user.entity.extend.ITabUser;
 import com.ccx.demo.business.user.vo.UserDetail;
 import com.ccx.demo.enums.Radio;
 import com.ccx.demo.enums.RegisterSource;
+import com.ccx.demo.open.auth.cache.TokenCache;
 import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;
 import com.querydsl.core.types.dsl.Expressions;
@@ -205,6 +206,18 @@ public class TabUser extends UserDetail implements ITabUser, ITable, ITabUserCac
         } catch (Exception e) {
             throw ORDER_BY.exception("排序字段可选范围：".concat(JSON.toJSONString(OrderBy.names())));
         }
+    }
+
+    /**
+     * 基于用户生成 token，每个用户只支持一个 token ，每次调用该方法，前一次生成的 token 将失效
+     *
+     * @return {@link String} 生成的 token
+     */
+    public String token() {
+        return TokenCache.builder()
+                .userId(this.id)
+                .build()
+                .token();
     }
 
 // DB End **************************************************************************************************************

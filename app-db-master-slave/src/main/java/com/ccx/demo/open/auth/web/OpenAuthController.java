@@ -2,6 +2,7 @@ package com.ccx.demo.open.auth.web;
 
 
 import com.ccx.demo.business.user.entity.TabUser;
+import com.ccx.demo.business.user.vo.TabUserVO;
 import com.ccx.demo.config.init.AppConfig.URL;
 import com.ccx.demo.enums.Session;
 import com.ccx.demo.open.auth.vo.AuthLogin;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * 操作请求处理：授权
@@ -109,7 +111,7 @@ public class OpenAuthController {
             @PathVariable final int version,
             @RequestBody final Param param,
             HttpServletRequest request) {
-        return new Result<TabUser>(1) // 指定接口最新版本号
+        return new Result<TabUserVO>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
                         .props(Props.list())
                         .notes(Arrays.asList(
@@ -139,54 +141,52 @@ public class OpenAuthController {
                 });
     }
 
-//    /**
-//     * 以 token 模式登录
-//     */
-//    @PostMapping("/login/TOKEN")
-//    @ResponseBody
-//    public Result<?> loginByToken(@PathVariable final int version,
-//                                  @RequestBody final Param param,
-//                                  HttpServletRequest request,
-//                                  HttpServletResponse response
-//    ) {
-//        final Result<TabUser> result = new Result<>(1);
-//        try {
-//            result
-//                    .version(builder -> builder
-//                            .url("/open/auth/{version}/login/TOKEN")
-//                            .markdown(this.getClass().getSimpleName().concat("/loginByToken.md"))
-//                            .method(POST)
-//                            .props(Props.comments())
-//                            .notes(Arrays.asList(
-//                                    "TOKEN模式登录，最长有效期30天，重新调用该接口则上次的token失效；返回结果extras中存放的是当前有效token，请将该键值对存储在本地，向服务端发起请求时附加到请求头"
-//                            ))
-//                            .build()
-//                            .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl()),
-//                                    BeanMap.create(new AuthLogin()
-//                                            .setUsername("admin")
-//                                            .setPassword("111111")
-//                                    )
-//                                    )
-//                            ))
-//                    .versionAssert(version);
-//            AuthLogin authLogin = Param.of(param).parseObject(AuthLogin.class);
-//            Assert.hasText(authLogin.getUsername(), "用户名不能为空");
-//            Assert.hasText(authLogin.getPassword(), "密码不能为空");
-//            // 登录成功之后，将用户信息放入session； 同时生成 token 回传到前端
-//            TabUser user = authService.login(authLogin.getUsername(), authLogin.getPassword());
-//            HttpSession session = request.getSession(true);
-////            session.setMaxInactiveInterval(60); // 测试时，设置 session 超时时间为60s
-//            session.setAttribute(Session.user.name(), user);
-//            // 生成token 放在响应头
-//            final String token = tokenCache.generate(user);
-//            response.setHeader(Session.token.name(), token);
-//            result.setSuccess(user.toLoginResult()).addExtras(Session.token.name(), token);
-//        } catch (Exception e) {
-//            log.error(e.getMessage(), e);
-//            result.setException(e);
-//        }
-//        return result;
-//    }
+    /**
+     * 以 token 模式登录
+     */
+    @PostMapping("/login/TOKEN")
+    @ResponseBody
+    public Result<?> loginByToken(@PathVariable final int version,
+                                  @RequestBody final Param param,
+                                  HttpServletRequest request,
+                                  HttpServletResponse response
+    ) {
+        final Result<TabUser> result = new Result<>(1);
+        try {
+            result
+                    .version(this.getClass(), builder -> builder
+                            .props(Props.list())
+                            .notes(Arrays.asList(
+                                    "TOKEN模式登录，最长有效期30天，重新调用该接口则上次的token失效；返回结果extras中存放的是当前有效token，请将该键值对存储在本地，向服务端发起请求时附加到请求头"
+                            ))
+                            .build()
+                            .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl()),
+                                    BeanMap.create(new AuthLogin()
+                                            .setUsername("admin")
+                                            .setPassword("111111")
+                                    )
+                                    )
+                            ))
+                    .versionAssert(version);
+            AuthLogin authLogin = Param.of(param).parseObject(AuthLogin.class);
+            Assert.hasText(authLogin.getUsername(), "用户名不能为空");
+            Assert.hasText(authLogin.getPassword(), "密码不能为空");
+            // 登录成功之后，将用户信息放入session； 同时生成 token 回传到前端
+            TabUser user = authService.login(authLogin.getUsername(), authLogin.getPassword());
+            // 生成token 放在响应头
+            final String token = user.token();
+            response.setHeader(Session.token.name(), token);
+            result.setSuccess(user.toTabUserVO()).addExtras(Session.token.name(), token);
+
+            Optional.ofNullable(request.getSession(false)).ifPresent(session -> {
+                session.setMaxInactiveInterval(1); // 兼容默认的 session 模式，禁止 token 模式创建 session，设置 session 超时时间为1s
+            });
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            result.setException(e);
+        }
+        return result;
+    }
 
 //    /**
 //     * 激活账户

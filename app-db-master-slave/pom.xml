@@ -30,6 +30,20 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
+        <!-- Ehcache3 Start : springboot 默认的 Ehcache 缓存版本只到 2.x ，3.x 需要使用 jcache 才能兼容 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.cache</groupId>
+            <artifactId>cache-api</artifactId>
+        </dependency>
+        <!-- Ehcache3 End : springboot 默认的 Ehcache 缓存版本只到 2.x ，3.x 需要使用 jcache 才能兼容 -->
     </dependencies>
     <build>
         <finalName>${project.artifactId}</finalName>

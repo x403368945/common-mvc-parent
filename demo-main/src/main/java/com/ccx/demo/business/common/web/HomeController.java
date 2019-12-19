@@ -18,9 +18,9 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RequestMapping("")
 @Slf4j
 public class HomeController
-        // spring-boot start >> mvc 不需要继承 {@link AbstractMvcConfig.ErrorController}
+// spring-boot start >> mvc 不需要继承 {@link AbstractMvcConfig.ErrorController}
         extends AbstractMvcConfig.ErrorController
-        // spring-boot end <<<<
+// spring-boot end <<<<
 {
     // spring-boot start >> mvc 不需要继承 {@link AbstractMvcConfig.ErrorController}
     public HomeController(ErrorAttributes errorAttributes) {

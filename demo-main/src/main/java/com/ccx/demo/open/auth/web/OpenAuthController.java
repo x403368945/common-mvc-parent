@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * 操作请求处理：授权
@@ -172,13 +173,14 @@ public class OpenAuthController {
             Assert.hasText(authLogin.getPassword(), "密码不能为空");
             // 登录成功之后，将用户信息放入session； 同时生成 token 回传到前端
             TabUser user = authService.login(authLogin.getUsername(), authLogin.getPassword());
-            HttpSession session = request.getSession(true);
-//            session.setMaxInactiveInterval(60); // 测试时，设置 session 超时时间为60s
-            session.setAttribute(Session.user.name(), user);
             // 生成token 放在响应头
             final String token = user.token();
             response.setHeader(Session.token.name(), token);
             result.setSuccess(user.toTabUserVO()).addExtras(Session.token.name(), token);
+
+            Optional.ofNullable(request.getSession(false)).ifPresent(session -> {
+                session.setMaxInactiveInterval(1); // 兼容默认的 session 模式，禁止 token 模式创建 session，设置 session 超时时间为1s
+            });
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             result.setException(e);

@@ -26,6 +26,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -45,6 +46,7 @@ import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
+import java.util.Optional;
 
 import static com.alibaba.fastjson.serializer.SerializerFeature.PrettyFormat;
 
@@ -165,6 +167,7 @@ public class SecurityConfig {
                     .antMatchers("/error").permitAll()
                     // 所有方法都需要登录认证
                     .anyRequest().authenticated()
+//                    .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     // 开启 Basic 认证
                     .and().httpBasic()
                     .and().formLogin()
@@ -230,14 +233,14 @@ public class SecurityConfig {
                 }
                 try {
                     final String auth = request.getHeader(Session.token.name());
-                    if (log.isDebugEnabled()) {
+                    if (log.isTraceEnabled()) {
                         final Enumeration<String> headerNames = request.getHeaderNames();
                         final LinkedHashMap<String, String> obj = new LinkedHashMap<>();
                         while (headerNames.hasMoreElements()) {
                             val key = headerNames.nextElement();
                             obj.put(key, request.getHeader(key));
                         }
-                        log.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> headers\n{}", JSON.toJSONString(obj, PrettyFormat));
+                        log.trace(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> headers\n{}", JSON.toJSONString(obj, PrettyFormat));
                     }
 
                     if (StringUtils.isBlank(auth)) {
@@ -247,6 +250,9 @@ public class SecurityConfig {
                     final TabUser user = TokenCache.auth(auth).getUser();
                     SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
                     filterChain.doFilter(request, response);
+                    Optional.ofNullable(request.getSession(false)).ifPresent(session -> {
+                        session.setMaxInactiveInterval(1); // 兼容默认的 session 模式，禁止 token 模式创建 session，设置 session 超时时间为1s
+                    });
                 } catch (Exception e) {
                     if (e instanceof TokenNotExistException || e instanceof CodeException) {
                         log.warn(e.getMessage());

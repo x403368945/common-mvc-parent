@@ -3,10 +3,10 @@ package com.ccx.demo.business.common.vo;
 import com.ccx.demo.config.init.AppConfig.Path;
 import com.utils.util.FPath;
 import com.utils.util.FPath.FileName;
-import com.utils.util.Util;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -104,7 +104,7 @@ public class FileUpload<T> {
      */
     @SneakyThrows
     public FileUpload<T> upload() {
-        if (Objects.isNull(to)) {
+        if (StringUtils.isEmpty(to)) {
             throw new NullPointerException("未指定文件上传目录");
         }
         if (Objects.isNull(uploadFiles)) {
@@ -123,7 +123,7 @@ public class FileUpload<T> {
             localFile = FPath.of(to, fileInfo.getUname());
             // 将文件写入到本地
             uploadFile.transferTo(localFile.file());
-            if (log.isDebugEnabled()) log.debug("上传文件路径：{}",localFile.chmod().absolute());
+            if (log.isDebugEnabled()) log.debug("上传文件路径：{}", localFile.chmod().absolute());
             resultList.add(fileInfo.parse(clazz));
         }
         return this;
