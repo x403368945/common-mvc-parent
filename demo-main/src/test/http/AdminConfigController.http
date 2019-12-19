@@ -13,9 +13,9 @@ GET http://localhost:8080/admin-config/1/url
 Content-Type: application/json
 Authorization: basic YWRtaW46YWRtaW4=
 
-### 普通用户，模拟无权限时的响应消息
-GET http://localhost:8080/admin-config/1/app
-Authorization: Basic dXNlcjoxMTExMTE=
-Accept: application/json
+### 模拟 403
+GET http://localhost:8080/admin-config/1/url
+Content-Type: application/json
+Authorization: basic dXNlcjoxMTExMTE=
 
 ###
