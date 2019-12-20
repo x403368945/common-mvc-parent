@@ -3,6 +3,7 @@ package com.ccx.demo.business.example.web;
 import com.ccx.demo.business.example.entity.TabDemoList;
 import com.ccx.demo.business.example.enums.DemoStatus;
 import com.ccx.demo.business.example.service.DemoListService;
+import com.ccx.demo.business.example.vo.TabDemoListVO;
 import com.ccx.demo.business.user.entity.TabUser;
 import com.ccx.demo.config.init.AppConfig.URL;
 import com.ccx.demo.enums.Radio;
@@ -401,6 +402,83 @@ public class DemoListController implements IAuthController<Long> {
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
                         .setSuccess(service.findPage(
+                                Param.of(json).parseObject(TabDemoList.class),
+                                Pager.builder().number(number).size(size).build()
+                        ))
+                );
+    }
+
+
+    @GetMapping("/vo")
+    @ResponseBody
+    public Result<?> searchVO(
+            @AuthenticationPrincipal final TabUser user,
+            @PathVariable final int version,
+            @RequestParam(required = false, defaultValue = "{}") final String json) {
+        return new Result<TabDemoListVO>(1) // 指定接口最新版本号
+                .version(this.getClass(), builder -> builder
+                        .props(TabDemoList.Props.list()) // 当前返回对象属性说明
+                        .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
+                                "查询多条数据，不分页，url带参必须使用 encodeURI 格式化【?json=encodeURI(JSON.stringify({}))】",
+                                "1.当前版本变更说明"
+                        ))
+                        .build()
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl()), // 当前接口参考案例请求地址；
+                                TabDemoList.builder() // 当前接口参考案例请求参数，demo中设置支持查询的字段
+                                        .status(DemoStatus._NONE)
+                                        .insertUserId(1L)
+                                        .updateUserId(1L)
+                                        .deleted(Radio.NO)
+                                        .name("name")
+                                        .content("content")
+                                        .amountRange(Range.of(1d, 10d))
+                                        .insertTimeRange(Dates.Range.month())
+                                        .sorts(Collections.singletonList(Sorts.Order.builder().name(TabDemoList.OrderBy.id.name()).direction(DESC).build()))
+                                        .build()
+                        ))
+                )
+                .execute(result -> result
+                        .versionAssert(version, false) // 弱校验版本号
+                        .setSuccess(service.findListVO(
+                                Param.of(json).parseObject(TabDemoList.class)
+                        ))
+                );
+    }
+
+    @GetMapping("/page/vo/{number}/{size}")
+    @ResponseBody
+    public Result<?> pageVO(
+            @AuthenticationPrincipal final TabUser user,
+            @PathVariable final int version,
+            @PathVariable final int number,
+            @PathVariable final int size,
+            @RequestParam(required = false, defaultValue = "{}") final String json
+    ) {
+        return new Result<TabDemoListVO>(1) // 指定接口最新版本号
+                .version(this.getClass(), builder -> builder
+                        .props(TabDemoList.Props.list()) // 当前返回对象属性说明
+                        .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
+                                "分页查询数据，url带参必须使用 encodeURI 格式化【?json=encodeURI(JSON.stringify({}))】",
+                                "1.当前版本变更说明"
+                        ))
+                        .build()
+                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(1, 20)), // 当前接口参考案例请求地址；
+                                TabDemoList.builder() // 当前接口参考案例请求参数，demo中设置支持查询的字段
+                                        .status(DemoStatus._NONE)
+                                        .insertUserId(1L)
+                                        .updateUserId(1L)
+                                        .deleted(Radio.NO)
+                                        .name("name")
+                                        .content("content")
+                                        .amountRange(Range.of(1d, 10d))
+                                        .insertTimeRange(Dates.Range.month())
+                                        .sorts(Collections.singletonList(Sorts.Order.builder().name(TabDemoList.OrderBy.id.name()).direction(DESC).build()))
+                                        .build()
+                        ))
+                )
+                .execute(result -> result
+                        .versionAssert(version, false) // 弱校验版本号
+                        .setSuccess(service.findPageVO(
                                 Param.of(json).parseObject(TabDemoList.class),
                                 Pager.builder().number(number).size(size).build()
                         ))

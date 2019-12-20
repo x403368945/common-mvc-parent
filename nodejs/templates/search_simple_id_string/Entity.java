@@ -215,6 +215,7 @@ public class <%=TabName%> implements
 /*
 import com.alibaba.fastjson.annotation.JSONField;
 import com.querydsl.core.annotations.QueryTransient;
+import org.apache.commons.lang3.StringUtils;
 import java.beans.Transient;
 
 import static <%=pkg%>.config.init.BeanInitializer.Beans.getAppContext;
@@ -233,8 +234,10 @@ public interface I<%=TabName%>Cache {
      * @return {@link Optional<<%=TabName%>>}
      *\/
     @JSONField(serialize = false, deserialize = false)
-    default Optional<<%=TabName%>> get<%=TabName%>CacheById(final Long id) {
-        return Optional.of(getAppContext().getBean(<%=JavaName%>Repository.class).findCacheById(id));
+    default Optional<<%=TabName%>> get<%=TabName%>CacheById(final String id) {
+        return Optional.ofNullable(id)
+                .filter(StringUtils::isNotBlank)
+                .map(v -> getAppContext().getBean(<%=JavaName%>Repository.class).findCacheById(v));
     }
 }
 */

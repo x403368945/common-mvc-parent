@@ -34,7 +34,9 @@ public interface ITabRoleCache extends ICache {
      */
     @JSONField(serialize = false, deserialize = false)
     default Optional<TabRole> getTabRoleCacheById(final Long id) {
-        return Optional.of(getAppContext().getBean(RoleRepository.class).findCacheById(id));
+        return Optional.ofNullable(id)
+                .filter(value -> value > 0)
+                .map(value ->getAppContext().getBean(RoleRepository.class).findCacheById(value));
     }
 
     /**
@@ -47,7 +49,6 @@ public interface ITabRoleCache extends ICache {
     @QueryTransient
     @JSONField(serialize = false, deserialize = false)
     default List<String> getRoleAuthoritiesCacheById(final Long id) {
-        if (Objects.isNull(id)) return Collections.emptyList();
         return getTabRoleCacheById(id)
                 .filter(obj -> Objects.equals(obj.getDeleted(), Radio.NO))
                 .map(TabRole::getAuthorities)
@@ -65,7 +66,6 @@ public interface ITabRoleCache extends ICache {
     @QueryTransient
     @JSONField(serialize = false, deserialize = false)
     default String getRoleNameCacheById(final Long id) {
-        if (Objects.isNull(id)) return null;
         return getTabRoleCacheById(id).map(TabRole::getName).orElse(null);
     }
 

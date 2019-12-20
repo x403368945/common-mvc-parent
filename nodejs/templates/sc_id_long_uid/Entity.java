@@ -234,7 +234,9 @@ public interface I<%=TabName%>Cache {
      *\/
     @JSONField(serialize = false, deserialize = false)
     default Optional<<%=TabName%>> get<%=TabName%>CacheById(final Long id) {
-        return Optional.of(getAppContext().getBean(<%=JavaName%>Repository.class).findCacheById(id));
+        return Optional.ofNullable(id)
+                .filter(v -> v > 0)
+                .map(v -> getAppContext().getBean(<%=JavaName%>Repository.class).findCacheById(v));
     }
 }
 */

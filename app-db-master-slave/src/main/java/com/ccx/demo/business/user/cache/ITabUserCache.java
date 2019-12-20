@@ -9,7 +9,6 @@ import com.support.mvc.entity.ICache;
 import java.beans.Transient;
 import java.util.Optional;
 
-import static com.ccx.demo.config.init.BeanInitializer.getAppContext;
 import static com.ccx.demo.config.init.BeanInitializer.Beans.userRepository;
 
 /**
@@ -29,7 +28,10 @@ public interface ITabUserCache extends ICache {
      */
     @JSONField(serialize = false, deserialize = false)
     default Optional<TabUser> getTabUserCacheById(final Long id) {
-        return Optional.of(getAppContext().getBean(UserRepository.class).findCacheById(id));
+        return Optional.ofNullable(id)
+                .filter(value -> value > 0)
+                .map(value -> userRepository.<UserRepository>get().findCacheById(id));
+
     }
 
     /**
@@ -42,7 +44,7 @@ public interface ITabUserCache extends ICache {
     @QueryTransient
     @JSONField(serialize = false, deserialize = false)
     default String getNickNameCacheById(final Long userId) {
-        return userRepository.<UserRepository>get().findById(userId).map(TabUser::getNickname).orElse(null);
+        return getTabUserCacheById(userId).map(TabUser::getNickname).orElse(null);
     }
 
     /**

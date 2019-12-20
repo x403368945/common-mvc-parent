@@ -8,6 +8,9 @@ import com.support.mvc.dao.ISearchRepository;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.entity.base.Sorts;
 import com.utils.util.Then;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Sort;
 
 import java.util.*;
@@ -220,22 +223,22 @@ public interface IWhere<U, W> {
          * @return {@link QdslWhere}
          */
         public QdslWhere andIfNonBlank(final String value, final Supplier<BooleanExpression> supplier) {
-            return and(Optional.ofNullable(value).filter(v -> !Objects.equals("", value.trim())).isPresent(), supplier);
+            return and(StringUtils.isNotBlank(value), supplier);
         }
 
         /**
          * where 条件拼接
          *
-         * @param collection Collection value非空且集合大小必须大于 0 ，执行supplier.value()获得查询条件
+         * @param collection {@link Collection} value非空且集合大小必须大于 0 ，执行supplier.value()获得查询条件
          * @param supplier   {@link Supplier<BooleanExpression>}
          * @return {@link QdslWhere}
          */
-        public QdslWhere andIfNonEmpty(final Collection<BooleanExpression> collection, final Supplier<BooleanExpression> supplier) {
-            return and(Objects.nonNull(collection) && !collection.isEmpty(), supplier);
+        public QdslWhere andIfNonEmpty(final Collection<?> collection, final Supplier<BooleanExpression> supplier) {
+            return and(!CollectionUtils.isNotEmpty(collection), supplier);
         }
 
         public QdslWhere andIfNonEmpty(final Object[] objects, final Supplier<BooleanExpression> supplier) {
-            return and(Objects.nonNull(objects) && objects.length>0, supplier);
+            return and(ArrayUtils.isNotEmpty(objects), supplier);
         }
 
         public boolean isEmpty() {
