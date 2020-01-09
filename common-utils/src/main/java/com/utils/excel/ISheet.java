@@ -8,6 +8,7 @@ import lombok.SneakyThrows;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellAddress;
 
+import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
@@ -282,7 +283,7 @@ public interface ISheet<T extends ISheet<T>> {
     }
 
     @SneakyThrows
-    default void saveWorkBookByStream(final OutputStream outputStream) {
+    default void saveWorkBook(final OutputStream outputStream) {
         getWorkbook().write(outputStream);
         outputStream.close();
     }
