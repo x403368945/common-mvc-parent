@@ -6,8 +6,13 @@ import com.alibaba.fastjson.annotation.JSONType;
 import com.ccx.demo.business.example.enums.DemoStatus;
 import com.ccx.demo.business.user.cache.ITabUserCache;
 import com.ccx.demo.enums.Radio;
+import com.google.common.collect.Lists;
+import com.querydsl.core.annotations.Config;
 import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;
+import com.querydsl.core.types.EntityPath;
+import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.BeanPath;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.support.mvc.entity.ITable;
@@ -31,6 +36,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
@@ -47,6 +53,7 @@ import static com.support.mvc.enums.Code.ORDER_BY;
  *
  * @author 谢长春 on 2018-12-17.
  */
+@Config(entityAccessors = true, listAccessors = true, mapAccessors = true)
 @Table(name = "tab_demo_list") // 注解映射数据库表名
 @Entity // 声明数据库映射实体类，将会被Spring扫描
 @QueryEntity // 注解为 QueryDsl 实体类，将会被 QueryDsl 通用查询框架扫描，生成Q{ClassName}.java
@@ -307,7 +314,30 @@ public class TabDemoList implements
         }
     }
 
+    /**
+     * 获取查询实体与数据库表映射的所有字段,用于投影到 VO 类
+     * 支持追加扩展字段,追加扩展字段一般用于连表查询
+     *
+     * @param appends {@link Path}[] 追加扩展连表查询字段
+     * @return {@link Path}[]
+     */
+    public static Path<?>[] allColumns(final Path<?>... appends) {
+        final List<Path<?>> columns = Lists.newArrayList(appends);
+        final Class<?> clazz = tabDemoList.getClass();
+        try {
+            for (Field field : clazz.getDeclaredFields()) {
+                if (field.getType().isPrimitive()) continue;
+                final Object o = field.get(tabDemoList);
+                if (o instanceof EntityPath || o instanceof BeanPath) continue;
+                if (o instanceof Path) {
+                    columns.add((Path<?>) o);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("获取查询实体属性与数据库映射的字段异常", e);
+        }
+        return columns.toArray(new Path<?>[0]);
+    }
 
 // DB End **************************************************************************************************************
-
 }

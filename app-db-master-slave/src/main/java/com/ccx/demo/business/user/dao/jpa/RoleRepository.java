@@ -129,10 +129,10 @@ public interface RoleRepository extends
     /**
      * 查询有效的角色集合，需要完全匹配 id:uid
      *
-     * @param roles {@link List<TabRole>} 角色集合
-     * @return {@link List<Long>}
+     * @param roles {@link Set<TabRole>} 角色集合
+     * @return {@link Set<Long>}
      */
-    default Set<Long> findValidRoleIds(final List<TabRole> roles) {
+    default Set<Long> findValidRoleIds(final Set<TabRole> roles) {
         final Set<String> roleKeys = roles.stream()
                 // 拼接 id:uid
                 .map(row -> StringUtils.joinWith(":", row.getId(), row.getUid()))

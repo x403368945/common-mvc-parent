@@ -110,7 +110,7 @@ public class RoleService implements IService<TabRole>, ITabRoleCache {
      * @return {@link List<Long>}
      */
     public @NotEmpty(message = "matchValidRoleIds:返回值不能为空集合") Set<Long> matchValidRoleIds(
-            @NotEmpty(message = "【ids】不能为空") final List<TabRole> roles) {
+            @NotEmpty(message = "【ids】不能为空") final Set<TabRole> roles) {
         return repository.findValidRoleIds(roles);
     }
 

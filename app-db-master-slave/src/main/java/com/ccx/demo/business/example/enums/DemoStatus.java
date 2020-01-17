@@ -16,7 +16,7 @@ import java.util.stream.Stream;
  * @author 谢长春 2018/12/17
  */
 public enum DemoStatus {
-    NONE("无效"),
+    _NONE("无效"),
     WATING("等待中"),
     RUNNING("执行中"),
     SUCCESS("成功"),

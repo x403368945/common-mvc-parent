@@ -7,13 +7,9 @@ import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.support.aop.annotations.Master;
 import com.support.mvc.dao.IRepository;
 import com.support.mvc.entity.base.Pager;
-import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +42,8 @@ public interface DemoListRepository extends
                         .selectFrom(q)
                         .where(q.id.eq(id).and(q.insertUserId.eq(userId)))
                         .fetchOne()
-                )                .map(obj -> {
+                )
+                .map(obj -> {
                     delete(obj);
                     return obj;
                 })
@@ -64,7 +61,8 @@ public interface DemoListRepository extends
                         .selectFrom(q)
                         .where(q.id.eq(id).and(q.uid.eq(uid)).and(q.insertUserId.eq(userId)))
                         .fetchOne()
-                )                .map(obj -> {
+                )
+                .map(obj -> {
                     delete(obj);
                     return obj;
                 })
@@ -146,7 +144,6 @@ public interface DemoListRepository extends
                 .fetchResults();
     }
 
-
     @Override
     default QueryResults<TabDemoList> findPage(final TabDemoList condition, final Pager pager, final Expression<?>... exps) {
         return jpaQueryFactory.<JPAQueryFactory>get()
@@ -158,4 +155,36 @@ public interface DemoListRepository extends
                 .orderBy(condition.buildQdslSorts())
                 .fetchResults();
     }
+
+    default <T extends TabDemoList> List<T> findListProjection(final TabDemoList condition, final Class<T> clazz) {
+        return findListProjection(condition, clazz, TabDemoList.allColumns());
+    }
+
+    @Override
+    default <T extends TabDemoList> List<T> findListProjection(final TabDemoList condition, final Class<T> clazz, final Expression<?>... exps) {
+        return jpaQueryFactory.<JPAQueryFactory>get()
+                .select(Projections.bean(clazz, exps))
+                .from(q)
+                .where(condition.where().toArray())
+                .orderBy(condition.buildQdslSorts())
+                .fetch();
+    }
+
+    @Override
+    default <T extends TabDemoList> QueryResults<T> findPageProjection(final TabDemoList condition, final Pager pager, final Class<T> clazz) {
+        return findPageProjection(condition, pager, clazz, TabDemoList.allColumns());
+    }
+
+    @Override
+    default <T extends TabDemoList> QueryResults<T> findPageProjection(final TabDemoList condition, final Pager pager, final Class<T> clazz, final Expression<?>... exps) {
+        return jpaQueryFactory.<JPAQueryFactory>get()
+                .select(Projections.bean(clazz, exps))
+                .from(q)
+                .where(condition.where().toArray())
+                .offset(pager.offset())
+                .limit(pager.limit())
+                .orderBy(condition.buildQdslSorts())
+                .fetchResults();
+    }
+
 }

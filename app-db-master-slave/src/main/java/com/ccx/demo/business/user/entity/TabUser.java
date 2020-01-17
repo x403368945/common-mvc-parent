@@ -34,6 +34,7 @@ import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.ccx.demo.business.user.entity.QTabUser.tabUser;
@@ -154,7 +155,7 @@ public class TabUser extends UserDetail implements ITabUser, ITable, ITabUserCac
     @NotEmpty(groups = {ISave.class, IUpdate.class})
     @QueryTransient
     @Transient
-    private List<TabRole> roleList;
+    private Set<TabRole> roleList;
 
     @Override
     public TabUser loadUserDetail() {

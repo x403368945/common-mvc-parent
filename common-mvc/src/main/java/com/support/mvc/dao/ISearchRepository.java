@@ -65,7 +65,7 @@ public interface ISearchRepository<E> extends QuerydslPredicateExecutor<E> {
     /**
      * 按条件查询列表，将查询结果投影到指定 VO 类后返回，VO 类必须继承实体
      *
-     * @param condition 查询条件
+     * @param condition 查询条件:可使用继承实体的 VO 类传参,扩展实体默认的查询
      * @param clazz     继承实体的 VO 类
      * @return List<E> 结果集合
      */
@@ -76,7 +76,7 @@ public interface ISearchRepository<E> extends QuerydslPredicateExecutor<E> {
     /**
      * 按条件查询列表，将查询结果投影到指定 VO 类后返回，VO 类必须继承实体
      *
-     * @param condition 查询条件
+     * @param condition 查询条件:可使用继承实体的 VO 类传参,扩展实体默认的查询
      * @param clazz     继承实体的 VO 类
      * @param exps      {@link Expression} 指定查询字段
      * @return List<E> 结果集合
@@ -88,7 +88,7 @@ public interface ISearchRepository<E> extends QuerydslPredicateExecutor<E> {
     /**
      * 按条件分页查询列表，将查询结果投影到指定 VO 类后返回，VO 类必须继承实体
      *
-     * @param condition 查询条件
+     * @param condition 查询条件:可使用继承实体的 VO 类传参,扩展实体默认的查询
      * @param pager     Pager 分页排序集合
      * @param clazz     继承实体的 VO 类
      * @return QueryResults<E> 分页对象
@@ -100,7 +100,7 @@ public interface ISearchRepository<E> extends QuerydslPredicateExecutor<E> {
     /**
      * 按条件分页查询列表，将查询结果投影到指定 VO 类后返回，VO 类必须继承实体
      *
-     * @param condition 查询条件
+     * @param condition 查询条件:可使用继承实体的 VO 类传参,扩展实体默认的查询
      * @param pager     {@link Pager} 分页排序集合
      * @param clazz     继承实体的 VO 类
      * @param exps      {@link Expression} 指定查询字段

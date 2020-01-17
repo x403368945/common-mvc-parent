@@ -2,6 +2,7 @@ package com.ccx.demo.business.example.service;
 
 import com.ccx.demo.business.example.dao.jpa.DemoListRepository;
 import com.ccx.demo.business.example.entity.TabDemoList;
+import com.ccx.demo.business.example.vo.TabDemoListVO;
 import com.querydsl.core.QueryResults;
 import com.support.aop.annotations.ServiceAspect;
 import com.support.mvc.entity.base.Pager;
@@ -91,5 +92,13 @@ public class DemoListService implements IService<TabDemoList> {
     @Override
     public QueryResults<TabDemoList> findPage(final TabDemoList condition, final Pager pager) {
         return repository.findPage(condition, Pager.rebuild(pager));
+    }
+
+    public List<TabDemoListVO> findListVO(final TabDemoList condition) {
+        return repository.findListProjection(condition, TabDemoListVO.class);
+    }
+
+    public QueryResults<TabDemoListVO> findPageVO(final TabDemoList condition, final Pager pager) {
+        return repository.findPageProjection(condition, Pager.rebuild(pager), TabDemoListVO.class);
     }
 }

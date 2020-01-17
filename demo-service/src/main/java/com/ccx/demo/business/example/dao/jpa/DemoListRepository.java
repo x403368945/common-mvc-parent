@@ -3,8 +3,6 @@ package com.ccx.demo.business.example.dao.jpa;
 import com.alibaba.fastjson.JSON;
 import com.ccx.demo.business.example.entity.QTabDemoList;
 import com.ccx.demo.business.example.entity.TabDemoList;
-import com.ccx.demo.business.example.vo.QTabDemoListVO;
-import com.ccx.demo.business.example.vo.TabDemoListVO;
 import com.ccx.demo.enums.Radio;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
@@ -164,13 +162,7 @@ public interface DemoListRepository extends
     }
 
     default <T extends TabDemoList> List<T> findListProjection(final TabDemoList condition, final Class<T> clazz) {
-        List<TabDemoListVO> fetch = jpaQueryFactory.<JPAQueryFactory>get()
-                .select(q.as(QTabDemoListVO.class))
-                .from(q)
-                .where(condition.where().toArray())
-                .orderBy(condition.buildQdslSorts())
-                .fetch();
-        return null;
+        return findListProjection(condition, clazz, TabDemoList.allColumns());
     }
 
     @Override
@@ -185,14 +177,7 @@ public interface DemoListRepository extends
 
     @Override
     default <T extends TabDemoList> QueryResults<T> findPageProjection(final TabDemoList condition, final Pager pager, final Class<T> clazz) {
-        return jpaQueryFactory.<JPAQueryFactory>get()
-                .select(Projections.bean(clazz, q))
-                .from(q)
-                .where(condition.where().toArray())
-                .offset(pager.offset())
-                .limit(pager.limit())
-                .orderBy(condition.buildQdslSorts())
-                .fetchResults();
+        return findPageProjection(condition, pager, clazz, TabDemoList.allColumns());
     }
 
     @Override
@@ -206,7 +191,6 @@ public interface DemoListRepository extends
                 .orderBy(condition.buildQdslSorts())
                 .fetchResults();
     }
-
 
     /**
      * 自定方言
@@ -265,5 +249,4 @@ public interface DemoListRepository extends
         private Double amount;
         private Double otherColumn;
     }
-
 }
