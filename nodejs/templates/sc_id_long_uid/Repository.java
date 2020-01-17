@@ -166,4 +166,36 @@ public interface <%=JavaName%>Repository extends
                 .orderBy(condition.buildQdslSorts())
                 .fetchResults();
     }
+    
+    @Override
+    default <T extends <%=TabName%>> List<T> findListProjection(final <%=TabName%> condition, final Class<T> clazz) {
+        return findListProjection(condition, clazz, <%=TabName%>.allColumns());
+    }
+
+    @Override
+    default <T extends <%=TabName%>> List<T> findListProjection(final <%=TabName%> condition, final Class<T> clazz, final Expression<?>... exps) {
+        return jpaQueryFactory.<JPAQueryFactory>get()
+                .select(Projections.bean(clazz, exps))
+                .from(q)
+                .where(condition.where().toArray())
+                .orderBy(condition.buildQdslSorts())
+                .fetch();
+    }
+
+    @Override
+    default <T extends <%=TabName%>> QueryResults<T> findPageProjection(final <%=TabName%> condition, final Pager pager, final Class<T> clazz) {
+        return findPageProjection(condition, pager, clazz, <%=TabName%>.allColumns());
+    }
+
+    @Override
+    default <T extends <%=TabName%>> QueryResults<T> findPageProjection(final <%=TabName%> condition, final Pager pager, final Class<T> clazz, final Expression<?>... exps) {
+        return jpaQueryFactory.<JPAQueryFactory>get()
+                .select(Projections.bean(clazz, exps))
+                .from(q)
+                .where(condition.where().toArray())
+                .offset(pager.offset())
+                .limit(pager.limit())
+                .orderBy(condition.buildQdslSorts())
+                .fetchResults();
+    }
 }

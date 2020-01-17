@@ -5,7 +5,6 @@ import com.ccx.demo.business.example.entity.QTabDemoList;
 import com.ccx.demo.business.example.entity.TabDemoList;
 import com.ccx.demo.business.example.enums.DemoStatus;
 import com.ccx.demo.business.user.entity.TabUser;
-import com.querydsl.core.annotations.QueryEntity;
 import com.utils.util.Dates;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,8 +23,8 @@ import static com.ccx.demo.business.example.entity.QTabDemoList.tabDemoList;
  * *@EqualsAndHashCode(callSuper = true)
  * *@ToString(callSuper = true)
  * </pre>
+ * @author 谢长春 2020-01-17
  */
-@QueryEntity
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)

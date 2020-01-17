@@ -31,10 +31,12 @@ public interface IAdapter {
      * @author 谢长春 2018/12/4
      */
     interface Cors extends IAdapter {
+        @Override
         default String matcher() {
             return "/cors/**";
         }
 
+        @Override
         default void config(final HttpSecurity http) throws Exception {
             http
                     .antMatcher(matcher())
@@ -58,10 +60,12 @@ public interface IAdapter {
      * @author 谢长春 2018/12/4
      */
     interface Open extends IAdapter {
+        @Override
         default String matcher() {
             return "/open/**";
         }
 
+        @Override
         default void config(final HttpSecurity http) throws Exception {
             http
                     .antMatcher(matcher())

@@ -110,6 +110,7 @@ public class UserController implements IAuthController<Long> {
                 );
     }
 
+    @Override
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'UserController_save')")
     @PostMapping
     @ResponseBody

@@ -323,7 +323,7 @@ public class Result<E> implements IJson {
     public Result<E> addExtras(final String key, final Object value) {
         Objects.requireNonNull(key, "参数【key】是必须的");
         if (Objects.isNull(this.extras)) {
-            this.extras = new HashMap<>();
+            this.extras = new HashMap<>(10);
         }
         this.extras.put(key, value);
         return this; // 保证链式请求，返回:this
@@ -337,7 +337,7 @@ public class Result<E> implements IJson {
     public Result<E> addExtras(final JSONObject obj) {
         Objects.requireNonNull(obj, "参数【obj】是必须的");
         if (Objects.isNull(this.extras)) {
-            this.extras = new HashMap<>();
+            this.extras = new HashMap<>(10);
         }
         this.extras.putAll(obj);
         return this; // 保证链式请求，返回:this
@@ -350,7 +350,7 @@ public class Result<E> implements IJson {
      */
     public Result<E> addExtras(final Map<String, String> extras) {
         if (Objects.isNull(this.extras)) {
-            this.extras = new HashMap<>();
+            this.extras = new HashMap<>(10);
         }
         this.extras.putAll(extras);
         return this; // 保证链式请求，返回:this

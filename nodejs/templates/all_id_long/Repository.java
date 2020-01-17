@@ -167,12 +167,7 @@ public interface <%=JavaName%>Repository extends
 
     @Override
     default <T extends <%=TabName%>> List<T> findListProjection(final <%=TabName%> condition, final Class<T> clazz) {
-        return jpaQueryFactory.<JPAQueryFactory>get()
-                .select(Projections.bean(clazz, q))
-                .from(q)
-                .where(condition.where().toArray())
-                .orderBy(condition.buildQdslSorts())
-                .fetch();
+        return findListProjection(condition, clazz, <%=TabName%>.allColumns());
     }
 
     @Override
@@ -187,14 +182,7 @@ public interface <%=JavaName%>Repository extends
 
     @Override
     default <T extends <%=TabName%>> QueryResults<T> findPageProjection(final <%=TabName%> condition, final Pager pager, final Class<T> clazz) {
-        return jpaQueryFactory.<JPAQueryFactory>get()
-                .select(Projections.bean(clazz, q))
-                .from(q)
-                .where(condition.where().toArray())
-                .offset(pager.offset())
-                .limit(pager.limit())
-                .orderBy(condition.buildQdslSorts())
-                .fetchResults();
+        return findPageProjection(condition, pager, clazz, <%=TabName%>.allColumns());
     }
 
     @Override

@@ -161,6 +161,7 @@ public interface DemoListRepository extends
                 .fetchResults();
     }
 
+    @Override
     default <T extends TabDemoList> List<T> findListProjection(final TabDemoList condition, final Class<T> clazz) {
         return findListProjection(condition, clazz, TabDemoList.allColumns());
     }

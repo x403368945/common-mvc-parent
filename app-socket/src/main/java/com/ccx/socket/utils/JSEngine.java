@@ -110,7 +110,7 @@ public final class JSEngine {
             System.out.println(JSEngine.getInstance().compute("(1+3)*5").format());
             System.out.println(JSEngine.getInstance().eval("(18620000.00)+(-8760000.00)-(0)-(-360000.00)"));
             System.out.println(JSEngine.getInstance().eval("(function (o) {var count = o.贬损者 + o.被动者 + o.推荐者;return count === 0 ? 0 : parseInt((o.推荐者 / count) * 100 - (o.贬损者 / count) * 100);})({贬损者:<%%>,被动者:<%%>, 推荐者:<%%>})", 176, 608, 40));
-            System.out.println(JSEngine.getInstance().eval("(function (o) {var count = o.贬损者 + o.被动者 + o.推荐者;return count === 0 ? 0 : parseInt((o.推荐者 / count) * 100 - (o.贬损者 / count) * 100);})({贬损者:<%贬损者%>,被动者:<%被动者%>, 推荐者:<%推荐者%>})", new HashMap<String, Object>() {{
+            System.out.println(JSEngine.getInstance().eval("(function (o) {var count = o.贬损者 + o.被动者 + o.推荐者;return count === 0 ? 0 : parseInt((o.推荐者 / count) * 100 - (o.贬损者 / count) * 100);})({贬损者:<%贬损者%>,被动者:<%被动者%>, 推荐者:<%推荐者%>})", new HashMap<String, Object>(3) {{
                 put("贬损者", 176);
                 put("被动者", 608);
                 put("推荐者", 40);

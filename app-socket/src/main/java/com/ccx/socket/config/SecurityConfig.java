@@ -28,6 +28,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @Configuration
 public class SecurityConfig extends SimpleAuthAdapter {
 
+    @Override
     @Bean
     public UserDetailsService userDetailsService() {
         final InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();

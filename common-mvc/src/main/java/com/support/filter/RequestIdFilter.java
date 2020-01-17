@@ -85,6 +85,7 @@ public class RequestIdFilter extends MDCInsertingServletFilter {
      * 使用 6 位随机数 + 2 位数字或大小写字母
      */
     public static class DefaultAdapter implements IRidAdapter {
+        @Override
         public String getRid() {
             return Util.random(6).concat(RandomStringUtils.randomAlphanumeric(2));
         }
@@ -94,6 +95,7 @@ public class RequestIdFilter extends MDCInsertingServletFilter {
      * 使用 uuid
      */
     public static class UuidAdapter implements IRidAdapter {
+        @Override
         public String getRid() {
             return Util.uuid32();
         }
@@ -103,6 +105,7 @@ public class RequestIdFilter extends MDCInsertingServletFilter {
      * 使用 6 位随机数
      */
     public static class RandomNumberAdapter implements IRidAdapter {
+        @Override
         public String getRid() {
             return Util.random(6);
         }
