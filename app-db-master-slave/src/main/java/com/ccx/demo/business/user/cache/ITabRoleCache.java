@@ -9,10 +9,7 @@ import com.support.mvc.entity.ICache;
 import org.springframework.util.CollectionUtils;
 
 import java.beans.Transient;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.ccx.demo.config.init.BeanInitializer.getAppContext;
@@ -78,7 +75,7 @@ public interface ITabRoleCache extends ICache {
     @Transient
     @QueryTransient
     @JSONField(serialize = false, deserialize = false)
-    default List<String> getRoleNameCacheByIds(final List<Long> ids) {
+    default List<String> getRoleNameCacheByIds(final Collection<Long> ids) {
         if (CollectionUtils.isEmpty(ids)) return Collections.emptyList();
         final RoleRepository roleRepository = getAppContext().getBean(RoleRepository.class);
         return ids.stream()

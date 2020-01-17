@@ -1,8 +1,10 @@
 package com.ccx.demo.business.example.dao.jpa;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.ccx.demo.business.example.entity.QTabDemoList;
 import com.ccx.demo.business.example.entity.TabDemoList;
 import com.ccx.demo.enums.Radio;
+import com.google.common.collect.Lists;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
@@ -11,10 +13,12 @@ import com.support.mvc.dao.IRepository;
 import com.support.mvc.entity.base.Pager;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 import static com.ccx.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
+import static com.ccx.demo.config.init.BeanInitializer.getAppContext;
 
 /**
  * 数据操作：
@@ -25,6 +29,52 @@ public interface DemoListRepository extends
         JpaRepository<TabDemoList, Long>,
         IRepository<TabDemoList, Long> {
     QTabDemoList q = QTabDemoList.tabDemoList;
+
+    /**
+     * 如果该表有缓存时请使用缓存，将这段代码注释，然后组合缓存接口。
+     * 组合模式：定义表数据无缓存时，优化连表查询方法.
+     * 实体类只需要组合该接口就可以获得按 id 查询方法.
+     * 这种实现方式可以分解连表查询，减轻数据库压力，对分页查询有优化，让单表查询方法复用范围更广
+     * 使用参考：
+     * <pre>
+     * public class TabEntity implements IDemoListRepository{
+     *     public Long foreignKey;
+     *     public Set<Long> foreignKeys;
+     *
+     *     public TabDemoList getForeign(){
+     *         // 连表查询单条记录
+     *         return getTabDemoListById(foreignKey).orElse(null);
+     *     }
+     *     public List<TabDemoList> getForeigns(){
+     *         // 连表查询多条记录
+     *         return getTabDemoListByIds(foreignKeys);
+     *     }
+     * }
+     * </pre>
+     */
+    interface IDemoListRepository {
+        /**
+         * 按 ID 获取数据行，用于表数据无缓存时，优化连表查询
+         *
+         * @param id {@link TabDemoList#getId()}
+         * @return {@link Optional<TabDemoList>}
+         */
+        @JSONField(serialize = false, deserialize = false)
+        default Optional<TabDemoList> getTabDemoListById(final Long id) {
+            return getAppContext().getBean(DemoListRepository.class).findById(id);
+        }
+
+        /**
+         * 按 ID 获取数据行，用于表数据无缓存时，优化连表查询
+         *
+         * @param ids {@link TabDemoList#getId()}
+         * @return {@link List<TabDemoList>}
+         */
+        @JSONField(serialize = false, deserialize = false)
+        default List<TabDemoList> getTabDemoListByIds(final Collection<Long> ids) {
+            return Lists.newArrayList(getAppContext().getBean(DemoListRepository.class).findAll(q.id.in(ids)));
+        }
+    }
 
     @Override
     default long update(final Long id, final Long userId, final TabDemoList obj) {

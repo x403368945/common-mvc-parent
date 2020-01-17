@@ -2,7 +2,6 @@ package com.ccx.demo.business.user.web;
 
 import com.ccx.demo.business.user.entity.TabUser;
 import com.ccx.demo.business.user.entity.TabUserLogin;
-import com.ccx.demo.business.user.entity.extend.ITabUser;
 import com.ccx.demo.business.user.service.UserLoginService;
 import com.ccx.demo.business.user.service.UserService;
 import com.ccx.demo.business.user.vo.TabUserVO;
@@ -47,7 +46,7 @@ public class UserController implements IAuthController<Long> {
     public Result<?> current(@AuthenticationPrincipal final TabUser user, @PathVariable final int version) {
         return new Result<TabUserVO>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
-                        .props(ITabUser.Props.list())
+                        .props(TabUser.Props.list())
                         .notes(Arrays.asList(
                                 "获取当前登录用户信息"
                         ))
@@ -67,7 +66,7 @@ public class UserController implements IAuthController<Long> {
                                     @RequestBody(required = false) final Param param) {
         return new Result<>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
-                        .props(TabUser.Props.list(ITabUser.Props.nickname)) // 当前返回对象属性说明
+                        .props(TabUser.Props.list(TabUser.Props.nickname)) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
                                 "修改当前登录用户昵称",
                                 "1.初始化"
@@ -220,7 +219,7 @@ public class UserController implements IAuthController<Long> {
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(1, 20)), // 当前接口参考案例请求地址；
                                 TabUser.builder() // 当前接口参考案例请求参数，demo中设置支持查询的字段
                                         .deleted(Radio.NO)
-                                        .sorts(Collections.singletonList(Sorts.Order.builder().name(ITabUser.OrderBy.id.name()).direction(DESC).build()))
+                                        .sorts(Collections.singletonList(Sorts.Order.builder().name(TabUser.OrderBy.id.name()).direction(DESC).build()))
                                         .build()
                         ))
                 )

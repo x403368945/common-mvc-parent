@@ -1,0 +1,6 @@
+### 查看应用全局配置
+GET http://localhost:8080/user/1/page/1/10
+Content-Type: application/json
+Authorization: basic YWRtaW46YWRtaW4=
+
+###
