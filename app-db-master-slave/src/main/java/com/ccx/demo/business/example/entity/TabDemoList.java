@@ -294,7 +294,8 @@ public class TabDemoList implements
                 // 日期区间查询；Range.rebuild() : 先将时间区间重置到 00:00:00.000 - 23:59:59.999 ; 大多数情况都需要重置时间
                 .and(insertTimeRange, () -> q.insertTime.between(insertTimeRange.rebuild().getBegin(), insertTimeRange.getEnd()))
 //                .and(name, () -> q.name.endsWith(name)) // 模糊匹配查询：前面带 %
-//                .and(name, () -> q.name.like(MessageFormat.format("%{0}%", name))) // 模糊匹配查询：前后带 %
+//                .and(name, () -> q.name.like(MessageFormat.format("%{0}%", name)))
+//                .and(name, () -> q.name.contains(name)) // 模糊匹配查询：前后带 %,同 MessageFormat.format("%{0}%", name)
                 ;
     }
 

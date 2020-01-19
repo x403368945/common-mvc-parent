@@ -267,7 +267,8 @@ public class DemoMongo implements
                 // 模糊匹配查询：后面带 % ；建议优先使用
                 .and(name, () -> q.name.startsWith(name)) // 模糊匹配查询：后面带 %
 //                .and(name, () -> q.name.endsWith(name)) // 模糊匹配查询：前面带 %
-//                .and(name, () -> q.name.like(MessageFormat.format("%{0}%", name))) // 模糊匹配查询：前后带 %
+//                .and(name, () -> q.name.like(MessageFormat.format("%{0}%", name)))
+//                .and(name, () -> q.name.contains(name)) // 模糊匹配查询：前后带 %,同 MessageFormat.format("%{0}%", name)
                 ;
     }
 
