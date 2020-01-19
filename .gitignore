@@ -30,6 +30,7 @@ temp/
 docker/
 node_modules
 nodejs/yarn.lock
+nodejs/package-lock.json
 
 # // spring-mvc start >> mvc 不支持的模块
 #/app-db-master-slave
