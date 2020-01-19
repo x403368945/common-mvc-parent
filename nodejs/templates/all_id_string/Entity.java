@@ -246,6 +246,7 @@ public class <%=TabName%> implements
 import com.alibaba.fastjson.annotation.JSONField;
 import com.querydsl.core.annotations.QueryTransient;
 import org.apache.commons.lang3.StringUtils;
+import com.support.mvc.entity.ICache;
 import java.beans.Transient;
 
 import static <%=pkg%>.config.init.BeanInitializer.Beans.getAppContext;
@@ -254,7 +255,7 @@ import static <%=pkg%>.config.init.BeanInitializer.Beans.getAppContext;
  *
  * @author 谢长春 on <%=date%>
  *\/
-public interface I<%=TabName%>Cache {
+public interface I<%=TabName%>Cache extends ICache {
     String CACHE_ROW_BY_ID = "I<%=TabName%>Cache";
 
     /**
