@@ -7,7 +7,6 @@ import com.ccx.demo.business.example.enums.DemoStatus;
 import com.ccx.demo.business.user.cache.ITabUserCache;
 import com.ccx.demo.enums.Radio;
 import com.google.common.collect.Lists;
-import com.querydsl.core.annotations.Config;
 import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;
 import com.querydsl.core.types.EntityPath;
@@ -53,7 +52,6 @@ import static com.support.mvc.enums.Code.ORDER_BY;
  *
  * @author 谢长春 on 2018-12-17.
  */
-@Config(entityAccessors = true, listAccessors = true, mapAccessors = true)
 @Table(name = "tab_demo_list") // 注解映射数据库表名
 @Entity // 声明数据库映射实体类，将会被Spring扫描
 @QueryEntity // 注解为 QueryDsl 实体类，将会被 QueryDsl 通用查询框架扫描，生成Q{ClassName}.java
