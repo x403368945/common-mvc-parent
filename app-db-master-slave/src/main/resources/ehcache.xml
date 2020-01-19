@@ -34,17 +34,6 @@
             <disk unit="MB" persistent="true">30</disk>
         </resources>
     </cache>
-    <cache alias="ITabUserCache.token">
-        <key-type>java.lang.String</key-type>
-        <value-type>com.alibaba.fastjson.JSONObject</value-type>
-        <expiry>
-            <ttl unit="days">30</ttl>
-        </expiry>
-        <resources>
-            <heap>100</heap>
-            <disk unit="MB" persistent="true">30</disk>
-        </resources>
-    </cache>
     <cache alias="ITabRoleCache">
         <key-type>java.lang.Long</key-type>
         <value-type>com.ccx.demo.business.user.entity.TabRole</value-type>

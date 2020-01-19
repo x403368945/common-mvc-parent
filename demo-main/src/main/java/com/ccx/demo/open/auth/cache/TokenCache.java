@@ -9,7 +9,6 @@ import com.support.mvc.entity.ICache;
 import com.support.mvc.enums.Code;
 import com.utils.util.Base64;
 import com.utils.util.Dates;
-import com.utils.util.Util;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -102,12 +101,6 @@ public class TokenCache implements ICache, ITabUserCache, Serializable {
 
         final Cache cache = Objects.requireNonNull(cacheManager.<CacheManager>get().getCache(CACHE_TOKEN), CACHE_TOKEN.concat(": 不能为 null"));
         cache.put(userId, this);
-
-        for (int i = 0; i < 200; i++) {
-            long v = Util.randomMax(100000);
-            if(v==1L) continue;
-            cache.put(v, TokenCache.builder().userId(v).build());
-        }
 
         return Base64.encode(String.format("%d:%s", userId, uuid));
     }
