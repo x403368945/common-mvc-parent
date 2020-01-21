@@ -256,13 +256,7 @@ gulp.task('db:java:ny', async () => {
   });
 });
 
-gulp.task('file:merge', () => {
-  return gulp.src('temp/*.sql')
-    .pipe(concat('v2.0.0.sql'))
-    .pipe(gulp.dest('dest'));
-});
-
-gulp.task('in:out', () => {
+gulp.task('in:out', async () => {
   const writer = fs.createWriteStream(path.resolve('temp/out.txt'));
   writer.on('close', () => console.log('end'));
   readline.createInterface(
@@ -274,7 +268,7 @@ gulp.task('in:out', () => {
     })
     .on('close', () => writer.end())
 });
-gulp.task('write:line', () => {
+gulp.task('write:line', async () => {
   const writer = fs.createWriteStream(path.resolve('temp/test.log'));
   writer.on('close', () => console.log('end'));
   writer.write('测试\n');
@@ -282,7 +276,7 @@ gulp.task('write:line', () => {
   writer.write('测试\n');
   writer.end();
 });
-gulp.task('read:line', () => {
+gulp.task('read:line', async () => {
   readline.createInterface(fs.createReadStream(path.resolve('temp/test.log')))
     .on('line', text => {
       console.log(text)
@@ -290,7 +284,7 @@ gulp.task('read:line', () => {
     .on('close', () => console.log('end'));
 });
 
-gulp.task('xlsx:read', () => {
+gulp.task('xlsx:read', async () => {
   const wb = xlsx.readFile(
     './temp/数据文件.xls'
   );
@@ -313,14 +307,14 @@ gulp.task('xlsx:read', () => {
   ;
   writer.end();
 });
-gulp.task('xlsx:write', () => {
+gulp.task('xlsx:write', async () => {
   const {data: {errorInfos: array}} = JSON.parse('');
   array.sort((a, b) => a.rowNumber - b.rowNumber);
   const wb = xlsx.utils.book_new();
   xlsx.utils.book_append_sheet(wb, xlsx.utils.json_to_sheet(array), 'Sheet1');
   xlsx.writeFile(wb, './temp/write.xlsx');
 });
-gulp.task('xlsx:付息方式', () => {
+gulp.task('xlsx:付息方式', async () => {
   const wb = xlsx.readFile('./temp/付息方式.xls');
   const file = 'temp/付息方式.sql';
   const writer = fs.createWriteStream(file);
@@ -344,7 +338,7 @@ gulp.task('xlsx:付息方式', () => {
   writer.end();
 });
 
-gulp.task('exec', () => {
+gulp.task('exec', async () => {
   const proc = require('child_process');
   proc.exec('ls', function (error, stdout, stderr) {
     console.log(stdout);
@@ -354,7 +348,7 @@ gulp.task('exec', () => {
   });
 });
 
-gulp.task('stdout', () => {
+gulp.task('stdout', async () => {
   process.stdin.setEncoding('utf8');
   process.stdin.on('readable', () => {
     const chunk = process.stdin.read();
