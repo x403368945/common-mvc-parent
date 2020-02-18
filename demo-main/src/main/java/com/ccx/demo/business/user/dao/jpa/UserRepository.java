@@ -3,7 +3,7 @@ package com.ccx.demo.business.user.dao.jpa;
 import com.ccx.demo.business.user.cache.ITabUserCache;
 import com.ccx.demo.business.user.entity.QTabUser;
 import com.ccx.demo.business.user.entity.TabUser;
-import com.ccx.demo.enums.Radio;
+import com.ccx.demo.enums.Bool;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.support.mvc.dao.IRepository;
@@ -15,11 +15,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import static com.ccx.demo.business.user.entity.QTabUser.tabUser;
-import static com.ccx.demo.config.init.BeanInitializer.getAppContext;
 import static com.ccx.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 
 /**
@@ -36,7 +34,7 @@ public interface UserRepository extends
     default long update(final Long id, final Long userId, final TabUser obj) {
         return obj.update(jpaQueryFactory.<JPAQueryFactory>get().update(q))
                 .get()
-                .where(q.id.eq(id).and(q.uid.eq(obj.getUid())).and(q.deleted.eq(Radio.NO)))
+                .where(q.id.eq(id).and(q.uid.eq(obj.getUid())).and(q.deleted.eq(Bool.NO)))
                 .execute();
     }
 
@@ -44,7 +42,7 @@ public interface UserRepository extends
     default long markDeleteById(final Long id, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
-                .set(q.deleted, Radio.YES)
+                .set(q.deleted, Bool.YES)
                 .set(q.updateUserId, userId)
                 .where(q.id.eq(id).and(q.insertUserId.eq(userId)))
                 .execute();
@@ -54,7 +52,7 @@ public interface UserRepository extends
     default long markDeleteByIds(final List<Long> ids, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
-                .set(q.deleted, Radio.YES)
+                .set(q.deleted, Bool.YES)
                 .set(q.updateUserId, userId)
                 .where(q.id.in(ids).and(q.insertUserId.eq(userId)))
                 .execute();
@@ -173,7 +171,7 @@ public interface UserRepository extends
 //    default long enable(final Long id, final Long userId) {
 //        return jpaQueryFactory.<JPAQueryFactory>get()
 //                .update(q)
-//                .set(q.deleted, Radio.NO)
+//                .set(q.deleted, Bool.NO)
 //                .set(q.updateUserId, userId)
 //                .where(q.id.eq(id))
 //                .execute();
@@ -191,7 +189,7 @@ public interface UserRepository extends
 //    default long activate(final Long id, final Long userId) {
 //        return jpaQueryFactory.<JPAQueryFactory>get()
 //                .update(q)
-//                .set(q.expired, Radio.NO)
+//                .set(q.expired, Bool.NO)
 //                .set(q.updateUserId, userId)
 //                .where(q.id.eq(id))
 //                .execute();

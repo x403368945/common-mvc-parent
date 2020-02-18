@@ -5,7 +5,7 @@ import com.ccx.demo.business.user.dao.jpa.RoleRepository;
 import com.ccx.demo.business.user.vo.Authority;
 import com.ccx.demo.business.user.entity.QTabRole;
 import com.ccx.demo.business.user.entity.TabRole;
-import com.ccx.demo.enums.Radio;
+import com.ccx.demo.enums.Bool;
 import com.querydsl.core.QueryResults;
 import com.support.aop.annotations.ServiceAspect;
 import com.support.mvc.entity.base.Pager;
@@ -122,7 +122,7 @@ public class RoleService implements IService<TabRole>, ITabRoleCache {
     public List<TabRole> getOptions() {
         final QTabRole q = QTabRole.tabRole;
         return repository.findList(
-                TabRole.builder().deleted(Radio.NO).build(),
+                TabRole.builder().deleted(Bool.NO).build(),
                 q.id,
                 q.uid,
                 q.name

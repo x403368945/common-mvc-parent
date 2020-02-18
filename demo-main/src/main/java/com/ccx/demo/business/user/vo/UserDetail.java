@@ -3,7 +3,7 @@ package com.ccx.demo.business.user.vo;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.ccx.demo.business.user.cache.ITabRoleCache;
 import com.ccx.demo.business.user.entity.TabUser;
-import com.ccx.demo.enums.Radio;
+import com.ccx.demo.enums.Bool;
 import com.querydsl.core.annotations.QueryTransient;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -64,7 +64,7 @@ public class UserDetail implements UserDetails, ITabRoleCache {
     @Override
     public boolean isAccountNonExpired() {
         return true;
-//        return Objects.equals(Radio.NO, user.getExpired());
+//        return Objects.equals(Bool.NO, user.getExpired());
     }
 
     @QueryTransient
@@ -85,6 +85,6 @@ public class UserDetail implements UserDetails, ITabRoleCache {
     @JSONField(serialize = false, deserialize = false)
     @Override
     public boolean isEnabled() {
-        return Objects.equals(Radio.NO, loadUserDetail().getDeleted());
+        return Objects.equals(Bool.NO, loadUserDetail().getDeleted());
     }
 }

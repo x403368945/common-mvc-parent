@@ -6,7 +6,7 @@ import <%=pkg%>.code.<%=javaname%>.service.<%=JavaName%>Service;
 import <%=pkg%>.business.user.entity.TabUser;
 import <%=pkg%>.business.user.web.IAuthController;
 import <%=pkg%>.config.init.AppConfig.URL;
-import <%=pkg%>.enums.Radio;
+import <%=pkg%>.enums.Bool;
 import com.support.mvc.entity.base.*;
 import com.utils.util.Dates;
 import com.utils.util.Util;
@@ -337,7 +337,7 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
 //                        .build()
 //                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl()), // 当前接口参考案例请求地址；
 //                                <%=TabName%>.builder() // 当前接口参考案例请求参数，demo中设置支持查询的字段
-//                                    .deleted(Radio.NO)
+//                                    .deleted(Bool.NO)
 //                                    .sorts(Collections.singletonList(Sorts.Order.builder().name(OrderBy.id.name()).direction(DESC).build()))
 //                                    .build()
 //                        ))
@@ -370,7 +370,7 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
                         .build()
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(1, 20)), // 当前接口参考案例请求地址；
                                 <%=TabName%>.builder() // 当前接口参考案例请求参数，demo中设置支持查询的字段
-                                        .deleted(Radio.NO)
+                                        .deleted(Bool.NO)
                                         .sorts(Collections.singletonList(Sorts.Order.builder().name(OrderBy.id.name()).direction(DESC).build()))
                                         .build()
                         ))

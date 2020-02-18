@@ -3,7 +3,7 @@ package com.ccx.demo.business.user.cache;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.ccx.demo.business.user.dao.jpa.RoleRepository;
 import com.ccx.demo.business.user.entity.TabRole;
-import com.ccx.demo.enums.Radio;
+import com.ccx.demo.enums.Bool;
 import com.querydsl.core.annotations.QueryTransient;
 import com.support.mvc.entity.ICache;
 import org.springframework.util.CollectionUtils;
@@ -47,7 +47,7 @@ public interface ITabRoleCache extends ICache {
     @JSONField(serialize = false, deserialize = false)
     default List<String> getRoleAuthoritiesCacheById(final Long id) {
         return getTabRoleCacheById(id)
-                .filter(obj -> Objects.equals(obj.getDeleted(), Radio.NO))
+                .filter(obj -> Objects.equals(obj.getDeleted(), Bool.NO))
                 .map(TabRole::getAuthorities)
                 .orElseGet(Collections::emptyList)
                 ;

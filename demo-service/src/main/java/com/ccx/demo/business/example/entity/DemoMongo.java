@@ -5,7 +5,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
 import com.ccx.demo.business.example.enums.DemoStatus;
 import com.ccx.demo.business.user.cache.ITabUserCache;
-import com.ccx.demo.enums.Radio;
+import com.ccx.demo.enums.Bool;
 import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
@@ -25,7 +25,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -34,7 +33,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.query.Update;
 
 import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
 import javax.validation.constraints.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -128,7 +126,7 @@ public class DemoMongo implements
      */
     @Indexed
     @NotNull(groups = {ISave.class})
-    private Radio deleted;
+    private Bool deleted;
 
     /**
      * 年龄查询区间
@@ -165,7 +163,7 @@ public class DemoMongo implements
         insertUserId(LONG.build("创建用户ID")),
         updateTime(TIMESTAMP.build("修改时间")),
         updateUserId(LONG.build("修改用户ID")),
-        deleted(ENUM.build("是否逻辑删除").setOptions(Radio.comments())),
+        deleted(ENUM.build("是否逻辑删除").setOptions(Bool.comments())),
 
         //        timestamp(LONG.build("数据最后一次更新时间戳")),
 //        numRange(RANGE_NUM.apply("数字查询区间")),
@@ -259,7 +257,7 @@ public class DemoMongo implements
                 .and(insertUserId, () -> q.insertUserId.eq(insertUserId))
                 .and(updateUserId, () -> q.updateUserId.eq(updateUserId))
                 // 强制带默认值的查询字段
-                .and(q.deleted.eq(Objects.isNull(getDeleted()) ? Radio.NO : deleted))
+                .and(q.deleted.eq(Objects.isNull(getDeleted()) ? Bool.NO : deleted))
                 // 年龄区间查询
                 .and(ageRange, () -> q.age.between(ageRange.getMin(), ageRange.getMax()))
                 // 日期区间查询；Range.rebuild() : 先将时间区间重置到 00:00:00.000 - 23:59:59.999 ; 大多数情况都需要重置时间

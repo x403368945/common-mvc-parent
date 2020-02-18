@@ -3,7 +3,7 @@ package com.ccx.demo.business.example.dao.jpa;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.ccx.demo.business.example.entity.QTabDemoList;
 import com.ccx.demo.business.example.entity.TabDemoList;
-import com.ccx.demo.enums.Radio;
+import com.ccx.demo.enums.Bool;
 import com.google.common.collect.Lists;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Expression;
@@ -125,7 +125,7 @@ public interface DemoListRepository extends
     default long markDeleteById(final Long id, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
-                .set(q.deleted, Radio.YES)
+                .set(q.deleted, Bool.YES)
                 .set(q.updateUserId, userId)
                 .where(q.id.eq(id).and(q.insertUserId.eq(userId)))
                 .execute();
@@ -135,7 +135,7 @@ public interface DemoListRepository extends
     default long markDeleteByUid(final Long id, final String uid, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
-                .set(q.deleted, Radio.YES)
+                .set(q.deleted, Bool.YES)
                 .set(q.updateUserId, userId)
                 .where(q.id.eq(id).and(q.uid.eq(uid).and(q.insertUserId.eq(userId))))
                 .execute();
@@ -145,7 +145,7 @@ public interface DemoListRepository extends
     default long markDeleteByIds(final List<Long> ids, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
-                .set(q.deleted, Radio.YES)
+                .set(q.deleted, Bool.YES)
                 .set(q.updateUserId, userId)
                 .where(q.id.in(ids).and(q.insertUserId.eq(userId)))
                 .execute();
@@ -155,7 +155,7 @@ public interface DemoListRepository extends
     default long markDelete(final List<TabDemoList> list, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
-                .set(q.deleted, Radio.YES)
+                .set(q.deleted, Bool.YES)
                 .set(q.updateUserId, userId)
                 .where(q.id.in(list.stream().map(TabDemoList::getId).toArray(Long[]::new))
                         .and(q.insertUserId.eq(userId))

@@ -3,7 +3,7 @@ package com.ccx.demo.business.user.dao.jpa;
 import com.ccx.demo.business.user.cache.ITabRoleCache;
 import com.ccx.demo.business.user.entity.QTabRole;
 import com.ccx.demo.business.user.entity.TabRole;
-import com.ccx.demo.enums.Radio;
+import com.ccx.demo.enums.Bool;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
@@ -50,9 +50,9 @@ public interface RoleRepository extends
     default long markDeleteByUid(final Long id, final String uid, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
-                .set(q.deleted, Radio.YES)
+                .set(q.deleted, Bool.YES)
                 .set(q.updateUserId, userId)
-                .where(q.id.eq(id).and(q.uid.eq(uid)).and(q.deleted.eq(Radio.NO)))
+                .where(q.id.eq(id).and(q.uid.eq(uid)).and(q.deleted.eq(Bool.NO)))
                 .execute();
     }
 
@@ -60,10 +60,10 @@ public interface RoleRepository extends
     default long markDelete(final List<TabRole> list, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
-                .set(q.deleted, Radio.YES)
+                .set(q.deleted, Bool.YES)
                 .set(q.updateUserId, userId)
                 .where(q.id.in(list.stream().map(TabRole::getId).toArray(Long[]::new))
-                        .and(q.insertUserId.eq(userId)).and(q.deleted.eq(Radio.NO))
+                        .and(q.insertUserId.eq(userId)).and(q.deleted.eq(Bool.NO))
                         .and(q.uid.in(list.stream().map(TabRole::getUid).toArray(String[]::new)))
                 )
                 .execute();
@@ -140,7 +140,7 @@ public interface RoleRepository extends
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .select(Projections.bean(TabRole.class, q.id, q.uid))
                 .from(q)
-                .where(q.id.in(roles.stream().map(TabRole::getId).toArray(Long[]::new)).and(q.deleted.eq(Radio.NO)))
+                .where(q.id.in(roles.stream().map(TabRole::getId).toArray(Long[]::new)).and(q.deleted.eq(Bool.NO)))
                 .fetch()
                 .stream()
                 // 过滤有效的角色

@@ -1,7 +1,7 @@
 package com.ccx.security.business.user.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.ccx.security.enums.Radio;
+import com.ccx.security.enums.Bool;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -47,7 +47,7 @@ public class UserDetail implements UserDetails {
     @Override
     public boolean isAccountNonExpired() {
         return true;
-//        return Objects.equals(Radio.NO, user.getExpired());
+//        return Objects.equals(Bool.NO, user.getExpired());
     }
 
     @JSONField(serialize = false, deserialize = false)
@@ -65,6 +65,6 @@ public class UserDetail implements UserDetails {
     @JSONField(serialize = false, deserialize = false)
     @Override
     public boolean isEnabled() {
-        return Objects.equals(Radio.NO, loadUserDetail().getDeleted());
+        return Objects.equals(Bool.NO, loadUserDetail().getDeleted());
     }
 }

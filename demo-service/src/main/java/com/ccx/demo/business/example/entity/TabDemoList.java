@@ -5,7 +5,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
 import com.ccx.demo.business.example.enums.DemoStatus;
 import com.ccx.demo.business.user.cache.ITabUserCache;
-import com.ccx.demo.enums.Radio;
+import com.ccx.demo.enums.Bool;
 import com.google.common.collect.Lists;
 import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;
@@ -144,7 +144,7 @@ public class TabDemoList implements
      */
     @Column(insertable = false, updatable = false)  // 声明当 JPA 执行 insert | update 语句时，就算该字段有值也会被忽略
     @Null(groups = {ISave.class})
-    private Radio deleted;
+    private Bool deleted;
     /**
      * 数字查询区间
      */
@@ -181,7 +181,7 @@ public class TabDemoList implements
         insertUserId(LONG.build("创建用户ID")),
         updateTime(TIMESTAMP.build("修改时间")),
         updateUserId(LONG.build("修改用户ID")),
-        deleted(ENUM.build("是否逻辑删除").setOptions(Radio.comments())),
+        deleted(ENUM.build("是否逻辑删除").setOptions(Bool.comments())),
         timestamp(LONG.build("数据最后一次更新时间戳")),
         amountRange(RANGE_NUM.apply("金额查询区间")),
         insertTimeRange(RANGE_DATE.apply("创建时间查询区间")),
@@ -285,7 +285,7 @@ public class TabDemoList implements
                 .and(insertUserId, () -> q.insertUserId.eq(insertUserId))
                 .and(updateUserId, () -> q.updateUserId.eq(updateUserId))
                 // 强制带默认值的查询字段
-                .and(q.deleted.eq(Objects.isNull(getDeleted()) ? Radio.NO : deleted))
+                .and(q.deleted.eq(Objects.isNull(getDeleted()) ? Bool.NO : deleted))
                 // 模糊匹配查询：后面带 % ；建议优先使用
                 .and(name, () -> q.name.startsWith(name)) // 模糊匹配查询：后面带 %
                 .and(content, () -> q.content.startsWith(content)) // 模糊匹配查询：后面带 %

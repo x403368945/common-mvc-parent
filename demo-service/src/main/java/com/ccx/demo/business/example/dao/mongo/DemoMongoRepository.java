@@ -1,7 +1,7 @@
 package com.ccx.demo.business.example.dao.mongo;
 
 import com.ccx.demo.business.example.entity.DemoMongo;
-import com.ccx.demo.enums.Radio;
+import com.ccx.demo.enums.Bool;
 import com.querydsl.core.QueryResults;
 import com.support.mvc.dao.IRepository;
 import com.support.mvc.entity.base.Pager;
@@ -62,7 +62,7 @@ public interface DemoMongoRepository extends
                 .updateFirst(
                         new Query(byExample(Example.of(DemoMongo.builder().id(id).insertUserId(userId).build()))),
                         new Update()
-                                .set(deleted.name(), Radio.YES)
+                                .set(deleted.name(), Bool.YES)
                                 .set(updateUserId.name(), userId)
                                 .set(updateTime.name(), Timestamp.valueOf(LocalDateTime.now()))
                         ,
@@ -77,7 +77,7 @@ public interface DemoMongoRepository extends
                 .updateMulti(
                         new Query(where(id.name()).in(ids).and(insertUserId.name()).is(userId)),
                         new Update()
-                                .set(deleted.name(), Radio.YES)
+                                .set(deleted.name(), Bool.YES)
                                 .set(updateUserId.name(), userId)
                                 .set(updateTime.name(), Timestamp.valueOf(LocalDateTime.now()))
                         ,

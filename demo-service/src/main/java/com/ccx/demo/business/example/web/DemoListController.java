@@ -6,7 +6,7 @@ import com.ccx.demo.business.example.service.DemoListService;
 import com.ccx.demo.business.example.vo.TabDemoListVO;
 import com.ccx.demo.business.user.entity.TabUser;
 import com.ccx.demo.config.init.AppConfig.URL;
-import com.ccx.demo.enums.Radio;
+import com.ccx.demo.enums.Bool;
 import com.ccx.demo.business.user.web.IAuthController;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.entity.base.Param;
@@ -350,7 +350,7 @@ public class DemoListController implements IAuthController<Long> {
                                         .status(DemoStatus._NONE)
                                         .insertUserId(1L)
                                         .updateUserId(1L)
-                                        .deleted(Radio.NO)
+                                        .deleted(Bool.NO)
                                         .name("name")
                                         .content("content")
                                         .amountRange(Range.of(1d, 10d))
@@ -390,7 +390,7 @@ public class DemoListController implements IAuthController<Long> {
                                         .status(DemoStatus._NONE)
                                         .insertUserId(1L)
                                         .updateUserId(1L)
-                                        .deleted(Radio.NO)
+                                        .deleted(Bool.NO)
                                         .name("name")
                                         .content("content")
                                         .amountRange(Range.of(1d, 10d))
@@ -428,7 +428,7 @@ public class DemoListController implements IAuthController<Long> {
                                         .status(DemoStatus._NONE)
                                         .insertUserId(1L)
                                         .updateUserId(1L)
-                                        .deleted(Radio.NO)
+                                        .deleted(Bool.NO)
                                         .name("name")
                                         .content("content")
                                         .amountRange(Range.of(1d, 10d))
@@ -467,7 +467,7 @@ public class DemoListController implements IAuthController<Long> {
                                         .status(DemoStatus._NONE)
                                         .insertUserId(1L)
                                         .updateUserId(1L)
-                                        .deleted(Radio.NO)
+                                        .deleted(Bool.NO)
                                         .name("name")
                                         .content("content")
                                         .amountRange(Range.of(1d, 10d))

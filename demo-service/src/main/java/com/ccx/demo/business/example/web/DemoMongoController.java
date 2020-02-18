@@ -5,7 +5,7 @@ import com.ccx.demo.business.example.entity.DemoMongo.OrderBy;
 import com.ccx.demo.business.example.service.DemoMongoService;
 import com.ccx.demo.business.user.entity.TabUser;
 import com.ccx.demo.config.init.AppConfig.URL;
-import com.ccx.demo.enums.Radio;
+import com.ccx.demo.enums.Bool;
 import com.ccx.demo.business.user.web.IAuthController;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.entity.base.Param;
@@ -243,7 +243,7 @@ public class DemoMongoController implements IAuthController<String> {
                         .build()
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl()), // 当前接口参考案例请求地址；
                                 DemoMongo.builder() // 当前接口参考案例请求参数，demo中设置支持查询的字段
-                                        .deleted(Radio.NO)
+                                        .deleted(Bool.NO)
                                         .sorts(Collections.singletonList(Sorts.Order.builder().name(OrderBy.insertTime.name()).direction(DESC).build()))
                                         .build()
                         ))
@@ -276,7 +276,7 @@ public class DemoMongoController implements IAuthController<String> {
                         .build()
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(1, 20)), // 当前接口参考案例请求地址；
                                 DemoMongo.builder() // 当前接口参考案例请求参数，demo中设置支持查询的字段
-                                        .deleted(Radio.NO)
+                                        .deleted(Bool.NO)
                                         .sorts(Collections.singletonList(Sorts.Order.builder().name(OrderBy.insertTime.name()).direction(DESC).build()))
                                         .build()
                         ))

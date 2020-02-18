@@ -124,7 +124,7 @@ public class Prop implements IJson {
 //        insertUserId(LONG.build("创建用户ID")),
 //        updateTime(TIMESTAMP.build("修改时间")),
 //        updateUserId(LONG.build("修改用户ID")),
-//        deleted(ENUM.build(Radio.comments())),
+//        deleted(ENUM.build(Bool.comments())),
 //        timestamp(TIMESTAMP.build("数据最后一次更新时间戳")),
 //        ageRange(RANGE_NUM.apply("年龄查询区间")),
 //        insertTimeRange(RANGE_DATE.apply("创建时间查询区间")),

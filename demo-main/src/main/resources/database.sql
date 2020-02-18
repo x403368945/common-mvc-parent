@@ -62,7 +62,7 @@ CREATE TABLE tab_role
     insertUserId BIGINT                            NOT NULL COMMENT '创建用户ID',
     updateTime   TIMESTAMP(3)                         NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '修改时间',
     updateUserId BIGINT                            NOT NULL COMMENT '修改用户ID',
-    deleted      TINYINT(1) UNSIGNED               NOT NULL DEFAULT 0 COMMENT '是否逻辑删除（1、已删除， 0、未删除），参考：Enum{@link com.ccx.demo.enums.Radio}',
+    deleted      TINYINT(1) UNSIGNED               NOT NULL DEFAULT 0 COMMENT '是否逻辑删除（1、已删除， 0、未删除），参考：Enum{@link com.ccx.demo.enums.Bool}',
     KEY (uid)
 )
     ENGINE InnoDB

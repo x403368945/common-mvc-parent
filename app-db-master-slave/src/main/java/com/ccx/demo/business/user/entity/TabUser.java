@@ -5,7 +5,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
 import com.ccx.demo.business.user.cache.ITabUserCache;
 import com.ccx.demo.business.user.vo.UserDetail;
-import com.ccx.demo.enums.Radio;
+import com.ccx.demo.enums.Bool;
 import com.ccx.demo.enums.RegisterSource;
 import com.ccx.demo.enums.Role;
 import com.ccx.demo.open.auth.cache.TokenCache;
@@ -146,7 +146,7 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
      * 是否有效
      */
     @Column(insertable = false, updatable = false)
-    private Radio deleted;
+    private Bool deleted;
     /**
      * 排序字段
      */
@@ -185,7 +185,7 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
         insertUserId(LONG.build("创建用户ID")),
         updateTime(TIMESTAMP.build("修改时间")),
         updateUserId(LONG.build("修改用户ID")),
-        deleted(ENUM.build("是否逻辑删除").setOptions(Radio.comments()));
+        deleted(ENUM.build("是否逻辑删除").setOptions(Bool.comments()));
         private final Prop prop;
 
         public Prop getProp() {
@@ -270,7 +270,7 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
                 .and(subdomain, () -> q.subdomain.eq(subdomain))
                 .and(insertUserId, () -> q.insertUserId.eq(insertUserId))
                 .and(updateUserId, () -> q.updateUserId.eq(updateUserId))
-                .and(q.deleted.eq(Objects.isNull(getDeleted()) ? Radio.NO : deleted))
+                .and(q.deleted.eq(Objects.isNull(getDeleted()) ? Bool.NO : deleted))
                 .and(nickname, () -> q.nickname.containsIgnoreCase(nickname))
 //              Expressions.booleanTemplate("JSON_CONTAINS({0},{1})>0",q.roles,roleId)
 //              Expressions.booleanTemplate("JSON_CONTAINS({0},{1})>0", q.roles, JSON.toJSONString(roles))

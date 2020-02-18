@@ -2,7 +2,7 @@ package <%=pkg%>.code.<%=javaname%>.dao.jpa;
 
 import <%=pkg%>.code.<%=javaname%>.entity.<%=TabName%>;
 import <%=pkg%>.code.<%=javaname%>.entity.Q<%=TabName%>;
-import <%=pkg%>.enums.Radio;
+import <%=pkg%>.enums.Bool;
 import com.google.common.collect.Lists;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Expression;
@@ -88,8 +88,8 @@ public interface <%=JavaName%>Repository extends
 //    default long markDeleteById(final <%=id%> id) {
 //        return jpaQueryFactory.<JPAQueryFactory>get()
 //                .update(q)
-//                .set(q.deleted, Radio.YES)
-//                .where(q.id.eq(id).and(q.deleted.eq(Radio.NO)))
+//                .set(q.deleted, Bool.YES)
+//                .where(q.id.eq(id).and(q.deleted.eq(Bool.NO)))
 //                .execute();
 //    }
 
@@ -97,8 +97,8 @@ public interface <%=JavaName%>Repository extends
 //    default long markDeleteByIds(final List<<%=id%>> ids) {
 //        return jpaQueryFactory.<JPAQueryFactory>get()
 //                .update(q)
-//                .set(q.deleted, Radio.YES)
-//                .where(q.id.in(ids).and(q.deleted.eq(Radio.NO)))
+//                .set(q.deleted, Bool.YES)
+//                .where(q.id.in(ids).and(q.deleted.eq(Bool.NO)))
 //                .execute();
 //    }
 
@@ -106,9 +106,9 @@ public interface <%=JavaName%>Repository extends
 //    default long markDelete(final List<<%=TabName%>> list) {
 //        return jpaQueryFactory.<JPAQueryFactory>get()
 //                   .update(q)
-//                   .set(q.deleted, Radio.YES)
+//                   .set(q.deleted, Bool.YES)
 //                   .where(q.id.in(list.stream().map(<%=TabName%>::getId).toArray(String[]::new))
-//                       .and(q.deleted.eq(Radio.NO))
+//                       .and(q.deleted.eq(Bool.NO))
 //                    )
 //                    .execute();
 //    }

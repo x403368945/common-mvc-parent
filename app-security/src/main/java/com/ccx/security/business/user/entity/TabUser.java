@@ -2,7 +2,7 @@ package com.ccx.security.business.user.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
-import com.ccx.security.enums.Radio;
+import com.ccx.security.enums.Bool;
 import com.ccx.security.enums.Role;
 import com.support.mvc.entity.base.Prop;
 import com.utils.IJson;
@@ -54,7 +54,7 @@ public class TabUser extends UserDetail implements IJson {
         insertUserId(LONG.build("创建用户ID")),
         updateTime(TIMESTAMP.build("修改时间")),
         updateUserId(LONG.build("修改用户ID")),
-        deleted(ENUM.build("是否逻辑删除").setOptions(Radio.comments()));
+        deleted(ENUM.build("是否逻辑删除").setOptions(Bool.comments()));
         private final Prop prop;
 
         public Prop getProp() {
@@ -136,7 +136,7 @@ public class TabUser extends UserDetail implements IJson {
      * 是否有效
      */
     @Column(insertable = false, updatable = false)
-    private Radio deleted;
+    private Bool deleted;
 
     @Override
     public TabUser loadUserDetail() {

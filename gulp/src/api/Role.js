@@ -177,7 +177,7 @@ export default class RoleVO {
    * @param updateTime {string} 修改时间
    * @param updateUserId {number} 修改用户ID
    * @param updateUserName {string} 修改用户昵称
-   * @param deleted {string} 逻辑删除状态，参考 {@link Radio}.*.value
+   * @param deleted {string} 逻辑删除状态，参考 {@link Bool}.*.value
    * @param timestamp {number} 按 id 查询时可能使用时间戳缓存
    * @param sorts {Array<OrderBy>} 排序字段集合
    * @param page {Page} 分页对象
@@ -255,7 +255,7 @@ export default class RoleVO {
      */
     this.updateUserName = updateUserName;
     /**
-     * 逻辑删除状态，参考 {@link Radio}.*.value
+     * 逻辑删除状态，参考 {@link Bool}.*.value
      * @type {string}
      */
     this.deleted = deleted;

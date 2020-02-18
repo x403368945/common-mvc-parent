@@ -2,7 +2,7 @@ package <%=pkg%>.code.<%=javaname%>.dao.jpa;
 
 import <%=pkg%>.code.<%=javaname%>.entity.<%=TabName%>;
 import <%=pkg%>.code.<%=javaname%>.entity.Q<%=TabName%>;
-import <%=pkg%>.enums.Radio;
+import <%=pkg%>.enums.Bool;
 import com.google.common.collect.Lists;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Expression;
@@ -105,9 +105,9 @@ public interface <%=JavaName%>Repository extends
     default long markDeleteById(final <%=id%> id, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
-                .set(q.deleted, Radio.YES)
+                .set(q.deleted, Bool.YES)
                 .set(q.updateUserId, userId)
-                .where(q.id.eq(id).and(q.insertUserId.eq(userId)).and(q.deleted.eq(Radio.NO)))
+                .where(q.id.eq(id).and(q.insertUserId.eq(userId)).and(q.deleted.eq(Bool.NO)))
                 .execute();
     }
 
@@ -115,9 +115,9 @@ public interface <%=JavaName%>Repository extends
     default long markDeleteByIds(final List<<%=id%>> ids, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
-                .set(q.deleted, Radio.YES)
+                .set(q.deleted, Bool.YES)
                 .set(q.updateUserId, userId)
-                .where(q.id.in(ids).and(q.insertUserId.eq(userId)).and(q.deleted.eq(Radio.NO)))
+                .where(q.id.in(ids).and(q.insertUserId.eq(userId)).and(q.deleted.eq(Bool.NO)))
                 .execute();
     }
 
@@ -125,10 +125,10 @@ public interface <%=JavaName%>Repository extends
     default long markDelete(final List<<%=TabName%>> list, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
-                .set(q.deleted, Radio.YES)
+                .set(q.deleted, Bool.YES)
                 .set(q.updateUserId, userId)
                 .where(q.id.in(list.stream().map(<%=TabName%>::getId).toArray(String[]::new))
-                        .and(q.insertUserId.eq(userId)).and(q.deleted.eq(Radio.NO))
+                        .and(q.insertUserId.eq(userId)).and(q.deleted.eq(Bool.NO))
                 )
                 .execute();
     }

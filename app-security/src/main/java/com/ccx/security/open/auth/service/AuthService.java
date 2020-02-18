@@ -1,7 +1,7 @@
 package com.ccx.security.open.auth.service;
 
 import com.ccx.security.business.user.entity.TabUser;
-import com.ccx.security.enums.Radio;
+import com.ccx.security.enums.Bool;
 import com.ccx.security.enums.Role;
 import com.mysema.commons.lang.Assert;
 import com.support.mvc.enums.Code;
@@ -38,9 +38,9 @@ public class AuthService implements UserDetailsService {
 
     private static final List<TabUser> USERS = Arrays.asList(
             TabUser.builder().id(1L).uid(Util.uuid32()).username("admin").role(Role.ROLE_ADMIN)
-                    .password(new BCryptPasswordEncoder().encode("admin")).deleted(Radio.NO).build(),
+                    .password(new BCryptPasswordEncoder().encode("admin")).deleted(Bool.NO).build(),
             TabUser.builder().id(2L).uid(Util.uuid32()).username("user").role(Role.ROLE_USER)
-                    .password(new BCryptPasswordEncoder().encode("111111")).deleted(Radio.NO).build()
+                    .password(new BCryptPasswordEncoder().encode("111111")).deleted(Bool.NO).build()
     );
 
     @Autowired

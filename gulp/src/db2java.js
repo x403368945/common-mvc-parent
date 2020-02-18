@@ -455,7 +455,7 @@ export class BaseAdapter {
         }
       },
       uid: ({name}) => `    @Column(updatable = false)\n    @NotNull(groups = {IUpdate.class, IMarkDelete.class})\n    @Size(min = 32, max = 32)\n    private String ${name};`,
-      deleted: ({name}) => `    @Column(insertable = false, updatable = false)\n    @Null(groups = {ISave.class})\n    private Radio ${name};`,
+      deleted: ({name}) => `    @Column(insertable = false, updatable = false)\n    @Null(groups = {ISave.class})\n    private Bool ${name};`,
       insertTime: ({name}) => `    @Column(insertable = false, updatable = false)\n    @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")\n    @Null(groups = {ISave.class})\n    private Timestamp ${name};`,
       updateTime: (column) => this.fields.insertTime(column),
       insertUserId: ({name}) => `    @Column(updatable = false)\n    @NotNull(groups = {ISave.class})\n    @Positive\n    private Long ${name};`,
@@ -467,7 +467,7 @@ export class BaseAdapter {
       default: ({name, dataType, notNull, comment}) => `        ${name}(${dataType.value.toUpperCase()}.build(${notNull ? 'true, ' : ''}"${comment}"))`,
       id: ({name, dataType, comment}) => `        ${name}(${[DataType.BIGINT.name, DataType.INT.name].includes(dataType.name) ? 'LONG' : 'STRING'}.build(true, "${comment}"))`,
       uid: ({name, comment}) => `        ${name}(STRING.build(true, "${comment}"))`,
-      deleted: ({name, comment}) => `        ${name}(ENUM.build("是否逻辑删除").setOptions(Radio.comments()))`,
+      deleted: ({name, comment}) => `        ${name}(ENUM.build("是否逻辑删除").setOptions(Bool.comments()))`,
       insertTime: ({name, comment}) => `        ${name}(TIMESTAMP.build("${comment}"))`,
       updateTime: (column) => this.props.insertTime(column),
       insertUserId: ({name, comment}) => `        ${name}(LONG.build("${comment}"))`,

@@ -44,7 +44,7 @@ public @interface MongoServiceAspect {
     boolean user() default true;
 
     /**
-     * save | saveAll 方法是否自动设置Radio.NO 到 deleted 字段
+     * save | saveAll 方法是否自动设置Bool.NO 到 deleted 字段
      */
     Class<? extends Enum> deleted() default Deleted.class;
     /**

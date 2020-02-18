@@ -6,7 +6,7 @@ import com.ccx.demo.business.user.service.UserLoginService;
 import com.ccx.demo.business.user.service.UserService;
 import com.ccx.demo.business.user.vo.TabUserVO;
 import com.ccx.demo.config.init.AppConfig.URL;
-import com.ccx.demo.enums.Radio;
+import com.ccx.demo.enums.Bool;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.entity.base.Param;
 import com.support.mvc.entity.base.Result;
@@ -218,7 +218,7 @@ public class UserController implements IAuthController<Long> {
                         .build()
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(1, 20)), // 当前接口参考案例请求地址；
                                 TabUser.builder() // 当前接口参考案例请求参数，demo中设置支持查询的字段
-                                        .deleted(Radio.NO)
+                                        .deleted(Bool.NO)
                                         .sorts(Collections.singletonList(Sorts.Order.builder().name(TabUser.OrderBy.id.name()).direction(DESC).build()))
                                         .build()
                         ))

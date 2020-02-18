@@ -2,7 +2,7 @@ package com.ccx.demo.business.example.dao.jpa;
 
 import com.ccx.demo.business.example.entity.TabConvert;
 import com.ccx.demo.business.example.entity.QTabConvert;
-import com.ccx.demo.enums.Radio;
+import com.ccx.demo.enums.Bool;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
@@ -75,9 +75,9 @@ public interface ConvertRepository extends
     default long markDeleteById(final Long id, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
-                .set(q.deleted, Radio.YES)
+                .set(q.deleted, Bool.YES)
                 .set(q.updateUserId, userId)
-                .where(q.id.eq(id).and(q.insertUserId.eq(userId)).and(q.deleted.eq(Radio.NO)))
+                .where(q.id.eq(id).and(q.insertUserId.eq(userId)).and(q.deleted.eq(Bool.NO)))
                 .execute();
     }
 
@@ -85,9 +85,9 @@ public interface ConvertRepository extends
     default long markDeleteByUid(final Long id, final String uid, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
-                .set(q.deleted, Radio.YES)
+                .set(q.deleted, Bool.YES)
                 .set(q.updateUserId, userId)
-                .where(q.id.eq(id).and(q.uid.eq(uid).and(q.insertUserId.eq(userId))).and(q.deleted.eq(Radio.NO)))
+                .where(q.id.eq(id).and(q.uid.eq(uid).and(q.insertUserId.eq(userId))).and(q.deleted.eq(Bool.NO)))
                 .execute();
     }
 
@@ -95,9 +95,9 @@ public interface ConvertRepository extends
     default long markDeleteByIds(final List<Long> ids, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
-                .set(q.deleted, Radio.YES)
+                .set(q.deleted, Bool.YES)
                 .set(q.updateUserId, userId)
-                .where(q.id.in(ids).and(q.insertUserId.eq(userId)).and(q.deleted.eq(Radio.NO)))
+                .where(q.id.in(ids).and(q.insertUserId.eq(userId)).and(q.deleted.eq(Bool.NO)))
                 .execute();
     }
 
@@ -105,10 +105,10 @@ public interface ConvertRepository extends
     default long markDelete(final List<TabConvert> list, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
-                .set(q.deleted, Radio.YES)
+                .set(q.deleted, Bool.YES)
                 .set(q.updateUserId, userId)
                 .where(q.id.in(list.stream().map(TabConvert::getId).toArray(Long[]::new))
-                        .and(q.insertUserId.eq(userId)).and(q.deleted.eq(Radio.NO))
+                        .and(q.insertUserId.eq(userId)).and(q.deleted.eq(Bool.NO))
                         .and(q.uid.in(list.stream().map(TabConvert::getUid).toArray(String[]::new)))
                 )
                 .execute();

@@ -116,6 +116,6 @@ public interface ITabUserCache extends ICache {
 //     */
 //    @Indexed
 //    @NotNull(groups = {ISave.class})
-//    private Radio deleted;
+//    private Bool deleted;
 //
 }

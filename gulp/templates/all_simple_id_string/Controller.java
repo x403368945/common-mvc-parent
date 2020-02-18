@@ -4,7 +4,7 @@ import <%=pkg%>.code.<%=javaname%>.entity.<%=TabName%>;
 import <%=pkg%>.code.<%=javaname%>.entity.<%=TabName%>.OrderBy;
 import <%=pkg%>.code.<%=javaname%>.service.<%=JavaName%>Service;
 import <%=pkg%>.config.init.AppConfig.URL;
-import <%=pkg%>.enums.Radio;
+import <%=pkg%>.enums.Bool;
 import com.support.mvc.entity.base.*;
 import com.utils.util.Dates;
 import com.utils.util.Util;

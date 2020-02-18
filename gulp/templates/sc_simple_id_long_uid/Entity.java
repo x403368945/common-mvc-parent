@@ -3,7 +3,7 @@ package <%=pkg%>.code.<%=javaname%>.entity;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
-import <%=pkg%>.enums.Radio;
+import <%=pkg%>.enums.Bool;
 import com.google.common.collect.Lists;
 import com.support.mvc.entity.ITable;
 import com.support.mvc.entity.ITimestamp;
@@ -172,7 +172,7 @@ public class <%=TabName%> implements
 ////                .and(insertUserId, () -> q.insertUserId.eq(insertUserId))
 ////                .and(updateUserId, () -> q.updateUserId.eq(updateUserId))
 ////                // 强制带默认值的查询字段
-////                .and(q.deleted.eq(Objects.isNull(getDeleted()) ? Radio.NO : deleted))
+////                .and(q.deleted.eq(Objects.isNull(getDeleted()) ? Bool.NO : deleted))
 ////                // 数字区间查询
 ////                .and(amountRange, () -> q.amount.between(amountRange.getMin(), amountRange.getMax()))
 ////                // 日期区间查询；Range.rebuild() : 先将时间区间重置到 00:00:00.000 - 23:59:59.999 ; 大多数情况都需要重置时间

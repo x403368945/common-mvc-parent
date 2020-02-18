@@ -12,7 +12,7 @@ import java.util.stream.Stream;
  *
  * @author 谢长春 2017年7月4日 下午5:19:22
  */
-public enum Radio {
+public enum Bool {
     /**
      * 否|未删除|未读|待处理|未验证|未完成|不支持|未确认|无效|未过期|暂停
      */
@@ -26,7 +26,7 @@ public enum Radio {
      */
     final String comment;
 
-    Radio(String comment) {
+    Bool(String comment) {
         this.comment = comment;
     }
 
@@ -34,8 +34,8 @@ public enum Radio {
         return this.ordinal();
     }
 
-    public static Radio valueOf(final Integer value) {
-        return Objects.isNull(value) ? null : Radio.values()[value];
+    public static Bool valueOf(final Integer value) {
+        return Objects.isNull(value) ? null : Bool.values()[value];
     }
 
     /**
@@ -47,8 +47,8 @@ public enum Radio {
      */
     public static List<Item> options(final String yes, final String no) {
         return Arrays.asList(
-                Item.builder().key(Radio.YES.name()).value(Radio.YES.ordinal()).comment(yes).build(),
-                Item.builder().key(Radio.NO.name()).value(Radio.NO.ordinal()).comment(no).build()
+                Item.builder().key(Bool.YES.name()).value(Bool.YES.ordinal()).comment(yes).build(),
+                Item.builder().key(Bool.NO.name()).value(Bool.NO.ordinal()).comment(no).build()
         );
     }
 
@@ -58,8 +58,8 @@ public enum Radio {
      * @return {@link Map<String, String>}
      */
     public static Map<String, String> comments() {
-        return Stream.of(Radio.values()).collect(Collectors.toMap(
-                Radio::name,
+        return Stream.of(Bool.values()).collect(Collectors.toMap(
+                Bool::name,
                 o -> o.comment,
                 (u, v) -> {
                     throw new IllegalStateException(String.format("Duplicate key %s", u));

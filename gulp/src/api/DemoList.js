@@ -256,7 +256,7 @@ export default class DemoListVO {
    * @param updateTime {string} 修改时间
    * @param updateUserId {number} 修改用户ID
    * @param updateUserName {string} 修改用户昵称
-   * @param deleted {string} 逻辑删除状态，参考 {@link Radio}.*.value
+   * @param deleted {string} 逻辑删除状态，参考 {@link Bool}.*.value
    * @param timestamp {number} 按 id 查询时可能使用时间戳缓存
    * @param uids {Array<Object>} id + uid批量带参，=> [{id:1,uid:''},{id:1,uid:''}]
    * @param amountRange {NumRange} 金额查询区间
@@ -346,7 +346,7 @@ export default class DemoListVO {
      */
     this.updateUserName = updateUserName;
     /**
-     * 逻辑删除状态，参考 {@link Radio}.*.value
+     * 逻辑删除状态，参考 {@link Bool}.*.value
      * @type {string}
      */
     this.deleted = deleted;
