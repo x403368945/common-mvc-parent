@@ -13,9 +13,11 @@
 
     <!-- // spring-boot start >> spring-boot 特殊处理：依赖库 -->
     <dependencies>
+        <!-- 通过 jitpack.io 依赖开源项目 -->
         <dependency>
-            <groupId>com.ccx.utils.parent</groupId>
+            <groupId>com.github.x403368945</groupId>
             <artifactId>common-utils</artifactId>
+            <version>1.0.3</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

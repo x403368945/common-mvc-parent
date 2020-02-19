@@ -10,7 +10,6 @@
 
     <!-- spring-boot 特殊处理：pom 文件与mvc差别较大 -->
     <modules>
-        <module>common-utils</module><!-- 工具类封装 -->
         <module>common-mvc</module><!-- Spring MVC 封装 -->
         <module>demo-main</module><!-- 应用入口【独立运行，可选依赖[demo-service]】 -->
         <module>demo-service</module><!-- 参考案例【必须依赖[demo-main]】 -->
@@ -119,12 +118,19 @@
             </url>
         </repository>
     </repositories>-->
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
     <dependencyManagement>
         <dependencies>
+            <!-- 通过 jitpack.io 依赖开源项目 -->
             <dependency>
-                <groupId>com.ccx.utils.parent</groupId>
+                <groupId>com.github.x403368945</groupId>
                 <artifactId>common-utils</artifactId>
-                <version>1.0.0</version>
+                <version>1.0.3</version>
             </dependency>
             <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies -->
             <dependency>
