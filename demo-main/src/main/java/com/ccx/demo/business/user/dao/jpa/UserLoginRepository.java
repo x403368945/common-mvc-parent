@@ -27,6 +27,7 @@ import static com.ccx.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 public interface UserLoginRepository extends
         JpaRepository<TabUserLogin, Long>,
         IRepository<TabUserLogin, Long> {
+    // 每个 DAO 层顶部只能有一个查询实体,且必须以 q 命名,表示当前操作的数据库表. 当 q 作为主表的连接查询方法也必须写在这个类
     QTabUserLogin q = tabUserLogin;
 
     @Query
