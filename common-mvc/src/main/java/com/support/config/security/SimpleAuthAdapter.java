@@ -90,7 +90,16 @@ public class SimpleAuthAdapter extends WebSecurityConfigurerAdapter {
         // 解决静态资源被拦截的问题
         web.ignoring().antMatchers(
                 Sets.union(
-                        Sets.newHashSet("/static/**", "/files/**", "/druid/**"),
+                        Sets.newHashSet(
+                                "/favicon.ico" // resources 下的静态资源
+                                , "/static/**" // resources 下的静态资源
+                                , "/files/**" // 本地磁盘文件
+                                , "/druid/**" // druid 监控页面
+                                , "/doc.html" // knife4j 增强 swagger 页面
+                                , "/webjars/**" // knife4j 增强 swagger 页面
+                                , "/swagger-resources/**" // knife4j 增强 swagger 页面
+                                , "/v2/api-docs/**" // knife4j 增强 swagger 页面
+                        ),
                         Sets.newHashSet(ignores())
                 ).toArray(new String[]{})
         );

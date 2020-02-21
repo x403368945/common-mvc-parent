@@ -320,7 +320,7 @@ public class TabDemoList implements
      * @param appends {@link Path}[] 追加扩展连表查询字段
      * @return {@link Path}[]
      */
-    public static Path<?>[] allColumns(final Path<?>... appends) {
+    public static Path<?>[] allColumnAppends(final Path<?>... appends) {
         final List<Path<?>> columns = Lists.newArrayList(appends);
         final Class<?> clazz = tabDemoList.getClass();
         try {

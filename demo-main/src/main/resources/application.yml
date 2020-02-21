@@ -1,6 +1,9 @@
+
 spring:
   profiles: # 动态环境
     active: @env@ # 采坑记录，使用 @@ 获取 pom.xml 环境变量时，必须指定 build > resources > resource > <filtering>true</filtering>
+  application:
+    name: Demo
   mvc:
     throw-exception-if-no-handler-found: true # 出现错误时, 直接抛出异常(便于异常统一处理，否则捕获不到404)
   resources:

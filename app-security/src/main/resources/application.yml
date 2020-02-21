@@ -9,6 +9,8 @@ app: # 本地开发 windows 环境
   token-expired: 30 # token 默认过期时间，30 天
 
 spring:
+  application:
+    name: Security
   mvc:
     throw-exception-if-no-handler-found: true # 出现错误时, 直接抛出异常(便于异常统一处理，否则捕获不到404)
   resources:

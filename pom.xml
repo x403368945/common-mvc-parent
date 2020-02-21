@@ -162,6 +162,10 @@
                         <artifactId>guava</artifactId>
                         <groupId>com.google.guava</groupId>
                     </exclusion>
+                    <exclusion>
+                        <artifactId>jsr305</artifactId>
+                        <groupId>com.google.code.findbugs</groupId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <!-- https://mvnrepository.com/artifact/com.querydsl/querydsl-apt -->
@@ -173,6 +177,10 @@
                     <exclusion>
                         <artifactId>guava</artifactId>
                         <groupId>com.google.guava</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>javassist</artifactId>
+                        <groupId>org.javassist</groupId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -220,6 +228,27 @@
                 <version>5.2.1.RELEASE</version>
                 <scope>test</scope>
             </dependency>
+            <!-- https://gitee.com/xiaoym/knife4j -->
+            <!-- https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-spring-boot-starter -->
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <version>2.0.1</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>guava</artifactId>
+                        <groupId>com.google.guava</groupId>
+                    </exclusion>
+                    <!--<exclusion>
+                        <artifactId>swagger-annotations</artifactId>
+                        <groupId>io.swagger</groupId>
+                    </exclusion>-->
+                    <!--<exclusion>
+                        <artifactId>jackson-annotations</artifactId>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                    </exclusion>-->
+                </exclusions>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>
@@ -260,6 +289,7 @@
                     <exclude>*.woff</exclude>
                     <exclude>*.woff2</exclude>
                     <exclude>*.svg</exclude>
+                    <exclude>*.ico</exclude>
                 </excludes>
             </resource>
             <resource>
@@ -274,6 +304,7 @@
                     <include>*.woff</include>
                     <include>*.woff2</include>
                     <include>*.svg</include>
+                    <include>*.ico</include>
                 </includes>
             </resource>
             <resource>

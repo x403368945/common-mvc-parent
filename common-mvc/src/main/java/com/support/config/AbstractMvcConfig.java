@@ -51,6 +51,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @Slf4j
 public class AbstractMvcConfig implements WebMvcConfigurer {
 // spring-boot start >>
+
     /**
      * spring-boot 特殊处理：添加异常处理
      * 服务端 500 异常处理
@@ -79,6 +80,7 @@ public class AbstractMvcConfig implements WebMvcConfigurer {
         }
     }
 // spring-boot end <<<<
+
     /**
      * 多线程管理
      *
@@ -183,6 +185,23 @@ public class AbstractMvcConfig implements WebMvcConfigurer {
         configurer.setUseSuffixPatternMatch(false);
     }
 
+    @Bean
+    public FastJsonHttpMessageConverter fastJsonHttpMessageConverter() {
+        JSON.DEFAULT_GENERATE_FEATURE |= SerializerFeature.DisableCircularReferenceDetect.getMask(); // 解决循环引用问题
+        final FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
+        converter.setDefaultCharset(UTF_8);
+        converter.setSupportedMediaTypes(
+                Arrays.asList(
+                        MediaType.APPLICATION_JSON,
+                        MediaType.APPLICATION_OCTET_STREAM,
+                        MediaType.APPLICATION_FORM_URLENCODED,
+                        MediaType.TEXT_PLAIN
+                )
+        );
+        converter.getFastJsonConfig().setFeatures(Feature.OrderedField);
+        return converter;
+    }
+
     /**
      * 启用 FastJson
      * spring-boot 需要在 pom 文件中移除 com.fasterxml.jackson.core 包
@@ -232,11 +251,17 @@ public class AbstractMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
         // 添加静态资源过滤
+        registry.addResourceHandler("favicon.ico").addResourceLocations("classpath:/static/");
         // 需要在 Spring Security 中配置忽略静态资源 WebSecurity.ignoring().antMatchers("/static/**");
         registry.addResourceHandler("/static/**")
                 // Locations 这里应该是编译后的静态文件目录
                 .addResourceLocations("classpath:/static/")
                 .setCacheControl(CacheControl.maxAge(1, TimeUnit.MINUTES).cachePublic());
+        // knife4j 增强 swagger 配置 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        registry.addResourceHandler("doc.html").addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+        // knife4j 增强 swagger 配置 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
     }
 
     /**
@@ -257,7 +282,7 @@ public class AbstractMvcConfig implements WebMvcConfigurer {
      return Validation.byProvider(HibernateValidator.class)
      .configure()
      .failFast(true)
-     //                .addProperty( "hibernate.validator.fail_fast", "true" )
+     .addProperty( "hibernate.validator.fail_fast", "true" )
      .buildValidatorFactory()
      .getValidator();
      }

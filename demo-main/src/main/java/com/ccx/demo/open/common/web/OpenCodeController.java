@@ -1,12 +1,14 @@
 package com.ccx.demo.open.common.web;
 
 import com.ccx.demo.config.init.AppConfig;
-import com.ccx.demo.config.init.AppConfig.URL;
 import com.ccx.demo.enums.Session;
+import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import com.support.mvc.entity.base.Result;
 import com.support.mvc.enums.Code;
 import com.support.mvc.web.IController;
 import com.utils.util.CodeImage;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,81 +18,65 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Arrays;
 import java.util.Objects;
 
 /**
  * 验证码接口
  *
- *
  * @author 谢长春 on 2017-9-18
  */
+@Api(tags = "图片验证码")
+@ApiSort(1)
 @RequestMapping("/open/code/{version}")
 @Controller
 @Slf4j
 public class OpenCodeController implements IController<String> {
 
-    //    @Autowired
+//    @Autowired
 //    private EmailCode emailCode;
 //    @Autowired
 //    private PhoneCode phoneCode;
 
+    @ApiOperation(value = "获取图片验证码", tags = {"1.0.0"})
     @GetMapping
     @ResponseBody
     public Result<?> getImageCode(@PathVariable final int version, HttpServletRequest request) {
         return new Result<String>(1) // 指定接口最新版本号
-                .version(this.getClass(), builder -> builder
-                        .notes(Arrays.asList(
-                                "获取图片验证码，将图片验证码转换为 base64 格式后返回",
-                                "开发环境，将图片验证码放在{extras:{code:验证码}}；方便自动化测试"
-                        ))
-                        .build()
-                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl())))
-                )
+                .versionAssert(version) // 校验接口版本号
                 .execute(result -> {
-                    result.versionAssert(version);
                     final HttpSession session = request.getSession(true);
-                    result.setSuccess(
-                            CodeImage.ofDefault()
-                                    .generate(code -> {
-                                        session.setAttribute(Session.code.name(), code);
-                                        if (AppConfig.isDev() || AppConfig.isBeta()) {
-                                            result.addExtras("code", code);
-                                        }
-                                    })
-                                    .base64()
+                    result.setSuccess(CodeImage.ofDefault()
+                            .generate(code -> {
+                                session.setAttribute(Session.code.name(), code);
+                                if (AppConfig.isDev() || AppConfig.isBeta()) {
+                                    result.addExtras("code", code);
+                                }
+                            })
+                            .base64()
                     );
                 });
     }
 
+    @ApiOperation(value = "校验图片验证码", tags = {"1.0.1"})
     @GetMapping("/check/{code}")
     @ResponseBody
     public Result<?> checkImageCode(@PathVariable final int version, @PathVariable String code, HttpServletRequest request) {
         return new Result<String>(1) // 指定接口最新版本号
-                .version(this.getClass(), builder -> builder
-                        .notes(Arrays.asList(
-                                "校验图片验证码",
-                                "验证失败后，将会返回新的验证码，不需要重新调用获取验证码接口"
-                        ))
-                        .build()
-                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl())))
-                )
+                .versionAssert(version) // 校验接口版本号
                 .execute(result -> {
-                    result.versionAssert(version);
                     final HttpSession session = request.getSession(true);
                     if (Objects.equals(code, Session.code.get(session).orElse(null))) {
                         result.setCode(Code.SUCCESS);
                     } else { // 重新生成验证码
                         result
-                                .setSuccess(
-                                        CodeImage.ofDefault()
-                                                .generate(value -> {
-                                                    session.setAttribute(Session.code.name(), value);
-                                                    if (AppConfig.isDev() || AppConfig.isBeta()) {
-                                                        result.addExtras("code", value);
-                                                    }
-                                                })
-                                                .base64()
+                                .setSuccess(CodeImage.ofDefault()
+                                        .generate(value -> {
+                                            session.setAttribute(Session.code.name(), value);
+                                            if (AppConfig.isDev() || AppConfig.isBeta()) {
+                                                result.addExtras("code", value);
+                                            }
+                                        })
+                                        .base64()
                                 )
                                 .setCode(Code.IMAGE_CODE)
                         ;

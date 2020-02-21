@@ -117,7 +117,7 @@ public interface <%=JavaName%>Repository extends
     
     @Override
     default <T extends <%=TabName%>> List<T> findListProjection(final <%=TabName%> condition, final Class<T> clazz) {
-        return findListProjection(condition, clazz, <%=TabName%>.allColumns());
+        return findListProjection(condition, clazz, <%=TabName%>.allColumnAppends());
     }
 
     @Override
@@ -132,7 +132,7 @@ public interface <%=JavaName%>Repository extends
 
     @Override
     default <T extends <%=TabName%>> QueryResults<T> findPageProjection(final <%=TabName%> condition, final Pager pager, final Class<T> clazz) {
-        return findPageProjection(condition, pager, clazz, <%=TabName%>.allColumns());
+        return findPageProjection(condition, pager, clazz, <%=TabName%>.allColumnAppends());
     }
 
     @Override

@@ -15,6 +15,8 @@ import com.utils.ICall;
 import com.utils.IJson;
 import com.utils.util.FWrite;
 import com.utils.util.Maps;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -40,6 +42,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
  */
 @Slf4j
 @Accessors(chain = true)
+@ApiModel(description = "全局通用响应对象")
 @JSONType(orders = {"v", "code", "message", "rowCount", "pageCount", "totalCount", "rid", "exception", "data", "extras", "version"})
 public class Result<E> implements IJson {
 
@@ -106,45 +109,53 @@ public class Result<E> implements IJson {
      */
     @Getter
     @Setter
+    @ApiModelProperty(value = "当前请求接口最新版本号", position = 0)
     private int v;
     /**
      * 编码，成功、失败、异常编码
      */
     @Getter
+    @ApiModelProperty(value = "状态码", position = 1)
     private Code code;
     /**
      * 异常消息
      */
     @Getter
+    @ApiModelProperty(value = "异常消息，用于开发调试", position = 7)
     private String exception;
     /**
      * 返回数据集合
      */
     @Getter
+    @ApiModelProperty(value = "数据集合", position = 8)
     private List<E> data = Collections.emptyList();
     /**
      * 总页数
      */
     @Getter
     @Setter
+    @ApiModelProperty(value = "总页数", notes = "该参数分页查询时才会起作用，其他情况一直返回 0", position = 4)
     private int pageCount;
     /**
      * 总行数
      */
     @Getter
     @Setter
+    @ApiModelProperty(value = "总行数", notes = "该参数分页查询时才会起作用，其他情况一直返回 0", position = 5)
     private long totalCount;
     /**
      * 本次响应数据总行数
      */
     @Getter
     @Setter
+    @ApiModelProperty(value = "本次响应数据行数", notes = "data 集合大小", position = 3)
     private long rowCount;
     /**
      * 附加信息
      */
     @Getter
     @Setter
+    @ApiModelProperty(value = "扩展属性", notes = "扩展属性， 补充 data 集合", position = 9)
     private Map<String, Object> extras = null;
     /**
      * 当前调用接口版本和说明
@@ -158,8 +169,25 @@ public class Result<E> implements IJson {
      *
      * @return {@link String}
      */
+    @ApiModelProperty(value = "请求ID", position = 6)
     public String getRid() {
         return RequestIdFilter.get();
+    }
+
+    /**
+     * 将编码转换成具体消息
+     *
+     * @return String
+     */
+    @ApiModelProperty(value = "响应消息", notes = "用于页面弹窗内容", position = 2)
+    public String getMessage() {
+        if (Objects.equals(Code.CUSTOMIZE, code)) {
+            // 处理自定义动态异常消息
+            return Objects.isNull(this.exception)
+                    ? null
+                    : this.exception.replace(Code.CUSTOMIZE.name().concat(":"), "");
+        }
+        return this.code.comment;
     }
 
 //    /**
@@ -185,21 +213,6 @@ public class Result<E> implements IJson {
     @Deprecated
     public void setData(final List<E> data) {
         this.data = data;
-    }
-
-    /**
-     * 将编码转换成具体消息
-     *
-     * @return String
-     */
-    public String getMessage() {
-        if (Objects.equals(Code.CUSTOMIZE, code)) {
-            // 处理自定义动态异常消息
-            return Objects.isNull(this.exception)
-                    ? null
-                    : this.exception.replace(Code.CUSTOMIZE.name().concat(":"), "");
-        }
-        return this.code.comment;
     }
 
     public Result<E> setException(final String exception) {

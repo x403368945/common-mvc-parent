@@ -208,7 +208,7 @@ public interface DemoListRepository extends
 
     @Override
     default <T extends TabDemoList> List<T> findListProjection(final TabDemoList condition, final Class<T> clazz) {
-        return findListProjection(condition, clazz, TabDemoList.allColumns());
+        return findListProjection(condition, clazz, TabDemoList.allColumnAppends());
     }
 
     @Override
@@ -223,7 +223,7 @@ public interface DemoListRepository extends
 
     @Override
     default <T extends TabDemoList> QueryResults<T> findPageProjection(final TabDemoList condition, final Pager pager, final Class<T> clazz) {
-        return findPageProjection(condition, pager, clazz, TabDemoList.allColumns());
+        return findPageProjection(condition, pager, clazz, TabDemoList.allColumnAppends());
     }
 
     @Override
