@@ -34,6 +34,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @Data
 @Accessors(chain = true)
 @JSONType(orders = {"id", "url", "method", "markdown", "notes", "demo", "props"})
+@Deprecated
 public class Version implements IJson {
     /**
      * 版本号

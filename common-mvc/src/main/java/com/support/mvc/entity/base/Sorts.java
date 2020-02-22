@@ -2,6 +2,8 @@ package com.support.mvc.entity.base;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,6 +34,7 @@ public class Sorts implements Serializable {
     public interface IOrderBy {
         /**
          * 按排序方向获取字段对应的排序对象
+         *
          * @param direction {@link Sorts.Direction}
          * @return {@link Sorts}
          */
@@ -42,10 +45,32 @@ public class Sorts implements Serializable {
      * 排序方向
      */
     public enum Direction {
-        ASC, DESC;
+        ASC("正序"), DESC("倒序");
+        /**
+         * 枚举属性说明
+         */
+        final String comment;
 
+        Direction(String comment) {
+            this.comment = comment;
+        }
+
+        @Deprecated
         public static String[] names() {
             return Stream.of(Direction.values()).map(Enum::name).toArray(String[]::new);
+        }
+
+        /**
+         * 转换为 {@link Item} 对象
+         *
+         * @return {@link Item}
+         */
+        public Item getObject() {
+            return Item.builder()
+                    .key(this.name())
+                    .value(this.ordinal())
+                    .comment(this.comment)
+                    .build();
         }
     }
 
@@ -54,16 +79,19 @@ public class Sorts implements Serializable {
     @Builder
     @Data
     @Accessors(fluent = false)
+    @ApiModel(description = "通用排序参数接收对象")
     public static class Order implements Serializable {
         private static final long serialVersionUID = 8760879633278119365L;
         /**
          * 排序字段名
          */
+        @ApiModelProperty(required = true, value = "排序字段名，可以通过实体类的 OrderBy 枚举查看所有支持排序的字段")
         private String name;
         /**
          * 排序方向
          */
         @Builder.Default
+        @ApiModelProperty(position = 1, value = "排序方向，com.support.mvc.entity.base.Sorts.Direction", example = "ASC")
         private Direction direction = Direction.ASC;
     }
 

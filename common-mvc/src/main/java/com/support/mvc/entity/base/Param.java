@@ -8,6 +8,8 @@ import com.alibaba.fastjson.annotation.JSONType;
 import com.mysema.commons.lang.Assert;
 import com.support.mvc.enums.Code;
 import com.utils.util.Maps;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -28,6 +30,7 @@ import java.util.Optional;
 @NoArgsConstructor
 @Data
 @Accessors(chain = true)
+@ApiModel(description = "全局通用接参对象")
 @JSONType(orders = {"required", "empty", "array", "json"})
 public class Param implements Serializable {
     private static final long serialVersionUID = 6441278102384460156L;
@@ -112,6 +115,14 @@ public class Param implements Serializable {
     /**
      * 前端参数集合
      */
+    @ApiModelProperty(value = "统一传参属性，所有请求参数都包在 JSON 对象 或 JSON 数组中，然后指向 json" +
+            "POST 请求 body ， json 为对象时传参格式:   console.log({json:{key1:'value', key2:[]}}); " +
+            "POST 请求 body ， json 为数组时传参格式:     console.log({json:['value1','value2']}); " +
+            "POST 请求 body ， json 为数组对象时传参格式   console.log({json:[{key1:'value1'},{key2:'value2'}]}); " +
+            "GET 请求 query ， json 为对象时传参格式:     console.log(`?json=${encodeURI(JSON.stringify({key1:'value', key2:[]}))}`); " +
+            "GET 请求 query ， json 为数组时传参格式:     console.log(`?json=${encodeURI(JSON.stringify(['value1','value2']))}`); " +
+            "GET 请求 query ， json 为数组对象时传参格式   console.log(`?json=${encodeURI(JSON.stringify([{key1:'value1'},{key2:'value2'}]))}`); "
+    )
     private String json;
 
     /**
@@ -119,6 +130,7 @@ public class Param implements Serializable {
      *
      * @return boolean true：是，false：否
      */
+    @ApiModelProperty(hidden = true)
     public boolean isEmpty() {
         return StringUtils.isBlank(json) || "{}".equals(json) || "[]".equals(json) || "[{}]".equals(json);
     }
@@ -128,6 +140,7 @@ public class Param implements Serializable {
      *
      * @return boolean true：是，false：否
      */
+    @ApiModelProperty(hidden = true)
     public boolean isArray() {
         return StringUtils.isNotBlank(json) && json.startsWith("[") && json.endsWith("]");
     }

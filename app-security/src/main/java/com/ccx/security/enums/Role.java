@@ -8,9 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -52,30 +50,16 @@ public enum Role {
     }
 
     /**
-     * 构建选项集合
+     * 转换为 {@link Item} 对象
      *
-     * @return {@link List < Item >}
+     * @return {@link Item}
      */
-    public static List<Item> options() {
-        return Stream.of(Role.values())
-                .map(item -> Item.builder().key(item.name()).value(item.ordinal()).comment(item.comment).build())
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * 构建选项注释集合
-     *
-     * @return {@link Map <String, String>}
-     */
-    public static Map<String, String> comments() {
-        return Stream.of(Role.values()).collect(Collectors.toMap(
-                Role::name,
-                o -> o.comment,
-                (u, v) -> {
-                    throw new IllegalStateException(String.format("Duplicate key %s", u));
-                },
-                LinkedHashMap::new
-        ));
+    public Item getObject() {
+        return Item.builder()
+                .key(this.name())
+                .value(this.ordinal())
+                .comment(this.comment)
+                .build();
     }
 
     /**

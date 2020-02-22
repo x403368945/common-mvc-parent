@@ -171,7 +171,7 @@ public final class TabConvert implements
         insertUserId(LONG.build("创建用户ID")),
         updateTime(TIMESTAMP.build("修改时间")),
         updateUserId(LONG.build("修改用户ID")),
-        deleted(ENUM.build("是否逻辑删除").setOptions(Bool.comments())),
+        deleted(ENUM.build("是否逻辑删除")),
 
         //        timestamp(LONG.build("数据最后一次更新时间戳")),
 //        numRange(RANGE_NUM.apply("数字查询区间")),

@@ -2,9 +2,7 @@ package com.ccx.security.enums;
 
 import com.support.mvc.entity.base.Item;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Objects;
 
 /**
  * 选择状态，只有两种状态，YES or NO
@@ -38,32 +36,15 @@ public enum Bool {
     }
 
     /**
-     * 构建 YES or NO 选项
+     * 转换为 {@link Item} 对象
      *
-     * @param yes {@link String} YES 对应的文本
-     * @param no  {@link String} NO 对应的文本
-     * @return {@link List<Item>}
+     * @return {@link Item}
      */
-    public static List<Item> options(final String yes, final String no) {
-        return Arrays.asList(
-                Item.builder().key(Bool.YES.name()).value(Bool.YES.ordinal()).comment(yes).build(),
-                Item.builder().key(Bool.NO.name()).value(Bool.NO.ordinal()).comment(no).build()
-        );
-    }
-
-    /**
-     * 构建选项注释集合
-     *
-     * @return {@link Map<String, String>}
-     */
-    public static Map<String, String> comments() {
-        return Stream.of(Bool.values()).collect(Collectors.toMap(
-                Bool::name,
-                o -> o.comment,
-                (u, v) -> {
-                    throw new IllegalStateException(String.format("Duplicate key %s", u));
-                },
-                LinkedHashMap::new
-        ));
+    public Item getObject() {
+        return Item.builder()
+                .key(this.name())
+                .value(this.ordinal())
+                .comment(this.comment)
+                .build();
     }
 }

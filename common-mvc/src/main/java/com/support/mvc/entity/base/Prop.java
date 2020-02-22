@@ -29,6 +29,7 @@ import static com.support.mvc.entity.base.Prop.Type.*;
 @Data
 @Accessors(chain = true)
 @JSONType(orders = {"name", "type", "required", "comment", "props"})
+@Deprecated
 public class Prop implements IJson {
     private static final List<Prop> RANGE_NUM_CHILDS = Arrays.asList(
             Prop.builder().name("min").comment("最小值，这里兼容[SHORT|INT|LONG|FLOAT|DOUBLE]，所以不指定 type 属性").build(),

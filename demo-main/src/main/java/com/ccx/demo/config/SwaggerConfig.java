@@ -35,8 +35,8 @@ public class SwaggerConfig {
                 .groupName("默认接口")
                 .apiInfo(new ApiInfoBuilder()
                         .version("1.0")
-                        .title("# Swagger RESTful APIs 增强版")
-                        .description("## Swagger RESTful APIs 增强版， 集成指南：doc.xiaominfo.com")
+                        .title("Swagger RESTful APIs 增强版")
+                        .description("### Swagger RESTful APIs 增强版， 集成指南：doc.xiaominfo.com")
                         .termsOfServiceUrl("https://ccx.cccc6666.com/")
                         .contact(new Contact("谢长春", "ccx.cccc6666.com", "403368945@qq.com"))
                         .build()
@@ -50,6 +50,7 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
                 .paths(PathSelectors.any())
                 .build()
+                .ignoredParameterTypes()
 //                .globalOperationParameters(Lists.newArrayList(parameterBuilder
 //                                .name("token")
 //                                .description("token 令牌")

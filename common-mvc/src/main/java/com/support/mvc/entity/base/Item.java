@@ -1,6 +1,8 @@
 package com.support.mvc.entity.base;
 
 import com.alibaba.fastjson.annotation.JSONType;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,27 +22,38 @@ import java.util.Objects;
 @Builder
 @Data
 @Accessors(chain = true)
+@ApiModel(description = "通用下拉选项")
 @JSONType(orders = {"key", "value", "checked", "comment", "childs"})
 public class Item {
     /**
      * 一般用于枚举 Enum::name()
      */
+    @ApiModelProperty(value = "选项名称，枚举项名称，用于前端交互")
     private String key;
     /**
      * 值，一般用于枚举 Enum::ordinal()
      */
+    @ApiModelProperty(position = 1, value = "选项序号，枚举项序号，用于数据库存储")
     private Object value;
     /**
      * 是否被选中，true：选中状态，false未选中状态
      */
+    @ApiModelProperty(position = 2, value = "是否被选中，true：选中状态，false：未选中状态")
     private Boolean checked;
     /**
      * 文本，一般用于枚举 comment
      */
+    @ApiModelProperty(position = 3, value = "选项说明，枚举项说明，用于前端展示")
     private String comment;
+    /**
+     * 是否废弃
+     */
+    @ApiModelProperty(position = 4, value = "该选项是否已废弃，true：是，false：否")
+    private Boolean deprecated;
     /**
      * 子节点
      */
+    @ApiModelProperty(position = 5, value = "子节点集合")
     private List<Item> childs;
 
     /**

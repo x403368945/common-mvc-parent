@@ -49,12 +49,12 @@ public class TabUser extends UserDetail implements IJson {
         nickname(STRING.build("昵称")),
         phone(STRING.build("手机号")),
         email(STRING.build("邮箱")),
-        role(ENUM.build("角色").setOptions(Role.comments())),
+        role(ENUM.build("角色")),
         insertTime(TIMESTAMP.build("创建时间")),
         insertUserId(LONG.build("创建用户ID")),
         updateTime(TIMESTAMP.build("修改时间")),
         updateUserId(LONG.build("修改用户ID")),
-        deleted(ENUM.build("是否逻辑删除").setOptions(Bool.comments()));
+        deleted(ENUM.build("是否逻辑删除"));
         private final Prop prop;
 
         public Prop getProp() {

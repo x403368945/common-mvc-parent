@@ -37,10 +37,10 @@ public class OpenCodeController implements IController<String> {
 //    @Autowired
 //    private PhoneCode phoneCode;
 
-    @ApiOperation(value = "获取图片验证码", tags = {"1.0.0"})
+    @ApiOperation(value = "获取图片验证码", tags = {"1.0.0"}, notes = "验证码图片以 base64 格式放在 data 数组中返回")
     @GetMapping
     @ResponseBody
-    public Result<?> getImageCode(@PathVariable final int version, HttpServletRequest request) {
+    public Result<String> getImageCode(@PathVariable final int version, HttpServletRequest request) {
         return new Result<String>(1) // 指定接口最新版本号
                 .versionAssert(version) // 校验接口版本号
                 .execute(result -> {
@@ -57,10 +57,10 @@ public class OpenCodeController implements IController<String> {
                 });
     }
 
-    @ApiOperation(value = "校验图片验证码", tags = {"1.0.1"})
+    @ApiOperation(value = "校验图片验证码", tags = {"0.0.0"}, notes = "仅用于开发环境测试图片验证码输入")
     @GetMapping("/check/{code}")
     @ResponseBody
-    public Result<?> checkImageCode(@PathVariable final int version, @PathVariable String code, HttpServletRequest request) {
+    public Result<String> checkImageCode(@PathVariable final int version, @PathVariable String code, HttpServletRequest request) {
         return new Result<String>(1) // 指定接口最新版本号
                 .versionAssert(version) // 校验接口版本号
                 .execute(result -> {

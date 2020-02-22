@@ -1,5 +1,6 @@
 package com.support.mvc.enums;
 
+import com.support.mvc.entity.base.Item;
 import com.support.mvc.entity.base.Result;
 import com.support.mvc.exception.CodeException;
 import com.utils.util.Dates;
@@ -55,6 +56,19 @@ public enum Code {
 
     Code(String comment) {
         this.comment = comment;
+    }
+
+    /**
+     * 转换为 {@link Item} 对象
+     *
+     * @return {@link Item}
+     */
+    public Item getObject() {
+        return Item.builder()
+                .key(this.name())
+                .value(this.ordinal())
+                .comment(this.comment)
+                .build();
     }
 
     /**

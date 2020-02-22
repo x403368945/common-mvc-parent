@@ -1,10 +1,7 @@
 package com.ccx.demo.enums;
 
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import com.support.mvc.entity.base.Item;
 
 /**
  * 用户注册渠道
@@ -43,18 +40,15 @@ public enum RegisterSource {
     }
 
     /**
-     * 构建选项注释集合
+     * 转换为 {@link Item} 对象
      *
-     * @return {@link Map <String, String>}
+     * @return {@link Item}
      */
-    public static Map<String, String> comments() {
-        return Stream.of(RegisterSource.values()).collect(Collectors.toMap(
-                RegisterSource::name,
-                o -> o.comment,
-                (u, v) -> {
-                    throw new IllegalStateException(String.format("Duplicate key %s", u));
-                },
-                LinkedHashMap::new
-        ));
+    public Item getObject() {
+        return Item.builder()
+                .key(this.name())
+                .value(this.ordinal())
+                .comment(this.comment)
+                .build();
     }
 }

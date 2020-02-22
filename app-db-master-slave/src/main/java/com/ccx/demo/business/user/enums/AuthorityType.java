@@ -1,9 +1,6 @@
 package com.ccx.demo.business.user.enums;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import com.support.mvc.entity.base.Item;
 
 /**
  * <pre>
@@ -36,18 +33,15 @@ public enum AuthorityType {
     }
 
     /**
-     * 构建选项注释集合
+     * 转换为 {@link Item} 对象
      *
-     * @return {@link Map <String, String>}
+     * @return {@link Item}
      */
-    public static Map<String, String> comments() {
-        return Stream.of(AuthorityType.values()).collect(Collectors.toMap(
-                AuthorityType::name,
-                o -> o.comment,
-                (u, v) -> {
-                    throw new IllegalStateException(String.format("Duplicate key %s", u));
-                },
-                LinkedHashMap::new
-        ));
+    public Item getObject() {
+        return Item.builder()
+                .key(this.name())
+                .value(this.ordinal())
+                .comment(this.comment)
+                .build();
     }
 }

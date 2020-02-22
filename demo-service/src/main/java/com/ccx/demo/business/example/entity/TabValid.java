@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import javax.validation.constraints.*;
 
 /**
- *
  * @author 谢长春 2018/12/20
  */
 @NoArgsConstructor
@@ -25,7 +24,6 @@ import javax.validation.constraints.*;
 @Slf4j
 @JSONType(orders = {"id", "uid", "label", "value", "content"})
 public class TabValid implements ITable, IJson {
-    //    @ApiModelProperty(value="数据ID",name="id",example="1")
     @NotNull(groups = {IUpdate.class, IMarkDelete.class})
     @Positive
     private Long id;

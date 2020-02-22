@@ -34,7 +34,7 @@ public class AuthLogin implements Serializable {
      * 实体类所有属性名
      */
     public enum Props {
-        method(ENUM.build("登录模式").setOptions(Method.comments())),
+        method(ENUM.build("登录模式")),
         username(STRING.build("SESSION|TOKEN登录模式，必填")),
         password(STRING.build("SESSION|TOKEN登录模式，必填")),
         phone(STRING.build("CODE登录模式，必填")),

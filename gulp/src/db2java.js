@@ -467,7 +467,7 @@ export class BaseAdapter {
       default: ({name, dataType, notNull, comment}) => `        ${name}(${dataType.value.toUpperCase()}.build(${notNull ? 'true, ' : ''}"${comment}"))`,
       id: ({name, dataType, comment}) => `        ${name}(${[DataType.BIGINT.name, DataType.INT.name].includes(dataType.name) ? 'LONG' : 'STRING'}.build(true, "${comment}"))`,
       uid: ({name, comment}) => `        ${name}(STRING.build(true, "${comment}"))`,
-      deleted: ({name, comment}) => `        ${name}(ENUM.build("是否逻辑删除").setOptions(Bool.comments()))`,
+      deleted: ({name, comment}) => `        ${name}(ENUM.build("是否逻辑删除"))`,
       insertTime: ({name, comment}) => `        ${name}(TIMESTAMP.build("${comment}"))`,
       updateTime: (column) => this.props.insertTime(column),
       insertUserId: ({name, comment}) => `        ${name}(LONG.build("${comment}"))`,
@@ -490,8 +490,8 @@ class RdAdapter {
     this.props = {
       yyyy: ({name, comment}) => `${name}(INTEGER.build(true, "${comment}"))`,
       mm: (column) => this.props.yyyy(column),
-      regionCode: ({name, comment}) => `${name}(ENUM.build("${comment}").setOptions(RegionCode.comments()))`,
-      bsBookCode: ({name, comment}) => `${name} (ENUM.build("${comment}").setOptions(BookCode.comments()))`,
+      regionCode: ({name, comment}) => `${name}(ENUM.build("${comment}"))`,
+      bsBookCode: ({name, comment}) => `${name} (ENUM.build("${comment}"))`,
       pfsBookCode: (column) => this.props.bsBookCode(column)
     };
   }

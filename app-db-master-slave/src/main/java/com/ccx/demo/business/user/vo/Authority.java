@@ -79,7 +79,7 @@ public class Authority implements Cloneable, Serializable {
         parentCode(STRING.build("父级代码")),
         name(STRING.build("名称")),
         icon(STRING.build("图标")),
-        type(ENUM.build("权限类型").setOptions(AuthorityType.comments())),
+        type(ENUM.build("权限类型")),
         route(STRING.build("菜单路由地址 route，可选参数，需要跟前端约定")),
         checked(STRING.build("权限是否被选中")),
         nodes(ARRAY.build("子节点")),

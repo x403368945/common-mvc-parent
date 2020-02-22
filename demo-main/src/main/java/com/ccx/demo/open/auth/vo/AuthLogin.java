@@ -2,6 +2,7 @@ package com.ccx.demo.open.auth.vo;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
+import com.support.mvc.entity.base.Item;
 import com.support.mvc.entity.base.Prop;
 import com.utils.util.Maps;
 import lombok.AllArgsConstructor;
@@ -11,9 +12,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -36,7 +35,7 @@ public class AuthLogin implements Serializable {
      * 实体类所有属性名
      */
     public enum Props {
-        method(ENUM.build("登录模式").setOptions(Method.comments())),
+        method(ENUM.build("登录模式")),
         username(STRING.build("SESSION|TOKEN登录模式，必填")),
         password(STRING.build("SESSION|TOKEN登录模式，必填")),
         phone(STRING.build("CODE登录模式，必填")),
@@ -76,19 +75,16 @@ public class AuthLogin implements Serializable {
         }
 
         /**
-         * 构建选项注释集合
+         * 转换为 {@link Item} 对象
          *
-         * @return {@link Map <String, String>}
+         * @return {@link Item}
          */
-        public static Map<String, String> comments() {
-            return Stream.of(Method.values()).collect(Collectors.toMap(
-                    Method::name,
-                    o -> o.comment,
-                    (u, v) -> {
-                        throw new IllegalStateException(String.format("Duplicate key %s", u));
-                    },
-                    LinkedHashMap::new
-            ));
+        public Item getObject() {
+            return Item.builder()
+                    .key(this.name())
+                    .value(this.ordinal())
+                    .comment(this.comment)
+                    .build();
         }
     }
 
