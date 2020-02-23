@@ -1,9 +1,9 @@
 package com.ccx.socket.common.service;
 
+import com.alibaba.fastjson.JSON;
 import com.support.mvc.actions.ICallback;
 import com.support.mvc.actions.ICommand;
 import com.support.mvc.entity.base.Message;
-import com.support.mvc.entity.base.Param;
 import com.utils.util.Dates;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,10 +24,10 @@ import static com.support.mvc.actions.ICallback.Event.INFO;
 @Service
 public class PushService implements ICommand {
     @Override
-    public void command(final Param param, final ICallback callback, final Long userId) {
+    public void command(final String body, final ICallback callback, final Long userId) {
         try {
             callback.start("开始推送");
-            callback.sendMessage(INFO, "参数", param.parseObject());
+            callback.sendMessage(INFO, "参数", JSON.parseObject(body));
             for (int i = 1; i <= 10; i++) {
                 final int id = i;
                 final Future<Message> submit = singleThread.<ExecutorService>get().submit(() -> {

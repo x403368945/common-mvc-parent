@@ -38,9 +38,9 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
     @ResponseBody
     @Override
     public Result<?> save(@AuthenticationPrincipal final TabUser user,
-                          @PathVariable final int version,
+                          @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                           // required = false 可以让请求先过来，如果参数为空再抛出异常，保证本次请求能得到响应
-                          @RequestBody(required = false) final Param param) {
+                          @RequestBody(required = false) final String body) {
         return new Result<<%=TabName%>>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
                         .props(<%=TabName%>.Props.list()) // 当前返回对象属性说明
@@ -68,10 +68,10 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
     @ResponseBody
     @Override
     public Result<?> update(@AuthenticationPrincipal final TabUser user,
-                            @PathVariable final int version,
+                            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                             @PathVariable final <%=id%> id,
                             // required = false 可以让请求先过来，如果参数为空再抛出异常，保证本次请求能得到响应
-                            @RequestBody(required = false) final Param param) {
+                            @RequestBody(required = false) final String body) {
         return new Result<>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
                         .props(<%=TabName%>.Props.list()) // 当前返回对象属性说明
@@ -102,7 +102,7 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
     @ResponseBody
     @Override
     public Result<?> deleteById(@AuthenticationPrincipal final TabUser user,
-                                @PathVariable final int version,
+                                @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                                 @PathVariable final <%=id%> id) {
         return new Result<<%=TabName%>>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
@@ -124,7 +124,7 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
 //    @ResponseBody
 //    @Override
 //    public Result<?> deleteByUid(@AuthenticationPrincipal final TabUser user,
-//                                 @PathVariable final int version,
+// @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
 //                                 @PathVariable final <%=id%> id,
 //                                 @PathVariable final String uid) {
 //        return new Result<<%=TabName%>>(1) // 指定接口最新版本号
@@ -147,7 +147,7 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
     @ResponseBody
     @Override
     public Result<?> markDeleteById(@AuthenticationPrincipal final TabUser user,
-                                    @PathVariable final int version,
+                                    @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                                     @PathVariable final <%=id%> id) {
         return new Result<>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
@@ -169,7 +169,7 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
 //    @ResponseBody
 //    @Override
 //    public Result<?> markDeleteByUid(@AuthenticationPrincipal final TabUser user,
-//                                     @PathVariable final int version,
+//                                     @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
 //                                     @PathVariable final <%=id%> id,
 //                                     @PathVariable final String uid) {
 //        return new Result<>(1) // 指定接口最新版本号
@@ -192,8 +192,8 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
     @ResponseBody
     @Override
     public Result<?> markDelete(@AuthenticationPrincipal final TabUser user,
-                                @PathVariable final int version,
-                                @RequestBody(required = false) final Param param) {
+                                @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
+                                @RequestBody(required = false) final String body) {
         return new Result<>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
                         .props(<%=TabName%>.Props.list()) // 当前返回对象属性说明
@@ -249,7 +249,7 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
     @ResponseBody
     @Override
     public Result<?> findByIdTimestamp(@AuthenticationPrincipal final TabUser user,
-                                       @PathVariable final int version,
+                                       @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                                        @PathVariable final <%=id%> id,
                                        @PathVariable final long timestamp) {
         return new Result<<%=TabName%>>(1) // 指定接口最新版本号
@@ -325,7 +325,7 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
     @Override
     public Result<?> search(
             @AuthenticationPrincipal final TabUser user,
-            @PathVariable final int version,
+            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
             @RequestParam(required = false, defaultValue = "{}") final String json) {
         return new Result<<%=TabName%>>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
@@ -355,7 +355,7 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
     @Override
     public Result<?> page(
             @AuthenticationPrincipal final TabUser user,
-            @PathVariable final int version,
+            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
             @PathVariable final int number,
             @PathVariable final int size,
             @RequestParam(required = false, defaultValue = "{}") final String json

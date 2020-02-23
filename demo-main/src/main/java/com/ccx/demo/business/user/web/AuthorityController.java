@@ -5,6 +5,7 @@ import com.ccx.demo.business.user.entity.TabUser;
 import com.ccx.demo.business.user.service.AuthorityService;
 import com.ccx.demo.config.init.AppConfig.URL;
 import com.support.mvc.entity.base.Result;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,7 +36,7 @@ public class AuthorityController implements IAuthController<Long> {
     @ResponseBody
     public Result<?> tree(
             @AuthenticationPrincipal final TabUser user,
-            @PathVariable final int version) {
+            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
         return new Result<Authority>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
                         .props(Authority.Props.list()) // 当前返回对象属性说明
@@ -57,7 +58,7 @@ public class AuthorityController implements IAuthController<Long> {
     @ResponseBody
     public Result<?> list(
             @AuthenticationPrincipal final TabUser user,
-            @PathVariable final int version) {
+            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
         return new Result<Authority>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
                         .props(Authority.Props.list()) // 当前返回对象属性说明

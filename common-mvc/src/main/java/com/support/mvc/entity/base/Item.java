@@ -28,12 +28,12 @@ public class Item {
     /**
      * 一般用于枚举 Enum::name()
      */
-    @ApiModelProperty(value = "选项名称，枚举项名称，用于前端交互")
+    @ApiModelProperty(value = "选项名称，枚举项名称，用于前端交互", example = "YES")
     private String key;
     /**
      * 值，一般用于枚举 Enum::ordinal()
      */
-    @ApiModelProperty(position = 1, value = "选项序号，枚举项序号，用于数据库存储")
+    @ApiModelProperty(position = 1, value = "选项序号，枚举项序号，用于数据库存储", example = "1")
     private Object value;
     /**
      * 是否被选中，true：选中状态，false未选中状态
@@ -43,7 +43,7 @@ public class Item {
     /**
      * 文本，一般用于枚举 comment
      */
-    @ApiModelProperty(position = 3, value = "选项说明，枚举项说明，用于前端展示")
+    @ApiModelProperty(position = 3, value = "选项说明，枚举项说明，用于前端展示", example = "是")
     private String comment;
     /**
      * 是否废弃

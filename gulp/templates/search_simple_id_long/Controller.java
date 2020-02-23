@@ -5,7 +5,6 @@ import <%=pkg%>.code.<%=javaname%>.entity.<%=TabName%>.OrderBy;
 import <%=pkg%>.code.<%=javaname%>.service.<%=JavaName%>Service;
 import <%=pkg%>.config.init.AppConfig.URL;
 import com.support.mvc.entity.base.Pager;
-import com.support.mvc.entity.base.Param;
 import com.support.mvc.entity.base.Result;
 import com.support.mvc.entity.base.Sorts;
 import com.support.mvc.web.IController;
@@ -35,7 +34,8 @@ public class <%=JavaName%>Controller implements IController<<%=id%>> {
     @GetMapping("/{id}")
     @ResponseBody
     @Override
-    public Result<?> findById(@PathVariable final int version,
+    public Result<?> findById(
+@ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                               @PathVariable final Long id) {
         return new Result<<%=TabName%>>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
@@ -57,7 +57,8 @@ public class <%=JavaName%>Controller implements IController<<%=id%>> {
     @ResponseBody
     @Override
     public Result<?> search(
-            @PathVariable final int version,
+
+@ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
             @RequestParam(required = false, defaultValue = "{}") final String json) {
         return new Result<<%=TabName%>>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
@@ -85,7 +86,8 @@ public class <%=JavaName%>Controller implements IController<<%=id%>> {
     @ResponseBody
     @Override
     public Result<?> page(
-            @PathVariable final int version,
+
+@ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
             @PathVariable final int number,
             @PathVariable final int size,
             @RequestParam(required = false, defaultValue = "{}") final String json

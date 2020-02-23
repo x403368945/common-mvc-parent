@@ -95,10 +95,13 @@ public class SimpleAuthAdapter extends WebSecurityConfigurerAdapter {
                                 , "/static/**" // resources 下的静态资源
                                 , "/files/**" // 本地磁盘文件
                                 , "/druid/**" // druid 监控页面
-                                , "/doc.html" // knife4j 增强 swagger 页面
-                                , "/webjars/**" // knife4j 增强 swagger 页面
-                                , "/swagger-resources/**" // knife4j 增强 swagger 页面
-                                , "/v2/api-docs/**" // knife4j 增强 swagger 页面
+                                // knife4j 增强 swagger 页面 >>>>>>
+                                , "/doc.html"
+                                , "/webjars/**"
+                                , "/swagger-resources/**"
+                                , "/v2/api-docs/**"
+                                , "/v2/api-docs-ext/**"
+                                // knife4j 增强 swagger 页面 <<<<<<
                         ),
                         Sets.newHashSet(ignores())
                 ).toArray(new String[]{})

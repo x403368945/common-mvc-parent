@@ -7,7 +7,6 @@ import com.ccx.demo.business.user.cache.ITabUserCache;
 import com.ccx.demo.business.user.vo.UserDetail;
 import com.ccx.demo.enums.Bool;
 import com.ccx.demo.enums.RegisterSource;
-import com.ccx.demo.enums.Role;
 import com.ccx.demo.open.auth.cache.TokenCache;
 import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;

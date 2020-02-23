@@ -50,6 +50,7 @@ public enum Bool {
                 .build();
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public static void main(String[] args) {
         System.out.println(JSON.toJSONString(Bool.values()));
         {
@@ -68,7 +69,6 @@ public enum Bool {
                 Item item = (Item) clazz.getMethod("getObject").invoke(constant);
                 System.out.println(JSON.toJSONString(item));
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }

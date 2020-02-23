@@ -34,9 +34,10 @@ public class <%=JavaName%>Controller implements IController<<%=id%>> {
     @PostMapping
     @ResponseBody
     @Override
-    public Result<?> save(@PathVariable final int version,
+    public Result<?> save(
+@ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                           // required = false 可以让请求先过来，如果参数为空再抛出异常，保证本次请求能得到响应
-                          @RequestBody(required = false) final Param param) {
+                          @RequestBody(required = false) final String body) {
         return new Result<<%=TabName%>>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
                         .props(<%=TabName%>.Props.list()) // 当前返回对象属性说明
@@ -63,10 +64,11 @@ public class <%=JavaName%>Controller implements IController<<%=id%>> {
     @PutMapping("/{id}")
     @ResponseBody
     @Override
-    public Result<?> update(@PathVariable final int version,
+    public Result<?> update(
+@ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                             @PathVariable final <%=id%> id,
                             // required = false 可以让请求先过来，如果参数为空再抛出异常，保证本次请求能得到响应
-                            @RequestBody(required = false) final Param param) {
+                            @RequestBody(required = false) final String body) {
         return new Result<>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
                         .props(<%=TabName%>.Props.list()) // 当前返回对象属性说明
@@ -96,7 +98,8 @@ public class <%=JavaName%>Controller implements IController<<%=id%>> {
     @DeleteMapping("/{id}")
     @ResponseBody
     @Override
-    public Result<?> deleteById(@PathVariable final int version,
+    public Result<?> deleteById(
+@ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                                 @PathVariable final <%=id%> id) {
         return new Result<<%=TabName%>>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
@@ -117,7 +120,8 @@ public class <%=JavaName%>Controller implements IController<<%=id%>> {
     @PatchMapping("/{id}")
     @ResponseBody
     @Override
-    public Result<?> markDeleteById(@PathVariable final int version,
+    public Result<?> markDeleteById(
+@ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                                     @PathVariable final <%=id%> id) {
         return new Result<>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
@@ -139,7 +143,8 @@ public class <%=JavaName%>Controller implements IController<<%=id%>> {
     @GetMapping("/{id}")
     @ResponseBody
     @Override
-    public Result<?> findById(@PathVariable final int version,
+    public Result<?> findById(
+@ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                               @PathVariable final String id) {
         return new Result<<%=TabName%>>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
@@ -162,7 +167,8 @@ public class <%=JavaName%>Controller implements IController<<%=id%>> {
     @GetMapping("/{id}/{timestamp}")
     @ResponseBody
     @Override
-    public Result<?> findByIdTimestamp(@PathVariable final int version,
+    public Result<?> findByIdTimestamp(
+@ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                                        @PathVariable final <%=id%> id,
                                        @PathVariable final long timestamp) {
         return new Result<<%=TabName%>>(1) // 指定接口最新版本号
@@ -186,7 +192,8 @@ public class <%=JavaName%>Controller implements IController<<%=id%>> {
     @ResponseBody
     @Override
     public Result<?> search(
-            @PathVariable final int version,
+
+@ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
             @RequestParam(required = false, defaultValue = "{}") final String json) {
         return new Result<<%=TabName%>>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
@@ -214,7 +221,8 @@ public class <%=JavaName%>Controller implements IController<<%=id%>> {
     @ResponseBody
     @Override
     public Result<?> page(
-            @PathVariable final int version,
+
+@ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
             @PathVariable final int number,
             @PathVariable final int size,
             @RequestParam(required = false, defaultValue = "{}") final String json

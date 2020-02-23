@@ -1,5 +1,6 @@
 package com.ccx.demo.business.user.web;
 
+import com.alibaba.fastjson.JSON;
 import com.ccx.demo.business.user.entity.TabRole;
 import com.ccx.demo.business.user.entity.TabRole.OrderBy;
 import com.ccx.demo.business.user.entity.TabUser;
@@ -7,10 +8,10 @@ import com.ccx.demo.business.user.service.RoleService;
 import com.ccx.demo.config.init.AppConfig.URL;
 import com.ccx.demo.enums.Bool;
 import com.support.mvc.entity.base.Pager;
-import com.support.mvc.entity.base.Param;
 import com.support.mvc.entity.base.Result;
 import com.support.mvc.entity.base.Sorts;
 import com.utils.util.Util;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,9 +42,9 @@ public class RoleController implements IAuthController<Long> {
     @ResponseBody
     @Override
     public Result<?> save(@AuthenticationPrincipal final TabUser user,
-                          @PathVariable final int version,
+                          @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                           // required = false 可以让请求先过来，如果参数为空再抛出异常，保证本次请求能得到响应
-                          @RequestBody(required = false) final Param param) {
+                          @RequestBody(required = false) final String body) {
         return new Result<TabRole>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
                         .props(TabRole.Props.list()) // 当前返回对象属性说明
@@ -61,7 +62,7 @@ public class RoleController implements IAuthController<Long> {
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
                         .setSuccess(service.save(
-                                Param.of(param).required().parseObject(TabRole.class),
+                                JSON.parseObject(body, TabRole.class),
                                 user.getId()
                         ))
                 );
@@ -72,10 +73,10 @@ public class RoleController implements IAuthController<Long> {
     @ResponseBody
     @Override
     public Result<?> update(@AuthenticationPrincipal final TabUser user,
-                            @PathVariable final int version,
+                            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                             @PathVariable final Long id,
                             // required = false 可以让请求先过来，如果参数为空再抛出异常，保证本次请求能得到响应
-                            @RequestBody(required = false) final Param param) {
+                            @RequestBody(required = false) final String body) {
         return new Result<>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
                                 .props(TabRole.Props.list()) // 当前返回对象属性说明
@@ -97,7 +98,7 @@ public class RoleController implements IAuthController<Long> {
                         .call(() -> service.update(
                                 id,
                                 user.getId(),
-                                Param.of(param).required().parseObject(TabRole.class)
+                                JSON.parseObject(body, TabRole.class)
                         ))
                 );
     }
@@ -106,7 +107,7 @@ public class RoleController implements IAuthController<Long> {
     @ResponseBody
     @Override
     public Result<?> markDeleteByUid(@AuthenticationPrincipal final TabUser user,
-                                     @PathVariable final int version,
+                                     @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                                      @PathVariable final Long id,
                                      @PathVariable final String uid) {
         return new Result<>(1) // 指定接口最新版本号
@@ -129,7 +130,7 @@ public class RoleController implements IAuthController<Long> {
     @ResponseBody
     @Override
     public Result<?> findByUid(@AuthenticationPrincipal final TabUser user,
-                               @PathVariable final int version,
+                               @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                                @PathVariable final Long id,
                                @PathVariable final String uid) {
         return new Result<TabRole>(1) // 指定接口最新版本号
@@ -154,7 +155,7 @@ public class RoleController implements IAuthController<Long> {
     @Override
     public Result<?> page(
             @AuthenticationPrincipal final TabUser user,
-            @PathVariable final int version,
+            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
             @PathVariable final int number,
             @PathVariable final int size,
             @RequestParam(required = false, defaultValue = "{}") final String json
@@ -187,7 +188,7 @@ public class RoleController implements IAuthController<Long> {
     @ResponseBody
     public Result<?> options(
             @AuthenticationPrincipal final TabUser user,
-            @PathVariable final int version) {
+            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
         return new Result<TabRole>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
                         .props(TabRole.Props.list()) // 当前返回对象属性说明

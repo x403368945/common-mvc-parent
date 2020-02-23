@@ -1,9 +1,9 @@
 package com.ccx.socket.common.service;
 
+import com.alibaba.fastjson.JSON;
 import com.ccx.socket.utils.JSEngine;
 import com.support.mvc.actions.ICallback;
 import com.support.mvc.actions.ICommand;
-import com.support.mvc.entity.base.Param;
 import com.utils.exception.InfinityException;
 import com.utils.exception.NaNException;
 import lombok.extern.slf4j.Slf4j;
@@ -21,10 +21,10 @@ import javax.script.ScriptException;
 @Service
 public class FormulaService implements ICommand {
     @Override
-    public void command(final Param param, final ICallback callback, final Long userId) {
+    public void command(final String body, final ICallback callback, final Long userId) {
         try {
             callback.start("开始计算");
-            final String formula = param.parseObject().getString("formula");
+            final String formula = JSON.parseObject(body).getString("formula");
             try {
                 callback.info("{}={}", formula, JSEngine.getInstance().compute(formula));
             } catch (ScriptException e) {

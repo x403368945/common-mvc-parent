@@ -5,8 +5,6 @@ import io.swagger.annotations.Api;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -25,14 +23,14 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 @EnableKnife4j
-@Import(BeanValidatorPluginsConfiguration.class)
+//@Import(BeanValidatorPluginsConfiguration.class)
 @AutoConfigureAfter(WebMvcConfig.class)
 public class SwaggerConfig {
 
     @Bean(value = "defaultApi")
     public Docket defaultApi() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("默认接口")
+                .groupName("全部接口")
                 .apiInfo(new ApiInfoBuilder()
                         .version("1.0")
                         .title("Swagger RESTful APIs 增强版")
@@ -44,13 +42,13 @@ public class SwaggerConfig {
                 .select()
                 // 生成所有API接口
 //                .apis(RequestHandlerSelectors.basePackage("com.ccx.demo.open.common.web"))
-                // 只生成被ApiOperation这个注解注解过的api接口
-                //.apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 // 只生成被Api这个注解注解过的类接口
                 .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
+                // 只生成被ApiOperation这个注解注解过的api接口
+                //.apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.any())
                 .build()
-                .ignoredParameterTypes()
+//                .ignoredParameterTypes()
 //                .globalOperationParameters(Lists.newArrayList(parameterBuilder
 //                                .name("token")
 //                                .description("token 令牌")
@@ -67,6 +65,30 @@ public class SwaggerConfig {
 //                                .build()
 //                ))
 //                .securitySchemes(Lists.<SecurityScheme>newArrayList(new ApiKey("BearerToken", "Authorization", "header")))
+                ;
+    }
+
+    @Bean(value = "openApi")
+    public Docket openApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("开放接口")
+                .apiInfo(new ApiInfoBuilder()
+                        .version("1.0")
+                        .title("Swagger RESTful APIs 增强版")
+                        .description("### Swagger RESTful APIs 增强版， 集成指南：doc.xiaominfo.com")
+                        .termsOfServiceUrl("https://ccx.cccc6666.com/")
+                        .contact(new Contact("谢长春", "ccx.cccc6666.com", "403368945@qq.com"))
+                        .build()
+                )
+                .select()
+                // 生成所有API接口
+                .apis(RequestHandlerSelectors.basePackage("com.ccx.demo.open"))
+                // 只生成被Api这个注解注解过的类接口
+                .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
+                // 只生成被ApiOperation这个注解注解过的api接口
+                //.apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
+                .paths(PathSelectors.any())
+                .build()
                 ;
     }
 

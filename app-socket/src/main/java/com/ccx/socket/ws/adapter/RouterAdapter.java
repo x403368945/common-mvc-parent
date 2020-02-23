@@ -3,7 +3,6 @@ package com.ccx.socket.ws.adapter;
 import com.support.mvc.actions.ICallback;
 import com.support.mvc.actions.ICommand;
 import com.support.mvc.entity.base.Message;
-import com.support.mvc.entity.base.Param;
 import com.utils.util.Util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.BinaryMessage;
@@ -36,7 +35,7 @@ public class RouterAdapter implements IAdapter {
     @Override
     public void textMessage(final WebSocketSession session, final String jsonText) throws IOException {
         final ICommand command = getAppContext().getBean(serviceClass);
-        command.command(Param.of(jsonText), new ICallback.AbstractCallback() {
+        command.command(jsonText, new ICallback.AbstractCallback() {
             @Override
             public Message sendMessage(final Message message) {
                 if (Objects.nonNull(logger)) logger.d(message.toString());

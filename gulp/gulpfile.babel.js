@@ -28,7 +28,6 @@ import UserTest from './test/api/User.test';
 import DemoListTest from './test/api/DemoList.test';
 import AuthorityTest from './test/api/Authority.test';
 import RoleTest from './test/api/Role.test';
-
 const web = browser.create();
 
 const options = require('minimist')(process.argv.slice(2), {});

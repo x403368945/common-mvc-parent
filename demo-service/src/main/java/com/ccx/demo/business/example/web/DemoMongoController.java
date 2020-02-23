@@ -1,5 +1,6 @@
 package com.ccx.demo.business.example.web;
 
+import com.alibaba.fastjson.JSON;
 import com.ccx.demo.business.example.entity.DemoMongo;
 import com.ccx.demo.business.example.entity.DemoMongo.OrderBy;
 import com.ccx.demo.business.example.service.DemoMongoService;
@@ -8,11 +9,11 @@ import com.ccx.demo.config.init.AppConfig.URL;
 import com.ccx.demo.enums.Bool;
 import com.ccx.demo.business.user.web.IAuthController;
 import com.support.mvc.entity.base.Pager;
-import com.support.mvc.entity.base.Param;
 import com.support.mvc.entity.base.Result;
 import com.support.mvc.entity.base.Sorts;
 import com.utils.util.Dates;
 import com.utils.util.Util;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,7 +27,6 @@ import static com.support.mvc.entity.base.Sorts.Direction.DESC;
 
 /**
  * 请求操作响应：案例
- *
  *
  * @author 谢长春 2018-10-5
  */
@@ -42,9 +42,9 @@ public class DemoMongoController implements IAuthController<String> {
     @ResponseBody
     @Override
     public Result<?> save(@AuthenticationPrincipal final TabUser user,
-                          @PathVariable final int version,
+                          @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                           // required = false 可以让请求先过来，如果参数为空再抛出异常，保证本次请求能得到响应
-                          @RequestBody(required = false) final Param param) {
+                          @RequestBody(required = false) final String body) {
         return new Result<DemoMongo>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
                         .props(DemoMongo.Props.list()) // 当前返回对象属性说明
@@ -62,7 +62,7 @@ public class DemoMongoController implements IAuthController<String> {
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
                         .setSuccess(service.save(
-                                Param.of(param).required().parseObject(DemoMongo.class),
+                                JSON.parseObject(body, DemoMongo.class),
                                 user.getId()
                         ))
                 );
@@ -72,10 +72,10 @@ public class DemoMongoController implements IAuthController<String> {
     @ResponseBody
     @Override
     public Result<?> update(@AuthenticationPrincipal final TabUser user,
-                            @PathVariable final int version,
+                            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                             @PathVariable final String id,
                             // required = false 可以让请求先过来，如果参数为空再抛出异常，保证本次请求能得到响应
-                            @RequestBody(required = false) final Param param) {
+                            @RequestBody(required = false) final String body) {
         return new Result<>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
                         .props(DemoMongo.Props.list()) // 当前返回对象属性说明
@@ -94,10 +94,10 @@ public class DemoMongoController implements IAuthController<String> {
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
-                       .call(() -> service.update(
+                        .call(() -> service.update(
                                 id,
                                 user.getId(),
-                                Param.of(param).required().parseObject(DemoMongo.class)
+                                JSON.parseObject(body, DemoMongo.class)
                         ))
                 );
     }
@@ -106,7 +106,7 @@ public class DemoMongoController implements IAuthController<String> {
     @ResponseBody
     @Override
     public Result<?> deleteById(@AuthenticationPrincipal final TabUser user,
-                                @PathVariable final int version,
+                                @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                                 @PathVariable final String id) {
         return new Result<DemoMongo>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
@@ -128,7 +128,7 @@ public class DemoMongoController implements IAuthController<String> {
     @ResponseBody
     @Override
     public Result<?> markDeleteById(@AuthenticationPrincipal final TabUser user,
-                                    @PathVariable final int version,
+                                    @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                                     @PathVariable final String id) {
         return new Result<>(1)
                 .version(this.getClass(), builder -> builder
@@ -142,7 +142,7 @@ public class DemoMongoController implements IAuthController<String> {
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
-                       .call(() -> service.markDeleteById(id, user.getId()))
+                        .call(() -> service.markDeleteById(id, user.getId()))
                 );
     }
 
@@ -150,8 +150,8 @@ public class DemoMongoController implements IAuthController<String> {
     @ResponseBody
     @Override
     public Result<?> markDelete(@AuthenticationPrincipal final TabUser user,
-                                @PathVariable final int version,
-                                @RequestBody(required = false) final Param param) {
+                                @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
+                                @RequestBody(required = false) final String body) {
         return new Result<>(1)
                 .version(this.getClass(), builder -> builder
                                 .props(DemoMongo.Props.list()) // 当前返回对象属性说明
@@ -172,8 +172,8 @@ public class DemoMongoController implements IAuthController<String> {
                 )
                 .execute(result -> result
                                 .versionAssert(version, false) // 弱校验版本号
-                               .call(() -> service.markDeleteByIds(Param.of(param).required().hasArray().parseArray(String.class), user.getId())) // 方案1：按 ID 逻辑删除
-//                       .call(() -> service.markDelete(Param.of(param).required().hasArray().parseArray(DemoMongo.class), user.getId())) // 方案2：按 ID 和 UUID 逻辑删除
+                                .call(() -> service.markDeleteByIds(JSON.parseArray(body, String.class), user.getId())) // 方案1：按 ID 逻辑删除
+//                       .call(() -> service.markDelete(JSON.parseArray(body, DemoMongo.class), user.getId())) // 方案2：按 ID 和 UUID 逻辑删除
                 );
     }
 
@@ -183,7 +183,7 @@ public class DemoMongoController implements IAuthController<String> {
     @ResponseBody
     @Override
     public Result<?> findById(@AuthenticationPrincipal final TabUser user,
-                              @PathVariable final int version,
+                              @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                               @PathVariable final String id) {
         return new Result<TabDemoJpaMongo>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
@@ -207,7 +207,7 @@ public class DemoMongoController implements IAuthController<String> {
     @ResponseBody
     @Override
     public Result<?> findByIdTimestamp(@AuthenticationPrincipal final TabUser user,
-                                       @PathVariable final int version,
+                                       @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                                        @PathVariable final String id,
                                        @PathVariable final long timestamp) {
         return new Result<DemoMongo>(1) // 指定接口最新版本号
@@ -231,7 +231,7 @@ public class DemoMongoController implements IAuthController<String> {
     @Override
     public Result<?> search(
             @AuthenticationPrincipal final TabUser user,
-            @PathVariable final int version,
+            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
             @RequestParam(required = false, defaultValue = "{}") final String json) {
         return new Result<DemoMongo>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
@@ -251,7 +251,7 @@ public class DemoMongoController implements IAuthController<String> {
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
                         .setSuccess(service.findList(
-                                Param.of(json).parseObject(DemoMongo.class)
+                                JSON.parseObject(json, DemoMongo.class)
                         ))
                 );
     }
@@ -261,7 +261,7 @@ public class DemoMongoController implements IAuthController<String> {
     @Override
     public Result<?> page(
             @AuthenticationPrincipal final TabUser user,
-            @PathVariable final int version,
+            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
             @PathVariable final int number,
             @PathVariable final int size,
             @RequestParam(required = false, defaultValue = "{}") final String json
@@ -284,7 +284,7 @@ public class DemoMongoController implements IAuthController<String> {
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
                         .setSuccess(service.findPage(
-                                Param.of(json).parseObject(DemoMongo.class),
+                                JSON.parseObject(json, DemoMongo.class),
                                 Pager.builder().number(number).size(size).build()
                         ))
                 );

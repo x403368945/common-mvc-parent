@@ -5,6 +5,7 @@ import com.ccx.demo.business.common.vo.FileInfo.Props;
 import com.ccx.demo.business.common.vo.FileUpload;
 import com.ccx.demo.config.init.AppConfig.URL;
 import com.support.mvc.entity.base.Result;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -20,7 +21,6 @@ import static com.support.mvc.enums.Code.FILE_EMPTY;
 /**
  * 文件处理
  *
- *
  * @author 谢长春 2017年7月12日 下午2:01:20
  */
 @Controller
@@ -34,7 +34,8 @@ public class FileController {
 
     @PostMapping("/upload")
     @ResponseBody
-    public Result<?> uploadFile(@PathVariable final int version, @RequestParam(required = false) final MultipartFile file) {
+    public Result<?> uploadFile(
+            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version, @RequestParam(required = false) final MultipartFile file) {
         return new Result<FileInfo>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
                         .props(Props.list())
@@ -60,7 +61,8 @@ public class FileController {
 
     @PostMapping("/uploads")
     @ResponseBody
-    public Result<?> uploadFiles(@PathVariable final int version, @RequestParam(required = false) final MultipartFile[] files) {
+    public Result<?> uploadFiles(
+            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version, @RequestParam(required = false) final MultipartFile[] files) {
         return new Result<FileInfo>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
                         .props(Props.list())

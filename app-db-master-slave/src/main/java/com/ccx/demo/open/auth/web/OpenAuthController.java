@@ -1,6 +1,7 @@
 package com.ccx.demo.open.auth.web;
 
 
+import com.alibaba.fastjson.JSON;
 import com.ccx.demo.business.user.entity.TabUser;
 import com.ccx.demo.business.user.vo.TabUserVO;
 import com.ccx.demo.config.init.AppConfig.URL;
@@ -8,9 +9,9 @@ import com.ccx.demo.enums.Session;
 import com.ccx.demo.open.auth.vo.AuthLogin;
 import com.ccx.demo.open.auth.vo.AuthLogin.Props;
 import com.ccx.demo.open.auth.service.AuthService;
-import com.support.mvc.entity.base.Param;
 import com.support.mvc.entity.base.Result;
 import com.support.mvc.enums.Code;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanMap;
@@ -43,8 +44,8 @@ public class OpenAuthController {
     @PostMapping("/login")
     @ResponseBody
     public Result<?> login(
-            @PathVariable final int version,
-            @RequestBody final Param param,
+            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
+            @RequestBody final String body,
             HttpServletRequest request,
             HttpServletResponse response) {
         final Result<TabUser> result = new Result<>(1);
@@ -83,11 +84,11 @@ public class OpenAuthController {
                             ))
                     )
                     .versionAssert(version);
-            final AuthLogin authLogin = Param.of(param).required().parseObject(AuthLogin.class);
+            final AuthLogin authLogin = JSON.parseObject(body, AuthLogin.class);
             Assert.notNull(authLogin, "登录参数不能为空");
             switch (authLogin.getMethod()) {
                 case SESSION:
-                    return loginBySession(version, param, request);
+                    return loginBySession(version, body, request);
 //                case TOKEN:
 //                    return loginByToken(version, param, request, response);
                 case CODE:
@@ -108,8 +109,8 @@ public class OpenAuthController {
     @PostMapping("/login/SESSION")
     @ResponseBody
     public Result<?> loginBySession(
-            @PathVariable final int version,
-            @RequestBody final Param param,
+            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
+            @RequestBody final String body,
             HttpServletRequest request) {
         return new Result<TabUserVO>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
@@ -128,7 +129,7 @@ public class OpenAuthController {
                 )
                 .execute(result -> {
                     result.versionAssert(version);
-                    final AuthLogin authLogin = Param.of(param).required().parseObject(AuthLogin.class);
+                    final AuthLogin authLogin = JSON.parseObject(body, AuthLogin.class);
                     Assert.notNull(authLogin, "登录参数不能为空");
                     Assert.hasText(authLogin.getUsername(), "用户名不能为空");
                     Assert.hasText(authLogin.getPassword(), "密码不能为空");
@@ -146,10 +147,11 @@ public class OpenAuthController {
      */
     @PostMapping("/login/TOKEN")
     @ResponseBody
-    public Result<?> loginByToken(@PathVariable final int version,
-                                  @RequestBody final Param param,
-                                  HttpServletRequest request,
-                                  HttpServletResponse response
+    public Result<?> loginByToken(
+            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
+            @RequestBody final String body,
+            HttpServletRequest request,
+            HttpServletResponse response
     ) {
         final Result<TabUser> result = new Result<>(1);
         try {
@@ -168,7 +170,7 @@ public class OpenAuthController {
                                     )
                             ))
                     .versionAssert(version);
-            AuthLogin authLogin = Param.of(param).parseObject(AuthLogin.class);
+            AuthLogin authLogin = JSON.parseObject(body, AuthLogin.class);
             Assert.hasText(authLogin.getUsername(), "用户名不能为空");
             Assert.hasText(authLogin.getPassword(), "密码不能为空");
             // 登录成功之后，将用户信息放入session； 同时生成 token 回传到前端
@@ -200,7 +202,7 @@ public class OpenAuthController {
 //     */
 //    @PatchMapping("/forget/password")
 //    @ResponseBody
-//    public Result<Object> forgetPassword(@RequestBody(required = false) Param param) {
+//    public Result<Object> forgetPassword(@RequestBody(required = false) String body) {
 //        Result<Object> result = new Result<>(1);
 //        try {
 //            authService.forgetPassword(param.parseObject().getString("email"));

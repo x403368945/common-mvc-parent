@@ -121,7 +121,7 @@ public class AuthLogin implements Serializable {
         System.out.println(
                 "登录接口：body 参数范本:" +
                         JSON.toJSONString(
-                                Maps.by("json", new AuthLogin(null, "admin", "admin", null, null))
+                                new AuthLogin(null, "admin", "admin", null, null)
                         )
         );
     }

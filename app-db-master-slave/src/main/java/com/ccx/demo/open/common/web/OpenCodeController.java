@@ -7,6 +7,7 @@ import com.support.mvc.entity.base.Result;
 import com.support.mvc.enums.Code;
 import com.support.mvc.web.IController;
 import com.utils.util.CodeImage;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,7 +38,7 @@ public class OpenCodeController implements IController<String> {
 
     @GetMapping
     @ResponseBody
-    public Result<?> getImageCode(@PathVariable final int version, HttpServletRequest request) {
+    public Result<?> getImageCode(@ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version, HttpServletRequest request) {
         return new Result<String>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
                         .notes(Arrays.asList(
@@ -65,7 +66,8 @@ public class OpenCodeController implements IController<String> {
 
     @GetMapping("/check/{code}")
     @ResponseBody
-    public Result<?> checkImageCode(@PathVariable final int version, @PathVariable String code, HttpServletRequest request) {
+    public Result<?> checkImageCode(
+            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version, @PathVariable String code, HttpServletRequest request) {
         return new Result<String>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
                         .notes(Arrays.asList(

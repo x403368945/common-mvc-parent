@@ -1,8 +1,8 @@
 package com.support.config.security;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
-import com.support.mvc.entity.base.Param;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -68,7 +68,7 @@ public class JsonUsernamePasswordAuthenticationFilter extends UsernamePasswordAu
     protected String obtainUsername(final HttpServletRequest request) {
         return Objects.isNull(TL.get())
                 ? super.obtainUsername(request)
-                : Param.valueOf(TL.get()).parseObject().getString("username");
+                : JSON.parseObject(TL.get()).getString("username");
     }
 
     @SneakyThrows
@@ -76,6 +76,6 @@ public class JsonUsernamePasswordAuthenticationFilter extends UsernamePasswordAu
     protected String obtainPassword(final HttpServletRequest request) {
         return Objects.isNull(TL.get())
                 ? super.obtainPassword(request)
-                : Param.valueOf(TL.get()).parseObject().getString("password");
+                : JSON.parseObject(TL.get()).getString("password");
     }
 }

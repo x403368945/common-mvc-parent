@@ -30,12 +30,12 @@ public class Message implements IJson {
     /**
      * 可选的事件属性
      */
-    @ApiModelProperty(value = "事件类型")
+    @ApiModelProperty(value = "事件类型", example = "SUCCESS")
     private Object event;
     /**
      * 异常消息内容
      */
-    @ApiModelProperty(value = "事件消息")
+    @ApiModelProperty(value = "事件消息", example = "成功")
     private String message;
     /**
      * 扩展属性

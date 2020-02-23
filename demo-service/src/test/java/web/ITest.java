@@ -3,8 +3,7 @@ package web;
 //import com.alibaba.fastjson.JSON;
 //import com.alibaba.fastjson.parser.Feature;
 //import com.alibaba.fastjson.serializer.SerializerFeature;
-//import com.support.mvc.entity.base.Param;
-//import com.support.mvc.entity.base.Result;
+////import com.support.mvc.entity.base.Result;
 //import com.utils.util.Dates;
 //import com.utils.util.FCopy;
 //import com.utils.util.FWrite;
@@ -167,7 +166,7 @@ package web;
 //            return pattern;
 //        }
 //
-//        public Tester post(Param param) {
+//        public Tester post(String body) {
 //            try {
 //                System.err.println("url:\n" + getUrl());
 //                System.err.println("参数:\n" + param.toString());
@@ -185,7 +184,7 @@ package web;
 //            return this;
 //        }
 //
-//        public Tester put(Param param) {
+//        public Tester put(String body) {
 //            try {
 //                System.err.println("url:\n" + getUrl());
 //                System.err.println("参数:\n" + param.toString());
@@ -203,7 +202,7 @@ package web;
 //            return this;
 //        }
 //
-//        public Tester patch(Param param) {
+//        public Tester patch(String body) {
 //            try {
 //                System.err.println("url:\n" + getUrl());
 //                System.err.println("参数:\n" + param.toString());
@@ -221,7 +220,7 @@ package web;
 //            return this;
 //        }
 //
-//        public Tester delete(Param param) {
+//        public Tester delete(String body) {
 //            try {
 //                System.err.println("url:\n" + getUrl());
 //                System.err.println("参数:\n" + param.toString());
@@ -239,7 +238,7 @@ package web;
 //            return this;
 //        }
 //
-//        public Tester get(Param param) {
+//        public Tester get(String body) {
 //            try {
 //                System.err.println("url:\n" + getUrl());
 //                System.err.println("参数:\n" + param.toString());
@@ -257,7 +256,7 @@ package web;
 //            return this;
 //        }
 //
-//        public Tester updateById(Object id, Param param) {
+//        public Tester updateById(Object id, String body) {
 //            try {
 //                System.err.println("url:\n" + format("{url}/{id}", getUrl(), id));
 //                System.err.println("参数:\n" + param.toString());
@@ -340,7 +339,7 @@ package web;
 //            return this;
 //        }
 //
-//        public Tester markDelete(Param param) {
+//        public Tester markDelete(String body) {
 //            try {
 //                System.err.println("url:\n" + getUrl());
 //                System.err.println("参数:\n" + param.toString());
@@ -423,7 +422,7 @@ package web;
 //            return this;
 //        }
 //
-//        public Tester page(int number, int size, Param param) {
+//        public Tester page(int number, int size, String body) {
 //            try {
 //                System.err.println("url:\n" + format("{url}/page/{number}/{size}", getUrl(), number, size));
 //                System.err.println("参数:\n?json=" + UTF_8.encode(param.toString()));

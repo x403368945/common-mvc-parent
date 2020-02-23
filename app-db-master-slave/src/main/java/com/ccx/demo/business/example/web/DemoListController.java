@@ -1,5 +1,6 @@
 package com.ccx.demo.business.example.web;
 
+import com.alibaba.fastjson.JSON;
 import com.ccx.demo.business.example.entity.TabDemoList;
 import com.ccx.demo.business.example.enums.DemoStatus;
 import com.ccx.demo.business.example.service.DemoListService;
@@ -9,12 +10,12 @@ import com.ccx.demo.config.init.AppConfig.URL;
 import com.ccx.demo.enums.Bool;
 import com.ccx.demo.business.user.web.IAuthController;
 import com.support.mvc.entity.base.Pager;
-import com.support.mvc.entity.base.Param;
 import com.support.mvc.entity.base.Result;
 import com.support.mvc.entity.base.Sorts;
 import com.utils.util.Dates;
 import com.utils.util.Range;
 import com.utils.util.Util;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -43,9 +44,9 @@ public class DemoListController implements IAuthController<Long> {
     @ResponseBody
     @Override
     public Result<?> save(@AuthenticationPrincipal final TabUser user,
-                          @PathVariable final int version,
+                          @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                           // required = false 可以让请求先过来，如果参数为空再抛出异常，保证本次请求能得到响应
-                          @RequestBody(required = false) final Param param) {
+                          @RequestBody(required = false) final String body) {
         return new Result<TabDemoList>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
                         .props(TabDemoList.Props.list()) // 当前返回对象属性说明
@@ -64,7 +65,7 @@ public class DemoListController implements IAuthController<Long> {
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
                         .setSuccess(service.save(
-                                Param.of(param).required().parseObject(TabDemoList.class),
+                                JSON.parseObject(body, TabDemoList.class),
                                 user.getId()
                         ))
                 );
@@ -74,10 +75,10 @@ public class DemoListController implements IAuthController<Long> {
     @ResponseBody
     @Override
     public Result<?> update(@AuthenticationPrincipal final TabUser user,
-                            @PathVariable final int version,
+                            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                             @PathVariable final Long id,
                             // required = false 可以让请求先过来，如果参数为空再抛出异常，保证本次请求能得到响应
-                            @RequestBody(required = false) final Param param) {
+                            @RequestBody(required = false) final String body) {
         return new Result<>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
                         .props(TabDemoList.Props.list()) // 当前返回对象属性说明
@@ -100,10 +101,10 @@ public class DemoListController implements IAuthController<Long> {
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
-                       .call(() -> service.update(
+                        .call(() -> service.update(
                                 id,
                                 user.getId(),
-                                Param.of(param).required().parseObject(TabDemoList.class)
+                                JSON.parseObject(body, TabDemoList.class)
                         ))
                 );
     }
@@ -112,7 +113,7 @@ public class DemoListController implements IAuthController<Long> {
     @ResponseBody
     @Override
     public Result<?> deleteById(@AuthenticationPrincipal final TabUser user,
-                                @PathVariable final int version,
+                                @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                                 @PathVariable final Long id) {
         return new Result<TabDemoList>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
@@ -134,7 +135,7 @@ public class DemoListController implements IAuthController<Long> {
     @ResponseBody
     @Override
     public Result<?> deleteByUid(@AuthenticationPrincipal final TabUser user,
-                                 @PathVariable final int version,
+                                 @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                                  @PathVariable final Long id,
                                  @PathVariable final String uid) {
         return new Result<TabDemoList>(1) // 指定接口最新版本号
@@ -157,7 +158,7 @@ public class DemoListController implements IAuthController<Long> {
     @ResponseBody
     @Override
     public Result<?> markDeleteById(@AuthenticationPrincipal final TabUser user,
-                                    @PathVariable final int version,
+                                    @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                                     @PathVariable final Long id) {
         return new Result<>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
@@ -171,7 +172,7 @@ public class DemoListController implements IAuthController<Long> {
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
-                       .call(() -> service.markDeleteById(id, user.getId()))
+                        .call(() -> service.markDeleteById(id, user.getId()))
                 );
     }
 
@@ -179,7 +180,7 @@ public class DemoListController implements IAuthController<Long> {
     @ResponseBody
     @Override
     public Result<?> markDeleteByUid(@AuthenticationPrincipal final TabUser user,
-                                     @PathVariable final int version,
+                                     @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                                      @PathVariable final Long id,
                                      @PathVariable final String uid) {
         return new Result<>(1) // 指定接口最新版本号
@@ -194,7 +195,7 @@ public class DemoListController implements IAuthController<Long> {
                 )
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
-                       .call(() -> service.markDeleteByUid(id, uid, user.getId()))
+                        .call(() -> service.markDeleteByUid(id, uid, user.getId()))
                 );
     }
 
@@ -202,8 +203,8 @@ public class DemoListController implements IAuthController<Long> {
     @ResponseBody
     @Override
     public Result<?> markDelete(@AuthenticationPrincipal final TabUser user,
-                                @PathVariable final int version,
-                                @RequestBody(required = false) final Param param) {
+                                @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
+                                @RequestBody(required = false) final String body) {
         return new Result<>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
                         .props(TabDemoList.Props.list()) // 当前返回对象属性说明
@@ -225,7 +226,7 @@ public class DemoListController implements IAuthController<Long> {
                 .execute(result -> result
                         .versionAssert(version, false) // 弱校验版本号
                         //.call(()->service.markDeleteByIds(Param.of(param).required().hasArray().parseArray(Long.class), user.getId())) // 方案1：按 ID 逻辑删除
-                       .call(() -> service.markDelete(Param.of(param).required().hasArray().parseArray(TabDemoList.class), user.getId())) // 方案2：按 ID 和 UUID 逻辑删除
+                        .call(() -> service.markDelete(JSON.parseArray(body, TabDemoList.class), user.getId())) // 方案2：按 ID 和 UUID 逻辑删除
                 );
     }
 
@@ -235,7 +236,8 @@ public class DemoListController implements IAuthController<Long> {
     @ResponseBody
     @Override
     public Result<?> findById(@AuthenticationPrincipal final TabUser user,
-                              @PathVariable final int version,
+
+@ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                               @PathVariable final Long id) {
         return new Result<TabDemoList>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
@@ -259,7 +261,7 @@ public class DemoListController implements IAuthController<Long> {
     @ResponseBody
     @Override
     public Result<?> findByIdTimestamp(@AuthenticationPrincipal final TabUser user,
-                                       @PathVariable final int version,
+                                       @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                                        @PathVariable final Long id,
                                        @PathVariable final long timestamp) {
         return new Result<TabDemoList>(1) // 指定接口最新版本号
@@ -284,7 +286,8 @@ public class DemoListController implements IAuthController<Long> {
     @ResponseBody
     @Override
     public Result<?> findByUid(@AuthenticationPrincipal final TabUser user,
-                               @PathVariable final int version,
+
+@ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                                @PathVariable final Long id,
                                @PathVariable final String uid) {
         return new Result<TabDemoList>(1) // 指定接口最新版本号
@@ -308,7 +311,7 @@ public class DemoListController implements IAuthController<Long> {
     @ResponseBody
     @Override
     public Result<?> findByUidTimestamp(@AuthenticationPrincipal final TabUser user,
-                                        @PathVariable final int version,
+                                        @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                                         @PathVariable final Long id,
                                         @PathVariable final String uid,
                                         @PathVariable final long timestamp) {
@@ -335,7 +338,7 @@ public class DemoListController implements IAuthController<Long> {
     @Override
     public Result<?> search(
             @AuthenticationPrincipal final TabUser user,
-            @PathVariable final int version,
+            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
             @RequestParam(required = false, defaultValue = "{}") final String json) {
         return new Result<TabDemoList>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
@@ -372,7 +375,7 @@ public class DemoListController implements IAuthController<Long> {
     @Override
     public Result<?> page(
             @AuthenticationPrincipal final TabUser user,
-            @PathVariable final int version,
+            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
             @PathVariable final int number,
             @PathVariable final int size,
             @RequestParam(required = false, defaultValue = "{}") final String json
@@ -413,7 +416,7 @@ public class DemoListController implements IAuthController<Long> {
     @ResponseBody
     public Result<?> searchVO(
             @AuthenticationPrincipal final TabUser user,
-            @PathVariable final int version,
+            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
             @RequestParam(required = false, defaultValue = "{}") final String json) {
         return new Result<TabDemoListVO>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
@@ -449,7 +452,7 @@ public class DemoListController implements IAuthController<Long> {
     @ResponseBody
     public Result<?> pageVO(
             @AuthenticationPrincipal final TabUser user,
-            @PathVariable final int version,
+            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
             @PathVariable final int number,
             @PathVariable final int size,
             @RequestParam(required = false, defaultValue = "{}") final String json

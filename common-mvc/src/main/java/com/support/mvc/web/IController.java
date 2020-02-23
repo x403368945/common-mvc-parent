@@ -1,6 +1,5 @@
 package com.support.mvc.web;
 
-import com.support.mvc.entity.base.Param;
 import com.support.mvc.entity.base.Result;
 import com.support.mvc.enums.Code;
 
@@ -9,7 +8,6 @@ import com.support.mvc.enums.Code;
  * Controller 基础方法规范接口
  * 注释中有相应的代码实现模板，包括接参规范
  * 每个方法内部代码必须使用 try{}catch(){} 将所有异常变为可枚举的已知异常, 禁止 Controller 方法向外抛出异常
- *
  *
  * @author 谢长春 2017年7月14日 上午11:23:18
  */
@@ -21,11 +19,11 @@ public interface IController<ID> {
      * /{模块url前缀}/{version}/{id}
      *
      * @param version {@link Integer} 请求url中获取当前请求接口版本号；@PathVariable final int version
-     * @param param  {@link Param} body中获取参数；@RequestBody(required = false) Param param
+     * @param body  {@link String} body中获取参数；@RequestBody(required = false) String body
      * @return {@link Result}
      */
-    default Result<?> save(final int version, final Param param) {
-        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【save(final int version, final Param param)】未实现"));
+    default Result<?> save(final int version, final String body) {
+        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【save(final int version, final String body)】未实现"));
     }
 
     /**
@@ -35,11 +33,11 @@ public interface IController<ID> {
      *
      * @param version {@link Integer} 请求url中获取当前请求接口版本号；@PathVariable final int version
      * @param id      ID 数据ID 请求url中获取当前请求数据ID；@PathVariable final ID id
-     * @param param  {@link Param} body中获取参数；@RequestBody(required = false) Param param
+     * @param body  {@link String} body中获取参数；@RequestBody(required = false) String body
      * @return {@link Result}
      */
-    default Result<?> update(final int version, final ID id, Param param) {
-        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【update(final int version, final ID id, Param param)】未实现"));
+    default Result<?> update(final int version, final ID id, String body) {
+        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【update(final int version, final ID id, String body)】未实现"));
     }
 
     /**
@@ -102,11 +100,11 @@ public interface IController<ID> {
      * /{模块url前缀}/{version}
      *
      * @param version {@link Integer} 请求url中获取当前请求接口版本号； @PathVariable final int version
-     * @param param  {@link Param} body中获取参数；@RequestBody(required = false) Param param
+     * @param body  {@link String} body中获取参数；@RequestBody(required = false) String body
      * @return {@link Result}
      */
-    default Result<?> markDelete(final int version, final Param param) {
-        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【markDelete(final int version, final Param param)】未实现"));
+    default Result<?> markDelete(final int version, final String body) {
+        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【markDelete(final int version, final String body)】未实现"));
     }
 
     /**

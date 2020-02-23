@@ -7,6 +7,7 @@ import com.ccx.demo.config.init.AppConfig.Path;
 import com.ccx.demo.config.init.AppConfig.URL;
 import com.support.mvc.entity.base.Item;
 import com.support.mvc.entity.base.Result;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -40,15 +41,9 @@ public class AdminConfigController {
 
     @GetMapping("/app")
     @ResponseBody
-    public Result<?> getApp(@AuthenticationPrincipal final TabUser user, @PathVariable final int version) {
+    public Result<?> getApp(@AuthenticationPrincipal final TabUser user,
+                            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
         return new Result<Item>(1) // 指定接口最新版本号
-                .version(this.getClass(), builder -> builder
-                        .notes(Arrays.asList(
-                                "查看应用全局配置参数"
-                        ))
-                        .build()
-                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl())))
-                )
                 .execute(result -> result
                         .versionAssert(version)
                         .setSuccess(Stream.of(App.values())
@@ -60,15 +55,9 @@ public class AdminConfigController {
 
     @GetMapping("/path")
     @ResponseBody
-    public Result<?> getPath(@AuthenticationPrincipal final TabUser user, @PathVariable final int version) {
+    public Result<?> getPath(@AuthenticationPrincipal final TabUser user,
+                             @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
         return new Result<Item>(1) // 指定接口最新版本号
-                .version(this.getClass(), builder -> builder
-                        .notes(Arrays.asList(
-                                "查看应用目录配置参数"
-                        ))
-                        .build()
-                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl())))
-                )
                 .execute(result -> result
                         .versionAssert(version)
                         .setSuccess(Stream.of(Path.values())
@@ -80,15 +69,9 @@ public class AdminConfigController {
 
     @GetMapping("/url")
     @ResponseBody
-    public Result<?> getUrl(@AuthenticationPrincipal final TabUser user, @PathVariable final int version) {
+    public Result<?> getUrl(@AuthenticationPrincipal final TabUser user,
+                            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
         return new Result<Item>(1) // 指定接口最新版本号
-                .version(this.getClass(), builder -> builder
-                        .notes(Arrays.asList(
-                                "查看应用 URL 配置参数"
-                        ))
-                        .build()
-                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl())))
-                )
                 .execute(result -> result
                         .versionAssert(version)
                         .setSuccess(Stream.of(URL.values())
@@ -100,15 +83,9 @@ public class AdminConfigController {
 
     @GetMapping("/{key}")
     @ResponseBody
-    public Result<?> getByKey(@PathVariable final int version, @PathVariable String key) {
+    public Result<?> getByKey(
+            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version, @PathVariable String key) {
         return new Result<String>(1) // 指定接口最新版本号
-                .version(this.getClass(), builder -> builder
-                        .notes(Arrays.asList(
-                                "查看指定配置参数"
-                        ))
-                        .build()
-                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl())))
-                )
                 .execute(result -> result
                         .versionAssert(version)
                         .setSuccess(App.valueOf(key).value())

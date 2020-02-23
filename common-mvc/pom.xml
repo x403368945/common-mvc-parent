@@ -17,7 +17,6 @@
         <dependency>
             <groupId>com.github.x403368945</groupId>
             <artifactId>common-utils</artifactId>
-            <version>1.0.3</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

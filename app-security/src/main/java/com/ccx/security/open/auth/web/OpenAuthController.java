@@ -1,12 +1,12 @@
 package com.ccx.security.open.auth.web;
 
 
+import com.alibaba.fastjson.JSON;
 import com.ccx.security.business.user.entity.TabUser;
 import com.ccx.security.config.init.AppConfig.URL;
 import com.ccx.security.enums.Session;
 import com.ccx.security.open.auth.entity.AuthLogin;
 import com.ccx.security.open.auth.service.AuthService;
-import com.support.mvc.entity.base.Param;
 import com.support.mvc.entity.base.Result;
 import com.support.mvc.enums.Code;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Arrays;
-
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * 操作请求处理：授权
@@ -41,7 +39,7 @@ public class OpenAuthController {
      * 参数：param=JSONObject
      *
      * @param version  int 当前请求接口版本号
-     * @param param    Param
+     * @param body    String
      * @param request  HttpServletRequest
      * @param response HttpServletResponse
      * @return Result
@@ -49,7 +47,7 @@ public class OpenAuthController {
     @PostMapping("/login")
     @ResponseBody
     public Result<?> login(@PathVariable final int version,
-                           @RequestBody final Param param,
+                           @RequestBody final String body,
                            HttpServletRequest request,
                            HttpServletResponse response
     ) {
@@ -73,10 +71,10 @@ public class OpenAuthController {
 //            log.debug("request.getServletContext().getServerInfo()"+request.getServletContext().getServerInfo());
 //            log.debug("request.getServletContext().getServletContextName()"+request.getServletContext().getServletContextName());
 //            log.debug("request.getServletContext().getVirtualServerName()"+request.getServletContext().getVirtualServerName());
-            AuthLogin authLogin = Param.of(param).required().parseObject(AuthLogin.class);
+            AuthLogin authLogin = JSON.parseObject(body, AuthLogin.class);
             switch (authLogin.getMethod()) {
                 case SESSION:
-                    return loginBySession(version, param, request);
+                    return loginBySession(version, body, request);
                 case TOKEN:
 //                    return loginByToken(version, param, request, response);
                 case CODE:
@@ -97,34 +95,20 @@ public class OpenAuthController {
      * 参数：param=JSONObject
      *
      * @param version int 当前请求接口版本号
-     * @param param   Param
+     * @param body   String
      * @param request HttpServletRequest
      * @return Result
      */
     @PostMapping("/login/SESSION")
     @ResponseBody
     public Result<?> loginBySession(@PathVariable final int version,
-                                    @RequestBody final Param param,
+                                    @RequestBody final String body,
                                     HttpServletRequest request
     ) {
         final Result<TabUser> result = new Result<>(1);
         try {
-            result
-                    .version(this.getClass(), builder -> builder
-                            .props(TabUser.Props.list())
-                            .notes(Arrays.asList(
-                                    "会话模式登录，有效期30分钟"
-                            ))
-                            .build()
-                            .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl()),
-                                    BeanMap.create(new AuthLogin()
-                                            .setUsername("admin")
-                                            .setPassword("111111")
-                                    )
-                            ))
-                    )
-                    .versionAssert(version);
-            AuthLogin authLogin = Param.of(param).required().parseObject(AuthLogin.class);
+            result.versionAssert(version);
+            AuthLogin authLogin = JSON.parseObject(body, AuthLogin.class);
             // 登录成功之后，将用户信息放入session
             TabUser user = authService.login(authLogin.getUsername(), authLogin.getPassword());
             HttpSession session = request.getSession(true);
