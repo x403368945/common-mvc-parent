@@ -102,10 +102,10 @@ public interface IController<ID, T> {
      * /{模块url前缀}/{version}
      *
      * @param version {@link Integer} 请求url中获取当前请求接口版本号； @PathVariable final int version
-     * @param body  {@link Set<ID>} body中获取参数；@RequestBody(required = false) Set<ID> body
+     * @param body  {@link String} body中获取参数；@RequestBody(required = false) String body
      * @return {@link Result}
      */
-    default Result<Void> markDelete(final int version, final Set<ID> body) {
+    default Result<Void> markDelete(final int version, final String body) {
         return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【markDelete(final int version, final Set<ID> body)】未实现"));
     }
 
