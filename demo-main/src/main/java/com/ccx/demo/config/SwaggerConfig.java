@@ -92,4 +92,28 @@ public class SwaggerConfig {
                 ;
     }
 
+    @Bean(value = "wappApi")
+    public Docket wappApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("微信小程序接口")
+                .apiInfo(new ApiInfoBuilder()
+                        .version("1.0")
+                        .title("Swagger RESTful APIs 增强版")
+                        .description("### Swagger RESTful APIs 增强版， 集成指南：doc.xiaominfo.com")
+                        .termsOfServiceUrl("https://ccx.cccc6666.com/")
+                        .contact(new Contact("谢长春", "ccx.cccc6666.com", "403368945@qq.com"))
+                        .build()
+                )
+                .select()
+                // 生成所有API接口
+                .apis(RequestHandlerSelectors.basePackage("com.ccx.demo.wapp"))
+                // 只生成被Api这个注解注解过的类接口
+                .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
+                // 只生成被ApiOperation这个注解注解过的api接口
+                //.apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
+                .paths(PathSelectors.any())
+                .build()
+                ;
+    }
+
 }

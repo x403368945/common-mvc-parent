@@ -7,7 +7,6 @@ import com.ccx.socket.ws.adapter.IAdapter;
 import com.ccx.socket.ws.adapter.RouterAdapter;
 import com.support.mvc.actions.ICommand;
 import com.support.mvc.entity.base.Message;
-import com.utils.util.Util;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

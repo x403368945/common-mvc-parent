@@ -16,12 +16,12 @@ import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.support.mvc.entity.ITable;
 import com.support.mvc.entity.IWhere;
 import com.support.mvc.entity.IWhere.QdslWhere;
-import com.support.mvc.entity.base.Prop;
 import com.support.mvc.entity.base.Sorts;
 import com.support.mvc.entity.convert.ArrayLongJsonConvert;
 import com.support.mvc.entity.validated.ISave;
 import com.support.mvc.entity.validated.IUpdate;
 import com.utils.util.Then;
+import io.swagger.annotations.Api;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -40,7 +40,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.ccx.demo.business.user.entity.QTabUser.tabUser;
-import static com.support.mvc.entity.base.Prop.Type.*;
 import static com.support.mvc.enums.Code.ORDER_BY;
 
 /**
@@ -50,6 +49,7 @@ import static com.support.mvc.enums.Code.ORDER_BY;
  */
 //@Table(name = "tab_user", uniqueConstraints = {@UniqueConstraint(columnNames = "uid")})
 @Table(name = "tab_user")
+@Api(tags = "用户表")
 @Entity
 @QueryEntity
 @DynamicInsert
@@ -166,46 +166,6 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
     }
 
     /**
-     * 实体类所有属性名
-     * 当其他地方有用到字符串引用该类属性时，应该使用该枚举定义
-     */
-    public enum Props {
-        id(LONG.build(true, "数据ID，主键自增")),
-        uid(STRING.build("用户UUID，缓存和按ID查询时可使用强校验")),
-        subdomain(STRING.build("子域名用户组")),
-        username(STRING.build(true, "登录名")),
-        password(STRING.build(true, "登录密码")),
-        nickname(STRING.build("昵称")),
-        phone(STRING.build("手机号")),
-        email(STRING.build("邮箱")),
-        role(ENUM.build("角色")),
-        registerSource(ENUM.build("注册渠道")),
-        insertTime(TIMESTAMP.build("创建时间")),
-        insertUserId(LONG.build("创建用户ID")),
-        updateTime(TIMESTAMP.build("修改时间")),
-        updateUserId(LONG.build("修改用户ID")),
-        deleted(ENUM.build("是否逻辑删除"));
-        private final Prop prop;
-
-        public Prop getProp() {
-            return prop;
-        }
-
-        Props(final Prop prop) {
-            prop.setName(this.name());
-            this.prop = prop;
-        }
-
-        public static List<Prop> list() {
-            return Stream.of(TabUser.Props.values()).map(TabUser.Props::getProp).collect(Collectors.toList());
-        }
-
-        public static List<Prop> list(final Props... props) {
-            return Stream.of(props).map(TabUser.Props::getProp).collect(Collectors.toList());
-        }
-    }
-
-    /**
      * 枚举：定义排序字段
      */
     public enum OrderBy {
@@ -220,9 +180,11 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
         public Sorts get(final Sorts.Direction direction) {
             return Objects.equals(direction, Sorts.Direction.DESC) ? desc : asc;
         }
+
         public Sorts.Order asc() {
             return Sorts.Order.builder().name(this.name()).direction(Sorts.Direction.ASC).build();
         }
+
         public Sorts.Order desc() {
             return Sorts.Order.builder().name(this.name()).direction(Sorts.Direction.DESC).build();
         }
@@ -242,7 +204,7 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
         }
     }
 
-// DB Start ********************************************************************************************************
+    // DB Start ********************************************************************************************************
     @Override
     public Then<JPAUpdateClause> update(final JPAUpdateClause update) {
         final QTabUser q = tabUser;

@@ -23,6 +23,7 @@ import static com.ccx.demo.business.example.entity.QTabDemoList.tabDemoList;
  * *@EqualsAndHashCode(callSuper = true)
  * *@ToString(callSuper = true)
  * </pre>
+ *
  * @author 谢长春 2020-01-17
  */
 @Data

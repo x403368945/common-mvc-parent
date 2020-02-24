@@ -3,7 +3,6 @@ package com.ccx.security.open.auth.web;
 
 import com.alibaba.fastjson.JSON;
 import com.ccx.security.business.user.entity.TabUser;
-import com.ccx.security.config.init.AppConfig.URL;
 import com.ccx.security.enums.Session;
 import com.ccx.security.open.auth.entity.AuthLogin;
 import com.ccx.security.open.auth.service.AuthService;
@@ -11,14 +10,12 @@ import com.support.mvc.entity.base.Result;
 import com.support.mvc.enums.Code;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.beans.BeanMap;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.Arrays;
 
 /**
  * 操作请求处理：授权
@@ -39,7 +36,7 @@ public class OpenAuthController {
      * 参数：param=JSONObject
      *
      * @param version  int 当前请求接口版本号
-     * @param body    String
+     * @param body     String
      * @param request  HttpServletRequest
      * @param response HttpServletResponse
      * @return Result
@@ -95,7 +92,7 @@ public class OpenAuthController {
      * 参数：param=JSONObject
      *
      * @param version int 当前请求接口版本号
-     * @param body   String
+     * @param body    String
      * @param request HttpServletRequest
      * @return Result
      */

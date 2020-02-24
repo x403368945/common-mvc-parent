@@ -11,7 +11,9 @@ import java.util.Set;
  * 需要在实体类属性上添加注解：@Convert(converter = {@link SetIntegerJsonConvert}.class)
  *
  * @author 谢长春 2019/2/12
+ * @deprecated Set 类型 QueryDSL 不支持 update 方法，请使用 {@link ArrayIntegerJsonConvert}
  */
+@Deprecated
 public class SetIntegerJsonConvert implements AttributeConverter<Set<Integer>, String> {
     @Override
     public String convertToDatabaseColumn(final Set<Integer> attribute) {

@@ -1,9 +1,7 @@
 package com.ccx.demo.business.common.web;
 
 import com.ccx.demo.business.common.vo.FileInfo;
-import com.ccx.demo.business.common.vo.FileInfo.Props;
 import com.ccx.demo.business.common.vo.FileUpload;
-import com.ccx.demo.config.init.AppConfig.URL;
 import com.support.mvc.entity.base.Result;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 import static com.support.mvc.enums.Code.FILE_EMPTY;
@@ -37,14 +34,6 @@ public class FileController {
     public Result<?> uploadFile(
             @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version, @RequestParam(required = false) final MultipartFile file) {
         return new Result<FileInfo>(1) // 指定接口最新版本号
-                .version(this.getClass(), builder -> builder
-                        .props(Props.list())
-                        .notes(Arrays.asList(
-                                "单文件上传接口, body 中 file=单个文件对象"
-                        ))
-                        .build()
-                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl())))
-                )
                 .execute(result -> {
                     result.versionAssert(version);
                     if (Objects.isNull(file) || StringUtils.isBlank(file.getOriginalFilename())) {
@@ -64,14 +53,6 @@ public class FileController {
     public Result<?> uploadFiles(
             @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version, @RequestParam(required = false) final MultipartFile[] files) {
         return new Result<FileInfo>(1) // 指定接口最新版本号
-                .version(this.getClass(), builder -> builder
-                        .props(Props.list())
-                        .notes(Arrays.asList(
-                                "文件批量上传接口, body 中 files=[文件对象数组]"
-                        ))
-                        .build()
-                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl())))
-                )
                 .execute(result -> {
                     result.versionAssert(version);
                     if (Objects.isNull(files) || StringUtils.isBlank(files[0].getOriginalFilename())) {

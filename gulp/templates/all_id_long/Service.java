@@ -26,7 +26,9 @@ import java.util.Optional;
 @Slf4j
 @Service
 @ServiceAspect
-public class <%=JavaName%>Service implements IService<<%=TabName%>>, /* I<%=TabName%>Cache */ {
+public class <%=JavaName%>Service implements IService<<%=TabName%>>
+//	, I<%=TabName%>Cache
+ {
     @Autowired
     private <%=JavaName%>Repository repository;
 //     /** // 若使用缓存需要解开代码

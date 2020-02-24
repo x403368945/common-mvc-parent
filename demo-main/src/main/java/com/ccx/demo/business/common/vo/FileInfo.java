@@ -4,8 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.ccx.demo.config.init.AppConfig.Path;
 import com.ccx.demo.config.init.AppConfig.URL;
-import com.support.mvc.entity.base.Prop;
 import com.utils.IJson;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,15 +14,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static com.support.mvc.entity.base.Prop.Type.STRING;
-
 /**
  * 上传文件对象
- *
  *
  * @author 谢长春 on 2017/10/17.
  */
@@ -30,37 +24,18 @@ import static com.support.mvc.entity.base.Prop.Type.STRING;
 @Builder
 @Data
 @Accessors(chain = true)
+@Api(tags = "上传文件对象")
 public class FileInfo implements IJson {
-    /**
-     * 实体类所有属性名
-     */
-    public enum Props {
-        name(STRING.build(true, "文件名，用户上传的文件名")),
-        uname(STRING.build(true, "唯一文件名，磁盘上存储的uuid文件名")),
-        url(STRING.build(true, "本次上传文件临时访问路径")),;
-        private final Prop prop;
-
-        public Prop getProp() {
-            return prop;
-        }
-
-        Props(final Prop prop) {
-            prop.setName(this.name());
-            this.prop = prop;
-        }
-
-        public static List<Prop> list() {
-            return Stream.of(Props.values()).map(Props::getProp).collect(Collectors.toList());
-        }
-    }
 
     /**
      * 文件名，用户上传的文件名
      */
+    @ApiModelProperty(position = 1, value = "文件名，用户上传的文件名", example = "测试.png")
     protected String name;
     /**
      * 唯一文件名，磁盘上存储的uuid文件名
      */
+    @ApiModelProperty(position = 2, value = "唯一文件名，磁盘上存储的uuid文件名", example = "{uuid}.png")
     protected String uname;
 
     /**
@@ -68,6 +43,7 @@ public class FileInfo implements IJson {
      *
      * @return String 文件绝对路径
      */
+    @ApiModelProperty(hidden = true)
     @JSONField(serialize = false, deserialize = false)
     public String getPath() {
         return StringUtils.isEmpty(uname) ? null : Path.TEMP.absolute(uname);
@@ -78,6 +54,8 @@ public class FileInfo implements IJson {
      *
      * @return String
      */
+    @ApiModelProperty(position = 3, value = "文件访问路径", example = "http://127.0.0.1/app/{uuid}.png")
+    @JSONField(serialize = false, deserialize = false)
     public String getUrl() {
         return StringUtils.isEmpty(uname) ? null : URL.TEMP.append(uname);
     }

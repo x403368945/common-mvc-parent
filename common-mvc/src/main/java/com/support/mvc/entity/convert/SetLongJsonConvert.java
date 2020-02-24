@@ -12,7 +12,9 @@ import java.util.Set;
  * 需要在实体类属性上添加注解：@Convert(converter = {@link SetLongJsonConvert}.class)
  *
  * @author 谢长春 2019/2/12
+ * @deprecated Set 类型 QueryDSL 不支持 update 方法，请使用 {@link ArrayLongJsonConvert}
  */
+@Deprecated
 public class SetLongJsonConvert implements AttributeConverter<Set<Long>, String> {
     @Override
     public String convertToDatabaseColumn(final Set<Long> attribute) {

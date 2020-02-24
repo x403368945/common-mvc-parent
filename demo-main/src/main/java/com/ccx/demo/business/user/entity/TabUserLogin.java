@@ -10,7 +10,6 @@ import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.support.mvc.entity.ITable;
 import com.support.mvc.entity.IWhere;
 import com.support.mvc.entity.IWhere.QdslWhere;
-import com.support.mvc.entity.base.Prop;
 import com.support.mvc.entity.base.Sorts;
 import com.utils.util.Dates;
 import lombok.AllArgsConstructor;
@@ -27,9 +26,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.ccx.demo.business.user.entity.QTabUserLogin.tabUserLogin;
-import static com.support.mvc.entity.base.Prop.RANGE_DATE;
-import static com.support.mvc.entity.base.Prop.SORTS;
-import static com.support.mvc.entity.base.Prop.Type.*;
 import static com.support.mvc.enums.Code.ORDER_BY;
 
 /**
@@ -81,34 +77,6 @@ public class TabUserLogin implements ITable, IWhere<JPAUpdateClause, QdslWhere> 
     private List<Sorts.Order> sorts;
 
 // Enum Start **********************************************************************************************************
-
-    /**
-     * 实体类所有属性名
-     * 当其他地方有用到字符串引用该类属性时，应该使用该枚举定义
-     */
-    public enum Props {
-        id(LONG.build(true, "数据ID，主键自增")),
-        userId(LONG.build(true, "用户ID，tab_user.id")),
-        insertTime(TIMESTAMP.build("登录时间")),
-        user(OBJECT.build("用户信息").setProps(TabUser.Props.list())),
-        insertTimeRange(RANGE_DATE.apply("登录时间查询区间")),
-        sorts(SORTS.apply(OrderBy.names())),
-        ;
-        private final Prop prop;
-
-        public Prop getProp() {
-            return prop;
-        }
-
-        Props(final Prop prop) {
-            prop.setName(this.name());
-            this.prop = prop;
-        }
-
-        public static List<Prop> list() {
-            return Stream.of(Props.values()).map(Props::getProp).collect(Collectors.toList());
-        }
-    }
 
     /**
      * 枚举：定义排序字段

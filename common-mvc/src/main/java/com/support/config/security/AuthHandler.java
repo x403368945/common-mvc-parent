@@ -29,7 +29,7 @@ public class AuthHandler implements
         AuthenticationEntryPoint,
         AuthenticationSuccessHandler,
         AuthenticationFailureHandler,
-        LogoutSuccessHandler{
+        LogoutSuccessHandler {
 
     /**
      * 定制无权限响应状态：403；用户已登录，无访问权限

@@ -5,6 +5,7 @@ import com.ccx.demo.business.user.cache.ITabRoleCache;
 import com.ccx.demo.business.user.entity.TabUser;
 import com.ccx.demo.enums.Bool;
 import com.querydsl.core.annotations.QueryTransient;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -61,6 +62,7 @@ public class UserDetail implements UserDetails, ITabRoleCache {
 
     @QueryTransient
     @JSONField(serialize = false, deserialize = false)
+    @ApiModelProperty(hidden = true)
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -69,6 +71,7 @@ public class UserDetail implements UserDetails, ITabRoleCache {
 
     @QueryTransient
     @JSONField(serialize = false, deserialize = false)
+    @ApiModelProperty(hidden = true)
     @Override
     public boolean isAccountNonLocked() {
         return true;
@@ -76,6 +79,7 @@ public class UserDetail implements UserDetails, ITabRoleCache {
 
     @QueryTransient
     @JSONField(serialize = false, deserialize = false)
+    @ApiModelProperty(hidden = true)
     @Override
     public boolean isCredentialsNonExpired() {
         return true;

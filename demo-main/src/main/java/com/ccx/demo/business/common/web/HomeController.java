@@ -30,6 +30,6 @@ public class HomeController
 
     @RequestMapping(value = "/", method = {GET, POST, PUT, PATCH, DELETE})
     public String home() {
-        return "redirect:/doc.html";
+        return "redirect:/doc.html/#/plus";
     }
 }

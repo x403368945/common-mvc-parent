@@ -10,7 +10,7 @@ import com.support.mvc.entity.ITable;
 import com.support.mvc.entity.ITimestamp;
 import com.support.mvc.entity.IWhere;
 import com.support.mvc.entity.IWhere.QdslWhere;
-import com.support.mvc.entity.base.Prop;
+
 import com.support.mvc.entity.base.Sorts;
 import com.support.mvc.entity.validated.IMarkDelete;
 import com.support.mvc.entity.validated.ISave;
@@ -40,8 +40,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static <%=pkg%>.code.<%=javaname%>.entity.Q<%=TabName%>.<%=tabName%>;
-import static com.support.mvc.entity.base.Prop.*;
-import static com.support.mvc.entity.base.Prop.Type.*;
+
+
 import static com.support.mvc.enums.Code.ORDER_BY;
 
 /**

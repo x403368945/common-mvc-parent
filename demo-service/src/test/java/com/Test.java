@@ -34,10 +34,10 @@ public class Test {
                 (t, u) -> {
                     System.out.println(t.getClass());
                     System.out.println(u.getClass());
-                    System.out.println(JSON.toJSONString(Arrays.asList(t,u)));
+                    System.out.println(JSON.toJSONString(Arrays.asList(t, u)));
                 },
                 (t, u) -> {
-                    System.out.println(JSON.toJSONString(Arrays.asList(t,u)));
+                    System.out.println(JSON.toJSONString(Arrays.asList(t, u)));
                 }
         );
 

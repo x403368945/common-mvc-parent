@@ -14,7 +14,6 @@ import com.support.mvc.entity.IMongo;
 import com.support.mvc.entity.ITimestamp;
 import com.support.mvc.entity.IWhere;
 import com.support.mvc.entity.IWhere.QdslWhere;
-import com.support.mvc.entity.base.Prop;
 import com.support.mvc.entity.base.Sorts;
 import com.support.mvc.entity.validated.IMarkDelete;
 import com.support.mvc.entity.validated.ISave;
@@ -44,8 +43,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.ccx.demo.business.example.entity.QDemoMongo.demoMongo;
-import static com.support.mvc.entity.base.Prop.SORTS;
-import static com.support.mvc.entity.base.Prop.Type.*;
 import static com.support.mvc.enums.Code.ORDER_BY;
 
 /**
@@ -154,36 +151,17 @@ public class DemoMongo implements
      * 当其他地方有用到字符串引用该类属性时，应该使用该枚举定义
      */
     public enum Props {
-        id(LONG.build(true, "数据ID，主键自增")),
-        name(STRING.build(true, "姓名")),
-        phone(STRING.build("手机")),
-        age(SHORT.build("年龄")),
-        status(ENUM.build(true, "状态")),
-        insertTime(TIMESTAMP.build("创建时间")),
-        insertUserId(LONG.build("创建用户ID")),
-        updateTime(TIMESTAMP.build("修改时间")),
-        updateUserId(LONG.build("修改用户ID")),
-        deleted(ENUM.build("是否逻辑删除")),
-
-        //        timestamp(LONG.build("数据最后一次更新时间戳")),
-//        numRange(RANGE_NUM.apply("数字查询区间")),
-//        insertTimeRange(RANGE_DATE.apply("创建时间查询区间")),
-        sorts(SORTS.apply(OrderBy.names())),
+        id,
+        name,
+        phone,
+        age,
+        status,
+        insertTime,
+        insertUserId,
+        updateTime,
+        updateUserId,
+        deleted,
         ;
-        private final Prop prop;
-
-        public Prop getProp() {
-            return prop;
-        }
-
-        Props(final Prop prop) {
-            prop.setName(this.name());
-            this.prop = prop;
-        }
-
-        public static List<Prop> list() {
-            return Stream.of(Props.values()).map(Props::getProp).collect(Collectors.toList());
-        }
     }
 
     /**

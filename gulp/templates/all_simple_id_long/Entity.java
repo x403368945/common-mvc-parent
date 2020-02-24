@@ -9,7 +9,7 @@ import com.support.mvc.entity.ITable;
 import com.support.mvc.entity.ITimestamp;
 import com.support.mvc.entity.IWhere;
 import com.support.mvc.entity.IWhere.QdslWhere;
-import com.support.mvc.entity.base.Prop;
+
 import com.support.mvc.entity.base.Sorts;
 import com.support.mvc.entity.validated.IMarkDelete;
 import com.support.mvc.entity.validated.ISave;
@@ -39,8 +39,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static <%=pkg%>.code.<%=javaname%>.entity.Q<%=TabName%>.<%=tabName%>;
-import static com.support.mvc.entity.base.Prop.*;
-import static com.support.mvc.entity.base.Prop.Type.*;
+
+
 import static com.support.mvc.enums.Code.ORDER_BY;
 
 /**
@@ -76,34 +76,6 @@ public class <%=TabName%> implements
     private List<Sorts.Order> sorts;
 
 // Enum Start **********************************************************************************************************
-
-    /**
-     * 实体类所有属性名
-     * 当其他地方有用到字符串引用该类属性时，应该使用该枚举定义
-     */
-    public enum Props {
-<%=props%>,
-
-//        timestamp(LONG.build("数据最后一次更新时间戳")),
-//        numRange(RANGE_NUM.apply("数字查询区间")),
-//        insertTimeRange(RANGE_DATE.apply("创建时间查询区间")),
-        sorts(SORTS.apply(OrderBy.names())),
-        ;
-        private final Prop prop;
-
-        public Prop getProp() {
-            return prop;
-        }
-
-        Props(final Prop prop) {
-            prop.setName(this.name());
-            this.prop = prop;
-        }
-
-        public static List<Prop> list() {
-            return Stream.of(Props.values()).map(Props::getProp).collect(Collectors.toList());
-        }
-    }
 
     /**
      * 枚举：定义排序字段

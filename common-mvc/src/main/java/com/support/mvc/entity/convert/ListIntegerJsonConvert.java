@@ -10,7 +10,9 @@ import java.util.List;
  * 需要在实体类属性上添加注解：@Convert(converter = {@link ListIntegerJsonConvert}.class)
  *
  * @author 谢长春 2019/2/12
+ * @deprecated List 类型 QueryDSL 不支持 update 方法，请使用 {@link ArrayIntegerJsonConvert}
  */
+@Deprecated
 public class ListIntegerJsonConvert implements AttributeConverter<List<Integer>, String> {
     @Override
     public String convertToDatabaseColumn(final List<Integer> attribute) {

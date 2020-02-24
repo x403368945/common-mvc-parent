@@ -3,8 +3,8 @@ package com.ccx.security.open.auth.entity;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.support.mvc.entity.base.Item;
-import com.support.mvc.entity.base.Prop;
-import com.utils.util.Maps;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,13 +12,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static com.support.mvc.entity.base.Prop.Type.ENUM;
-import static com.support.mvc.entity.base.Prop.Type.STRING;
 
 /**
  * 实体：登录参数
@@ -30,33 +24,8 @@ import static com.support.mvc.entity.base.Prop.Type.STRING;
 @Data
 @Accessors(chain = true)
 @ToString(exclude = {"password"})
+@Api(tags = "登录参数")
 public class AuthLogin implements Serializable {
-    /**
-     * 实体类所有属性名
-     */
-    public enum Props {
-        method(ENUM.build("登录模式")),
-        username(STRING.build("SESSION|TOKEN登录模式，必填")),
-        password(STRING.build("SESSION|TOKEN登录模式，必填")),
-        phone(STRING.build("CODE登录模式，必填")),
-        code(STRING.build("CODE登录模式，必填")),
-        ;
-        private final Prop prop;
-
-        public Prop getProp() {
-            return prop;
-        }
-
-        Props(final Prop prop) {
-            prop.setName(this.name());
-            this.prop = prop;
-        }
-
-        public static List<Prop> list() {
-            return Stream.of(Props.values()).map(Props::getProp).collect(Collectors.toList());
-        }
-    }
-
     /**
      * 会话模式分类
      */
@@ -91,23 +60,28 @@ public class AuthLogin implements Serializable {
     /**
      * 会话模式
      */
+    @ApiModelProperty(position = 1, value = "登录模式", example = "SESSION")
     private Method method = Method.SESSION;
     /**
      * 登录名，SESSION|TOKEN 模式登录名和密码必填
      */
+    @ApiModelProperty(position = 2, value = "登录名，SESSION|TOKEN 模式登录名和密码必填", example = "SESSION")
     private String username;
     /**
      * 登录密码，SESSION|TOKEN 模式登录名和密码必填
      */
+    @ApiModelProperty(position = 3, value = "登录密码，SESSION|TOKEN 模式登录名和密码必填", example = "SESSION")
     @JSONField(serialize = false)
     private String password;
     /**
      * 手机号，CODE 模式手机号和验证码必填
      */
+    @ApiModelProperty(position = 4, value = "手机号，CODE 模式手机号和验证码必填", example = "SESSION")
     private String phone;
     /**
      * 验证码，CODE 模式手机号和验证码必填
      */
+    @ApiModelProperty(position = 5, value = "验证码，CODE 模式手机号和验证码必填", example = "SESSION")
     private String code;
 
     public Method getMethod() {
@@ -121,7 +95,7 @@ public class AuthLogin implements Serializable {
         System.out.println(
                 "登录接口：body 参数范本:" +
                         JSON.toJSONString(
-                                Maps.by("json", new AuthLogin(null, "admin", "admin", null, null))
+                                new AuthLogin(null, "admin", "admin", null, null)
                         )
         );
     }

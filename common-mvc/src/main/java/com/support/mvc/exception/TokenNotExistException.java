@@ -6,7 +6,7 @@ package com.support.mvc.exception;
  * @author 谢长春 2016-11-23
  */
 public class TokenNotExistException extends RuntimeException {
-	public TokenNotExistException(String msg) {
-		super(msg);
-	}
+    public TokenNotExistException(String msg) {
+        super(msg);
+    }
 }

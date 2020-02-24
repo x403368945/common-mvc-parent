@@ -1,7 +1,6 @@
 package com.ccx.demo.config;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
@@ -10,7 +9,6 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 
 /**
  * 定时任务配置
- *
  *
  * @author 谢长春 on 2018/1/5.
  */
@@ -28,6 +26,7 @@ public class ScheduleConfig implements SchedulingConfigurer {
     /**
      * 方案一：支持 CronTrigger 表达式
      * 多线程定时任务调度器
+     *
      * @return ThreadPoolTaskScheduler
      */
     @Bean(destroyMethod = "destroy")

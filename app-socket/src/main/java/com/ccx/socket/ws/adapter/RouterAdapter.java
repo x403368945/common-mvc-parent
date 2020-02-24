@@ -15,7 +15,6 @@ import java.util.Objects;
 import static com.ccx.socket.config.init.BeanInitializer.getAppContext;
 
 /**
- *
  * @author 谢长春 2018/10/14
  */
 @Slf4j

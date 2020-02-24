@@ -12,11 +12,13 @@ import com.support.mvc.dao.IRepository;
 import com.support.mvc.entity.base.Pager;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Collection;
+import com.alibaba.fastjson.annotation.JSONField;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static <%=pkg%>.config.init.BeanInitializer.Beans.jpaQueryFactory;
+import static <%=pkg%>.config.init.BeanInitializer.getAppContext;
 
 /**
  * 数据操作：<%=comment%>
@@ -60,7 +62,7 @@ public interface <%=JavaName%>Repository extends
          */
         @JSONField(serialize = false, deserialize = false)
         default Optional<<%=TabName%>> get<%=TabName%>ById(final Long id) {
-            return getAppContext().getBean(<%=TabName%>Repository.class).findById(id);
+            return getAppContext().getBean(<%=JavaName%>Repository.class).findById(id);
         }
 
         /**

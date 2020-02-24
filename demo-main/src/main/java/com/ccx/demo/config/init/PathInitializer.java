@@ -30,7 +30,7 @@ public class PathInitializer implements InitConfig.Initializer {
                         .collect(Collectors.joining("\n"))
         );
         log.info("┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬ 初始化路径配置 ┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬");
-        log.info("\n{}",Stream.of(Path.values())
+        log.info("\n{}", Stream.of(Path.values())
                 .map(path -> String.format("%s【%s】：%s", path.name(), path.comment, path.fpath().mkdirs().absolute()))
                 .collect(Collectors.joining("\n"))
         );

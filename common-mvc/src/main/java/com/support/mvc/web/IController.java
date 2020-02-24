@@ -3,6 +3,9 @@ package com.support.mvc.web;
 import com.support.mvc.entity.base.Result;
 import com.support.mvc.enums.Code;
 
+import java.util.List;
+import java.util.Set;
+
 /**
  * 开放式接口规范，无需登录即可访问
  * Controller 基础方法规范接口
@@ -11,7 +14,7 @@ import com.support.mvc.enums.Code;
  *
  * @author 谢长春 2017年7月14日 上午11:23:18
  */
-public interface IController<ID> {
+public interface IController<ID, T> {
 
     /**
      * <pre>保存；
@@ -19,11 +22,11 @@ public interface IController<ID> {
      * /{模块url前缀}/{version}/{id}
      *
      * @param version {@link Integer} 请求url中获取当前请求接口版本号；@PathVariable final int version
-     * @param body  {@link String} body中获取参数；@RequestBody(required = false) String body
+     * @param body  {@link T} body中获取参数；@RequestBody(required = false) T body
      * @return {@link Result}
      */
-    default Result<?> save(final int version, final String body) {
-        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【save(final int version, final String body)】未实现"));
+    default Result<T> save(final int version, final T body) {
+        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【save(final int version, final T body)】未实现"));
     }
 
     /**
@@ -33,11 +36,11 @@ public interface IController<ID> {
      *
      * @param version {@link Integer} 请求url中获取当前请求接口版本号；@PathVariable final int version
      * @param id      ID 数据ID 请求url中获取当前请求数据ID；@PathVariable final ID id
-     * @param body  {@link String} body中获取参数；@RequestBody(required = false) String body
+     * @param body  {@link T} body中获取参数；@RequestBody(required = false) T body
      * @return {@link Result}
      */
-    default Result<?> update(final int version, final ID id, String body) {
-        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【update(final int version, final ID id, String body)】未实现"));
+    default Result<Void> update(final int version, final ID id, T body) {
+        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【update(final int version, final ID id, T body)】未实现"));
     }
 
     /**
@@ -49,7 +52,7 @@ public interface IController<ID> {
      * @param id      ID  数据ID 请求url中获取当前请求数据ID；@PathVariable final ID id
      * @return {@link Result}
      */
-    default Result<?> deleteById(final int version, final ID id) {
+    default Result<Void> deleteById(final int version, final ID id) {
         return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【deleteById(final int version, final ID id)】未实现"));
     }
 
@@ -63,7 +66,7 @@ public interface IController<ID> {
      * @param uid     {@link String} 数据UUID 请求url中获取当前请求数据UUID；@PathVariable final String uid
      * @return {@link Result}
      */
-    default Result<?> deleteByUid(final int version, final ID id, final String uid) {
+    default Result<Void> deleteByUid(final int version, final ID id, final String uid) {
         return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【deleteByUid(final int version, final ID id, final String uid)】未实现"));
     }
 
@@ -76,7 +79,7 @@ public interface IController<ID> {
      * @param id      ID 数据ID 请求url中获取当前请求数据ID；@PathVariable final ID id
      * @return {@link Result}
      */
-    default Result<?> markDeleteById(final int version, final ID id) {
+    default Result<Void> markDeleteById(final int version, final ID id) {
         return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【markDeleteById(final int version, final ID id)】未实现"));
     }
 
@@ -90,8 +93,20 @@ public interface IController<ID> {
      * @param uid     {@link String} 数据UUID 请求url中获取当前请求数据UUID；@PathVariable final String uid
      * @return {@link Result}
      */
-    default Result<?> markDeleteByUid(final int version, final ID id, final String uid) {
+    default Result<Void> markDeleteByUid(final int version, final ID id, final String uid) {
         return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【markDeleteByUid(final int version, final ID id, final String uid)】未实现"));
+    }
+
+    /**
+     * <pre>批量操作按 ID，逻辑删除；
+     * /{模块url前缀}/{version}
+     *
+     * @param version {@link Integer} 请求url中获取当前请求接口版本号； @PathVariable final int version
+     * @param body  {@link Set<ID>} body中获取参数；@RequestBody(required = false) Set<ID> body
+     * @return {@link Result}
+     */
+    default Result<Void> markDelete(final int version, final Set<ID> body) {
+        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【markDelete(final int version, final Set<ID> body)】未实现"));
     }
 
     /**
@@ -100,11 +115,11 @@ public interface IController<ID> {
      * /{模块url前缀}/{version}
      *
      * @param version {@link Integer} 请求url中获取当前请求接口版本号； @PathVariable final int version
-     * @param body  {@link String} body中获取参数；@RequestBody(required = false) String body
+     * @param body  {@link List} body中获取参数；@RequestBody(required = false) T body
      * @return {@link Result}
      */
-    default Result<?> markDelete(final int version, final String body) {
-        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【markDelete(final int version, final String body)】未实现"));
+    default Result<Void> markDelete(final int version, final List<T> body) {
+        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【markDelete(final int version, final List<T> body)】未实现"));
     }
 
     /**
@@ -117,7 +132,7 @@ public interface IController<ID> {
      * @param id      ID  数据ID 请求url中获取当前请求数据ID；@PathVariable final ID id
      * @return {@link Result}
      */
-    default Result<?> findById(final int version, final ID id) {
+    default Result<? extends T> findById(final int version, final ID id) {
         return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【findById(final int version, final ID id)】未实现"));
     }
 
@@ -131,7 +146,7 @@ public interface IController<ID> {
      * @param timestamp {@link Long} 数据最后一次更新时间戳；方便兼容缓存方案
      * @return {@link Result}
      */
-    default Result<?> findByIdTimestamp(final int version, final ID id, final long timestamp) {
+    default Result<? extends T> findByIdTimestamp(final int version, final ID id, final long timestamp) {
         return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【findById(final int version, final ID id, final Timestamp timestamp)】未实现"));
     }
 
@@ -146,7 +161,7 @@ public interface IController<ID> {
      * @param uid     {@link String} 数据UUID 请求url中获取当前请求数据UUID；@PathVariable final String uid
      * @return {@link Result}
      */
-    default Result<?> findByUid(final int version, final ID id, final String uid) {
+    default Result<? extends T> findByUid(final int version, final ID id, final String uid) {
         return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【findByUid(final int version, final ID id, final String uid)】未实现"));
     }
 
@@ -161,7 +176,7 @@ public interface IController<ID> {
      * @param timestamp {@link Long} 数据最后一次更新时间戳；方便兼容缓存方案
      * @return {@link Result}
      */
-    default Result<?> findByUidTimestamp(final int version, final ID id, final String uid, final long timestamp) {
+    default Result<? extends T> findByUidTimestamp(final int version, final ID id, final String uid, final long timestamp) {
         return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【findByUid(final int version, final ID id, final String uid, final Timestamp timestamp)】未实现"));
     }
 
@@ -174,7 +189,7 @@ public interface IController<ID> {
      * @param json    {@link String} TODO 这里小心入坑注意看注释；@RequestParam 与 @RequestBody 不同；不能自动将 json 字符串转换为对象，所以这里需要用 String 接收前端传递的json字符串对象；
      * @return {@link Result}
      */
-    default Result<?> search(final int version, final String json) {
+    default <P extends T> Result<? extends T> search(final int version, final P json) {
         return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【search(final int version, final String json)】未实现"));
     }
 
@@ -189,7 +204,7 @@ public interface IController<ID> {
      * @param json    {@link String} TODO 这里小心入坑注意看注释； @RequestParam 与 @RequestBody 不同；不能自动将 json 字符串转换为对象，所以这里需要用 String 接收前端传递的json字符串对象
      * @return {@link Result}
      */
-    default Result<?> page(final int version, final int number, final int size, final String json) {
+    default <P extends T> Result<? extends T> page(final int version, final int number, final int size, final P json) {
         return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【search(final int version, final int number, final int size, final String json)】未实现"));
     }
 }

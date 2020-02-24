@@ -17,7 +17,6 @@ import java.util.function.Consumer;
 /**
  * 文件上传工具类
  *
- *
  * @author 谢长春  2016-11-23
  */
 @Slf4j
@@ -88,7 +87,7 @@ public class FileUpload<T> {
             consumer.accept("上传文件集合为空");
         } else {
             for (MultipartFile uploadFile : uploadFiles) {
-                if (!uploadFile.getOriginalFilename().matches(reg)) {
+                if (!Objects.requireNonNull(uploadFile.getOriginalFilename(), "originalFilename").matches(reg)) {
                     consumer.accept(String.format("【%s】文件校验失败", uploadFile.getOriginalFilename()));
                     return this;
                 }

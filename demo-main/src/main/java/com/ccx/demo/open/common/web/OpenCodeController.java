@@ -4,10 +4,8 @@ import com.ccx.demo.config.init.AppConfig;
 import com.ccx.demo.enums.Session;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
-import com.github.xiaoymin.knife4j.annotations.DynamicResponseParameters;
 import com.support.mvc.entity.base.Result;
 import com.support.mvc.enums.Code;
-import com.support.mvc.web.IController;
 import com.utils.util.CodeImage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,15 +31,16 @@ import java.util.Objects;
 @RequestMapping("/open/code/{version}")
 @Controller
 @Slf4j
-public class OpenCodeController implements IController<String> {
+public class OpenCodeController {
 
 //    @Autowired
 //    private EmailCode emailCode;
 //    @Autowired
 //    private PhoneCode phoneCode;
 
-    @ApiOperation(value = "获取图片验证码", tags = {"1.0.0"}, notes = "验证码图片以 base64 格式放在 data 数组中返回")
     @GetMapping
+    @ApiOperationSupport(order = 1)
+    @ApiOperation(value = "获取图片验证码", tags = {"1.0.0"}, notes = "验证码图片以 base64 格式放在 data 数组中返回")
     @ResponseBody
     public Result<String> getImageCode(@ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version, HttpServletRequest request) {
         return new Result<String>(1) // 指定接口最新版本号

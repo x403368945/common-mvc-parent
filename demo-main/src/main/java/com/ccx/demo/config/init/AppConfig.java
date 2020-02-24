@@ -223,6 +223,8 @@ public class AppConfig {
 
         CONFIG("配置文件访问路径", "                    /files/config/"),
         TEMP("临时文件访问路径", "                      /files/temp/"),
+        USER("临时文件访问路径", "                      /files/user/"),
+        ROLE("临时文件访问路径", "                      /files/role/"),
         ;
         /**
          * 枚举属性说明

@@ -2,24 +2,10 @@ package com.ccx.demo.config;
 
 import com.ccx.demo.config.init.AppConfig;
 import com.support.config.AbstractMvcConfig;
-import com.support.config.BusConfig;
-import com.support.config.InitConfig;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.*;
-import org.springframework.web.multipart.MultipartResolver;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.thymeleaf.spring5.SpringTemplateEngine;
-import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
-import org.thymeleaf.spring5.view.ThymeleafViewResolver;
-import org.thymeleaf.templatemode.TemplateMode;
-
-import static com.google.common.base.Charsets.UTF_8;
 
 /**
  * spring-boot 特殊处理：大部分配置在 application.yml 文件中，简化配置

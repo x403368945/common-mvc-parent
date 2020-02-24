@@ -6,8 +6,8 @@ import com.alibaba.fastjson.TypeReference;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.support.filter.RequestIdFilter;
 import com.querydsl.core.QueryResults;
+import com.support.filter.RequestIdFilter;
 import com.support.mvc.enums.Code;
 import com.support.mvc.exception.CodeException;
 import com.support.mvc.exception.UserSessionException;
@@ -22,18 +22,11 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ValidationException;
 import java.io.File;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.function.Function;
-
-import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
  * 返回结果集对象
@@ -109,67 +102,61 @@ public class Result<E> implements IJson {
      */
     @Getter
     @Setter
-    @ApiModelProperty(value = "当前请求接口最新版本号")
+    @ApiModelProperty(position = 1, value = "当前请求接口最新版本号")
     private int v;
     /**
      * 编码，成功、失败、异常编码
      */
     @Getter
-    @ApiModelProperty(position = 1, value = "状态码")
+    @ApiModelProperty(position = 2, value = "状态码")
     private Code code;
     /**
      * 本次响应数据总行数
      */
     @Getter
     @Setter
-    @ApiModelProperty(position = 3, value = "本次响应数据行数，data 集合大小")
+    @ApiModelProperty(position = 4, value = "本次响应数据行数，data 集合大小")
     private long rowCount;
     /**
      * 总页数
      */
     @Getter
     @Setter
-    @ApiModelProperty(position = 4, value = "总页数，该参数分页查询时才会起作用，其他情况一直返回 0")
+    @ApiModelProperty(position = 5, value = "总页数，该参数分页查询时才会起作用，其他情况一直返回 0")
     private int pageCount;
     /**
      * 总行数
      */
     @Getter
     @Setter
-    @ApiModelProperty(position = 5, value = "总行数，该参数分页查询时才会起作用，其他情况一直返回 0")
+    @ApiModelProperty(position = 6, value = "总行数，该参数分页查询时才会起作用，其他情况一直返回 0")
     private long totalCount;
     /**
      * 异常消息
      */
     @Getter
-    @ApiModelProperty(position = 7, value = "异常消息，用于开发调试")
+    @ApiModelProperty(position = 8, value = "异常消息，用于开发调试")
     private String exception;
     /**
      * 返回数据集合
      */
     @Getter
-    @ApiModelProperty(position = 8, value = "数据集合，查询单条数据或多条数据，都放在泛型集合中")
+    @ApiModelProperty(position = 9, value = "数据集合，查询单条数据或多条数据，都放在泛型集合中")
     private List<E> data = Collections.emptyList();
     /**
      * 附加信息
      */
     @Getter
     @Setter
-    @ApiModelProperty(position = 9, value = "扩展属性， 补充 data 集合")
+    @ApiModelProperty(position = 10, value = "扩展属性， 补充 data 集合")
     private Map<String, Object> extras = null;
-    /**
-     * 当前调用接口版本和说明
-     */
-    @Getter
-    @Setter
-    private Version version;
 
     /**
      * 本次请求标记
      *
      * @return {@link String}
      */
-    @ApiModelProperty(position = 6, value = "请求ID")
+    @ApiModelProperty(position = 7, value = "请求ID")
     public String getRid() {
         return RequestIdFilter.get();
     }
@@ -179,7 +166,7 @@ public class Result<E> implements IJson {
      *
      * @return String
      */
-    @ApiModelProperty(position = 2, value = "响应消息，用于页面弹窗内容")
+    @ApiModelProperty(position = 3, value = "响应消息，用于页面弹窗内容")
     public String getMessage() {
         if (Objects.equals(Code.CUSTOMIZE, code)) {
             // 处理自定义动态异常消息
@@ -459,51 +446,51 @@ public class Result<E> implements IJson {
 //        }
 //        return this;
 //    }
-
-    /**
-     * 设置版本信息
-     *
-     * @return {@link Result}{@link Result<E>}
-     */
-    public Result<E> version(final Class<?> clazz, final Function<Version.VersionBuilder, Version> version) {
-        try {
-            Assert.isTrue(v > 0, "指定版本前先指定【v】字段，当前接口最新版本号，版本号最小值为1");
-            Objects.requireNonNull(version, "参数【version】不能为null");
-            final String method = Thread.currentThread().getStackTrace()[2].getMethodName();
-            final Version.VersionBuilder builder = Version.builder().id(v).markdown(String.format("%s/%s.md", clazz.getSimpleName(), method));
-            for (Method m : clazz.getMethods()) {
-//                System.out.println(m.getName());
-                if (Objects.equals(method, m.getName())) {
-                    for (Annotation annotation : m.getAnnotations()) {
-                        if (annotation instanceof PostMapping) {
-                            builder.method(POST).url(((RequestMapping) clazz.getAnnotation(RequestMapping.class)).value()[0] // 获取类头部 @RequestMapping 注解
-                                    .concat(Optional.of(((PostMapping) annotation).value()).map(arr -> arr.length > 0 ? arr[0] : "").orElse("")));
-                        } else if (annotation instanceof PutMapping) {
-                            builder.method(PUT).url(((RequestMapping) clazz.getAnnotation(RequestMapping.class)).value()[0] // 获取类头部 @RequestMapping 注解
-                                    .concat(Optional.of(((PutMapping) annotation).value()).map(arr -> arr.length > 0 ? arr[0] : "").orElse("")));
-                        } else if (annotation instanceof PatchMapping) {
-                            builder.method(PATCH).url(((RequestMapping) clazz.getAnnotation(RequestMapping.class)).value()[0] // 获取类头部 @RequestMapping 注解
-                                    .concat(Optional.of(((PatchMapping) annotation).value()).map(arr -> arr.length > 0 ? arr[0] : "").orElse("")));
-                        } else if (annotation instanceof DeleteMapping) {
-                            builder.method(DELETE).url(((RequestMapping) clazz.getAnnotation(RequestMapping.class)).value()[0] // 获取类头部 @RequestMapping 注解
-                                    .concat(Optional.of(((DeleteMapping) annotation).value()).map(arr -> arr.length > 0 ? arr[0] : "").orElse("")));
-                        } else if (annotation instanceof GetMapping) {
-                            builder.method(GET).url(((RequestMapping) clazz.getAnnotation(RequestMapping.class)).value()[0] // 获取类头部 @RequestMapping 注解
-                                    .concat(Optional.of(((GetMapping) annotation).value()).map(arr -> arr.length > 0 ? arr[0] : "").orElse("")));
-                        } else if (annotation instanceof RequestMapping) {
-                            builder.method(((RequestMapping) annotation).method()[0]).url(((RequestMapping) clazz.getAnnotation(RequestMapping.class)).value()[0]
-                                    .concat(Optional.of(((RequestMapping) annotation).value()).map(arr -> arr.length > 0 ? arr[0] : "").orElse("")));
-                        }
-                    }
-                    break;
-                }
-            }
-            this.version = version.apply(builder);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
-        return this;
-    }
+//
+//    /**
+//     * 设置版本信息
+//     *
+//     * @return {@link Result}{@link Result<E>}
+//     */
+//    public Result<E> version(final Class<?> clazz, final Function<Version.VersionBuilder, Version> version) {
+//        try {
+//            Assert.isTrue(v > 0, "指定版本前先指定【v】字段，当前接口最新版本号，版本号最小值为1");
+//            Objects.requireNonNull(version, "参数【version】不能为null");
+//            final String method = Thread.currentThread().getStackTrace()[2].getMethodName();
+//            final Version.VersionBuilder builder = Version.builder().id(v).markdown(String.format("%s/%s.md", clazz.getSimpleName(), method));
+//            for (Method m : clazz.getMethods()) {
+////                System.out.println(m.getName());
+//                if (Objects.equals(method, m.getName())) {
+//                    for (Annotation annotation : m.getAnnotations()) {
+//                        if (annotation instanceof PostMapping) {
+//                            builder.method(POST).url(((RequestMapping) clazz.getAnnotation(RequestMapping.class)).value()[0] // 获取类头部 @RequestMapping 注解
+//                                    .concat(Optional.of(((PostMapping) annotation).value()).map(arr -> arr.length > 0 ? arr[0] : "").orElse("")));
+//                        } else if (annotation instanceof PutMapping) {
+//                            builder.method(PUT).url(((RequestMapping) clazz.getAnnotation(RequestMapping.class)).value()[0] // 获取类头部 @RequestMapping 注解
+//                                    .concat(Optional.of(((PutMapping) annotation).value()).map(arr -> arr.length > 0 ? arr[0] : "").orElse("")));
+//                        } else if (annotation instanceof PatchMapping) {
+//                            builder.method(PATCH).url(((RequestMapping) clazz.getAnnotation(RequestMapping.class)).value()[0] // 获取类头部 @RequestMapping 注解
+//                                    .concat(Optional.of(((PatchMapping) annotation).value()).map(arr -> arr.length > 0 ? arr[0] : "").orElse("")));
+//                        } else if (annotation instanceof DeleteMapping) {
+//                            builder.method(DELETE).url(((RequestMapping) clazz.getAnnotation(RequestMapping.class)).value()[0] // 获取类头部 @RequestMapping 注解
+//                                    .concat(Optional.of(((DeleteMapping) annotation).value()).map(arr -> arr.length > 0 ? arr[0] : "").orElse("")));
+//                        } else if (annotation instanceof GetMapping) {
+//                            builder.method(GET).url(((RequestMapping) clazz.getAnnotation(RequestMapping.class)).value()[0] // 获取类头部 @RequestMapping 注解
+//                                    .concat(Optional.of(((GetMapping) annotation).value()).map(arr -> arr.length > 0 ? arr[0] : "").orElse("")));
+//                        } else if (annotation instanceof RequestMapping) {
+//                            builder.method(((RequestMapping) annotation).method()[0]).url(((RequestMapping) clazz.getAnnotation(RequestMapping.class)).value()[0]
+//                                    .concat(Optional.of(((RequestMapping) annotation).value()).map(arr -> arr.length > 0 ? arr[0] : "").orElse("")));
+//                        }
+//                    }
+//                    break;
+//                }
+//            }
+//            this.version = version.apply(builder);
+//        } catch (Exception e) {
+//            log.error(e.getMessage(), e);
+//        }
+//        return this;
+//    }
 
     /**
      * <pre>

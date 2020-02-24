@@ -9,7 +9,6 @@ import java.util.Objects;
 /**
  * Html 模板
  *
- *
  * @author 谢长春 on 2018/1/14.
  */
 @Slf4j
@@ -18,7 +17,7 @@ public class Html {
      * 邮件验证码 html 模板格式化，返回格式化后的html
      *
      * @param name String 用户昵称
-     * @param code  String 验证码
+     * @param code String 验证码
      * @return String html
      */
     public static String emailCode(final String name, final String code) {
@@ -29,6 +28,7 @@ public class Html {
                 .replace("<%code%>", code) // 验证码
                 ;
     }
+
     /**
      * 重置密码 html 模板格式化，返回格式化后的html
      *
@@ -44,10 +44,11 @@ public class Html {
                 .replace("<%url%>", url) // 激活url
                 ;
     }
+
     /**
      * 消息提醒html
      *
-     * @param code Code 消息状态
+     * @param code    Code 消息状态
      * @param message String 消息内容
      * @return String html
      */
