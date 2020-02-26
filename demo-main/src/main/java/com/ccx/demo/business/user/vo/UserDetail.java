@@ -37,7 +37,7 @@ public class UserDetail implements UserDetails, ITabRoleCache {
     public Collection<? extends GrantedAuthority> getAuthorities() {
 //        return Collections.singletonList(loadUserDetail().getRole().toAuthority());
         final List<String> authorityList = Stream.of(loadUserDetail().getRoles())
-                .flatMap(id -> getRoleAuthoritiesCacheById(id).stream())
+                .flatMap(id -> Stream.of(getRoleAuthoritiesCacheById(id)))
                 .distinct()
                 .collect(Collectors.toList());
 //        setAuthorityList(authorityList);

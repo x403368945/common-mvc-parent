@@ -1,6 +1,7 @@
 package com.ccx.demo.business.user.enums;
 
 import com.ccx.demo.business.user.vo.Authority;
+import com.google.common.collect.Sets;
 
 import java.util.Arrays;
 
@@ -56,6 +57,6 @@ public enum AuthorityCode {
     }
 
     public Authority nodes(final Authority... nodes) {
-        return build().setNodes(Arrays.asList(nodes));
+        return build().setNodes(Sets.newHashSet(nodes));
     }
 }

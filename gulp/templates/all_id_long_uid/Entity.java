@@ -17,6 +17,7 @@ import com.support.mvc.entity.validated.IUpdate;
 import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;
 import com.querydsl.core.types.EntityPath;
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.BeanPath;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
@@ -176,16 +177,16 @@ public class <%=TabName%> implements
      * 获取查询实体与数据库表映射的所有字段,用于投影到 VO 类
      * 支持追加扩展字段,追加扩展字段一般用于连表查询
      *
-     * @param appends {@link Path}[] 追加扩展连表查询字段
-     * @return {@link Path}[]
+     * @param appends {@link Expression}[] 追加扩展连表查询字段
+     * @return {@link Expression}[]
      */
-    public static Path<?>[] allColumnAppends(final Path<?>... appends) {
-        final List<Path<?>> columns = Lists.newArrayList(appends);
-        final Class<?> clazz = <%=tabName%>.getClass();
+    public static Expression<?>[] allColumnAppends(final Expression<?>... appends) {
+        final List<Expression<?>> columns = Lists.newArrayList(appends);
+        final Class<?> clazz = tabDemoList.getClass();
         try {
             for (Field field : clazz.getDeclaredFields()) {
                 if (field.getType().isPrimitive()) continue;
-                final Object o = field.get(<%=tabName%>);
+                final Object o = field.get(tabDemoList);
                 if (o instanceof EntityPath || o instanceof BeanPath) continue;
                 if (o instanceof Path) {
                     columns.add((Path<?>) o);
@@ -194,7 +195,7 @@ public class <%=TabName%> implements
         } catch (Exception e) {
             throw new RuntimeException("获取查询实体属性与数据库映射的字段异常", e);
         }
-        return columns.toArray(new Path<?>[0]);
+        return columns.toArray(new Expression<?>[0]);
     }
 
 }

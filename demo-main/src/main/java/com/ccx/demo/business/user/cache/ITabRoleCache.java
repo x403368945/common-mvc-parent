@@ -33,23 +33,23 @@ public interface ITabRoleCache extends ICache {
     default Optional<TabRole> getTabRoleCacheById(final Long id) {
         return Optional.ofNullable(id)
                 .filter(value -> value > 0)
-                .map(value ->getAppContext().getBean(RoleRepository.class).findCacheById(value));
+                .map(value -> getAppContext().getBean(RoleRepository.class).findCacheById(value));
     }
 
     /**
      * 从缓存获取角色权限
      *
      * @param id {@link Long} 角色ID
-     * @return {@link List<String>} 角色权限集合，参考：{@link com.ccx.demo.business.user.enums.AuthorityCode}
+     * @return {@link Set<String>} 角色权限集合，参考：{@link com.ccx.demo.business.user.enums.AuthorityCode}
      */
     @Transient
     @QueryTransient
     @JSONField(serialize = false, deserialize = false)
-    default List<String> getRoleAuthoritiesCacheById(final Long id) {
+    default String[] getRoleAuthoritiesCacheById(final Long id) {
         return getTabRoleCacheById(id)
                 .filter(obj -> Objects.equals(obj.getDeleted(), Bool.NO))
                 .map(TabRole::getAuthorities)
-                .orElseGet(Collections::emptyList)
+                .orElseGet(() -> new String[]{})
                 ;
     }
 

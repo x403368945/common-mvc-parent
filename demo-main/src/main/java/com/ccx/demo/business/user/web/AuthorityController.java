@@ -3,6 +3,7 @@ package com.ccx.demo.business.user.web;
 import com.ccx.demo.business.user.entity.TabUser;
 import com.ccx.demo.business.user.service.AuthorityService;
 import com.ccx.demo.business.user.vo.Authority;
+import com.google.common.collect.Lists;
 import com.support.mvc.entity.base.Result;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +38,7 @@ public class AuthorityController implements IAuthController<Long> {
         return new Result<Authority>(1) // 指定接口最新版本号
                 .execute(result -> result
                         .versionAssert(version) // 弱校验版本号
-                        .setSuccess(service.getTree())
+                        .setSuccess(Lists.newArrayList(service.getTree()))
                 );
     }
 

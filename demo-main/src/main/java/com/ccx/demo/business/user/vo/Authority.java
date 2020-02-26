@@ -9,7 +9,7 @@ import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -53,7 +53,7 @@ public class Authority implements Cloneable, Serializable {
     /**
      * 子节点
      */
-    private List<Authority> nodes;
+    private Set<Authority> nodes;
 
     @Override
     public String toString() {

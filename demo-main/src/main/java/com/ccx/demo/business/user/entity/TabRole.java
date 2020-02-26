@@ -14,7 +14,7 @@ import com.support.mvc.entity.ITimestamp;
 import com.support.mvc.entity.IWhere;
 import com.support.mvc.entity.IWhere.QdslWhere;
 import com.support.mvc.entity.base.Sorts;
-import com.support.mvc.entity.convert.ListStringJsonConvert;
+import com.support.mvc.entity.convert.ArrayStringJsonConvert;
 import com.support.mvc.entity.validated.IMarkDelete;
 import com.support.mvc.entity.validated.ISave;
 import com.support.mvc.entity.validated.IUpdate;
@@ -31,6 +31,7 @@ import javax.validation.constraints.*;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -81,10 +82,10 @@ public final class TabRole implements
     @Size(max = 200)
     private String name;
     /**
-     * 权限指令集合，tab_authority.id，{@link List<String>}
+     * 权限指令集合，tab_authority.id，{@link String[]}
      */
-    @Convert(converter = ListStringJsonConvert.class)
-    private List<String> authorities;
+    @Convert(converter = ArrayStringJsonConvert.class)
+    private String[] authorities;
     /**
      * 创建时间
      */
@@ -131,7 +132,7 @@ public final class TabRole implements
     @NotEmpty(groups = {ISave.class})
     @QueryTransient
     @Transient
-    private List<Authority> authorityTree;
+    private Set<Authority> authorityTree;
 
     @Override
     public String toString() {

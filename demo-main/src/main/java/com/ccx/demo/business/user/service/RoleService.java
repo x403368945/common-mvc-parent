@@ -60,11 +60,11 @@ public class RoleService implements IService<TabRole>, ITabRoleCache {
 
     @Override
     public TabRole save(final TabRole obj, final Long userId) {
-        final List<String> authorities = authorityService.expendFilterCheckedList(obj.getAuthorityTree())
+        final String[] authorities = authorityService.expendFilterCheckedSet(obj.getAuthorityTree())
                 .stream()
                 .map(Authority::getCode)
                 .map(Enum::name)
-                .collect(Collectors.toList());
+                .toArray(String[]::new);
         Assert.notEmpty(authorities, "权限指令树【authorityTree】配置无效，有效的权限指令代码不能为空");
         obj.setAuthorities(authorities);
         return repository.save(obj);
@@ -72,11 +72,11 @@ public class RoleService implements IService<TabRole>, ITabRoleCache {
 
     @Override
     public void update(final Long id, final Long userId, final TabRole obj) {
-        final List<String> authorities = authorityService.expendFilterCheckedList(obj.getAuthorityTree())
+        final String[] authorities = authorityService.expendFilterCheckedSet(obj.getAuthorityTree())
                 .stream()
                 .map(Authority::getCode)
                 .map(Enum::name)
-                .collect(Collectors.toList());
+                .toArray(String[]::new);
         Assert.notEmpty(authorities, "权限指令树【authorityTree】配置无效，有效的权限指令代码不能为空");
         obj.setAuthorities(authorities);
         UpdateRowsException.asserts(repository.update(id, userId, obj));

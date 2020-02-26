@@ -42,7 +42,7 @@ public class TabUserVO extends TabUser {
     public List<String> getAuthorityList() {
         if (CollectionUtils.isEmpty(authorityList)) {
             authorityList = Stream.of(Objects.requireNonNull(getRoles(), "当前登录账户未配置权限"))
-                    .flatMap(id -> getRoleAuthoritiesCacheById(id).stream())
+                    .flatMap(id -> Stream.of(getRoleAuthoritiesCacheById(id)))
                     .distinct()
                     .collect(Collectors.toList());
         }
