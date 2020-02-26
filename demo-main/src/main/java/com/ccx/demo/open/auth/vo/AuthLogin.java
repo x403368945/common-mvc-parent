@@ -3,7 +3,7 @@ package com.ccx.demo.open.auth.vo;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.support.mvc.entity.base.Item;
-import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,7 +24,7 @@ import java.util.Objects;
 @Data
 @Accessors(chain = true)
 @ToString(exclude = {"password"})
-@Api(tags = "登录参数")
+@ApiModel(description = "登录参数")
 public class AuthLogin implements Serializable {
     /**
      * 会话模式分类

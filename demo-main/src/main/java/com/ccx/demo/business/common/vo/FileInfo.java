@@ -5,7 +5,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.ccx.demo.config.init.AppConfig.Path;
 import com.ccx.demo.config.init.AppConfig.URL;
 import com.utils.IJson;
-import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 @Builder
 @Data
 @Accessors(chain = true)
-@Api(tags = "上传文件对象")
+@ApiModel(description = "上传文件对象")
 public class FileInfo implements IJson {
 
     /**

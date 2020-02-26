@@ -21,7 +21,7 @@ import com.support.mvc.entity.convert.ArrayLongJsonConvert;
 import com.support.mvc.entity.validated.ISave;
 import com.support.mvc.entity.validated.IUpdate;
 import com.utils.util.Then;
-import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -49,7 +49,7 @@ import static com.support.mvc.enums.Code.ORDER_BY;
  */
 //@Table(name = "tab_user", uniqueConstraints = {@UniqueConstraint(columnNames = "uid")})
 @Table(name = "tab_user")
-@Api(tags = "用户表")
+@ApiModel(description = "用户表")
 @Entity
 @QueryEntity
 @DynamicInsert
