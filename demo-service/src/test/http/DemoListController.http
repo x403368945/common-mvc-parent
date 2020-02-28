@@ -4,12 +4,10 @@ Content-Type: application/json
 Authorization: basic YWRtaW46YWRtaW4=
 
 {
-  "json": {
-    "name": "JX",
-    "content": "mMCqBHZnIEzvmYh",
-    "status": "WATING",
-    "amount": 1000
-  }
+  "name": "JX",
+  "content": "mMCqBHZnIEzvmYh",
+  "status": "WATING",
+  "amount": 1000
 }
 
 ### 修改
@@ -18,14 +16,12 @@ Content-Type: application/json
 Authorization: basic YWRtaW46YWRtaW4=
 
 {
-  "json": {
-    "uid": "8dbdec428e9547d8b11b7253774a674f",
-    "name": "PeXImPsqeI",
-    "content": "OyTlwNFavgqaHgc",
-    "status": "RUNNING",
-    "amount": 7871.1,
-    "updateTime": "2019-07-21 15:21:42"
-  }
+  "uid": "8dbdec428e9547d8b11b7253774a674f",
+  "name": "PeXImPsqeI",
+  "content": "OyTlwNFavgqaHgc",
+  "status": "RUNNING",
+  "amount": 7871.1,
+  "updateTime": "2019-07-21 15:21:42"
 }
 
 ### 物理删除:id
@@ -49,18 +45,16 @@ PATCH http://localhost:8080/demo-list/1
 Content-Type: application/json
 Authorization: basic YWRtaW46YWRtaW4=
 
-{
-  "json": [
-    {
-      "id": 12,
-      "uid": "e122cfb6575e442f91a4ff8310ce12d7"
-    },
-    {
-      "id": 13,
-      "uid": "0141ba6664e84a9795eb549d985b24f0"
-    }
-  ]
-}
+[
+  {
+    "id": 12,
+    "uid": "e122cfb6575e442f91a4ff8310ce12d7"
+  },
+  {
+    "id": 13,
+    "uid": "0141ba6664e84a9795eb549d985b24f0"
+  }
+]
 
 ### 查询:id+timestamp
 GET http://localhost:8080/demo-list/1/4/1562813813000
@@ -75,15 +69,15 @@ GET http://localhost:8080/demo-list/1
 Authorization: basic YWRtaW46YWRtaW4=
 
 ### 查询:不分页
-GET http://localhost:8080/demo-list/1?json={"insertTimeRange":{"begin":"2018-12-27", "end":"2018-12-27"}}
+GET http://localhost:8080/demo-list/1??insertTimeRange={"begin":"2018-12-27", "end":"2018-12-27"}
 Authorization: basic YWRtaW46YWRtaW4=
 
 ### 查询:分页
-GET http://localhost:8080/demo-list/1/page/1/10?json={"amountRange":{"min":0.0,"max":2000.0}}
+GET http://localhost:8080/demo-list/1/page/1/10?amountRange={"min":0.0,"max":2000.0}
 Authorization: basic YWRtaW46YWRtaW4=
 
 ### 查询:分页 + 排序
-GET http://localhost:8080/demo-list/1/page/1/10?json={"amountRange":{"min":0.0,"max":2000.0}, sorts:[{name:"updateTime", direction:"DESC"}]}
+GET http://localhost:8080/demo-list/1/page/1/10?amountRange={"min":0.0,"max":2000.0}&sorts=[{name:"updateTime", direction:"DESC"}]
 Authorization: basic YWRtaW46YWRtaW4=
 
 ### 自定义方言

@@ -14,6 +14,7 @@ import java.util.Set;
  *
  * @author 谢长春 2017年7月14日 上午11:23:18
  */
+@SuppressWarnings("unused")
 public interface IController<ID, T> {
 
     /**
@@ -102,10 +103,10 @@ public interface IController<ID, T> {
      * /{模块url前缀}/{version}
      *
      * @param version {@link Integer} 请求url中获取当前请求接口版本号； @PathVariable final int version
-     * @param body  {@link String} body中获取参数；@RequestBody(required = false) String body
+     * @param body  {@link Set} body中获取参数；@RequestBody(required = false) String body
      * @return {@link Result}
      */
-    default Result<Void> markDelete(final int version, final String body) {
+    default Result<Void> markDeleteByIds(final int version, final Set<ID> body) {
         return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【markDelete(final int version, final Set<ID> body)】未实现"));
     }
 
@@ -186,11 +187,11 @@ public interface IController<ID, T> {
      * /{模块url前缀}/{version}
      *
      * @param version {@link Integer} 请求url中获取当前请求接口版本号； @PathVariable final int version
-     * @param json    {@link String} TODO 这里小心入坑注意看注释；@RequestParam 与 @RequestBody 不同；不能自动将 json 字符串转换为对象，所以这里需要用 String 接收前端传递的json字符串对象；
+     * @param param    {@link T}
      * @return {@link Result}
      */
-    default <P extends T> Result<? extends T> search(final int version, final P json) {
-        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【search(final int version, final String json)】未实现"));
+    default <P extends T> Result<? extends T> search(final int version, final P param) {
+        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【search(final int version, final String param)】未实现"));
     }
 
     /**
@@ -201,10 +202,10 @@ public interface IController<ID, T> {
      * @param version {@link Integer} 请求url中获取当前请求接口版本号； @PathVariable final int version
      * @param number  int 页码
      * @param size    int 每页大小
-     * @param json    {@link String} TODO 这里小心入坑注意看注释； @RequestParam 与 @RequestBody 不同；不能自动将 json 字符串转换为对象，所以这里需要用 String 接收前端传递的json字符串对象
+     * @param param    {@link T}
      * @return {@link Result}
      */
-    default <P extends T> Result<? extends T> page(final int version, final int number, final int size, final P json) {
-        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【search(final int version, final int number, final int size, final String json)】未实现"));
+    default <P extends T> Result<? extends T> page(final int version, final int number, final int size, final P param) {
+        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【search(final int version, final int number, final int size, final String param)】未实现"));
     }
 }

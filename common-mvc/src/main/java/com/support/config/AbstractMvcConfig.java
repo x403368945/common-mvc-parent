@@ -1,6 +1,7 @@
 package com.support.config;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
@@ -14,21 +15,28 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.CacheControl;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.BindException;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
@@ -162,6 +170,23 @@ public class AbstractMvcConfig implements WebMvcConfigurer {
         return Code.MAPPING.toResult("405：请求方式不被该接口支持，或者请求url错误未映射到正确的方法");
     }
 
+//    @ExceptionHandler(HttpMessageNotReadableException.class)
+//    @ResponseBody
+//    public Result<?> httpMessageNotReadableException(final HttpMessageNotReadableException e) {
+//        log.error(e.getMessage(), e);
+//        if(e instanceof JSONException) {
+//            return Code.CONVERT.toResult("500 请求参数异常");
+//        }
+//        return Code.CONVERT.toResult("500 请求参数异常");
+//    }
+//
+//    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+//    @ResponseBody
+//    public Result<?> methodArgumentTypeMismatchException(final MethodArgumentTypeMismatchException e) {
+//        log.error(e.getMessage(), e);
+//        return Code.CONVERT.toResult("500 请求参数异常");
+//    }
+
     /**
      * 500 异常
      * spring-boot 特殊处理：这里配置不起作用，现在是按照继承 {@link org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController} 方案实现
@@ -169,7 +194,13 @@ public class AbstractMvcConfig implements WebMvcConfigurer {
 //    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(value = {Exception.class})
     @ResponseBody
-    public Result<?> exception(final Exception e) {
+    public Result<?> exception(final Exception e, final HttpServletRequest request) {
+        if (e instanceof JSONException
+                || e instanceof MethodArgumentTypeMismatchException
+                || e instanceof BindException
+        ) {
+//            request.getMethod()
+        }
         log.error(e.getMessage(), e);
         return Code.FAILURE.toResult(String.format("500：请求失败，不明确的异常：%s", e.getMessage()));
     }

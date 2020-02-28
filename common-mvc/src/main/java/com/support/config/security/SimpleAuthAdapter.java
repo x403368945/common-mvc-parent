@@ -96,7 +96,7 @@ public class SimpleAuthAdapter extends WebSecurityConfigurerAdapter {
                                 , "/files/**" // 本地磁盘文件
                                 , "/druid/**" // druid 监控页面
                                 // knife4j 增强 swagger 页面 >>>>>>
-                                , "/doc.html"
+                                , "/doc.html**"
                                 , "/webjars/**"
                                 , "/swagger-resources/**"
                                 , "/v2/api-docs/**"

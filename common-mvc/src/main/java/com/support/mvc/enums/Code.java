@@ -25,6 +25,7 @@ public enum Code {
     TIMEOUT("会话超时"),
     BAD_REQUEST("请求地址不存在"),
     ARGUMENT("请求缺少必要的参数"),
+    CONVERT("请求参数类型不匹配或 JSON 格式不符合规范"),
     MAPPING("请求方式不支持"),
     URL_MAPPING("请求不存在"),
     ACCESS_DENIED("无操作权限"),

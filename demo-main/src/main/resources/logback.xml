@@ -80,6 +80,7 @@
     <logger name="com.zaxxer.hikari.pool.HikariPool" level="INFO"/>
     <logger name="org.mongodb.driver" level="INFO"/>
     <logger name="org.apache.commons.beanutils.converters" level="INFO"/>
+    <logger name="org.springframework.validation.DataBinder" level="OFF"/>
     <!--<logger name="org.springframework.data.redis.core.RedisConnectionUtils" level="INFO"/>-->
 
     <!--
