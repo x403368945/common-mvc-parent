@@ -15,9 +15,8 @@ const DEMO_LIST_URL = Object.freeze({
   markDeleteById: '/demo-list/1/{id}', // 按 id 逻辑删除
   markDeleteByUid: '/demo-list/1/{id}/{uid}', // 按 id + uid 逻辑删除
   markDelete: '/demo-list/1', // 按 id + uid 批量逻辑删除
-  // findById: '/demo-list/1/{id}', // 按 id 查询单条记录
-  findByIdTimestamp: '/demo-list/1/{id}/{timestamp}', // 按 id + 时间戳 查询单条记录
-  findByUidTimestamp: '/demo-list/1/{id}/{uid}/{timestamp}', // 按 id + uid + 时间戳 查询单条记录
+  findById: '/demo-list/1/{id}', // 按 id 查询单条记录
+  findByUid: '/demo-list/1/{id}/{uid}', // 按 id + uid + 时间戳 查询单条记录
   search: '/demo-list/1', // 多条件批量查询，不分页
   page: '/demo-list/1/page/{number}/{size}' // 分页：多条件批量查询
 });

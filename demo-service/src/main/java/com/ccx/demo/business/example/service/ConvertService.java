@@ -4,12 +4,13 @@ import com.ccx.demo.business.example.dao.jpa.ConvertRepository;
 import com.ccx.demo.business.example.entity.TabConvert;
 import com.querydsl.core.QueryResults;
 import com.support.aop.annotations.ServiceAspect;
+import com.support.mvc.entity.base.MarkDelete;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.exception.DeleteRowsException;
 import com.support.mvc.exception.UpdateRowsException;
 import com.support.mvc.service.IService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,9 +25,9 @@ import java.util.Optional;
 @Slf4j
 @Service
 @ServiceAspect
+@RequiredArgsConstructor
 public class ConvertService implements IService<TabConvert> {
-    @Autowired
-    private ConvertRepository repository;
+    private final ConvertRepository repository;
 
     @Override
     public TabConvert save(final TabConvert obj, final Long userId) {
@@ -69,7 +70,7 @@ public class ConvertService implements IService<TabConvert> {
     }
 
     @Override
-    public void markDelete(final List<TabConvert> list, final Long userId) {
+    public void markDelete(final List<MarkDelete> list, final Long userId) {
         DeleteRowsException.warn(repository.markDelete(list, userId), list.size());
     }
 

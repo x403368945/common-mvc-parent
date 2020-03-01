@@ -1,5 +1,6 @@
 package com.support.mvc.service;
 
+import com.support.mvc.entity.base.MarkDelete;
 import com.support.mvc.entity.validated.IMarkDelete;
 import com.support.mvc.entity.validated.ISave;
 import com.support.mvc.entity.validated.IUpdate;
@@ -166,9 +167,9 @@ public interface IService<E> extends ISearch<E> {
      */
     @Validated({Default.class, IMarkDelete.class})
     @Transactional(rollbackFor = Exception.class)
-    default void markDelete(@NotEmpty(message = "【list】不能为null") final List<@Valid @NotNull E> list,
+    default void markDelete(@NotEmpty(message = "【list】不能为null") final List<@Valid @NotNull MarkDelete> list,
                             @NotNull(message = "【userId】不能为null") @Positive(message = "【userId】必须大于0") final Long userId) {
 //        DeleteRowsException.batch(repository.markDelete(list, userId));
-        throw new NullPointerException(this.getClass().getName().concat("：方法【markDelete(final List<E> list, final Long userId)】未实现"));
+        throw new NullPointerException(this.getClass().getName().concat("：方法【markDelete(final List<MarkDelete> list, final Long userId)】未实现"));
     }
 }

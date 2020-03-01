@@ -8,8 +8,8 @@ import com.ccx.security.open.auth.entity.AuthLogin;
 import com.ccx.security.open.auth.service.AuthService;
 import com.support.mvc.entity.base.Result;
 import com.support.mvc.enums.Code;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,10 +25,10 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/open/auth/{version}")
 @Controller
 @Slf4j
+@RequiredArgsConstructor
 public class OpenAuthController {
 
-    @Autowired
-    private AuthService authService;
+    private final AuthService authService;
 
     /**
      * 默认以 session 模式登录

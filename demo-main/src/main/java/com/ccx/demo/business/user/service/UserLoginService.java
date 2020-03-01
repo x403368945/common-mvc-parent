@@ -5,8 +5,8 @@ import com.ccx.demo.business.user.entity.TabUserLogin;
 import com.querydsl.core.QueryResults;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.service.IService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,10 +16,10 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class UserLoginService implements IService<TabUserLogin> {
 
-    @Autowired
-    private UserLoginRepository repository;
+    private final UserLoginRepository repository;
 
     @Override
     public TabUserLogin save(final TabUserLogin obj, final Long userId) {

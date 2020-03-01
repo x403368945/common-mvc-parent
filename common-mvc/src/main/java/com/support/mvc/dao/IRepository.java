@@ -1,5 +1,6 @@
 package com.support.mvc.dao;
 
+import com.support.mvc.entity.base.MarkDelete;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
@@ -9,7 +10,6 @@ import java.util.List;
 /**
  * 数据访问接口方法定义，默认继承 QDSL 查询，建议查询尽量使用 QDSL 语法 <br>
  * 所有参数校验建议都写在 Service 中，数据逻辑不再校验参数
- *
  *
  * @param <E>
  * @author 谢长春 2017年7月14日 上午11:23:18
@@ -34,8 +34,8 @@ public interface IRepository<E, ID> extends ISearchRepository<E> {
     /**
      * 修改数据
      *
-     * @param id     ID 数据ID
-     * @param obj    E 实体对象
+     * @param id  ID 数据ID
+     * @param obj E 实体对象
      * @return long 影响行数
      */
     @Modifying
@@ -74,8 +74,8 @@ public interface IRepository<E, ID> extends ISearchRepository<E> {
     /**
      * 按ID和UUID删除，物理删除
      *
-     * @param id     ID 数据ID
-     * @param uid    String 数据UUID
+     * @param id  ID 数据ID
+     * @param uid String 数据UUID
      * @return E 删除对象实体
      */
     @Modifying
@@ -100,7 +100,7 @@ public interface IRepository<E, ID> extends ISearchRepository<E> {
     /**
      * 按ID删除，逻辑删除
      *
-     * @param id     ID 数据ID
+     * @param id ID 数据ID
      * @return long 影响行数
      */
     @Modifying
@@ -126,8 +126,8 @@ public interface IRepository<E, ID> extends ISearchRepository<E> {
     /**
      * 按ID和UUID删除，逻辑删除
      *
-     * @param id     ID 数据ID
-     * @param uid    String 数据UUID
+     * @param id  ID 数据ID
+     * @param uid String 数据UUID
      * @return long 影响行数
      */
     @Modifying
@@ -152,7 +152,7 @@ public interface IRepository<E, ID> extends ISearchRepository<E> {
     /**
      * 批量操作按ID删除，逻辑删除
      *
-     * @param ids    List<ID> 数据ID集合
+     * @param ids List<ID> 数据ID集合
      * @return long 影响行数
      */
     @Modifying
@@ -164,26 +164,26 @@ public interface IRepository<E, ID> extends ISearchRepository<E> {
     /**
      * 批量操作按ID和UUID删除，逻辑删除
      *
-     * @param list   List<E> 数据ID和UUID构建的对象
+     * @param list   List<MarkDelete> 数据ID和UUID构建的对象
      * @param userId Long 操作用户ID
      * @return long 影响行数
      */
     @Modifying
     @Query
-    default long markDelete(final List<E> list, final Long userId) {
-        throw new NullPointerException(this.getClass().getName().concat("：方法【markDelete(final List<E> list, final Long userId)】未实现"));
+    default long markDelete(final List<MarkDelete> list, final Long userId) {
+        throw new NullPointerException(this.getClass().getName().concat("：方法【markDelete(final List<MarkDelete> list, final Long userId)】未实现"));
     }
 
     /**
      * 批量操作按ID和UUID删除，逻辑删除
      *
-     * @param list   List<E> 数据ID和UUID构建的对象
+     * @param list List<MarkDelete> 数据ID和UUID构建的对象
      * @return long 影响行数
      */
     @Modifying
     @Query
-    default long markDelete(final List<E> list) {
-        throw new NullPointerException(this.getClass().getName().concat("：方法【markDelete(final List<E> list)】未实现"));
+    default long markDelete(final List<MarkDelete> list) {
+        throw new NullPointerException(this.getClass().getName().concat("：方法【markDelete(final List<MarkDelete> list)】未实现"));
     }
 
 }

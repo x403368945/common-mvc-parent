@@ -8,8 +8,8 @@ import com.ccx.security.config.init.AppConfig.URL;
 import com.support.mvc.entity.base.Item;
 import com.support.mvc.entity.base.Result;
 import io.swagger.annotations.ApiParam;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -32,11 +32,10 @@ import java.util.stream.Stream;
 @Secured("ROLE_ADMIN")
 @RequestMapping("/admin-config/{version}")
 @Slf4j
+@RequiredArgsConstructor
 public class AdminConfigController {
-    @Autowired
-    ApplicationContext applicationContext;
-    @Autowired
-    ExecutorService multiThread;
+    private final ApplicationContext applicationContext;
+    private final ExecutorService multiThread;
 
     @GetMapping("/app")
     @ResponseBody

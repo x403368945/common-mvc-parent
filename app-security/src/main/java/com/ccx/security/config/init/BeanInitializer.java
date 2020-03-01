@@ -1,8 +1,8 @@
 package com.ccx.security.config.init;
 
 import com.support.config.InitConfig;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -16,10 +16,10 @@ import java.util.function.Supplier;
  */
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class BeanInitializer implements InitConfig.Initializer {
     private static ApplicationContext APP_CONTEXT;
-    @Autowired
-    private ApplicationContext applicationContext;
+    public final ApplicationContext applicationContext;
 
     @Override
     public int priority() {

@@ -3,8 +3,8 @@ package com.ccx.demo.config.init;
 import com.ccx.demo.business.user.dao.jpa.UserRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.support.config.InitConfig;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -20,10 +20,10 @@ import java.util.function.Supplier;
  */
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class BeanInitializer implements InitConfig.Initializer {
     private static ApplicationContext APP_CONTEXT;
-    @Autowired
-    private ApplicationContext applicationContext;
+    private final ApplicationContext applicationContext;
 
     @Override
     public int priority() {

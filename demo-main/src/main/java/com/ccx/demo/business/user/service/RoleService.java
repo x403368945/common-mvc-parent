@@ -8,12 +8,13 @@ import com.ccx.demo.business.user.vo.Authority;
 import com.ccx.demo.enums.Bool;
 import com.querydsl.core.QueryResults;
 import com.support.aop.annotations.ServiceAspect;
+import com.support.mvc.entity.base.MarkDelete;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.exception.DeleteRowsException;
 import com.support.mvc.exception.UpdateRowsException;
 import com.support.mvc.service.IService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
@@ -33,11 +34,10 @@ import static com.ccx.demo.config.init.BeanInitializer.Beans.cacheManager;
 @Slf4j
 @Service
 @ServiceAspect
+@RequiredArgsConstructor
 public class RoleService implements IService<TabRole>, ITabRoleCache {
-    @Autowired
-    private RoleRepository repository;
-    @Autowired
-    private AuthorityService authorityService;
+    private final RoleRepository repository;
+    private final AuthorityService authorityService;
 
     /**
      * 获取当前缓存管理器，用于代码控制缓存
@@ -88,9 +88,9 @@ public class RoleService implements IService<TabRole>, ITabRoleCache {
     }
 
     @Override
-    public void markDelete(final List<TabRole> list, final Long userId) {
+    public void markDelete(final List<MarkDelete> list, final Long userId) {
         DeleteRowsException.warn(repository.markDelete(list, userId), list.size());
-        clearKeys(list.stream().map(TabRole::getId).collect(Collectors.toSet()));
+        clearKeys(list.stream().map(MarkDelete::getLongId).collect(Collectors.toSet()));
     }
 
     @Override

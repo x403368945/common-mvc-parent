@@ -12,8 +12,8 @@ import com.support.mvc.enums.Code;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
@@ -34,10 +34,10 @@ import java.util.Optional;
 @RequestMapping("/open/auth/{version}")
 @Controller
 @Slf4j
+@RequiredArgsConstructor
 public class OpenAuthController {
 
-    @Autowired
-    private AuthService authService;
+    private final AuthService authService;
 
     /**
      * 默认以 session 模式登录

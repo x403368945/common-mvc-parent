@@ -30,22 +30,17 @@ public interface IControllerAspect {
             log.info("SseEmitter");
             return;
         }
-//        参数和响应结果可能造成日志巨大，可以暂时将超出长度的响应写入独立文件
-//        sb.append("args:").append(Arrays.toString(joinPoint.getArgs())).append("\n");
-//        sb.append("result:").append((Util.isEmpty(result) ? "Empty" : JSON.toJSONString(result))).append("\n");
-//        if (log.length() > 20000) { // 超长的内容不打印到全局日志，写入独立日志文件
-//            sb.append("内容超长，请使用命令查看日志：\ncat ").append(Logs.start(this.getClass()).d(sb.toString().concat(log)).end()).append("\n");
-//        } else {
-//        }
-        log.info("\n{}", String.join("\n",
+        log.info("\n{}\n{}\ntime:{}ms({}-{})\nurl:{}\nargs:{}\nresult:{}\n{}",
                 START,
-                Objects.toString(joinPoint),
-                String.format("time:%dms", Duration.between(time, LocalTime.now()).toMillis()),
-                "url:".concat(getPath()),
-                "args:".concat(Arrays.toString(joinPoint.getArgs())),
-                "result:".concat(Objects.isNull(result) ? "" : JSON.toJSONString(result)),
+                joinPoint,
+                Duration.between(time, LocalTime.now()).toMillis(),
+                time,
+                LocalTime.now(),
+                getPath(),
+                Arrays.toString(joinPoint.getArgs()),
+                Objects.isNull(result) ? "" : JSON.toJSONString(result),
                 END
-        ));
+        );
     }
 
     /**

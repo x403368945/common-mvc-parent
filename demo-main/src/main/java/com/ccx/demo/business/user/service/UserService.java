@@ -11,8 +11,8 @@ import com.support.mvc.entity.base.Pager;
 import com.support.mvc.exception.DeleteRowsException;
 import com.support.mvc.exception.UpdateRowsException;
 import com.support.mvc.service.IService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,17 +34,13 @@ import static com.ccx.demo.config.init.BeanInitializer.Beans.cacheManager;
 @Slf4j
 @Service
 @ServiceAspect
+@RequiredArgsConstructor
 public class UserService implements IService<TabUser>, ITabUserCache {
 
-    @Autowired
-    private UserRepository repository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private RoleService roleService;
-//    @Autowired
+    private final UserRepository repository;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleService roleService;
 //    private UserCache userCache;
-//    @Autowired
 //    private PhoneCode phoneCode;
 
     /**

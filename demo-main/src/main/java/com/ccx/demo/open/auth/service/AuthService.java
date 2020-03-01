@@ -5,9 +5,9 @@ import com.ccx.demo.business.user.entity.TabUserLogin;
 import com.ccx.demo.business.user.service.UserLoginService;
 import com.ccx.demo.business.user.service.UserService;
 import com.support.mvc.enums.Code;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.DisabledException;
@@ -32,22 +32,15 @@ import javax.validation.constraints.NotBlank;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class AuthService implements UserDetailsService {
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private UserService userService;
-    //    @Autowired
+    private final AuthenticationManager authenticationManager;
+    private final UserService userService;
 //    private MailService mailService;
-//    @Autowired
 //    private UserCache userCache;
-//    @Autowired
 //    private PhoneCode phoneCode;
-    @Autowired
-    private UserLoginService userLoginService;
-//    @Autowired
+    private final UserLoginService userLoginService;
 //    private EmailActivate emailActivate;
-//    @Autowired
 //    private ResetPassword resetPasswordService;
 
     @SneakyThrows

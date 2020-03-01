@@ -92,7 +92,7 @@ public interface <%=JavaName%>Repository extends
 //        return Optional
 //                .ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
 //                        .selectFrom(q)
-//                        .where(q.id.eq(id).and(q.insertUserId.eq(userId)))
+//                        .where(q.id.eq(id))
 //                        .fetchOne()
 //                )
 //                .map(obj -> {
@@ -112,7 +112,7 @@ public interface <%=JavaName%>Repository extends
 //        return Optional
 //                .ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
 //                        .selectFrom(q)
-//                        .where(q.id.eq(id).and(q.uid.eq(uid)).and(q.insertUserId.eq(userId)))
+//                        .where(q.id.eq(id).and(q.uid.eq(uid)))
 //                        .fetchOne()
 //                )
 //                .map(obj -> {
@@ -131,7 +131,7 @@ public interface <%=JavaName%>Repository extends
 //                .update(q)
 //                .set(q.deleted, Bool.YES)
 //                .set(q.updateUserId, userId)
-//                .where(q.id.eq(id).and(q.insertUserId.eq(userId)).and(q.deleted.eq(Bool.NO)))
+//                .where(q.id.eq(id).and(q.deleted.eq(Bool.NO)))
 //                .execute();
 //    }
 
@@ -152,19 +152,19 @@ public interface <%=JavaName%>Repository extends
 //                .update(q)
 //                .set(q.deleted, Bool.YES)
 //                .set(q.updateUserId, userId)
-//                .where(q.id.in(ids).and(q.insertUserId.eq(userId)).and(q.deleted.eq(Bool.NO)))
+//                .where(q.id.in(ids).and(q.deleted.eq(Bool.NO)))
 //                .execute();
 //    }
 
     @Override
-    default long markDelete(final List<<%=TabName%>> list, final Long userId) {
+    default long markDelete(final List<MarkDelete> list, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Bool.YES)
                 .set(q.updateUserId, userId)
-                .where(q.id.in(list.stream().map(<%=TabName%>::getId).toArray(Long[]::new))
+                .where(q.id.in(list.stream().map(MarkDelete::getLongId).toArray(Long[]::new))
                         .and(q.deleted.eq(Bool.NO))
-                        .and(q.uid.in(list.stream().map(<%=TabName%>::getUid).toArray(String[]::new)))
+                        .and(q.uid.in(list.stream().map(MarkDelete::getUid).toArray(String[]::new)))
                 )
                 .execute();
     }

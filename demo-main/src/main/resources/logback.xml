@@ -118,7 +118,7 @@
     -       默认是DEBUG。
     -appender-ref:可以包含零个或多个<appender-ref>元素，标识这个appender将会添加到这个logger
     -->
-    <root level="DEBUG">
+    <root level="TRACE">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="APP"/>
     </root>

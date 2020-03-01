@@ -360,3 +360,31 @@ gulp.task('stdout', async () => {
     process.stdout.write('end');
   });
 });
+
+gulp.task('ssr', async () => {
+  // const content = fs.readFileSync('temp/console.txt');
+  // fs.writeFileSync('temp/ssr.txt',Buffer.from(content).toString('base64'));
+  //
+  // const decode = fs.createWriteStream(path.resolve('temp/decode.txt'));
+  // decode.on('close', () => console.log('end'));
+  // readline.createInterface(
+  //   fs.createReadStream(path.resolve('temp/console.txt')),
+  //   decode
+  // )
+  //   .on('line', line => {
+  //     decode.write(Buffer.from(line.replace(/^ssr:\/\//, ''), 'base64').toString('ascii').concat('\n'))
+  //   })
+  //   .on('close', () => decode.end())
+
+  const shell = fs.createWriteStream(path.resolve('temp/ssr.sh'));
+  shell.write('#!/bin/bash\n');
+  readline.createInterface(
+    fs.createReadStream(path.resolve('temp/console.txt')),
+    shell
+  )
+    .on('line', line => {
+      shell.write(`echo '${line}'\n`)
+      shell.write(Buffer.from(line.replace(/^ssr:\/\//, ''), 'base64').toString('ascii').concat('\n'))
+    })
+    .on('close', () => shell.end())
+});

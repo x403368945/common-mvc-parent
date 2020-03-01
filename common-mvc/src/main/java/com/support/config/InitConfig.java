@@ -1,6 +1,6 @@
 package com.support.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -20,9 +20,9 @@ import java.util.Comparator;
  *
  * @author 谢长春 on 2017/11/14.
  */
+@RequiredArgsConstructor
 public class InitConfig implements ApplicationListener<ContextRefreshedEvent> {
-    @Autowired
-    private ApplicationContext applicationContext;
+    private final ApplicationContext applicationContext;
 
     @Override
     public void onApplicationEvent(final ContextRefreshedEvent contextRefreshedEvent) {

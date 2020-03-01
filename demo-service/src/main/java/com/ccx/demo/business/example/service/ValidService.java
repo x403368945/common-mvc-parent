@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.ccx.demo.business.example.entity.TabValid;
 import com.querydsl.core.QueryResults;
 import com.support.aop.annotations.ServiceAspect;
+import com.support.mvc.entity.base.MarkDelete;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.service.IService;
 import com.support.mvc.service.ISimpleService;
@@ -151,7 +152,7 @@ public class ValidService implements IService<TabValid>, ISimpleService<TabValid
     }
 
     @Override
-    public void markDelete(final List<TabValid> list, final Long userId) {
+    public void markDelete(final List<MarkDelete> list, final Long userId) {
         log.info(JSON.toJSONString(Arrays.asList(list, userId)));
     }
 
@@ -204,7 +205,7 @@ public class ValidService implements IService<TabValid>, ISimpleService<TabValid
     }
 
     @Override
-    public void markDelete(final List<TabValid> list) {
+    public void markDelete(final List<MarkDelete> list) {
         log.info(JSON.toJSONString(list));
     }
     // ISimpleService End **********************************************************************************************

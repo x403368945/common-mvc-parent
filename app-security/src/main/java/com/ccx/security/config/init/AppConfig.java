@@ -3,7 +3,6 @@ package com.ccx.security.config.init;
 import com.utils.util.FPath;
 import com.utils.util.FWrite;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -31,7 +30,9 @@ import static com.ccx.security.config.init.AppConfig.App.PATH_ROOT;
 public class AppConfig {
     private static AppProperties properties;
 
-    @Autowired
+    private AppConfig() {
+    }
+
     public AppConfig(AppProperties appProperties) {
         AppConfig.properties = appProperties;
     }

@@ -216,12 +216,6 @@ PATCH http://localhost:8080/valid/0
 #PATCH http://localhost:8080/valid/9
 Authorization: basic YWRtaW46YWRtaW4=
 
-### findByIdTimestamp
-GET http://localhost:8080/valid/0/1/1
-#GET http://localhost:8080/valid/1/1/1
-#GET http://localhost:8080/valid/2/1/1
-Authorization: basic YWRtaW46YWRtaW4=
-
 ### findByUidTimestamp
 GET http://localhost:8080/valid/0/1/1/1
 #GET http://localhost:8080/valid/1/1/1/1

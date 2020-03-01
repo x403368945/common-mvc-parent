@@ -13,6 +13,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.support.mvc.dao.IRepository;
+import com.support.mvc.entity.base.MarkDelete;
 import com.support.mvc.entity.base.Pager;
 import lombok.Data;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -85,7 +86,7 @@ public interface DemoListRepository extends
     default long update(final Long id, final Long userId, final TabDemoList obj) {
         return obj.update(jpaQueryFactory.<JPAQueryFactory>get().update(q))
                 .get()
-                .where(q.id.eq(id).and(q.uid.eq(obj.getUid())).and(q.insertUserId.eq(userId)).and(q.updateTime.eq(obj.getUpdateTime())))
+                .where(q.id.eq(id).and(q.uid.eq(obj.getUid())).and(q.updateTime.eq(obj.getUpdateTime())))
                 .execute();
     }
 
@@ -95,7 +96,7 @@ public interface DemoListRepository extends
         return Optional
                 .ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
                         .selectFrom(q)
-                        .where(q.id.eq(id).and(q.insertUserId.eq(userId)))
+                        .where(q.id.eq(id))
                         .fetchOne()
                 )
                 .map(obj -> {
@@ -157,14 +158,14 @@ public interface DemoListRepository extends
     }
 
     @Override
-    default long markDelete(final List<TabDemoList> list, final Long userId) {
+    default long markDelete(final List<MarkDelete> list, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Bool.YES)
                 .set(q.updateUserId, userId)
-                .where(q.id.in(list.stream().map(TabDemoList::getId).toArray(Long[]::new))
-                        .and(q.insertUserId.eq(userId))
-                        .and(q.uid.in(list.stream().map(TabDemoList::getUid).toArray(String[]::new)))
+                .where(q.id.in(list.stream().map(MarkDelete::getLongId).toArray(Long[]::new))
+                        .and(q.deleted.eq(Bool.YES))
+                        .and(q.uid.in(list.stream().map(MarkDelete::getUid).toArray(String[]::new)))
                 )
                 .execute();
     }

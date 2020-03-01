@@ -373,22 +373,6 @@ interface ITest {
             return this;
         }
 
-        public Tester findByIdTimestamp(Object id, long timestamp) {
-            try {
-                System.err.println("url:\n" + format("{url}/{id}/{timestamp}", getUrl(), id, timestamp));
-                System.err.println("参数:");
-                asserts(
-                        mockMvc.perform(MockMvcRequestBuilders
-                                .get("{url}/{id}/{timestamp}", getUrl(), id, timestamp)
-                                .with(httpBasic(username, password))
-                        )
-                );
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return this;
-        }
-
         public Tester findByUid(Object id, String uid) {
             try {
                 System.err.println("url:\n" + format("{url}/{id}/{uid}", getUrl(), id, uid));

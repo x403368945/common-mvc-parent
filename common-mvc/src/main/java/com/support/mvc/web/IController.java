@@ -1,5 +1,6 @@
 package com.support.mvc.web;
 
+import com.support.mvc.entity.base.MarkDelete;
 import com.support.mvc.entity.base.Result;
 import com.support.mvc.enums.Code;
 
@@ -18,36 +19,39 @@ import java.util.Set;
 public interface IController<ID, T> {
 
     /**
-     * <pre>保存；
+     * <pre>保存:避免 500 之后日志中不打印请求 body，所以先使用 String 接收 body 参数
      * 代码参考：example.DemoListController#save
      * /{模块url前缀}/{version}/{id}
+     * </pre>
      *
      * @param version {@link Integer} 请求url中获取当前请求接口版本号；@PathVariable final int version
-     * @param body  {@link T} body中获取参数；@RequestBody(required = false) T body
+     * @param body    {@link String} body中获取参数；@RequestBody(required = false) String body
      * @return {@link Result}
      */
-    default Result<T> save(final int version, final T body) {
-        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【save(final int version, final T body)】未实现"));
+    default Result<T> save(final int version, final String body) {
+        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【save(final int version, final String body)】未实现"));
     }
 
     /**
-     * <pre>更新；
+     * <pre>更新:避免 500 之后日志中不打印请求 body，所以先使用 String 接收 body 参数
      * 代码参考：example.DemoListController#update
      * /{模块url前缀}/{version}/{id}
+     * </pre>
      *
      * @param version {@link Integer} 请求url中获取当前请求接口版本号；@PathVariable final int version
      * @param id      ID 数据ID 请求url中获取当前请求数据ID；@PathVariable final ID id
-     * @param body  {@link T} body中获取参数；@RequestBody(required = false) T body
+     * @param body    {@link String} body中获取参数；@RequestBody(required = false) String body
      * @return {@link Result}
      */
-    default Result<Void> update(final int version, final ID id, T body) {
-        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【update(final int version, final ID id, T body)】未实现"));
+    default Result<Void> update(final int version, final ID id, String body) {
+        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【update(final int version, final ID id, String body)】未实现"));
     }
 
     /**
      * <pre>按ID删除，物理删除；
      * 代码参考：example.DemoListController#deleteById
      * /{模块url前缀}/{version}/{id}
+     * </pre>
      *
      * @param version {@link Integer} 请求url中获取当前请求接口版本号； @PathVariable final int version
      * @param id      ID  数据ID 请求url中获取当前请求数据ID；@PathVariable final ID id
@@ -61,10 +65,11 @@ public interface IController<ID, T> {
      * <pre>按 ID 和 UUID 删除，物理删除；
      * 代码参考：example.DemoListController#deleteByUid
      * /{模块url前缀}/{version}/{id}/{uid}
+     * </pre>
      *
      * @param version {@link Integer} 请求url中获取当前请求接口版本号； @PathVariable final int version
      * @param id      ID  数据ID 请求url中获取当前请求数据ID；@PathVariable final ID id
-     * @param uid     {@link String} 数据UUID 请求url中获取当前请求数据UUID；@PathVariable final String uid
+     * @param uid     {@link String} 数据UUID 请求url中获取当前请求数据UUID；@ApiParam(required = true, value = "数据uid", example = "uuid32") @PathVariable final String uid
      * @return {@link Result}
      */
     default Result<Void> deleteByUid(final int version, final ID id, final String uid) {
@@ -88,10 +93,11 @@ public interface IController<ID, T> {
      * <pre>按 ID 和 UUID 删除，逻辑删除；
      * 代码参考：example.DemoListController#markDeleteByUid
      * /{模块url前缀}/{version}/{id}/{uid}
+     * </pre>
      *
      * @param version {@link Integer} 请求url中获取当前请求接口版本号； @PathVariable final int version
      * @param id      ID 数据ID 请求url中获取当前请求数据ID；@PathVariable final ID id
-     * @param uid     {@link String} 数据UUID 请求url中获取当前请求数据UUID；@PathVariable final String uid
+     * @param uid     {@link String} 数据UUID 请求url中获取当前请求数据UUID；@ApiParam(required = true, value = "数据uid", example = "uuid32") @PathVariable final String uid
      * @return {@link Result}
      */
     default Result<Void> markDeleteByUid(final int version, final ID id, final String uid) {
@@ -101,9 +107,10 @@ public interface IController<ID, T> {
     /**
      * <pre>批量操作按 ID，逻辑删除；
      * /{模块url前缀}/{version}
+     * </pre>
      *
      * @param version {@link Integer} 请求url中获取当前请求接口版本号； @PathVariable final int version
-     * @param body  {@link Set} body中获取参数；@RequestBody(required = false) String body
+     * @param body    {@link Set} body中获取参数；@RequestBody(required = false) String body
      * @return {@link Result}
      */
     default Result<Void> markDeleteByIds(final int version, final Set<ID> body) {
@@ -114,20 +121,21 @@ public interface IController<ID, T> {
      * <pre>批量操作按 ID 和 UUID 删除，逻辑删除；
      * 代码参考：example.DemoListController#markDelete
      * /{模块url前缀}/{version}
+     * </pre>
      *
      * @param version {@link Integer} 请求url中获取当前请求接口版本号； @PathVariable final int version
-     * @param body  {@link List} body中获取参数；@RequestBody(required = false) T body
+     * @param body    {@link List} body中获取参数；@RequestBody(required = false) T body
      * @return {@link Result}
      */
-    default Result<Void> markDelete(final int version, final List<T> body) {
-        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【markDelete(final int version, final List<T> body)】未实现"));
+    default Result<Void> markDelete(final int version, final List<MarkDelete> body) {
+        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【markDelete(final int version, final List<MarkDelete> body)】未实现"));
     }
 
     /**
      * <pre>按ID查询；
-     * 建议优先使用 {@link IController#findByIdTimestamp(int, Object, long)} 方案，该方案可以适配缓存兼容
      * 代码参考：example.DemoListController#findById
      * /{模块url前缀}/{version}/{id}
+     * </pre>
      *
      * @param version {@link Integer} 请求url中获取当前请求接口版本号； @PathVariable final int version
      * @param id      ID  数据ID 请求url中获取当前请求数据ID；@PathVariable final ID id
@@ -138,28 +146,14 @@ public interface IController<ID, T> {
     }
 
     /**
-     * <pre>按ID查询；
-     * 代码参考：example.DemoListController#findByIdTimestamp
-     * /{模块url前缀}/{version}/{id}/{timestamp}
-     *
-     * @param version   {@link Integer} 请求url中获取当前请求接口版本号； @PathVariable final int version
-     * @param id        ID  数据ID 请求url中获取当前请求数据ID；@PathVariable final ID id
-     * @param timestamp {@link Long} 数据最后一次更新时间戳；方便兼容缓存方案
-     * @return {@link Result}
-     */
-    default Result<? extends T> findByIdTimestamp(final int version, final ID id, final long timestamp) {
-        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【findById(final int version, final ID id, final Timestamp timestamp)】未实现"));
-    }
-
-    /**
      * <pre>按ID和UUID查询
-     * 建议优先使用 {@link IController#findByUidTimestamp(int, Object, String, long)} 方案，该方案可以适配缓存兼容
      * 代码参考：example.DemoListController#findByUid
      * /{模块url前缀}/{version}/{id}/{uid}
+     * </pre>
      *
      * @param version {@link Integer} 请求url中获取当前请求接口版本号； @PathVariable final int version
      * @param id      ID  数据ID 请求url中获取当前请求数据ID；@PathVariable final ID id
-     * @param uid     {@link String} 数据UUID 请求url中获取当前请求数据UUID；@PathVariable final String uid
+     * @param uid     {@link String} 数据UUID 请求url中获取当前请求数据UUID；@ApiParam(required = true, value = "数据uid", example = "uuid32") @PathVariable final String uid
      * @return {@link Result}
      */
     default Result<? extends T> findByUid(final int version, final ID id, final String uid) {
@@ -167,45 +161,32 @@ public interface IController<ID, T> {
     }
 
     /**
-     * <pre>按ID和UUID查询
-     * 代码参考：example.DemoListController#findByUidTimestamp
-     * /{模块url前缀}/{version}/{id}/{uid}
-     *
-     * @param version   {@link Integer} 请求url中获取当前请求接口版本号； @PathVariable final int version
-     * @param id        ID  数据ID 请求url中获取当前请求数据ID；@PathVariable final ID id
-     * @param uid       {@link String} 数据UUID 请求url中获取当前请求数据UUID；@PathVariable final String uid
-     * @param timestamp {@link Long} 数据最后一次更新时间戳；方便兼容缓存方案
-     * @return {@link Result}
-     */
-    default Result<? extends T> findByUidTimestamp(final int version, final ID id, final String uid, final long timestamp) {
-        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【findByUid(final int version, final ID id, final String uid, final Timestamp timestamp)】未实现"));
-    }
-
-    /**
      * <pre>按条件查询列表，不分页；url带参需要 URLEncoder 格式化
      * 代码参考：example.DemoListController#search
      * /{模块url前缀}/{version}
+     * </pre>
      *
      * @param version {@link Integer} 请求url中获取当前请求接口版本号； @PathVariable final int version
-     * @param param    {@link T}
+     * @param condition   {@link T}
      * @return {@link Result}
      */
-    default <P extends T> Result<? extends T> search(final int version, final P param) {
-        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【search(final int version, final String param)】未实现"));
+    default <P extends T> Result<? extends T> search(final int version, final P condition) {
+        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【search(final int version, final P condition)】未实现"));
     }
 
     /**
      * <pre>按条件分页查询列表；url带参需要 URLEncoder 格式化
      * 代码参考：example.DemoListController#page
      * /{模块url前缀}/{version}/page/{number}/{size}
+     * </pre>
      *
      * @param version {@link Integer} 请求url中获取当前请求接口版本号； @PathVariable final int version
      * @param number  int 页码
      * @param size    int 每页大小
-     * @param param    {@link T}
+     * @param condition   {@link T}
      * @return {@link Result}
      */
-    default <P extends T> Result<? extends T> page(final int version, final int number, final int size, final P param) {
-        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【search(final int version, final int number, final int size, final String param)】未实现"));
+    default <P extends T> Result<? extends T> page(final int version, final int number, final int size, final P condition) {
+        return Code.FAILURE.toResult(this.getClass().getName().concat("：方法【search(final int version, final int number, final int size, final P condition)】未实现"));
     }
 }

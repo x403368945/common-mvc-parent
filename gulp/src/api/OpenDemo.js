@@ -16,7 +16,6 @@ const OPEN_DEMO_URL = Object.freeze({
   // markDeleteByUid: '', // 按 id + uid 逻辑删除
   // markDelete: '', // 按 id + uid 批量逻辑删除
   // findById: '', // 按 id 查询单条记录
-  // findByIdTimestamp: '', // 按 id + 时间戳 查询单条记录
   // findByUid: '', // // 按 id + uid 查询单条记录
   // findByUidTimestamp: '', // 按 id + uid + 时间戳 查询单条记录
   // search: '', // 多条件批量查询，不分页

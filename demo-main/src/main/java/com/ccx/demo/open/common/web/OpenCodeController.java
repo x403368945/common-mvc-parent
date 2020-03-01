@@ -33,9 +33,7 @@ import java.util.Objects;
 @Slf4j
 public class OpenCodeController {
 
-//    @Autowired
 //    private EmailCode emailCode;
-//    @Autowired
 //    private PhoneCode phoneCode;
 
     @GetMapping

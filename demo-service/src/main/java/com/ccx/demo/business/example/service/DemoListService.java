@@ -5,12 +5,13 @@ import com.ccx.demo.business.example.entity.TabDemoList;
 import com.ccx.demo.business.example.vo.TabDemoListVO;
 import com.querydsl.core.QueryResults;
 import com.support.aop.annotations.ServiceAspect;
+import com.support.mvc.entity.base.MarkDelete;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.exception.DeleteRowsException;
 import com.support.mvc.exception.UpdateRowsException;
 import com.support.mvc.service.IService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,9 +26,9 @@ import java.util.Optional;
 @Slf4j
 @Service
 @ServiceAspect
+@RequiredArgsConstructor
 public class DemoListService implements IService<TabDemoList> {
-    @Autowired
-    private DemoListRepository repository;
+    private final DemoListRepository repository;
 
     @Override
     public TabDemoList save(final TabDemoList obj, final Long userId) {
@@ -70,7 +71,7 @@ public class DemoListService implements IService<TabDemoList> {
     }
 
     @Override
-    public void markDelete(final List<TabDemoList> list, final Long userId) {
+    public void markDelete(final List<MarkDelete> list, final Long userId) {
         DeleteRowsException.warn(repository.markDelete(list, userId), list.size());
     }
 

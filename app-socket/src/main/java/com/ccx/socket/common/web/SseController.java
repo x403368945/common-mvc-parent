@@ -3,8 +3,9 @@ package com.ccx.socket.common.web;
 import com.utils.excel.Rownum;
 import com.utils.util.Dates;
 import com.utils.util.Maps;
+import io.swagger.annotations.ApiParam;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,9 +24,9 @@ import java.util.concurrent.ExecutorService;
 @RequestMapping("/sse")
 @Controller
 @Slf4j
+@RequiredArgsConstructor
 public class SseController {
-    @Autowired
-    private ExecutorService multiThread;
+    private final ExecutorService multiThread;
 
     /**
      * 异步推送消息
@@ -39,7 +40,7 @@ public class SseController {
      * @return Result<E>
      */
     @GetMapping("/{id}")
-    public SseEmitter sse(@PathVariable final String id) {
+    public SseEmitter sse(@ApiParam(required = true, value = "数据id", example = "1") @PathVariable final String id) {
         final SseEmitter emitter = new SseEmitter(0L); //timeout设置为0表示不超时
         emitter.onError(e -> log.error(e.getMessage(), e));
         emitter.onTimeout(() -> log.error("连接超时"));

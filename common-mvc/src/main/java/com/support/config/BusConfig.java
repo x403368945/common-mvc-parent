@@ -1,8 +1,8 @@
 package com.support.config;
 
 import com.google.common.eventbus.EventBus;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
@@ -21,9 +21,9 @@ import java.util.stream.Collectors;
  * @author 谢长春 on 2017/11/14.
  */
 @Slf4j
+@RequiredArgsConstructor
 public class BusConfig implements ApplicationListener<ContextRefreshedEvent> {
-    @Autowired
-    private ApplicationContext applicationContext;
+    private final ApplicationContext applicationContext;
 
     private static final EventBus EVENT_BUS = new EventBus();
 

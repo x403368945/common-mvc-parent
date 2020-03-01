@@ -11,7 +11,7 @@ import com.support.mvc.entity.base.*;
 import com.utils.util.Dates;
 import com.utils.util.Util;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -31,8 +31,7 @@ import static com.support.mvc.entity.base.Sorts.Direction.DESC;
 @Slf4j
 public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
 
-    @Autowired
-    private <%=JavaName%>Service service;
+    private final <%=JavaName%>Service service;
 
     @PostMapping
     @ResponseBody
@@ -128,7 +127,7 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
 //    public Result<?> deleteByUid(@AuthenticationPrincipal final TabUser user,
 //                                 @PathVariable final int version,
 //                                 @PathVariable final <%=id%> id,
-//                                 @PathVariable final String uid) {
+//                                 @ApiParam(required = true, value = "数据uid", example = "uuid32") @PathVariable final String uid) {
 //        return new Result<<%=TabName%>>(1) // 指定接口最新版本号
 //                .version(this.getClass(), builder -> builder
 //                        .props(<%=TabName%>.Props.list()) // 当前返回对象属性说明
@@ -174,7 +173,7 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
 
 @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
                                      @PathVariable final <%=id%> id,
-                                     @PathVariable final String uid) {
+                                     @ApiParam(required = true, value = "数据uid", example = "uuid32") @PathVariable final String uid) {
         return new Result<>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
                         .props(<%=TabName%>.Props.list()) // 当前返回对象属性说明
@@ -223,14 +222,13 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
                 );
     }
 
-    // 该方法与 findByIdTimestamp() 2选1 即可
 /*
     @GetMapping("/{id}")
     @ResponseBody
     @Override
     public Result<?> findById(@AuthenticationPrincipal final TabUser user,
                               @PathVariable final int version,
-                              @PathVariable final Long id) {
+                              @ApiParam(required = true, value = "数据id", example = "1") @PathVariable final Long id) {
         return new Result<<%=TabName%>>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
                         .props(<%=TabName%>.Props.list()) // 当前返回对象属性说明
@@ -249,38 +247,15 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
 */
 
 
-//    @GetMapping("/{id}/{timestamp}")
-//    @ResponseBody
-//    @Override
-//    public Result<?> findByIdTimestamp(@AuthenticationPrincipal final TabUser user,
-//                                       @PathVariable final int version,
-//                                       @PathVariable final <%=id%> id,
-//                                       @PathVariable final long timestamp) {
-//        return new Result<<%=TabName%>>(1) // 指定接口最新版本号
-//                .version(this.getClass(), builder -> builder
-//                        .props(<%=TabName%>.Props.list()) // 当前返回对象属性说明
-//                        .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
-//                            "按ID查询 + 最后一次更新时间戳查询数据，url带参说明:/{version【response.version.id】}/{id【response.data[*].id】}/{id【response.data[*].timestamp】}",
-//                            "1. <%=comment%>"
-//                        ))
-//                        .build()
-//                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100, Dates.now().getTimeMillis())))) // 当前接口参考案例请求地址；
-//                )
-//                .execute(result -> result
-//                        .versionAssert(version, false) // 弱校验版本号
-//                        .setSuccess(service.findById(id).orElse(null))
-//                );
-//    }
-
-    // 该方法与 findByUidTimestamp() 2选1 即可
     @GetMapping("/{id}/{uid}")
     @ResponseBody
     @Override
     public Result<?> findByUid(@AuthenticationPrincipal final TabUser user,
 
 @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
-                               @PathVariable final Long id,
-                               @PathVariable final String uid) {
+
+@ApiParam(required = true, value = "数据id", example = "1") @PathVariable final Long id,
+                               @ApiParam(required = true, value = "数据uid", example = "uuid32") @PathVariable final String uid) {
         return new Result<<%=TabName%>>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
                         .props(<%=TabName%>.Props.list()) // 当前返回对象属性说明
@@ -304,7 +279,7 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
     public Result<?> findByUidTimestamp(@AuthenticationPrincipal final TabUser user,
                                         @PathVariable final int version,
                                         @PathVariable final <%=id%> id,
-                                        @PathVariable final String uid,
+                                        @ApiParam(required = true, value = "数据uid", example = "uuid32") @PathVariable final String uid,
                                         @PathVariable final long timestamp) {
         return new Result<<%=TabName%>>(1) // 指定接口最新版本号
                 .version(this.getClass(), builder -> builder
@@ -362,8 +337,8 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
             @AuthenticationPrincipal final TabUser user,
 
 @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
-            @PathVariable final int number,
-            @PathVariable final int size,
+            @ApiParam(required = true, value = "页码", example = "1") @PathVariable final int number,
+            @ApiParam(required = true, value = "每页条数", example = "1") @PathVariable final int size,
             @RequestParam(required = false, defaultValue = "{}") final String json
     ) {
         return new Result<<%=TabName%>>(1) // 指定接口最新版本号

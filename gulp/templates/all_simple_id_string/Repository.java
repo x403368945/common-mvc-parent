@@ -105,11 +105,11 @@ public interface <%=JavaName%>Repository extends
 //    }
 
 //    @Override
-//    default long markDelete(final List<<%=TabName%>> list) {
+//    default long markDelete(final List<MarkDelete> list) {
 //        return jpaQueryFactory.<JPAQueryFactory>get()
 //                   .update(q)
 //                   .set(q.deleted, Bool.YES)
-//                   .where(q.id.in(list.stream().map(<%=TabName%>::getId).toArray(String[]::new))
+//                   .where(q.id.in(list.stream().map(MarkDelete::getStringId).toArray(String[]::new))
 //                       .and(q.deleted.eq(Bool.NO))
 //                    )
 //                    .execute();

@@ -6,7 +6,7 @@ import com.querydsl.core.QueryResults;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.service.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,9 +19,9 @@ import java.util.Optional;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class <%=JavaName%>Service implements ISearchService<<%=TabName%>> {
-    @Autowired
-    private <%=JavaName%>Repository repository;
+    private final <%=JavaName%>Repository repository;
 
     @Override
     public Optional<<%=TabName%>> findById(final <%=id%> id) {

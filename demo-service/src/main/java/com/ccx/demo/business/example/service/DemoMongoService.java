@@ -9,8 +9,9 @@ import com.support.mvc.entity.base.Pager;
 import com.support.mvc.exception.DeleteRowsException;
 import com.support.mvc.exception.UpdateRowsException;
 import com.support.mvc.service.str.IService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,10 +24,10 @@ import java.util.Optional;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 @MongoServiceAspect(deleted = Bool.class)
 public class DemoMongoService implements IService<DemoMongo> {
-    @Autowired
-    private DemoMongoRepository repository;
+    private final DemoMongoRepository repository;
 
     @Override
     public DemoMongo save(final DemoMongo obj, final Long userId) {

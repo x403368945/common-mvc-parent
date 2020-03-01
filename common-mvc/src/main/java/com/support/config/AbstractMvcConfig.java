@@ -15,15 +15,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.CacheControl;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindException;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,12 +33,12 @@ import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.support.RequestContextUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -126,13 +125,6 @@ public class AbstractMvcConfig implements WebMvcConfigurer {
         );
     }
 
-    @ExceptionHandler(MissingServletRequestParameterException.class)
-    @ResponseBody
-    public Result<?> missingParamHandle(final MissingServletRequestParameterException e) {
-        log.error(e.getMessage(), e);
-        return Code.ARGUMENT.toResult("请求 url 映射的方法缺少必要的参数");
-    }
-
     //    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = {IllegalArgumentException.class})
     public Result<?> badRequestException(final Exception e) {
@@ -163,12 +155,12 @@ public class AbstractMvcConfig implements WebMvcConfigurer {
         return Code.URL_MAPPING.toResult("404：请求url不存在");
     }
 
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    @ResponseBody
-    public Result<?> methodNotSupportHandle(final HttpRequestMethodNotSupportedException e) {
-        log.error(e.getMessage(), e);
-        return Code.MAPPING.toResult("405：请求方式不被该接口支持，或者请求url错误未映射到正确的方法");
-    }
+//    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+//    @ResponseBody
+//    public Result<?> methodNotSupportHandle(final HttpRequestMethodNotSupportedException e) {
+//        log.error(e.getMessage(), e);
+//        return Code.MAPPING.toResult("405：请求方式不被该接口支持，或者请求url错误未映射到正确的方法");
+//    }
 
 //    @ExceptionHandler(HttpMessageNotReadableException.class)
 //    @ResponseBody
@@ -195,13 +187,15 @@ public class AbstractMvcConfig implements WebMvcConfigurer {
     @ExceptionHandler(value = {Exception.class})
     @ResponseBody
     public Result<?> exception(final Exception e, final HttpServletRequest request) {
-        if (e instanceof JSONException
-                || e instanceof MethodArgumentTypeMismatchException
-                || e instanceof BindException
-        ) {
-//            request.getMethod()
-        }
+        log.error("{}", Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication()).map(Authentication::getPrincipal).orElse(null));
         log.error(e.getMessage(), e);
+        if (e instanceof HttpRequestMethodNotSupportedException) {
+            return Code.MAPPING.toResult(String.format("405：请求方式不被该接口支持，或者请求url错误未映射到正确的方法：%s", e.getMessage()));
+        } else if (e instanceof JSONException || e instanceof BindException || e instanceof MethodArgumentTypeMismatchException) {
+            return Code.CONVERT.toResult(String.format("500：参数转换异常：%s", e.getMessage()));
+        } else if (e instanceof MissingServletRequestParameterException) {
+            return Code.ARGUMENT.toResult(String.format("500：请求 url 映射的方法缺少必要的参数：%s", e.getMessage()));
+        }
         return Code.FAILURE.toResult(String.format("500：请求失败，不明确的异常：%s", e.getMessage()));
     }
 

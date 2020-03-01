@@ -6,8 +6,8 @@ import com.ccx.demo.business.user.vo.Authority;
 import com.google.common.collect.Lists;
 import com.support.mvc.entity.base.Result;
 import io.swagger.annotations.ApiParam;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -24,10 +24,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/authority/{version}")
 @Slf4j
+@RequiredArgsConstructor
 public class AuthorityController implements IAuthController<Long> {
 
-    @Autowired
-    private AuthorityService service;
+    private final AuthorityService service;
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'Menu_Role')")
     @GetMapping("/tree")

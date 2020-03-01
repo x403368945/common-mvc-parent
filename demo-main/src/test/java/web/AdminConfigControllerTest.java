@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -33,7 +33,6 @@ public class AdminConfigControllerTest implements ITest {
     private String urlPrefix = "/admin-config/{version}";
     @Getter
     private MockMvc mockMvc;
-    @Autowired
     private WebApplicationContext webApplicationContext;
 
     @Before

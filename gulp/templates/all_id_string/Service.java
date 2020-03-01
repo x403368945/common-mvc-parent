@@ -9,7 +9,7 @@ import com.support.mvc.exception.DeleteRowsException;
 import com.support.mvc.exception.UpdateRowsException;
 import com.support.mvc.service.IService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,11 +26,11 @@ import java.util.Optional;
 @Slf4j
 @Service
 @ServiceAspect
+@RequiredArgsConstructor
 public class <%=JavaName%>Service implements IService<<%=TabName%>>
 //	, I<%=TabName%>Cache
  {
-    @Autowired
-    private <%=JavaName%>Repository repository;
+    private final <%=JavaName%>Repository repository;
 //     /** // 若使用缓存需要解开代码
 //      * 获取当前缓存管理器，用于代码控制缓存
 //      *

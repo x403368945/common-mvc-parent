@@ -6,9 +6,9 @@ import com.ccx.security.enums.Role;
 import com.mysema.commons.lang.Assert;
 import com.support.mvc.enums.Code;
 import com.utils.util.Util;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.DisabledException;
@@ -34,6 +34,7 @@ import java.util.Objects;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class AuthService implements UserDetailsService {
 
     private static final List<TabUser> USERS = Arrays.asList(
@@ -43,8 +44,7 @@ public class AuthService implements UserDetailsService {
                     .password(new BCryptPasswordEncoder().encode("111111")).deleted(Bool.NO).build()
     );
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
     @SneakyThrows
     @Override

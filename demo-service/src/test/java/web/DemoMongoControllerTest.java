@@ -14,7 +14,7 @@ package web;
 //import org.junit.Before;
 //import org.junit.Test;
 //import org.junit.runner.RunWith;
-//import org.springframework.beans.factory.annotation.Autowired;
+//import lombok.RequiredArgsConstructor;
 //import org.springframework.cglib.beans.BeanMap;
 //import org.springframework.test.context.ContextConfiguration;
 //import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -42,7 +42,6 @@ package web;
 //    private String urlPrefix = "/demo-mongo/{version}";
 //    @Getter
 //    private MockMvc mockMvc;
-//    @Autowired
 //    private WebApplicationContext webApplicationContext;
 //
 //    @Before
@@ -150,24 +149,6 @@ package web;
 ////                .findById(2L)
 ////        ;
 ////    }
-//
-//    @Test
-//    public void findByIdTimestamp() {
-//        Stream.of(
-//                "a21a356bf3bb4e1189e6dcfdefa938b1",
-//                "80246fb8d0eb4a5da808e9e4ef9ac213",
-//                "b892fab7d0a84c02879697e8a262c880"
-//        ).forEach(id -> Tester.builder()
-//                        .clazz(this.getClass())
-//                        .methodName(getMethodName())
-//                        .mockMvc(mockMvc)
-//                        .url(urlPrefix)
-//                        .version(1)
-//                        .build()
-//                        .findByIdTimestamp(id, yyyy_MM_dd_HH_mm_ss.parse("2019-01-04 20:32:10").getTimeMillis())
-//        );
-//    }
-//
 //    @Test
 //    public void search() {
 //        Tester.builder()

@@ -9,6 +9,7 @@ import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.support.mvc.dao.IRepository;
+import com.support.mvc.entity.base.MarkDelete;
 import com.support.mvc.entity.base.Pager;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
@@ -58,14 +59,14 @@ public interface RoleRepository extends
     }
 
     @Override
-    default long markDelete(final List<TabRole> list, final Long userId) {
+    default long markDelete(final List<MarkDelete> list, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Bool.YES)
                 .set(q.updateUserId, userId)
-                .where(q.id.in(list.stream().map(TabRole::getId).toArray(Long[]::new))
-                        .and(q.insertUserId.eq(userId)).and(q.deleted.eq(Bool.NO))
-                        .and(q.uid.in(list.stream().map(TabRole::getUid).toArray(String[]::new)))
+                .where(q.id.in(list.stream().map(MarkDelete::getLongId).toArray(Long[]::new))
+                        .and(q.deleted.eq(Bool.NO))
+                        .and(q.uid.in(list.stream().map(MarkDelete::getUid).toArray(String[]::new)))
                 )
                 .execute();
     }

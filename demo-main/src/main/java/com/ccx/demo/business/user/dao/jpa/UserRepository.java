@@ -45,7 +45,7 @@ public interface UserRepository extends
                 .update(q)
                 .set(q.deleted, Bool.YES)
                 .set(q.updateUserId, userId)
-                .where(q.id.eq(id).and(q.insertUserId.eq(userId)))
+                .where(q.id.eq(id))
                 .execute();
     }
 
@@ -55,7 +55,7 @@ public interface UserRepository extends
                 .update(q)
                 .set(q.deleted, Bool.YES)
                 .set(q.updateUserId, userId)
-                .where(q.id.in(ids).and(q.insertUserId.eq(userId)))
+                .where(q.id.in(ids))
                 .execute();
     }
 
