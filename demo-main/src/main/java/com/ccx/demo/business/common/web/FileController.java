@@ -21,7 +21,7 @@ import static com.support.mvc.enums.Code.FILE_EMPTY;
  * @author 谢长春 2017年7月12日 下午2:01:20
  */
 @Controller
-@RequestMapping("/file/{version}")
+@RequestMapping("/1/file")
 @Slf4j
 public class FileController {
 
@@ -31,39 +31,33 @@ public class FileController {
 
     @PostMapping("/upload")
     @ResponseBody
-    public Result<?> uploadFile(
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version, @RequestParam(required = false) final MultipartFile file) {
-        return new Result<FileInfo>(1) // 指定接口最新版本号
-                .execute(result -> {
-                    result.versionAssert(version);
-                    if (Objects.isNull(file) || StringUtils.isBlank(file.getOriginalFilename())) {
-                        throw FILE_EMPTY.exception("上传文件为空,字段【file】只能是单个文件");
-                    }
-                    result.setSuccess(
-                            FileUpload.ofTemp()
-                                    .files(file)
-                                    .upload()
-                                    .get()
-                    );
-                });
+    public Result<?> uploadFile(@RequestParam(required = false) final MultipartFile file) {
+        return new Result<FileInfo>().execute(result -> {
+            if (Objects.isNull(file) || StringUtils.isBlank(file.getOriginalFilename())) {
+                throw FILE_EMPTY.exception("上传文件为空,字段【file】只能是单个文件");
+            }
+            result.setSuccess(
+                    FileUpload.ofTemp()
+                            .files(file)
+                            .upload()
+                            .get()
+            );
+        });
     }
 
     @PostMapping("/uploads")
     @ResponseBody
-    public Result<?> uploadFiles(
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version, @RequestParam(required = false) final MultipartFile[] files) {
-        return new Result<FileInfo>(1) // 指定接口最新版本号
-                .execute(result -> {
-                    result.versionAssert(version);
-                    if (Objects.isNull(files) || StringUtils.isBlank(files[0].getOriginalFilename())) {
-                        throw FILE_EMPTY.exception("上传文件为空,字段【files】为数组");
-                    }
-                    result.setSuccess(
-                            FileUpload.ofTemp()
-                                    .files(files)
-                                    .upload()
-                                    .getResultList()
-                    );
-                });
+    public Result<?> uploadFiles(@RequestParam(required = false) final MultipartFile[] files) {
+        return new Result<FileInfo>().execute(result -> {
+            if (Objects.isNull(files) || StringUtils.isBlank(files[0].getOriginalFilename())) {
+                throw FILE_EMPTY.exception("上传文件为空,字段【files】为数组");
+            }
+            result.setSuccess(
+                    FileUpload.ofTemp()
+                            .files(files)
+                            .upload()
+                            .getResultList()
+            );
+        });
     }
 }

@@ -12,7 +12,6 @@ import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.support.mvc.entity.ITable;
-import com.support.mvc.entity.ITimestamp;
 import com.support.mvc.entity.IWhere;
 import com.support.mvc.entity.IWhere.QdslWhere;
 import com.support.mvc.entity.base.Item;
@@ -65,7 +64,6 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 public final class TabConvert implements
         ITable, // 所有与数据库表 - 实体类映射的表都实现该接口；方便后续一键查看所有表的实体
         ITabUserCache,
-        ITimestamp, // 所有需要更新时间戳的实体类
         // JPAUpdateClause => com.support.mvc.dao.IRepository#update 需要的动态更新字段；采用 方案2 时需要实现该接口
         // QdslWhere       => com.support.mvc.dao.IViewRepository 需要的查询条件
         IWhere<JPAUpdateClause, QdslWhere> {

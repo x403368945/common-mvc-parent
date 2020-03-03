@@ -11,15 +11,12 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.support.mvc.dao.IRepository;
 import com.support.mvc.entity.base.MarkDelete;
 import com.support.mvc.entity.base.Pager;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.ccx.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 
@@ -128,27 +125,27 @@ public interface RoleRepository extends
 //        return findById(id).orElse(null);
 //    }
 
-    /**
-     * 查询有效的角色集合，需要完全匹配 id:uid
-     *
-     * @param roles {@link Set<TabRole>} 角色集合
-     * @return {@link Set<Long>}
-     */
-    default Set<Long> findValidRoleIds(final Set<TabRole> roles) {
-        final Set<String> roleKeys = roles.stream()
-                // 拼接 id:uid
-                .map(row -> StringUtils.joinWith(":", row.getId(), row.getUid()))
-                .collect(Collectors.toSet());
-        return jpaQueryFactory.<JPAQueryFactory>get()
-                .select(Projections.bean(TabRole.class, q.id, q.uid))
-                .from(q)
-                .where(q.id.in(roles.stream().map(TabRole::getId).toArray(Long[]::new)).and(q.deleted.eq(Bool.NO)))
-                .fetch()
-                .stream()
-                // 过滤有效的角色
-                .filter(row -> roleKeys.contains(StringUtils.joinWith(":", row.getId(), row.getUid())))
-                .map(TabRole::getId)
-                .collect(Collectors.toSet())
-                ;
-    }
+//    /**
+//     * 查询有效的角色集合，需要完全匹配 id:uid
+//     *
+//     * @param roles {@link Set<TabRole>} 角色集合
+//     * @return {@link Set<Long>}
+//     */
+//    default Set<Long> findValidRoleIds(final Set<TabRole> roles) {
+//        final Set<String> roleKeys = roles.stream()
+//                // 拼接 id:uid
+//                .map(row -> StringUtils.joinWith(":", row.getId(), row.getUid()))
+//                .collect(Collectors.toSet());
+//        return jpaQueryFactory.<JPAQueryFactory>get()
+//                .select(Projections.bean(TabRole.class, q.id, q.uid))
+//                .from(q)
+//                .where(q.id.in(roles.stream().map(TabRole::getId).toArray(Long[]::new)).and(q.deleted.eq(Bool.NO)))
+//                .fetch()
+//                .stream()
+//                // 过滤有效的角色
+//                .filter(row -> roleKeys.contains(StringUtils.joinWith(":", row.getId(), row.getUid())))
+//                .map(TabRole::getId)
+//                .collect(Collectors.toSet())
+//                ;
+//    }
 }

@@ -7,10 +7,8 @@ import <%=pkg%>.enums.Bool;
 import <%=pkg%>.support.entity.ITabUserCache;
 import com.google.common.collect.Lists;
 import com.support.mvc.entity.ITable;
-import com.support.mvc.entity.ITimestamp;
 import com.support.mvc.entity.IWhere;
 import com.support.mvc.entity.IWhere.QdslWhere;
-
 import com.support.mvc.entity.base.Sorts;
 import com.support.mvc.entity.validated.IMarkDelete;
 import com.support.mvc.entity.validated.ISave;
@@ -24,6 +22,8 @@ import com.querydsl.core.types.dsl.BeanPath;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.utils.util.Then;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -41,8 +41,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static <%=pkg%>.code.<%=javaname%>.entity.Q<%=TabName%>.<%=tabName%>;
-
-
 import static com.support.mvc.enums.Code.ORDER_BY;
 
 /**
@@ -59,11 +57,11 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 @AllArgsConstructor
 @Builder
 @Data
+@ApiModel(description = "<%=comment%>")
 @JSONType(orders = {<%=orders%>})
 public class <%=TabName%> implements
         ITable, // 所有与数据库表 - 实体类映射的表都实现该接口；方便后续一键查看所有表的实体
         <%=ITabUserCache%>
-        <%=ITimestamp%>
         // JPAUpdateClause => com.support.mvc.dao.IRepository#update 需要的动态更新字段；采用 方案2 时需要实现该接口
         // QdslWhere       => com.support.mvc.dao.IViewRepository 需要的查询条件
         IWhere<JPAUpdateClause, QdslWhere>
@@ -75,37 +73,10 @@ public class <%=TabName%> implements
      */
     @QueryTransient
     @Transient
+    @ApiModelProperty(value = "<%=pkg%>.code.<%=javaname%>.entity.<%=TabName%>$OrderBy")
     private List<Sorts.Order> sorts;
 
 // Enum Start **********************************************************************************************************
-
-    /**
-     * 实体类所有属性名
-     * 当其他地方有用到字符串引用该类属性时，应该使用该枚举定义
-     */
-    public enum Props {
-<%=props%>,
-
-//        timestamp(LONG.build("数据最后一次更新时间戳")),
-//        numRange(RANGE_NUM.apply("数字查询区间")),
-//        insertTimeRange(RANGE_DATE.apply("创建时间查询区间")),
-        sorts(SORTS.apply(OrderBy.names())),
-        ;
-        private final Prop prop;
-
-        public Prop getProp() {
-            return prop;
-        }
-
-        Props(final Prop prop) {
-            prop.setName(this.name());
-            this.prop = prop;
-        }
-
-        public static List<Prop> list() {
-            return Stream.of(Props.values()).map(Props::getProp).collect(Collectors.toList());
-        }
-    }
 
     /**
      * 枚举：定义排序字段

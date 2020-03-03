@@ -39,11 +39,9 @@ public class AdminConfigController {
 
     @GetMapping("/app")
     @ResponseBody
-    public Result<?> getApp(@AuthenticationPrincipal final TabUser user,
-                            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
-        return new Result<Item>(1) // 指定接口最新版本号
+    public Result<?> getApp(@AuthenticationPrincipal final TabUser user) {
+        return new Result<Item>()
                 .execute(result -> result
-                        .versionAssert(version)
                         .setSuccess(Stream.of(App.values())
                                 .map(key -> Item.builder().key(key.name()).value(key.value()).comment(key.comment).build())
                                 .collect(Collectors.toList())
@@ -53,11 +51,9 @@ public class AdminConfigController {
 
     @GetMapping("/path")
     @ResponseBody
-    public Result<?> getPath(@AuthenticationPrincipal final TabUser user,
-                             @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
-        return new Result<Item>(1) // 指定接口最新版本号
+    public Result<?> getPath(@AuthenticationPrincipal final TabUser user) {
+        return new Result<Item>()
                 .execute(result -> result
-                        .versionAssert(version)
                         .setSuccess(Stream.of(Path.values())
                                 .map(key -> Item.builder().key(key.name()).value(key.absolute()).comment(key.comment).build())
                                 .collect(Collectors.toList())
@@ -67,11 +63,9 @@ public class AdminConfigController {
 
     @GetMapping("/url")
     @ResponseBody
-    public Result<?> getUrl(@AuthenticationPrincipal final TabUser user,
-                            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
-        return new Result<Item>(1) // 指定接口最新版本号
+    public Result<?> getUrl(@AuthenticationPrincipal final TabUser user) {
+        return new Result<Item>()
                 .execute(result -> result
-                        .versionAssert(version)
                         .setSuccess(Stream.of(URL.values())
                                 .map(key -> Item.builder().key(key.name()).value(key.value()).comment(key.comment).build())
                                 .collect(Collectors.toList())
@@ -81,11 +75,9 @@ public class AdminConfigController {
 
     @GetMapping("/{key}")
     @ResponseBody
-    public Result<?> getByKey(
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version, @PathVariable String key) {
-        return new Result<String>(1) // 指定接口最新版本号
+    public Result<?> getByKey(@PathVariable String key) {
+        return new Result<String>()
                 .execute(result -> result
-                        .versionAssert(version)
                         .setSuccess(App.valueOf(key).value())
                 );
     }

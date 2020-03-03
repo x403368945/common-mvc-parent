@@ -1,7 +1,6 @@
 package com.ccx.demo.business.user.service;
 
 import com.ccx.demo.business.user.vo.Authority;
-import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -21,20 +20,21 @@ import static com.ccx.demo.business.user.enums.AuthorityCode.*;
 public class AuthorityService {
     // 构造权限树
     private static final Set<Authority> TREE = new LinkedHashSet<>(10);
+
     static {
         TREE.add(Menu_Home.build());
         TREE.add(
                 Menu_Setting.nodes(
-                        Menu_User.nodes(
-                                UserController_page.build(),
-                                UserController_save.build(),
-                                UserController_update.build(),
-                                UserController_reset.build()
+                        Menu_UC.nodes(
+                                UC_page.build(),
+                                UC_save.build(),
+                                UC_update.build(),
+                                UC_reset.build()
                         ),
-                        Menu_Role.nodes(
-                                RoleController_page.build(),
-                                RoleController_save.build(),
-                                RoleController_update.build()
+                        Menu_RC.nodes(
+                                RC_page.build(),
+                                RC_save.build(),
+                                RC_update.build()
                         )
                 )
         );

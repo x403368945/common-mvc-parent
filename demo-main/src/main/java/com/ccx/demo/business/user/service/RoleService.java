@@ -15,6 +15,7 @@ import com.support.mvc.exception.UpdateRowsException;
 import com.support.mvc.service.IService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
@@ -111,7 +112,21 @@ public class RoleService implements IService<TabRole>, ITabRoleCache {
      */
     public @NotEmpty(message = "matchValidRoleIds:返回值不能为空集合") Set<Long> matchValidRoleIds(
             @NotEmpty(message = "【ids】不能为空") final Set<TabRole> roles) {
-        return repository.findValidRoleIds(roles);
+//        return repository.findValidRoleIds(roles);
+        final Set<String> roleKeys = roles.stream()
+                // 拼接 id:uid
+                .map(row -> StringUtils.joinWith(":", row.getId(), row.getUid()))
+                .collect(Collectors.toSet());
+        return roles.stream()
+                // 从缓存获取数据
+                .map(role -> getTabRoleCacheById(role.getId()).orElse(null))
+                // 排除已删除的角色
+                .filter(role -> Objects.nonNull(role) && Objects.equals(Bool.NO, role.getDeleted()))
+                // 过滤有效的角色
+                .filter(role -> roleKeys.contains(StringUtils.joinWith(":", role.getId(), role.getUid())))
+                .map(TabRole::getId)
+                .collect(Collectors.toSet())
+                ;
     }
 
     /**
@@ -128,5 +143,4 @@ public class RoleService implements IService<TabRole>, ITabRoleCache {
                 q.name
         );
     }
-
 }

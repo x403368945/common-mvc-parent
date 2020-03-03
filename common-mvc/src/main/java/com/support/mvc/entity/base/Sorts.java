@@ -91,7 +91,7 @@ public class Sorts implements Serializable {
          * 排序方向
          */
         @Builder.Default
-        @ApiModelProperty(position = 1, value = "排序方向，com.support.mvc.entity.base.Sorts.Direction", example = "ASC")
+        @ApiModelProperty(position = 1, value = "排序方向，com.support.mvc.entity.base.Sorts$Direction", example = "ASC")
         private Direction direction = Direction.ASC;
     }
 

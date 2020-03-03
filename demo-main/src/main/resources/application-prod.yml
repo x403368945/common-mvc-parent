@@ -2,10 +2,12 @@ app: # 生产环境 todo 编辑时注意，请同时变更其他环境对应的�
   env: prod # 当前环境：[dev:本地|beta:测试|prod:生产]
   admin-user-id: 1 # 管理员用户ID
   admin-user: admin # 管理员账户登录账户
-  ip: 127.0.0.1 # 当前主机 IP 地址；可使用 frp 服务器IP
+  ip: 127.0.0.1 # 当前主机 IP 地址
   domain: http://demo.cccc6666.com # 应用路径，域名；可使用 frp 服务器域名
-  markdown: http://demo.cccc6666.com/md/ # markdown 文档地址
   path-root: /var/www/demo/files # 应用文件根目录
+  token-expired: 30 # token 默认过期时间，30 天
+  auto-task:
+    enabled: true # 是否启用服务内部的定时任务 true：是，false：否
 
 spring:
   datasource:

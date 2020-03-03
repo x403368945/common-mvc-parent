@@ -7,7 +7,6 @@ import <%=pkg%>.enums.Bool;
 import <%=pkg%>.support.entity.ITabUserCache;
 import com.google.common.collect.Lists;
 import com.support.mvc.entity.ITable;
-import com.support.mvc.entity.ITimestamp;
 import com.support.mvc.entity.IWhere;
 import com.support.mvc.entity.IWhere.QdslWhere;
 import com.support.mvc.entity.base.Sorts;
@@ -23,6 +22,8 @@ import com.querydsl.core.types.dsl.BeanPath;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.utils.util.Then;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -56,11 +57,11 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 @AllArgsConstructor
 @Builder
 @Data
+@ApiModel(description = "<%=comment%>")
 @JSONType(orders = {<%=orders%>})
 public class <%=TabName%> implements
         ITable, // 所有与数据库表 - 实体类映射的表都实现该接口；方便后续一键查看所有表的实体
         <%=ITabUserCache%>
-        <%=ITimestamp%>
         // JPAUpdateClause => com.support.mvc.dao.IRepository#update 需要的动态更新字段；采用 方案2 时需要实现该接口
         // QdslWhere       => com.support.mvc.dao.IViewRepository 需要的查询条件
         IWhere<JPAUpdateClause, QdslWhere>
@@ -72,6 +73,7 @@ public class <%=TabName%> implements
      */
     @QueryTransient
     @Transient
+    @ApiModelProperty(value = "<%=pkg%>.code.<%=javaname%>.entity.<%=TabName%>$OrderBy")
     private List<Sorts.Order> sorts;
 
 // Enum Start **********************************************************************************************************
@@ -171,8 +173,6 @@ public class <%=TabName%> implements
         }
     }
 
-// DB End **************************************************************************************************************
-
     /**
      * 获取查询实体与数据库表映射的所有字段,用于投影到 VO 类
      * 支持追加扩展字段,追加扩展字段一般用于连表查询
@@ -198,6 +198,8 @@ public class <%=TabName%> implements
         return columns.toArray(new Expression<?>[0]);
     }
 
+// DB End **************************************************************************************************************
+
 }
 /* ehcache 配置
 <cache alias="I<%=TabName%>Cache">
@@ -212,7 +214,6 @@ public class <%=TabName%> implements
     </resources>
 </cache>
 */
-
 /*
 import com.alibaba.fastjson.annotation.JSONField;
 import com.querydsl.core.annotations.QueryTransient;

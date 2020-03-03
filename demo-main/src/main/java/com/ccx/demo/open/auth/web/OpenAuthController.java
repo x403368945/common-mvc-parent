@@ -11,12 +11,14 @@ import com.support.mvc.entity.base.Result;
 import com.support.mvc.enums.Code;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +33,7 @@ import java.util.Optional;
  */
 @Api(tags = "登录")
 @ApiSort(2)
-@RequestMapping("/open/auth/{version}")
+@RequestMapping("/1/open/auth")
 @Controller
 @Slf4j
 @RequiredArgsConstructor
@@ -47,11 +49,10 @@ public class OpenAuthController {
     @ApiOperationSupport(order = 1, ignoreParameters = {"body.method", "body.phone", "body.code"})
     @ResponseBody
     public Result<TabUserVO> login(
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
             @RequestBody final AuthLogin body,
             HttpServletRequest request,
             HttpServletResponse response) {
-        final Result<TabUserVO> result = new Result<>(1);
+        final Result<TabUserVO> result = new Result<>();
         try {
 //            log.debug("request.getAuthType():"+request.getAuthType());
 //            log.debug("request.getContextPath()"+request.getContextPath());
@@ -71,13 +72,12 @@ public class OpenAuthController {
 //            log.debug("request.getServletContext().getServerInfo()"+request.getServletContext().getServerInfo());
 //            log.debug("request.getServletContext().getServletContextName()"+request.getServletContext().getServletContextName());
 //            log.debug("request.getServletContext().getVirtualServerName()"+request.getServletContext().getVirtualServerName());
-            result.versionAssert(version);
             Assert.notNull(body, "登录参数不能为空");
             switch (body.getMethod()) {
                 case SESSION:
-                    return loginBySession(version, body, request);
+                    return loginBySession(body, request);
                 case TOKEN:
-                    return loginByToken(version, body, request, response);
+                    return loginByToken(body, request, response);
                 case CODE:
                     throw Code.FAILURE.exception("暂不支持手机验证码登录模式");
                 default:
@@ -96,13 +96,10 @@ public class OpenAuthController {
     @ApiIgnore
     @PostMapping("/login/SESSION")
     @ResponseBody
-    public Result<TabUserVO> loginBySession(
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
-            @RequestBody final AuthLogin body,
-            HttpServletRequest request) {
-        return new Result<TabUserVO>(1) // 指定接口最新版本号
+    public Result<TabUserVO> loginBySession(@RequestBody final AuthLogin body,
+                                            HttpServletRequest request) {
+        return new Result<TabUserVO>()
                 .execute(result -> {
-                    result.versionAssert(version);
                     Assert.notNull(body, "登录参数不能为空");
                     Assert.hasText(body.getUsername(), "用户名不能为空");
                     Assert.hasText(body.getPassword(), "密码不能为空");
@@ -121,15 +118,12 @@ public class OpenAuthController {
     @ApiIgnore
     @PostMapping("/login/TOKEN")
     @ResponseBody
-    public Result<TabUserVO> loginByToken(
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
-            @RequestBody final AuthLogin body,
-            HttpServletRequest request,
-            HttpServletResponse response
+    public Result<TabUserVO> loginByToken(@RequestBody final AuthLogin body,
+                                          HttpServletRequest request,
+                                          HttpServletResponse response
     ) {
-        final Result<TabUserVO> result = new Result<>(1);
+        final Result<TabUserVO> result = new Result<>();
         try {
-            result.versionAssert(version);
             Assert.hasText(body.getUsername(), "用户名不能为空");
             Assert.hasText(body.getPassword(), "密码不能为空");
             // 登录成功之后，将用户信息放入session； 同时生成 token 回传到前端
@@ -162,7 +156,7 @@ public class OpenAuthController {
 //    @PatchMapping("/forget/password")
 //    @ResponseBody
 //    public Result<Object> forgetPassword(@RequestBody(required = false) String body) {
-//        Result<Object> result = new Result<>(1);
+//        Result<Object> result = new Result<>();
 //        try {
 //            authService.forgetPassword(JSON.parseObject(body).getString("email"));
 //            result.setCode(SUCCESS);

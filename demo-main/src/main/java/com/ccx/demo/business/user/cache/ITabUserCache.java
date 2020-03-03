@@ -5,6 +5,7 @@ import com.ccx.demo.business.user.dao.jpa.UserRepository;
 import com.ccx.demo.business.user.entity.TabUser;
 import com.querydsl.core.annotations.QueryTransient;
 import com.support.mvc.entity.ICache;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.beans.Transient;
 import java.util.Objects;
@@ -64,6 +65,7 @@ public interface ITabUserCache extends ICache {
      */
     @Transient
     @QueryTransient
+    @ApiModelProperty(value = "新增操作人昵称")
     default String getInsertUserName() {
         return getNickNameCacheById(getInsertUserId());
     }
@@ -84,6 +86,7 @@ public interface ITabUserCache extends ICache {
      */
     @Transient
     @QueryTransient
+    @ApiModelProperty(value = "更新操作人昵称")
     default String getUpdateUserName() {
         return getNickNameCacheById(getUpdateUserId());
     }

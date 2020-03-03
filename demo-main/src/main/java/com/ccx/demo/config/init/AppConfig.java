@@ -83,14 +83,12 @@ public class AppConfig {
                 "app.admin-user-id", () -> Objects.toString(properties.getAdminUserId())),
         ADMIN_USER("管理员账户登录账户",
                 "app.admin-user", () -> properties.getAdminUser()),
-        IP("当前主机 IP 地址；可使用 frp 服务器IP",
+        IP("当前主机 IP 地址",
                 "app.ip", () -> properties.getIp()),
         DOMAIN("应用路径，域名；可使用 frp 服务器域名",
                 "app.domain", () -> properties.getDomain()),
         PATH_ROOT("应用文件根目录",
                 "app.path-root", () -> properties.getPathRoot()),
-        MARKDOWN("markdown 文档存放地址",
-                "app.markdown", () -> properties.getMarkdown()),
         TOKEN_EXPIRED("token 默认过期时间",
                 "app.token-expired", () -> Objects.toString(properties.getTokenExpired())),
         ;
@@ -138,7 +136,7 @@ public class AppConfig {
         JSON("json配置文件目录", "                                 /json/"),
         HTML("html模板文件目录", "                                 /html/"),
         MD("markdown文件目录", "                                   /md/"),
-        TEMP("文件上传及临时文件存储目录", "                       /temp/"),
+        TEMP("文件上传及临时文件存储目录", "                         /temp/"),
         ;
         /**
          * 枚举属性说明

@@ -14,7 +14,7 @@ import static com.ccx.demo.business.user.enums.AuthorityType.*;
  *
  * 命名规则：
  *   Menu_*: 首页菜单相关的权限
- *   {*Controller}_*: Controller 方法头上注解，规则 【{Controller 全称}_{方法名} => UserController_deleteById】
+ *   {*Controller}_*: Controller 方法头上注解，规则 【{Controller 全称}_{方法名} => UC_deleteById】
  *
  * @author 谢长春 2019/8/27
  */
@@ -26,16 +26,16 @@ public enum AuthorityCode {
     Menu_Setting("系统设置", MENU),
 
     // 用户角色权限 ******************************************************************************************************
-    Menu_User("用户管理", MENU),
-    UserController_page("查看数据", LOAD),
-    UserController_save("新增数据", BUTTON),
-    UserController_update("更新数据", BUTTON),
-    UserController_reset("重置密码", BUTTON),
+    Menu_UC("用户管理", MENU),
+    UC_page("查看数据", LOAD),
+    UC_save("新增数据", BUTTON),
+    UC_update("更新数据", BUTTON),
+    UC_reset("重置密码", BUTTON),
 
-    Menu_Role("角色管理", MENU),
-    RoleController_page("查看数据", LOAD),
-    RoleController_save("新增数据", BUTTON),
-    RoleController_update("更新数据", BUTTON),
+    Menu_RC("角色管理", MENU),
+    RC_page("查看数据", LOAD),
+    RC_save("新增数据", BUTTON),
+    RC_update("更新数据", BUTTON),
 
     ;
     public final String comment;

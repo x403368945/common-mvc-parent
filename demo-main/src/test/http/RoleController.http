@@ -1,0 +1,11 @@
+### 分页查看角色
+GET http://localhost:8080/1/role/page/1/10
+Content-Type: application/json
+Authorization: basic YWRtaW46YWRtaW4=
+
+###
+GET http://localhost:8080/1/role/options
+Content-Type: application/json
+Authorization: basic YWRtaW46YWRtaW4=
+
+###

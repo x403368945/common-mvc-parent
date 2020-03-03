@@ -15,7 +15,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
  * @author 谢长春
  */
 @Controller
-@RequestMapping("")
 @Slf4j
 public class HomeController
 // spring-boot start >> mvc 不需要继承 {@link AbstractMvcConfig.ErrorController}

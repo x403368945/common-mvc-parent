@@ -11,7 +11,6 @@ import com.querydsl.core.annotations.QueryTransient;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import com.support.mvc.actions.IUpdate;
 import com.support.mvc.entity.IMongo;
-import com.support.mvc.entity.ITimestamp;
 import com.support.mvc.entity.IWhere;
 import com.support.mvc.entity.IWhere.QdslWhere;
 import com.support.mvc.entity.base.Sorts;
@@ -61,7 +60,6 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 public class DemoMongo implements
         IMongo, // 所有与数据库表 - 实体类映射的表都实现该接口；方便后续一键查看所有表的实体
         ITabUserCache,
-        ITimestamp, // 所有需要更新时间戳的实体类
         IWhere<Update, QdslWhere> // 声明用于实现构建 com.support.mvc.dao.ISearchRepository 需要的查询条件
 {
     /**

@@ -10,7 +10,6 @@ import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import com.support.mvc.entity.ITable;
-import com.support.mvc.entity.ITimestamp;
 import com.support.mvc.entity.IWhere;
 import com.support.mvc.entity.IWhere.QdslWhere;
 import com.support.mvc.entity.base.Sorts;
@@ -19,6 +18,8 @@ import com.support.mvc.entity.validated.IMarkDelete;
 import com.support.mvc.entity.validated.ISave;
 import com.support.mvc.entity.validated.IUpdate;
 import com.utils.util.Then;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -52,11 +53,11 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 @AllArgsConstructor
 @Builder
 @Data
+@ApiModel(description = "角色表")
 @JSONType(orders = {"id", "uid", "name", "authorities", "insertTime", "insertUserId", "updateTime", "updateUserId", "deleted"})
 public final class TabRole implements
         ITable, // 所有与数据库表 - 实体类映射的表都实现该接口；方便后续一键查看所有表的实体
         ITabUserCache,
-        ITimestamp, // 所有需要更新时间戳的实体类
         // JPAUpdateClause => com.support.mvc.dao.IRepository#update 需要的动态更新字段；采用 方案2 时需要实现该接口
         // QdslWhere       => com.support.mvc.dao.IViewRepository 需要的查询条件
         IWhere<TabRole, QdslWhere> {
@@ -67,6 +68,7 @@ public final class TabRole implements
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull(groups = {IUpdate.class, IMarkDelete.class})
     @Positive
+    @ApiModelProperty(value = "数据ID，主键自增")
     private Long id;
     /**
      * 用户UUID，缓存和按ID查询时可使用强校验
@@ -78,7 +80,7 @@ public final class TabRole implements
     /**
      * 名称
      */
-    @NotNull
+    @NotNull(groups = {ISave.class})
     @Size(max = 200)
     private String name;
     /**
@@ -92,6 +94,7 @@ public final class TabRole implements
     @Column(insertable = false, updatable = false)
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @Null(groups = {ISave.class})
+    @ApiModelProperty(value = "数据新增时间", example = "2020-02-02 02:02:02")
     private Timestamp insertTime;
     /**
      * 创建用户ID
@@ -106,6 +109,7 @@ public final class TabRole implements
     @Column(insertable = false, updatable = false)
     @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")
     @Null(groups = {ISave.class})
+    @ApiModelProperty(value = "数据最后一次更新时间", example = "2020-02-02 02:02:02.002")
     private Timestamp updateTime;
     /**
      * 修改用户ID
@@ -118,6 +122,7 @@ public final class TabRole implements
      */
     @Column(insertable = false, updatable = false)
     @Null(groups = {ISave.class})
+    @ApiModelProperty(value = "是否逻辑删除，com.ccx.demo.enums.Bool")
     private Bool deleted;
 
     /**
@@ -125,6 +130,7 @@ public final class TabRole implements
      */
     @QueryTransient
     @Transient
+    @ApiModelProperty(value = "com.ccx.demo.business.user.entity.TabRole$OrderBy")
     private List<Sorts.Order> sorts;
     /**
      * 前端配置的权限树

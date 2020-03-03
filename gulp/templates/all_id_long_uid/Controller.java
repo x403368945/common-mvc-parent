@@ -10,101 +10,83 @@ import <%=pkg%>.enums.Bool;
 import com.support.mvc.entity.base.*;
 import com.utils.util.Dates;
 import com.utils.util.Util;
+import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
+import io.swagger.annotations.ApiParam;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.Arrays;
-import java.util.Collections;
-
-import static com.support.mvc.entity.base.Sorts.Direction.DESC;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 请求操作响应：<%=comment%>
  *
  * @author 谢长春 on <%=date%>
  */
-@Controller
+@Api(tags = "<%=comment%>")
+//@ApiSort(3) // 控制接口排序
 @RequestMapping("/<%=java_name%>/{version}")
+@Controller
 @Slf4j
 @RequiredArgsConstructor
-public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
+public class <%=JavaName%>Controller implements IAuthController<<%=id%>, <%=TabName%>> {
 
     private final <%=JavaName%>Service service;
 
     @PostMapping
+//    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_save')")
+    @ApiOperation(value = "1.新增<%=comment%>", tags = {"<%=date%>"})
+    @ApiImplicitParam(name = "body", dataType = "<%=TabName%>", dataTypeClass = <%=TabName%>.class, required = true)
+    @ApiOperationSupport(
+            order = 1,
+            ignoreParameters = {
+                    "body.id", "body.uid", "body.deleted", "body.insertTime", "body.insertUserId", "body.insertUserName", "body.updateTime", "body.updateUserId", "body.updateUserName", "body.timestamp", "body.sorts"
+            })
     @ResponseBody
     @Override
-    public Result<?> save(@AuthenticationPrincipal final TabUser user,
-                          @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
-                          // required = false 可以让请求先过来，如果参数为空再抛出异常，保证本次请求能得到响应
-                          @RequestBody(required = false) final String body) {
-        return new Result<<%=TabName%>>(1) // 指定接口最新版本号
-                .version(this.getClass(), builder -> builder
-                        .props(<%=TabName%>.Props.list()) // 当前返回对象属性说明
-                        .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
-                                "保存数据，url带参说明:/{version【response.version.id】}",
-                                "1. <%=comment%>"
-                        ))
-                        .build()
-                        .demo(v -> v.setDemo(
-                                URL.SERVER.append(v.formatUrl()), // 当前接口参考案例请求地址；
-                                <%=TabName%>.builder() // 当前接口参考案例请求参数，一般demo中存放必填字段或者所有字段
-                                        .build()
-                        ))
-                )
-                .execute(result -> result
-                        .versionAssert(version, false) // 弱校验版本号
-                        .setSuccess(service.save(
-                                Param.of(param).required().parseObject(<%=TabName%>.class),
-                                user.getId()
-                        ))
-                );
+    public Result<<%=TabName%>> save(final TabUser user, final String body) {
+        return new Result<<%=TabName%>>()
+                .execute(result -> result.setSuccess(service.save(JSON.parseObject(body, <%=TabName%>.class), user.getId())));
     }
 
     @PutMapping("/{id}")
+//    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_update')")
+    @ApiOperation(value = "2.修改<%=comment%>", tags = {"<%=date%>"})
+    @ApiImplicitParam(name = "body", dataType = "<%=TabName%>", dataTypeClass = <%=TabName%>.class, required = true)
+    @ApiOperationSupport(
+            order = 2,
+            ignoreParameters = {
+                    "body.id", "body.uid", "body.deleted", "body.insertTime", "body.insertUserId", "body.insertUserName", "body.updateTime", "body.updateUserId", "body.updateUserName", "body.timestamp", "body.sorts"
+            })
     @ResponseBody
     @Override
-    public Result<?> update(@AuthenticationPrincipal final TabUser user,
-                            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
-                            @PathVariable final <%=id%> id,
-                            // required = false 可以让请求先过来，如果参数为空再抛出异常，保证本次请求能得到响应
-                            @RequestBody(required = false) final String body) {
-        return new Result<>(1) // 指定接口最新版本号
-                .version(this.getClass(), builder -> builder
-                        .props(<%=TabName%>.Props.list()) // 当前返回对象属性说明
-                        .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
-                            "更新数据，不带 uid 强校验，但可能会带当前操作人校验，url带参说明:/{version【response.version.id】}/{id【response.data[*].id】}",
-                            "1. <%=comment%>"
-                        ))
-                        .build()
-                        .demo(v -> v.setDemo(
-                                URL.SERVER.append(v.formatUrl(100)), // 当前接口参考案例请求地址；
-                                <%=TabName%>.builder() // 当前接口参考案例请求参数，一般demo中存放必填字段或者所有字段
-                                        .uid(Util.uuid32())
-//                                            .updateTime(Dates.now().timestamp())
-                                        .build()
-                        ))
-                )
-                .execute(result -> result
-                        .versionAssert(version, false) // 弱校验版本号
-                        .call(() -> service.update(
-                                id,
-                                user.getId(),
-                                Param.of(param).required().parseObject(<%=TabName%>.class)
-                        ))
-                );
+    public Result<Void> update(final TabUser user, final <%=id%> id, final String body) {
+        return new Result<Void>()
+                .call(() -> service.update(id, user.getId(), JSON.parseObject(body, <%=TabName%>.class)));
+    }
+
+    @DeleteMapping("/{id}")
+//    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
+    @ApiOperation(value = "3.逻辑删除角色", tags = {"1.0.0"})
+    @ApiOperationSupport(order = 3)
+    @ResponseBody
+    @Override
+    public Result<Void> deleteById(final TabUser user,final int version,final <%=id%> id) {
+        return new Result<Void>()
+                .call(() -> service.deleteById(id, user.getId()));
     }
 
     @DeleteMapping("/{id}")
     @ResponseBody
     @Override
     public Result<?> deleteById(@AuthenticationPrincipal final TabUser user,
-                                @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
+
                                 @PathVariable final <%=id%> id) {
-        return new Result<<%=TabName%>>(1) // 指定接口最新版本号
+        return new Result<<%=TabName%>>()
                 .version(this.getClass(), builder -> builder
                         .props(<%=TabName%>.Props.list()) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
@@ -115,7 +97,6 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100)))) // 当前接口参考案例请求地址；
                 )
                 .execute(result -> result
-                        .versionAssert(version, false) // 弱校验版本号
                         .setSuccess(service.deleteById(id, user.getId()))
                 );
     }
@@ -124,10 +105,10 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
     @ResponseBody
     @Override
     public Result<?> deleteByUid(@AuthenticationPrincipal final TabUser user,
-@ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
+
                                  @PathVariable final <%=id%> id,
                                  @ApiParam(required = true, value = "数据uid", example = "uuid32") @PathVariable final String uid) {
-        return new Result<<%=TabName%>>(1) // 指定接口最新版本号
+        return new Result<<%=TabName%>>()
                 .version(this.getClass(), builder -> builder
                         .props(<%=TabName%>.Props.list()) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
@@ -138,7 +119,6 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100, Util.uuid32())))) // 当前接口参考案例请求地址；
                 )
                 .execute(result -> result
-                        .versionAssert(version, false) // 弱校验版本号
                         .setSuccess(service.deleteByUid(id, uid, user.getId()))
                 );
     }
@@ -148,9 +128,9 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
     @Override
     public Result<?> markDeleteById(@AuthenticationPrincipal final TabUser user,
 
-@ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
+
                                     @PathVariable final <%=id%> id) {
-        return new Result<>(1) // 指定接口最新版本号
+        return new Result<>()
                 .version(this.getClass(), builder -> builder
                         .props(<%=TabName%>.Props.list()) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
@@ -161,7 +141,6 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100)))) // 当前接口参考案例请求地址；
                 )
                 .execute(result -> result
-                        .versionAssert(version, false) // 弱校验版本号
                         .call(() -> service.markDeleteById(id, user.getId()))
                 );
     }
@@ -171,10 +150,10 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
     @Override
     public Result<?> markDeleteByUid(@AuthenticationPrincipal final TabUser user,
 
-@ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
+
                                      @PathVariable final <%=id%> id,
                                      @ApiParam(required = true, value = "数据uid", example = "uuid32") @PathVariable final String uid) {
-        return new Result<>(1) // 指定接口最新版本号
+        return new Result<>()
                 .version(this.getClass(), builder -> builder
                         .props(<%=TabName%>.Props.list()) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
@@ -185,7 +164,6 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100, Util.uuid32())))) // 当前接口参考案例请求地址；
                 )
                 .execute(result -> result
-                        .versionAssert(version, false) // 弱校验版本号
                         .call(() -> service.markDeleteByUid(id, uid, user.getId()))
                 );
     }
@@ -195,9 +173,9 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
     @Override
     public Result<?> markDelete(@AuthenticationPrincipal final TabUser user,
 
-@ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
+
                                 @RequestBody(required = false) final String body) {
-        return new Result<>(1) // 指定接口最新版本号
+        return new Result<>()
                 .version(this.getClass(), builder -> builder
                         .props(<%=TabName%>.Props.list()) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
@@ -216,7 +194,6 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
                         ))
                 )
                 .execute(result -> result
-                        .versionAssert(version, false) // 弱校验版本号
                         // .call(()->service.markDeleteByIds(Param.of(param).required().hasArray().parseArray(Long.class), user.getId())) // 方案1：按 ID 逻辑删除
                         .call(() -> service.markDelete(Param.of(param).required().hasArray().parseArray(<%=TabName%>.class), user.getId())) // 方案2：按 ID 和 UUID 逻辑删除
                 );
@@ -228,7 +205,7 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
     public Result<?> findById(@AuthenticationPrincipal final TabUser user,
                               @PathVariable final int version,
                               @ApiParam(required = true, value = "数据id", example = "1") @PathVariable final Long id) {
-        return new Result<<%=TabName%>>(1) // 指定接口最新版本号
+        return new Result<<%=TabName%>>()
                 .version(this.getClass(), builder -> builder
                         .props(<%=TabName%>.Props.list()) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
@@ -239,7 +216,6 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100)))) // 当前接口参考案例请求地址；
                 )
                 .execute(result -> result
-                        .versionAssert(version, false) // 弱校验版本号
                         .setSuccess(service.findById(id).orElse(null))
                 );
     }
@@ -252,7 +228,7 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
 
 @ApiParam(required = true, value = "数据id", example = "1") @PathVariable final Long id,
                                @ApiParam(required = true, value = "数据uid", example = "uuid32") @PathVariable final String uid) {
-        return new Result<<%=TabName%>>(1) // 指定接口最新版本号
+        return new Result<<%=TabName%>>()
                 .version(this.getClass(), builder -> builder
                         .props(<%=TabName%>.Props.list()) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
@@ -263,7 +239,6 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
                         .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(100, Util.uuid32())))) // 当前接口参考案例请求地址；
                 )
                 .execute(result -> result
-                        .versionAssert(version, false) // 弱校验版本号
                         .setSuccess(service.findByUid(id, uid).orElse(null))
                 );
     }
@@ -274,9 +249,9 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
     public Result<?> search(
             @AuthenticationPrincipal final TabUser user,
 
-@ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
+
             @RequestParam(required = false, defaultValue = "{}") final String json) {
-        return new Result<<%=TabName%>>(1) // 指定接口最新版本号
+        return new Result<<%=TabName%>>()
                 .version(this.getClass(), builder -> builder
                         .props(<%=TabName%>.Props.list()) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
@@ -305,12 +280,12 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
     public Result<?> page(
             @AuthenticationPrincipal final TabUser user,
 
-@ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
+
             @ApiParam(required = true, value = "页码", example = "1") @PathVariable final int number,
             @ApiParam(required = true, value = "每页条数", example = "1") @PathVariable final int size,
             @RequestParam(required = false, defaultValue = "{}") final String json
     ) {
-        return new Result<<%=TabName%>>(1) // 指定接口最新版本号
+        return new Result<<%=TabName%>>()
                 .version(this.getClass(), builder -> builder
                         .props(<%=TabName%>.Props.list()) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
@@ -326,7 +301,6 @@ public class <%=JavaName%>Controller implements IAuthController<<%=id%>> {
                         ))
                 )
                 .execute(result -> result
-                        .versionAssert(version, false) // 弱校验版本号
                         .setSuccess(service.findPage(
                                 Param.of(json).parseObject(<%=TabName%>.class),
                                 Pager.builder().number(number).size(size).build()

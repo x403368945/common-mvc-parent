@@ -7,6 +7,8 @@
 -debug:当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。
 -
 - configuration 子节点为 appender、logger、root
+
+slf4j 接管： http://www.slf4j.org/legacy.html
 -->
 <configuration scan="false" scanPeriod="60 second" debug="true">
     <property name="APP_NAME" value="${app.name:-app-demo}"/>

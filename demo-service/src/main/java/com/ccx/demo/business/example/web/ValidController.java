@@ -26,19 +26,19 @@ import java.util.List;
  *
  * @author 谢长春 2018-10-5
  */
-@RequestMapping("/valid/{version}")
+@RequestMapping("/1/valid")
 @Controller
 @Slf4j
 @RequiredArgsConstructor
 public class ValidController implements IAuthController<Long, TabValid> {
 
     private final ValidService service;
+    int version = 1;
 
     @GetMapping("/hasNull")
     @ResponseBody
-    public Result<String> hasNull(
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
-        return new Result<String>(1).execute(result -> {
+    public Result<String> hasNull() {
+        return new Result<String>().execute(result -> {
             if (0 == version) result.setSuccess(service.hasNull(null));
             if (1 == version) result.setSuccess(service.hasNull(""));
         });
@@ -46,9 +46,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
 
     @GetMapping("/notNull")
     @ResponseBody
-    public Result<String> notNull(
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
-        return new Result<String>(1).execute(result -> {
+    public Result<String> notNull() {
+        return new Result<String>().execute(result -> {
             if (0 == version) result.setSuccess(service.notNull(""));
             if (1 == version) result.setSuccess(service.notNull(null));
         });
@@ -56,9 +55,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
 
     @GetMapping("/notBlank")
     @ResponseBody
-    public Result<String> notBlank(
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
-        return new Result<String>(1).execute(result -> {
+    public Result<String> notBlank() {
+        return new Result<String>().execute(result -> {
             if (0 == version) result.setSuccess(service.notBlank(null));
             if (1 == version) result.setSuccess(service.notBlank("text"));
             if (2 == version) result.setSuccess(service.notBlank(""));
@@ -67,9 +65,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
 
     @GetMapping("/size")
     @ResponseBody
-    public Result<String> size(
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
-        return new Result<String>(1).execute(result -> {
+    public Result<String> size() {
+        return new Result<String>().execute(result -> {
             if (0 == version) result.setSuccess(service.size("text"));
             if (1 == version) result.setSuccess(service.size(null));
             if (2 == version) result.setSuccess(service.size(""));
@@ -80,9 +77,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
 
     @GetMapping("/pattern")
     @ResponseBody
-    public Result<String> pattern(
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
-        return new Result<String>(1).execute(result -> {
+    public Result<String> pattern() {
+        return new Result<String>().execute(result -> {
             if (0 == version) result.setSuccess(service.pattern("text_0"));
             if (1 == version) result.setSuccess(service.pattern(null));
             if (2 == version) result.setSuccess(service.pattern(""));
@@ -92,9 +88,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
 
     @GetMapping("/notEmpty")
     @ResponseBody
-    public Result<String> notEmpty(
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
-        return new Result<String>(1).execute(result -> {
+    public Result<String> notEmpty() {
+        return new Result<String>().execute(result -> {
             if (0 == version) result.setSuccess(service.notEmpty(Collections.singletonList(Util.uuid32())));
             if (1 == version) result.setSuccess(service.notEmpty(null));
             if (2 == version) result.setSuccess(service.notEmpty(Collections.emptyList()));
@@ -104,9 +99,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
 
     @GetMapping("/min")
     @ResponseBody
-    public Result<String> min(
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
-        return new Result<String>(1).execute(result -> {
+    public Result<String> min() {
+        return new Result<String>().execute(result -> {
             if (0 == version) result.setSuccess(service.min(null));
             if (1 == version) result.setSuccess(service.min(0));
         });
@@ -114,9 +108,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
 
     @GetMapping("/max")
     @ResponseBody
-    public Result<String> max(
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
-        return new Result<String>(1).execute(result -> {
+    public Result<String> max() {
+        return new Result<String>().execute(result -> {
             if (0 == version) result.setSuccess(service.max(null));
             if (1 == version) result.setSuccess(service.max(11));
         });
@@ -124,9 +117,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
 
     @GetMapping("/decimalMin")
     @ResponseBody
-    public Result<String> decimalMin(
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
-        return new Result<String>(1).execute(result -> {
+    public Result<String> decimalMin() {
+        return new Result<String>().execute(result -> {
             if (0 == version) result.setSuccess(service.decimalMin(null));
             if (1 == version) result.setSuccess(service.decimalMin(BigDecimal.ZERO));
         });
@@ -134,9 +126,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
 
     @GetMapping("/decimalMax")
     @ResponseBody
-    public Result<String> decimalMax(
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
-        return new Result<String>(1).execute(result -> {
+    public Result<String> decimalMax() {
+        return new Result<String>().execute(result -> {
             if (0 == version) result.setSuccess(service.decimalMax(null));
             if (1 == version) result.setSuccess(service.decimalMax(BigDecimal.valueOf(11)));
         });
@@ -144,9 +135,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
 
     @GetMapping("/digits")
     @ResponseBody
-    public Result<String> digits(
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
-        return new Result<String>(1).execute(result -> {
+    public Result<String> digits() {
+        return new Result<String>().execute(result -> {
             if (0 == version) result.setSuccess(service.digits(null));
             if (1 == version) result.setSuccess(service.digits(new BigDecimal("10.222")));
         });
@@ -154,9 +144,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
 
     @GetMapping("/negative")
     @ResponseBody
-    public Result<String> negative(
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
-        return new Result<String>(1).execute(result -> {
+    public Result<String> negative() {
+        return new Result<String>().execute(result -> {
             if (0 == version) result.setSuccess(service.negative(null));
             if (1 == version) result.setSuccess(service.negative(BigDecimal.ONE));
         });
@@ -164,9 +153,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
 
     @GetMapping("/negativeOrZero")
     @ResponseBody
-    public Result<String> negativeOrZero(
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
-        return new Result<String>(1).execute(result -> {
+    public Result<String> negativeOrZero() {
+        return new Result<String>().execute(result -> {
             if (0 == version) result.setSuccess(service.negativeOrZero(null));
             if (1 == version) result.setSuccess(service.negativeOrZero(BigDecimal.TEN));
         });
@@ -174,9 +162,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
 
     @GetMapping("/positive")
     @ResponseBody
-    public Result<String> positive(
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
-        return new Result<String>(1).execute(result -> {
+    public Result<String> positive() {
+        return new Result<String>().execute(result -> {
             if (0 == version) result.setSuccess(service.positive(null));
             if (1 == version) result.setSuccess(service.positive(BigDecimal.ZERO));
         });
@@ -184,9 +171,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
 
     @GetMapping("/positiveOrZero")
     @ResponseBody
-    public Result<String> positiveOrZero(
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
-        return new Result<String>(1).execute(result -> {
+    public Result<String> positiveOrZero() {
+        return new Result<String>().execute(result -> {
             if (0 == version) result.setSuccess(service.positiveOrZero(null));
             if (1 == version) result.setSuccess(service.positiveOrZero(BigDecimal.valueOf(-1)));
         });
@@ -194,9 +180,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
 
     @GetMapping("/assertTrue")
     @ResponseBody
-    public Result<String> assertTrue(
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
-        return new Result<String>(1).execute(result -> {
+    public Result<String> assertTrue() {
+        return new Result<String>().execute(result -> {
             if (0 == version) result.setSuccess(service.assertTrue(null));
             if (1 == version) result.setSuccess(service.assertTrue(false));
         });
@@ -204,9 +189,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
 
     @GetMapping("/assertFalse")
     @ResponseBody
-    public Result<String> assertFalse(
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
-        return new Result<String>(1).execute(result -> {
+    public Result<String> assertFalse() {
+        return new Result<String>().execute(result -> {
             if (0 == version) result.setSuccess(service.assertFalse(null));
             if (1 == version) result.setSuccess(service.assertFalse(true));
         });
@@ -214,9 +198,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
 
     @GetMapping("/email")
     @ResponseBody
-    public Result<String> email(
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
-        return new Result<String>(1).execute(result -> {
+    public Result<String> email() {
+        return new Result<String>().execute(result -> {
             if (0 == version) result.setSuccess(service.email(null));
             if (1 == version) result.setSuccess(service.email("x@126.com"));
             if (2 == version) result.setSuccess(service.email("126.com"));
@@ -225,9 +208,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
 
     @GetMapping("/past")
     @ResponseBody
-    public Result<String> past(
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
-        return new Result<String>(1).execute(result -> {
+    public Result<String> past() {
+        return new Result<String>().execute(result -> {
             if (0 == version) result.setSuccess(service.past(null));
             if (1 == version) result.setSuccess(service.past(Dates.now().addDay(1).timestamp()));
         });
@@ -235,9 +217,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
 
     @GetMapping("/future")
     @ResponseBody
-    public Result<String> future(
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
-        return new Result<String>(1).execute(result -> {
+    public Result<String> future() {
+        return new Result<String>().execute(result -> {
             if (0 == version) result.setSuccess(service.future(null));
             if (1 == version) result.setSuccess(service.future(Dates.now().addDay(-1).timestamp()));
         });
@@ -248,10 +229,9 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @Override
     public Result<TabValid> save(
             @AuthenticationPrincipal final TabUser user,
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
             // required = false 可以让请求先过来，如果参数为空再抛出异常，保证本次请求能得到响应
             @RequestBody(required = false) final String body) {
-        return new Result<TabValid>(1).execute(result -> {
+        return new Result<TabValid>().execute(result -> {
             {
                 if (0 == version)
                     result.setSuccess(service.save(TabValid.builder().id(1L).label(Strings.repeat("测试", 5)).value((short) 1).content(Strings.repeat("内容", 15)).build(), user.getId()));
@@ -327,11 +307,11 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @Override
     public Result<Void> update(
             @AuthenticationPrincipal final TabUser user,
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
+
             @ApiParam(required = true, value = "数据id", example = "1") @PathVariable final Long id,
             // required = false 可以让请求先过来，如果参数为空再抛出异常，保证本次请求能得到响应
             @RequestBody(required = false) final String body) {
-        return new Result<Void>(1).call(() -> {
+        return new Result<Void>().call(() -> {
             {
                 if (0 == version)
                     service.update(1L, user.getId(), TabValid.builder().uid(Util.uuid32()).label(Strings.repeat("测试", 5)).value((short) 1).content(Strings.repeat("内容", 15)).build());
@@ -364,9 +344,9 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @Override
     public Result<Void> deleteById(
             @AuthenticationPrincipal final TabUser user,
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
+
             @ApiParam(required = true, value = "数据id", example = "1") @PathVariable final Long id) {
-        return new Result<Void>(1).call(() -> {
+        return new Result<Void>().call(() -> {
             {
                 if (0 == version) service.deleteById(id, user.getId());
                 if (1 == version) service.deleteById(null, null);
@@ -385,10 +365,10 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @Override
     public Result<Void> deleteByUid(
             @AuthenticationPrincipal final TabUser user,
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
+
             @ApiParam(required = true, value = "数据id", example = "1") @PathVariable final Long id,
             @ApiParam(required = true, value = "数据uid", example = "uuid32") @PathVariable final String uid) {
-        return new Result<Void>(1).call(() -> {
+        return new Result<Void>().call(() -> {
             {
                 if (0 == version) service.deleteByUid(id, Util.uuid32(), user.getId());
                 if (1 == version) service.deleteByUid(null, null, null);
@@ -409,9 +389,9 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @Override
     public Result<Void> markDeleteById(
             @AuthenticationPrincipal final TabUser user,
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
+
             @ApiParam(required = true, value = "数据id", example = "1") @PathVariable final Long id) {
-        return new Result<Void>(1).call(() -> {
+        return new Result<Void>().call(() -> {
             {
                 if (0 == version) service.markDeleteById(id, user.getId());
                 if (1 == version) service.markDeleteById(null, null);
@@ -430,10 +410,10 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @Override
     public Result<Void> markDeleteByUid(
             @AuthenticationPrincipal final TabUser user,
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
+
             @ApiParam(required = true, value = "数据id", example = "1") @PathVariable final Long id,
             @ApiParam(required = true, value = "数据uid", example = "uuid32") @PathVariable final String uid) {
-        return new Result<Void>(1).call(() -> {
+        return new Result<Void>().call(() -> {
             {
                 if (0 == version) service.markDeleteByUid(id, Util.uuid32(), user.getId());
                 if (1 == version) service.markDeleteByUid(null, null, null);
@@ -455,9 +435,9 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @Override
     public Result<Void> markDelete(
             @AuthenticationPrincipal final TabUser user,
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
+
             @RequestBody(required = false) final List<MarkDelete> body) {
-        return new Result<Void>(1).call(() -> {
+        return new Result<Void>().call(() -> {
             {
                 if (0 == version)
                     service.markDelete(Collections.singletonList(MarkDelete.builder().id(1L).uid(Util.uuid32()).build()), user.getId());
@@ -484,9 +464,9 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @Override
     public Result<TabValid> search(
             @AuthenticationPrincipal final TabUser user,
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
+
             @RequestParam(required = false, defaultValue = "{}") final TabValid condition) {
-        return new Result<TabValid>(1).execute(result -> {
+        return new Result<TabValid>().execute(result -> {
             if (0 == version) result.setSuccess(service.findList(condition));
             if (1 == version) result.setSuccess(service.findList(TabValid.builder().value((short) 10).build()));
             if (2 == version) result.setSuccess(service.findList(null));
@@ -498,11 +478,10 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @Override
     public Result<TabValid> page(
             @AuthenticationPrincipal final TabUser user,
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
             @ApiParam(required = true, value = "页码", example = "1") @PathVariable final int number,
             @ApiParam(required = true, value = "每页条数", example = "1") @PathVariable final int size,
             @RequestParam(required = false, defaultValue = "{}") final TabValid condition) {
-        return new Result<TabValid>(1).execute(result -> {
+        return new Result<TabValid>().execute(result -> {
             if (0 == version)
                 result.setSuccess(service.findPage(condition, Pager.builder().number(number).size(size).build()));
             if (1 == version)

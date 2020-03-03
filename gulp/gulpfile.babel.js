@@ -96,6 +96,8 @@ gulp.task('mysql:read:write', async () => {
   // SHOW FULL COLUMNS FROM tab_demo_list;
   // # 表部分信息
   // DESCRIBE tab_demo_list;
+  // # 查看表数据行数
+  // SELECT TABLE_NAME, TABLE_ROWS FROM INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA = 'demo_main_db'
   const mysql = require('mysql');
   const connection = mysql.createConnection({
     host: 'localhost',

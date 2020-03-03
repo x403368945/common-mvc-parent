@@ -4,129 +4,112 @@ import com.alibaba.fastjson.JSON;
 import com.ccx.demo.business.user.entity.TabRole;
 import com.ccx.demo.business.user.entity.TabUser;
 import com.ccx.demo.business.user.service.RoleService;
+import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.entity.base.Result;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
+
+import java.util.Optional;
 
 /**
  * 请求操作响应：角色表
  *
  * @author 谢长春 on 2019-08-29
  */
+@Api(tags = "角色")
+@ApiSort(3)
+@RequestMapping("/1/role")
 @Controller
-@RequestMapping("/role/{version}")
 @Slf4j
 @RequiredArgsConstructor
-public class RoleController implements IAuthController<Long> {
+public class RoleController implements IAuthController<Long, TabRole> {
 
     private final RoleService service;
 
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'RoleController', 'RoleController_save')")
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'RC', 'RC_save')")
+    @ApiOperation(value = "1.新增角色", tags = {"1.0.0"})
+    @ApiImplicitParam(name = "body", dataType = "TabRole", dataTypeClass = TabRole.class, required = true)
+    @ApiOperationSupport(
+            order = 1,
+            ignoreParameters = {
+                    "body.id", "body.uid", "body.deleted", "body.insertTime", "body.insertUserId", "body.insertUserName", "body.updateTime", "body.updateUserId", "body.updateUserName", "body.timestamp", "body.sorts"
+                    , "body.authorities"
+            })
     @ResponseBody
     @Override
-    public Result<?> save(@AuthenticationPrincipal final TabUser user,
-                          @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
-                          // required = false 可以让请求先过来，如果参数为空再抛出异常，保证本次请求能得到响应
-                          @RequestBody(required = false) final String body) {
-        return new Result<TabRole>(1) // 指定接口最新版本号
-                .execute(result -> result
-                        .versionAssert(version, false) // 弱校验版本号
-                        .setSuccess(service.save(
-                                JSON.parseObject(body, TabRole.class),
-                                user.getId()
-                        ))
-                );
+    public Result<TabRole> save(final TabUser user, final String body) {
+        return new Result<TabRole>()
+                .execute(result -> result.setSuccess(service.save(JSON.parseObject(body, TabRole.class), user.getId())));
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'RoleController', 'RoleController_update')")
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'RC', 'RC_update')")
+    @ApiOperation(value = "2.修改角色", tags = {"1.0.0"})
+    @ApiImplicitParam(name = "body", dataType = "TabRole", dataTypeClass = TabRole.class, required = true)
+    @ApiOperationSupport(
+            order = 2,
+            ignoreParameters = {
+                    "body.id", "body.uid", "body.deleted", "body.insertTime", "body.insertUserId", "body.insertUserName", "body.updateTime", "body.updateUserId", "body.updateUserName", "body.timestamp", "body.sorts"
+                    , "body.authorities"
+            })
     @ResponseBody
     @Override
-    public Result<?> update(@AuthenticationPrincipal final TabUser user,
-                            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
-
-@ApiParam(required = true, value = "数据id", example = "1") @PathVariable final Long id,
-                            // required = false 可以让请求先过来，如果参数为空再抛出异常，保证本次请求能得到响应
-                            @RequestBody(required = false) final String body) {
-        return new Result<>(1) // 指定接口最新版本号
-                .execute(result -> result
-                        .versionAssert(version, false) // 弱校验版本号
-                        .call(() -> service.update(
-                                id,
-                                user.getId(),
-                                JSON.parseObject(body, TabRole.class)
-                        ))
-                );
+    public Result<Void> update(final TabUser user, final Long id, final String body) {
+        return new Result<Void>().call(() -> service.update(id, user.getId(), JSON.parseObject(body, TabRole.class)));
     }
 
     @PatchMapping("/{id}/{uid}")
+    @ApiOperation(value = "3.逻辑删除角色", tags = {"1.0.0"})
+    @ApiOperationSupport(order = 3)
     @ResponseBody
     @Override
-    public Result<?> markDeleteByUid(@AuthenticationPrincipal final TabUser user,
-                                     @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
-
-@ApiParam(required = true, value = "数据id", example = "1") @PathVariable final Long id,
-                                     @ApiParam(required = true, value = "数据uid", example = "uuid32") @PathVariable final String uid) {
-        return new Result<>(1) // 指定接口最新版本号
-                .execute(result -> result
-                        .versionAssert(version, false) // 弱校验版本号
-                        .call(() -> service.markDeleteByUid(id, uid, user.getId()))
-                );
+    public Result<Void> markDeleteByUid(final TabUser user, final Long id, final String uid) {
+        return new Result<Void>().call(() -> service.markDeleteByUid(id, uid, user.getId()));
     }
 
     @GetMapping("/{id}/{uid}")
+    @ApiOperation(value = "4.按 id 和 uid 查询角色", tags = {"1.0.0"})
+    @ApiOperationSupport(order = 4)
     @ResponseBody
     @Override
-    public Result<?> findByUid(@AuthenticationPrincipal final TabUser user,
-                               @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
-
-@ApiParam(required = true, value = "数据id", example = "1") @PathVariable final Long id,
-                               @ApiParam(required = true, value = "数据uid", example = "uuid32") @PathVariable final String uid) {
-        return new Result<TabRole>(1) // 指定接口最新版本号
-                .execute(result -> result
-                        .versionAssert(version, false) // 弱校验版本号
-                        .setSuccess(service.findByUid(id, uid).orElse(null))
-                );
+    public Result<TabRole> findByUid(final TabUser user, final Long id, final String uid) {
+        return new Result<TabRole>().execute(result -> result.setSuccess(service.findByUid(id, uid).orElse(null)));
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'Menu_Role', 'RoleController', 'RoleController_page')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'Menu_Role', 'RC', 'RC_page')")
     @GetMapping("/page/{number}/{size}")
+    @ApiOperation(value = "5.分页查询角色", tags = {"1.0.0"})
+    @ApiOperationSupport(
+            order = 5,
+            ignoreParameters = {"insertTime", "updateTime", "authorityTree"}
+    )
     @ResponseBody
     @Override
-    public Result<?> page(
-            @AuthenticationPrincipal final TabUser user,
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
-            @ApiParam(required = true, value = "页码", example = "1") @PathVariable final int number,
-            @ApiParam(required = true, value = "每页条数", example = "1") @PathVariable final int size,
-            @RequestParam(required = false, defaultValue = "{}") final String json
-    ) {
-        return new Result<TabRole>(1) // 指定接口最新版本号
-                .execute(result -> result
-                        .versionAssert(version, false) // 弱校验版本号
-                        .setSuccess(service.findPage(
-                                JSON.parseObject(json, TabRole.class),
-                                Pager.builder().number(number).size(size).build()
-                        ))
-                );
+    public Result<TabRole> page(final TabUser user, final int number, final int size, final TabRole condition) {
+        return new Result<TabRole>().execute(result -> result.setSuccess(service.findPage(
+                Optional.ofNullable(condition).orElseGet(TabRole::new),
+                Pager.builder().number(number).size(size).build()
+        )));
     }
 
     @GetMapping("/options")
+    @ApiOperation(value = "6.获取所有有效角色列表", tags = {"1.0.0"})
+    @ApiOperationSupport(order = 6)
     @ResponseBody
-    public Result<?> options(
-            @AuthenticationPrincipal final TabUser user,
-            @ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version) {
-        return new Result<TabRole>(1) // 指定接口最新版本号
-                .execute(result -> result
-                        .versionAssert(version) // 弱校验版本号
-                        .setSuccess(service.getOptions())
-                );
+    public Result<TabRole> options(
+            @ApiIgnore @AuthenticationPrincipal final TabUser user) {
+        return new Result<TabRole>().execute(result -> result.setSuccess(service.getOptions()));
     }
 
 }

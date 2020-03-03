@@ -35,9 +35,9 @@ public class <%=JavaName%>Controller implements IController<<%=id%>> {
     @ResponseBody
     @Override
     public Result<?> findById(
-@ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
+
                               @ApiParam(required = true, value = "数据id", example = "1") @PathVariable final Long id) {
-        return new Result<<%=TabName%>>(1) // 指定接口最新版本号
+        return new Result<<%=TabName%>>()
                 .version(this.getClass(), builder -> builder
                         .props(<%=TabName%>.Props.list()) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
@@ -58,9 +58,9 @@ public class <%=JavaName%>Controller implements IController<<%=id%>> {
     @Override
     public Result<?> search(
 
-@ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
+
             @RequestParam(required = false, defaultValue = "{}") final String json) {
-        return new Result<<%=TabName%>>(1) // 指定接口最新版本号
+        return new Result<<%=TabName%>>()
                 .version(this.getClass(), builder -> builder
                         .props(<%=TabName%>.Props.list()) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
@@ -87,12 +87,12 @@ public class <%=JavaName%>Controller implements IController<<%=id%>> {
     @Override
     public Result<?> page(
 
-@ApiParam(required = true, value = "版本号", example = "1") @PathVariable final int version,
+
             @ApiParam(required = true, value = "页码", example = "1") @PathVariable final int number,
             @ApiParam(required = true, value = "每页条数", example = "1") @PathVariable final int size,
             @RequestParam(required = false, defaultValue = "{}") final String json
     ) {
-        return new Result<<%=TabName%>>(1) // 指定接口最新版本号
+        return new Result<<%=TabName%>>()
                 .version(this.getClass(), builder -> builder
                         .props(<%=TabName%>.Props.list()) // 当前返回对象属性说明
                         .notes(Arrays.asList( // 当前接口详细说明及版本变更说明

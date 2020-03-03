@@ -13,6 +13,9 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 /**
  * <pre>
  * swagger 增强版配置
@@ -48,6 +51,8 @@ public class SwaggerConfig {
                 //.apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.any())
                 .build()
+                .directModelSubstitute(Timestamp.class, String.class)
+                .directModelSubstitute(Date.class, String.class)
 //                .ignoredParameterTypes()
 //                .globalOperationParameters(Lists.newArrayList(parameterBuilder
 //                                .name("token")
@@ -82,13 +87,15 @@ public class SwaggerConfig {
                 )
                 .select()
                 // 生成所有API接口
-                .apis(RequestHandlerSelectors.basePackage("com.ccx.demo.open"))
+                .apis(RequestHandlerSelectors.basePackage("com.ccx.demo.open")) // 这里不支持通配符
                 // 只生成被Api这个注解注解过的类接口
                 .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
                 // 只生成被ApiOperation这个注解注解过的api接口
                 //.apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.any())
                 .build()
+                .directModelSubstitute(Timestamp.class, String.class)
+                .directModelSubstitute(Date.class, String.class)
                 ;
     }
 
@@ -106,13 +113,15 @@ public class SwaggerConfig {
                 )
                 .select()
                 // 生成所有API接口
-                .apis(RequestHandlerSelectors.basePackage("com.ccx.demo.wapp"))
+                .apis(RequestHandlerSelectors.basePackage("com.ccx.demo.wapp")) // 这里不支持通配符
                 // 只生成被Api这个注解注解过的类接口
                 .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
                 // 只生成被ApiOperation这个注解注解过的api接口
                 //.apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.any())
                 .build()
+                .directModelSubstitute(Timestamp.class, String.class)
+                .directModelSubstitute(Date.class, String.class)
                 ;
     }
 

@@ -36,21 +36,14 @@ import java.util.function.Consumer;
 @Slf4j
 @Accessors(chain = true)
 @ApiModel(description = "全局通用响应对象")
-@JSONType(orders = {"v", "code", "message", "rowCount", "pageCount", "totalCount", "rid", "exception", "data", "extras"})
+@JSONType(orders = {"code", "message", "rowCount", "pageCount", "totalCount", "rid", "exception", "data", "extras"})
 public class Result<E> implements IJson {
 
     /**
      * 默认构造函数
      */
     public Result() {
-        this(Code.FAILURE, 0);
-    }
-
-    /**
-     * 指定当前请求接口最新版本号，版本号从 1 开始
-     */
-    public Result(final int version) {
-        this(Code.FAILURE, version);
+        this(Code.FAILURE);
     }
 
     /**
@@ -61,17 +54,6 @@ public class Result<E> implements IJson {
     public Result(final Code code) {
         super();
         setCode(code);
-    }
-
-    /**
-     * 带参构造函数
-     *
-     * @param code {@link Code} 操作响应码
-     */
-    public Result(final Code code, final int version) {
-        super();
-        setCode(code);
-        this.v = Math.max(version, 1);
     }
 
     /**
@@ -98,57 +80,50 @@ public class Result<E> implements IJson {
     }
 
     /**
-     * 当前请求接口最新版本号
-     */
-    @Getter
-    @Setter
-    @ApiModelProperty(position = 1, value = "当前请求接口最新版本号")
-    private int v;
-    /**
      * 编码，成功、失败、异常编码
      */
     @Getter
-    @ApiModelProperty(position = 2, value = "状态码")
+    @ApiModelProperty(position = 1, value = "状态码")
     private Code code;
     /**
      * 本次响应数据总行数
      */
     @Getter
     @Setter
-    @ApiModelProperty(position = 4, value = "本次响应数据行数，data 集合大小")
+    @ApiModelProperty(position = 3, value = "本次响应数据行数，data 集合大小")
     private long rowCount;
     /**
      * 总页数
      */
     @Getter
     @Setter
-    @ApiModelProperty(position = 5, value = "总页数，该参数分页查询时才会起作用，其他情况一直返回 0")
+    @ApiModelProperty(position = 4, value = "总页数，该参数分页查询时才会起作用，其他情况一直返回 0")
     private int pageCount;
     /**
      * 总行数
      */
     @Getter
     @Setter
-    @ApiModelProperty(position = 6, value = "总行数，该参数分页查询时才会起作用，其他情况一直返回 0")
+    @ApiModelProperty(position = 5, value = "总行数，该参数分页查询时才会起作用，其他情况一直返回 0")
     private long totalCount;
     /**
      * 异常消息
      */
     @Getter
-    @ApiModelProperty(position = 8, value = "异常消息，用于开发调试")
+    @ApiModelProperty(position = 7, value = "异常消息，用于开发调试")
     private String exception;
     /**
      * 返回数据集合
      */
     @Getter
-    @ApiModelProperty(position = 9, value = "数据集合，查询单条数据或多条数据，都放在泛型集合中")
+    @ApiModelProperty(position = 8, value = "数据集合，查询单条数据或多条数据，都放在泛型集合中")
     private List<E> data = Collections.emptyList();
     /**
      * 附加信息
      */
     @Getter
     @Setter
-    @ApiModelProperty(position = 10, value = "扩展属性， 补充 data 集合")
+    @ApiModelProperty(position = 9, value = "扩展属性， 补充 data 集合")
     private Map<String, Object> extras = null;
 
     /**
@@ -156,7 +131,7 @@ public class Result<E> implements IJson {
      *
      * @return {@link String}
      */
-    @ApiModelProperty(position = 7, value = "请求ID")
+    @ApiModelProperty(position = 6, value = "请求ID")
     public String getRid() {
         return RequestIdFilter.get();
     }
@@ -166,7 +141,7 @@ public class Result<E> implements IJson {
      *
      * @return String
      */
-    @ApiModelProperty(position = 3, value = "响应消息，用于页面弹窗内容")
+    @ApiModelProperty(position = 2, value = "响应消息，用于页面弹窗内容")
     public String getMessage() {
         if (Objects.equals(Code.CUSTOMIZE, code)) {
             // 处理自定义动态异常消息
@@ -403,34 +378,44 @@ public class Result<E> implements IJson {
         return FWrite.of(file).write(JSON.toJSONString(this, feature));
     }
 
-    /**
-     * 强校验版本号；版本号不匹配将会抛出【{@link Code#VERSION}】异常
-     * 如果需要弱校验，可以使用 {@link Result#versionAssert(int, boolean)}
-     *
-     * @param version int 用户请求版本号
-     * @return {@link Result}{@link Result<E>}
-     */
-    public Result<E> versionAssert(final int version) {
-        return versionAssert(version, true);
-    }
-
-    /**
-     * 指定 exception 为 false 弱校验版本号；不会抛出异常，只是在 extras 中添加版本号不匹配；
-     *
-     * @param version   int 用户请求版本号
-     * @param exception boolean true:抛出异常，false:extras中添加 version 校验异常消息
-     * @return {@link Result}{@link Result<E>}
-     */
-    public Result<E> versionAssert(final int version, final boolean exception) {
-        if (!Objects.equals(this.v, version)) {
-            if (exception) {
-                throw Code.VERSION.exception("当前请求版本号与接口最新版本号不匹配");
-            } else {
-                addExtras("version", "当前请求版本号与接口最新版本号不匹配，请检查更新内容");
-            }
-        }
-        return this;
-    }
+//    /**
+//     * 弱校验版本号；不会抛出异常，只是在 extras 中添加版本号不匹配；
+//     *
+//     * @param version int 用户请求版本号
+//     * @return {@link Result}{@link Result<E>}
+//     */
+//    public Result<E> versionAssert(final int version) {
+//        return versionAssert(version, false);
+//    }
+//
+//    /**
+//     * 强校验版本号；版本号不匹配将会抛出【{@link Code#VERSION}】异常
+//     * 如果需要弱校验，可以使用 {@link Result#versionAssert(int, boolean)}
+//     *
+//     * @param version int 用户请求版本号
+//     * @return {@link Result}{@link Result<E>}
+//     */
+//    public Result<E> versionAssertStrict(final int version) {
+//        return versionAssert(version, true);
+//    }
+//
+//    /**
+//     * 指定 exception 为 false 弱校验版本号；不会抛出异常，只是在 extras 中添加版本号不匹配；
+//     *
+//     * @param version   int 用户请求版本号
+//     * @param exception boolean true:抛出异常，false:extras中添加 version 校验异常消息
+//     * @return {@link Result}{@link Result<E>}
+//     */
+//    private Result<E> versionAssert(final int version, final boolean exception) {
+//        if (!Objects.equals(this.v, version)) {
+//            if (exception) {
+//                throw Code.VERSION.exception("当前请求版本号与接口最新版本号不匹配");
+//            } else {
+//                addExtras("version", "当前请求版本号与接口最新版本号不匹配，请检查更新内容");
+//            }
+//        }
+//        return this;
+//    }
 //
 //    /**
 //     * 设置版本信息

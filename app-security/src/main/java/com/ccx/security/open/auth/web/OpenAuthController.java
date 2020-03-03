@@ -102,9 +102,8 @@ public class OpenAuthController {
                                     @RequestBody final String body,
                                     HttpServletRequest request
     ) {
-        final Result<TabUser> result = new Result<>(1);
+        final Result<TabUser> result = new Result<>();
         try {
-            result.versionAssert(version);
             AuthLogin authLogin = JSON.parseObject(body, AuthLogin.class);
             // 登录成功之后，将用户信息放入session
             TabUser user = authService.login(authLogin.getUsername(), authLogin.getPassword());
@@ -136,7 +135,7 @@ public class OpenAuthController {
 //                                  HttpServletRequest request,
 //                                  HttpServletResponse response
 //    ) {
-//        final Result<TabUser> result = new Result<>(1);
+//        final Result<TabUser> result = new Result<>();
 //        try {
 //            result
 //                    .version(this.getClass(), builder -> builder

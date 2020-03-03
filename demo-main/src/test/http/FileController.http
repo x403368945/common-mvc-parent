@@ -1,5 +1,5 @@
 ### 单文件上传
-POST http://localhost:8080/file/1/upload
+POST http://localhost:8080/1/file/upload
 Authorization: basic YWRtaW46YWRtaW4=
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
@@ -11,7 +11,7 @@ Element Name
 --WebAppBoundary--
 
 ### 多文件上传
-POST http://localhost:8080/file/1/uploads
+POST http://localhost:8080/1/file/uploads
 Authorization: basic YWRtaW46YWRtaW4=
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
@@ -21,16 +21,16 @@ Content-Type: text/plain
 
 Element Name
 --WebAppBoundary
-Content-Disposition: form-data; name="files"; filename="login.http"
-Content-Type: text/plain
+Content-Disposition: form-data; name="files"; filename="index.html"
+Content-Type: text/html
 
-< ./login.http
+< index.html
 
 --WebAppBoundary
-Content-Disposition: form-data; name="files"; filename="README.MD"
-Content-Type: text/plain
+Content-Disposition: form-data; name="files"; filename="logback.xml"
+Content-Type: application/xml
 
-< ../files/README.MD
+< ../logback.xml
 
 --WebAppBoundary--
 

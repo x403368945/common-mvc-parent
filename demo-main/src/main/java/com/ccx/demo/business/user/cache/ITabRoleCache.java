@@ -85,4 +85,14 @@ public interface ITabRoleCache extends ICache {
                 .map(TabRole::getName)
                 .collect(Collectors.toList());
     }
+
+//    default <T> List<T> map(final List<T> list,
+//                            final Function<T, Long> idGetter,
+//                            final BiConsumer<T, Optional<TabRole>> valueSetter) {
+//        list.forEach(row -> {
+//            Long id = idGetter.apply(row);
+//            valueSetter.accept(row, getTabRoleCacheById(id));
+//        });
+//        return list;
+//    }
 }

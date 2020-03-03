@@ -2,7 +2,7 @@ app: # 本地开发 windows 环境
   env: dev # 当前环境：[dev:本地|beta:测试|prod:生产]
   admin-user-id: 1 # 管理员用户ID
   admin-user: admin # 管理员账户登录账户
-  ip: 127.0.0.1 # 当前主机 IP 地址；可使用 frp 服务器IP
+  ip: 127.0.0.1 # 当前主机 IP 地址
   domain: http://localhost:8080 # 应用路径，域名；可使用 frp 服务器域名
   markdown: http://localhost:8080/md/ # markdown 文档地址
   path-root: /app/files # 应用文件根目录

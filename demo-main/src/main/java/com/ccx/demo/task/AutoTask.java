@@ -3,6 +3,8 @@ package com.ccx.demo.task;
 import com.ccx.demo.config.init.AppConfig.Path;
 import com.utils.util.FPath;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Slf4j
+@ConditionalOnProperty(value = "app.auto-task.enabled", havingValue = "true")
 public class AutoTask {
 //	/**
 //	 * 测试定时任务
