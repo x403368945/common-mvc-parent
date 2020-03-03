@@ -32,9 +32,8 @@ public class MarkDelete {
     @NotNull
     @ApiModelProperty(position = 1, value = "数据 id", example = "1", required = true)
     private Object id;
-    @NotNull
     @Size(min = 32, max = 32)
-    @ApiModelProperty(position = 2, value = "数据 uid", example = "UUID32", required = true)
+    @ApiModelProperty(position = 2, value = "数据 uid", example = "UUID32")
     private String uid;
     @ApiModelProperty(position = 3, value = "最后一次更新数据时间戳", example = "1583069285501")
     @JSONField(parseFeatures = AllowISO8601DateFormat)

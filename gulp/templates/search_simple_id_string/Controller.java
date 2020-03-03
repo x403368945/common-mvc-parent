@@ -1,118 +1,89 @@
 package <%=pkg%>.code.<%=javaname%>.web;
 
 import <%=pkg%>.code.<%=javaname%>.entity.<%=TabName%>;
-import <%=pkg%>.code.<%=javaname%>.entity.<%=TabName%>.OrderBy;
 import <%=pkg%>.code.<%=javaname%>.service.<%=JavaName%>Service;
-import <%=pkg%>.config.init.AppConfig.URL;
+import <%=pkg%>.business.user.web.IController;
+import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import com.github.xiaoymin.knife4j.annotations.ApiSort;
+import com.support.mvc.entity.base.MarkDelete;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.entity.base.Result;
-import com.support.mvc.entity.base.Sorts;
-import com.support.mvc.web.IController;
 import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
+import io.swagger.annotations.ApiParam;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.Arrays;
-import java.util.Collections;
-
-import static com.support.mvc.entity.base.Sorts.Direction.DESC;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 请求操作响应：<%=comment%>
  *
  * @author 谢长春 on <%=date%>
  */
-@Controller
+@Api(tags = "<%=comment%>")
+//@ApiSort(1) // 控制接口排序
 @RequestMapping("/<%=java_name%>/{version}")
+@Controller
 @Slf4j
 @RequiredArgsConstructor
-public class <%=JavaName%>Controller implements IController<<%=id%>> {
+public class <%=JavaName%>Controller implements IController<Long, <%=TabName%>> {
 
     private final <%=JavaName%>Service service;
 
     @GetMapping("/{id}")
+    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_find')")
+    @ApiOperation(value = "1.按 id 查询<%=comment%>", tags = {"<%=date%>"})
+    @ApiOperationSupport(order = 1) // order id 相同的接口只能开放一个
     @ResponseBody
     @Override
-    public Result<?> findById(
-
-                              @ApiParam(required = true, value = "数据id", example = "1") @PathVariable final String id) {
-        return new Result<<%=TabName%>>()
-                .version(this.getClass(), builder -> builder
-                        .props(<%=TabName%>.Props.list()) // 当前返回对象属性说明
-                        .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
-                                "按ID查询详细信息，url带参说明:/{version【response.version.id】}/{id【response.data[*].id】}",
-                                "1. <%=comment%>"
-                        ))
-                        .build()
-                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl("100")))) // 当前接口参考案例请求地址；
-                )
-                .execute(result -> result
-                        .versionAssert(version, false) // 弱校验版本号
-                        .setSuccess(service.findById(id).orElse(null))
-                );
+    public Result<?> findById(final Long id) {
+        return new Result<<%=TabName%>>().execute(result -> result.setSuccess(service.findById(id).orElse(null)));
     }
 
-    @GetMapping
+/*
+    @GetMapping("/{id}/{uid}")
+    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_find')")
+    @ApiOperation(value = "5.按 id 和 uid 查询<%=comment%>", tags = {"<%=date%>"})
+    @ApiOperationSupport(order = 5) // order id 相同的接口只能开放一个
     @ResponseBody
     @Override
-    public Result<?> search(
-
-
-            @RequestParam(required = false, defaultValue = "{}") final String json) {
-        return new Result<<%=TabName%>>()
-                .version(this.getClass(), builder -> builder
-                        .props(<%=TabName%>.Props.list()) // 当前返回对象属性说明
-                        .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
-                            "查询多条数据，不分页，url带参必须使用 encodeURI 格式化【?json=encodeURI(JSON.stringify({}))】，url带参说明:/{version【response.version.id】}",
-                            "1. <%=comment%>"
-                        ))
-                        .build()
-                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl()), // 当前接口参考案例请求地址；
-                                <%=TabName%>.builder() // 当前接口参考案例请求参数，demo中设置支持查询的字段
-                                    .sorts(Collections.singletonList(Sorts.Order.builder().name(OrderBy.id.name()).direction(DESC).build()))
-                                    .build()
-                        ))
-                )
-                .execute(result -> result
-                        .versionAssert(version, false) // 弱校验版本号
-                        .setSuccess(service.findList(
-                                Param.of(json).parseObject(<%=TabName%>.class)
-                        ))
-                );
+    public Result<TabRole> findByUid(final Long id, final String uid) {
+        return new Result<TabRole>().execute(result -> result.setSuccess(service.findByUid(id, uid).orElse(null)));
     }
-
+*/
     @GetMapping("/page/{number}/{size}")
+    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_page')")
+    @ApiOperation(value = "2.分页查询<%=comment%>", tags = {"<%=date%>"})
+    @ApiOperationSupport(
+            order = 2,
+            ignoreParameters = {"insertTime", "updateTime"}
+    )
     @ResponseBody
     @Override
-    public Result<?> page(
-
-
-            @ApiParam(required = true, value = "页码", example = "1") @PathVariable final int number,
-            @ApiParam(required = true, value = "每页条数", example = "1") @PathVariable final int size,
-            @RequestParam(required = false, defaultValue = "{}") final String json
-    ) {
-        return new Result<<%=TabName%>>()
-                .version(this.getClass(), builder -> builder
-                        .props(<%=TabName%>.Props.list()) // 当前返回对象属性说明
-                        .notes(Arrays.asList( // 当前接口详细说明及版本变更说明
-                            "分页查询数据，url带参必须使用 encodeURI 格式化【?json=encodeURI(JSON.stringify({}))】，url带参说明:/{version【response.version.id】}/page/{number【当前页码】}/{size【每页显示条数】}",
-                            "1. <%=comment%>"
-                        ))
-                        .build()
-                        .demo(v -> v.setDemo(URL.SERVER.append(v.formatUrl(1, 20)), // 当前接口参考案例请求地址；
-                                <%=TabName%>.builder() // 当前接口参考案例请求参数，demo中设置支持查询的字段
-                                        .sorts(Collections.singletonList(Sorts.Order.builder().name(OrderBy.id.name()).direction(DESC).build()))
-                                        .build()
-                        ))
-                )
-                .execute(result -> result
-                        .versionAssert(version, false) // 弱校验版本号
-                        .setSuccess(service.findPage(
-                                Param.of(json).parseObject(<%=TabName%>.class),
-                                Pager.builder().number(number).size(size).build()
-                        ))
-                );
+    public Result<<%=TabName%>> page(final int number, final int size, final <%=TabName%> condition) {
+        return new Result<<%=TabName%>>().execute(result -> result.setSuccess(service.findPage(
+                Optional.ofNullable(condition).orElseGet(<%=TabName%>::new),
+                Pager.builder().number(number).size(size).build()
+        )));
     }
-
+/*
+    // 非必要情况下不要开放列表查询方法，因为没有分页控制，容易内存溢出。大批量查询数据应该使用分页查询
+    @GetMapping
+    // @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_search')")
+    @ApiOperation(value = "7.分页查询<%=comment%>", tags = {"<%=date%>"})
+    @ApiOperationSupport(
+            order = 7,
+            ignoreParameters = {"insertTime", "updateTime"}
+    )
+    @ResponseBody
+    @Override
+    public Result<<%=TabName%>> search(final <%=TabName%> condition) {
+        return new Result<<%=TabName%>>().execute(result -> result.setSuccess(service.findList(
+                Optional.ofNullable(condition).orElseGet(<%=TabName%>::new),
+        )));
+    }
+/*
 }

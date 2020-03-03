@@ -49,8 +49,9 @@ public class RoleController implements IAuthController<Long, TabRole> {
     @ResponseBody
     @Override
     public Result<TabRole> save(final TabUser user, final String body) {
-        return new Result<TabRole>()
-                .execute(result -> result.setSuccess(service.save(JSON.parseObject(body, TabRole.class), user.getId())));
+        return new Result<TabRole>().execute(result ->
+                result.setSuccess(service.save(JSON.parseObject(body, TabRole.class), user.getId()))
+        );
     }
 
     @PutMapping("/{id}")
@@ -107,8 +108,7 @@ public class RoleController implements IAuthController<Long, TabRole> {
     @ApiOperation(value = "6.获取所有有效角色列表", tags = {"1.0.0"})
     @ApiOperationSupport(order = 6)
     @ResponseBody
-    public Result<TabRole> options(
-            @ApiIgnore @AuthenticationPrincipal final TabUser user) {
+    public Result<TabRole> options(@ApiIgnore @AuthenticationPrincipal final TabUser user) {
         return new Result<TabRole>().execute(result -> result.setSuccess(service.getOptions()));
     }
 
