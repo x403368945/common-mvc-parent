@@ -6,9 +6,15 @@ import com.alibaba.fastjson.annotation.JSONType;
 import com.ccx.demo.business.user.cache.ITabUserCache;
 import com.ccx.demo.business.user.vo.Authority;
 import com.ccx.demo.enums.Bool;
+import com.google.common.collect.Lists;
 import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;
+import com.querydsl.core.types.EntityPath;
+import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.BeanPath;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
+import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.support.mvc.entity.ITable;
 import com.support.mvc.entity.IWhere;
 import com.support.mvc.entity.IWhere.QdslWhere;
@@ -29,6 +35,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
@@ -55,12 +62,12 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 @Data
 @ApiModel(description = "角色表")
 @JSONType(orders = {"id", "uid", "name", "authorities", "insertTime", "insertUserId", "updateTime", "updateUserId", "deleted"})
-public final class TabRole implements
+public class TabRole implements
         ITable, // 所有与数据库表 - 实体类映射的表都实现该接口；方便后续一键查看所有表的实体
         ITabUserCache,
         // JPAUpdateClause => com.support.mvc.dao.IRepository#update 需要的动态更新字段；采用 方案2 时需要实现该接口
         // QdslWhere       => com.support.mvc.dao.IViewRepository 需要的查询条件
-        IWhere<TabRole, QdslWhere> {
+        IWhere<JPAUpdateClause, QdslWhere> {
     /**
      * 数据ID，主键自增
      */
@@ -68,7 +75,7 @@ public final class TabRole implements
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull(groups = {IUpdate.class, IMarkDelete.class})
     @Positive
-    @ApiModelProperty(value = "数据ID，主键自增")
+    @ApiModelProperty(value = "数据ID")
     private Long id;
     /**
      * 用户UUID，缓存和按ID查询时可使用强校验
@@ -76,17 +83,20 @@ public final class TabRole implements
     @Column(updatable = false)
     @NotNull(groups = {IUpdate.class, IMarkDelete.class})
     @Size(min = 32, max = 32)
+    @ApiModelProperty(value = "数据uid")
     private String uid;
     /**
      * 名称
      */
     @NotNull(groups = {ISave.class})
     @Size(max = 200)
+    @ApiModelProperty(value = "名称")
     private String name;
     /**
-     * 权限指令集合，tab_authority.id，{@link String[]}
+     * 权限指令集合，{@link String}[]
      */
     @Convert(converter = ArrayStringJsonConvert.class)
+    @ApiModelProperty(value = "权限指令集合，{@link String}[]")
     private String[] authorities;
     /**
      * 创建时间
@@ -102,6 +112,7 @@ public final class TabRole implements
     @Column(updatable = false)
     @NotNull(groups = {ISave.class})
     @Positive
+    @ApiModelProperty(value = "新增操作人id")
     private Long insertUserId;
     /**
      * 修改时间
@@ -116,9 +127,10 @@ public final class TabRole implements
      */
     @NotNull(groups = {ISave.class, IUpdate.class})
     @Positive
+    @ApiModelProperty(value = "更新操作人id")
     private Long updateUserId;
     /**
-     * 是否逻辑删除（1、已删除， 0、未删除），参考：Enum{@link Bool}
+     * 是否逻辑删除（1、已删除， 0、未删除），参考：Enum{@link com.ccx.demo.enums.Bool}
      */
     @Column(insertable = false, updatable = false)
     @Null(groups = {ISave.class})
@@ -130,7 +142,7 @@ public final class TabRole implements
      */
     @QueryTransient
     @Transient
-    @ApiModelProperty(value = "com.ccx.demo.business.user.entity.TabRole$OrderBy")
+    @ApiModelProperty(value = "com.ccx.demo.code.role.entity.TabRole$OrderBy")
     private List<Sorts.Order> sorts;
     /**
      * 前端配置的权限树
@@ -195,16 +207,14 @@ public final class TabRole implements
 // Enum End : DB Start *************************************************************************************************
 
     @Override
-    public Then<TabRole> update(final TabRole dest) {
+    public Then<JPAUpdateClause> update(final JPAUpdateClause jpaUpdateClause) {
+        final QTabRole q = tabRole;
         // 动态拼接 update 语句
         // 以下案例中 只有 name 属性 为 null 时才不会加入 update 语句；
-        return Then.of(dest)
-                .then(name, update -> dest.setName(name))
-                .then(authorities, update -> dest.setAuthorities(authorities))
-                .then(update -> dest.setUpdateUserId(updateUserId))
-//                // 当 name != null 时更新 name 属性
-//                .then(name, update -> update.set(q.name, name))
-//                .then(update -> update.set(q.updateUserId, updateUserId))
+        return Then.of(jpaUpdateClause)
+                .then(name, update -> update.set(q.name, name))
+                .then(authorities, update -> update.set(q.authorities, authorities))
+                .then(update -> update.set(q.updateUserId, updateUserId))
 //                // 假设数据库中 content is not null；可以在属性为null时替换为 ""
 //                .then(update -> update.set(q.content, Optional.ofNullable(content).orElse("")))
 //                // 数据库中 amount 可以为 null
@@ -257,6 +267,73 @@ public final class TabRole implements
         }
     }
 
+    /**
+     * 获取查询实体与数据库表映射的所有字段,用于投影到 VO 类
+     * 支持追加扩展字段,追加扩展字段一般用于连表查询
+     *
+     * @param appends {@link Expression}[] 追加扩展连表查询字段
+     * @return {@link Expression}[]
+     */
+    public static Expression<?>[] allColumnAppends(final Expression<?>... appends) {
+        final List<Expression<?>> columns = Lists.newArrayList(appends);
+        final Class<?> clazz = tabRole.getClass();
+        try {
+            for (Field field : clazz.getDeclaredFields()) {
+                if (field.getType().isPrimitive()) continue;
+                final Object o = field.get(tabRole);
+                if (o instanceof EntityPath || o instanceof BeanPath) continue;
+                if (o instanceof Path) {
+                    columns.add((Path<?>) o);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("获取查询实体属性与数据库映射的字段异常", e);
+        }
+        return columns.toArray(new Expression<?>[0]);
+    }
+
 // DB End **************************************************************************************************************
 
 }
+/* ehcache 配置
+<cache alias="ITabRoleCache">
+    <key-type>java.lang.Long</key-type>
+    <value-type>com.ccx.demo.code.role.entity.TabRole</value-type>
+    <expiry>
+        <ttl unit="days">10</ttl>
+    </expiry>
+    <resources>
+        <heap>100</heap>
+        <offheap unit="MB">30</offheap>
+    </resources>
+</cache>
+*/
+/*
+import com.alibaba.fastjson.annotation.JSONField;
+import com.querydsl.core.annotations.QueryTransient;
+import com.support.mvc.entity.ICache;
+import java.beans.Transient;
+
+import static com.ccx.demo.config.init.BeanInitializer.Beans.getAppContext;
+/**
+ * 缓存：角色表
+ *
+ * @author 谢长春 on 2020-03-04
+ *\/
+public interface ITabRoleCache extends ICache {
+    String CACHE_ROW_BY_ID = "ITabRoleCache";
+
+    /**
+     * 按 ID 获取数据缓存行
+     *
+     * @param id {@link TabRole#getId()}
+     * @return {@link Optional<TabRole>}
+     *\/
+    @JSONField(serialize = false, deserialize = false)
+    default Optional<TabRole> getTabRoleCacheById(final Long id) {
+        return Optional.ofNullable(id)
+                .filter(v -> v > 0)
+                .map(v -> getAppContext().getBean(RoleRepository.class).findCacheById(v));
+    }
+}
+*/

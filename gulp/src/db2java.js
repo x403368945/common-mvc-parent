@@ -450,7 +450,7 @@ export class BaseAdapter {
       },
       id: ({name, dataType, length}) => {
         if ([DataType.BIGINT.name, DataType.INT.name].includes(dataType.name)) {
-          return `    @Id\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\n    @NotNull(groups = {IUpdate.class, IMarkDelete.class})\n    @Positive\n    @@ApiModelProperty(value = "数据ID")\n    private Long ${name};`
+          return `    @Id\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\n    @NotNull(groups = {IUpdate.class, IMarkDelete.class})\n    @Positive\n    @ApiModelProperty(value = "数据ID")\n    private Long ${name};`
         } else {
           return `    @Id\n    @NotBlank(groups = {IUpdate.class, IMarkDelete.class})\n    @Size(max = ${length})\n    @ApiModelProperty(value = "数据id")\n    private String ${name};`
         }

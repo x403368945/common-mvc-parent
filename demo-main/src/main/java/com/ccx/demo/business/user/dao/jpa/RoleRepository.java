@@ -4,7 +4,6 @@ import com.ccx.demo.business.user.cache.ITabRoleCache;
 import com.ccx.demo.business.user.entity.QTabRole;
 import com.ccx.demo.business.user.entity.TabRole;
 import com.ccx.demo.enums.Bool;
-import com.google.common.collect.Lists;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
@@ -16,13 +15,9 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 import static com.ccx.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
-import static com.ccx.demo.config.init.BeanInitializer.getAppContext;
 /**
  * 数据操作：角色表
  *
@@ -82,14 +77,10 @@ public interface RoleRepository extends
     @CacheEvict(cacheNames = ITabRoleCache.CACHE_ROW_BY_ID, key = "#id")
     @Override
     default long update(final Long id, final Long userId, final TabRole obj) {
-        return findById(id)
-                .filter(dest -> Objects.equals(obj.getUid(), dest.getUid()))
-                .filter(dest -> Objects.equals(obj.getUpdateTime(), dest.getUpdateTime()))
-                .map(dest -> {
-                    obj.update(dest);
-                    return 1L;
-                })
-                .orElse(0L);
+        return obj.update(jpaQueryFactory.<JPAQueryFactory>get().update(q))
+                .get()
+                .where(q.id.eq(id).and(q.uid.eq(obj.getUid())).and(q.updateTime.eq(obj.getUpdateTime())))
+                .execute();
     }
 
     @CacheEvict(cacheNames = ITabRoleCache.CACHE_ROW_BY_ID, key = "#id")
@@ -162,6 +153,39 @@ public interface RoleRepository extends
                 .orderBy(condition.buildQdslSorts())
                 .fetchResults();
     }
+
+    @Override
+    default <T extends TabRole> List<T> findListProjection(final TabRole condition, final Class<T> clazz) {
+        return findListProjection(condition, clazz, TabRole.allColumnAppends());
+    }
+
+    @Override
+    default <T extends TabRole> List<T> findListProjection(final TabRole condition, final Class<T> clazz, final Expression<?>... exps) {
+        return jpaQueryFactory.<JPAQueryFactory>get()
+                .select(Projections.bean(clazz, exps))
+                .from(q)
+                .where(condition.where().toArray())
+                .orderBy(condition.buildQdslSorts())
+                .fetch();
+    }
+
+    @Override
+    default <T extends TabRole> QueryResults<T> findPageProjection(final TabRole condition, final Pager pager, final Class<T> clazz) {
+        return findPageProjection(condition, pager, clazz, TabRole.allColumnAppends());
+    }
+
+    @Override
+    default <T extends TabRole> QueryResults<T> findPageProjection(final TabRole condition, final Pager pager, final Class<T> clazz, final Expression<?>... exps) {
+        return jpaQueryFactory.<JPAQueryFactory>get()
+                .select(Projections.bean(clazz, exps))
+                .from(q)
+                .where(condition.where().toArray())
+                .offset(pager.offset())
+                .limit(pager.limit())
+                .orderBy(condition.buildQdslSorts())
+                .fetchResults();
+    }
+
 //
 //    /**
 //     * 查询角色

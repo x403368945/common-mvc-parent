@@ -11,13 +11,15 @@ import com.support.mvc.entity.base.Pager;
 import com.support.mvc.entity.base.Result;
 import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.List;
-import java.util.Set;
+import java.util.Optional;
+
 
 /**
  * 请求操作响应：<%=comment%>
@@ -26,7 +28,7 @@ import java.util.Set;
  */
 @Api(tags = "<%=comment%>")
 //@ApiSort(1) // 控制接口排序
-@RequestMapping("/<%=java_name%>/{version}")
+@RequestMapping("/1/<%=java_name%>")
 @Controller
 @Slf4j
 @RequiredArgsConstructor

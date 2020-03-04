@@ -25,22 +25,23 @@ CREATE DATABASE demo_main_db CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_general_ci
 */
 -- 用户表
 DROP TABLE IF EXISTS tab_user;
-CREATE TABLE tab_user (
-    `id`             BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '数据ID，主键自增',
-    `uid`            VARCHAR(32)                       NOT NULL COMMENT '用户UUID，缓存和按ID查询时可使用强校验',
-    `subdomain`      VARCHAR(10)                       NOT NULL DEFAULT '' COMMENT '子域名用户组',
-    `username`       VARCHAR(15)                       NOT NULL COMMENT '登录名',
-    `password`       VARCHAR(150)                      NOT NULL COMMENT '登录密码',
-    `nickname`       VARCHAR(30)                       NOT NULL DEFAULT '' COMMENT '昵称',
-    `phone`          VARCHAR(11)                       NOT NULL DEFAULT '' COMMENT '手机号',
-    `email`          VARCHAR(30)                       NOT NULL DEFAULT '' COMMENT '邮箱',
-    `roles`          JSON                              NOT NULL COMMENT '角色 ID 集合，tab_role.id，{@link List<Long>}',
-    `registerSource` TINYINT(1) UNSIGNED               NOT NULL DEFAULT 0 COMMENT '账户注册渠道',
-    `insertTime`     TIMESTAMP                         NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `insertUserId`   BIGINT                            NOT NULL COMMENT '创建用户ID',
-    `updateTime`     TIMESTAMP(3)                      NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '修改时间',
-    `updateUserId`   BIGINT                            NOT NULL COMMENT '修改用户ID',
-    `deleted`        TINYINT(1) UNSIGNED               NOT NULL DEFAULT 0 COMMENT '是否逻辑删除（1、已删除， 0、未删除）',
+CREATE TABLE tab_user
+(
+    `id`             BIGINT UNSIGNED     NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '数据ID，主键自增',
+    `uid`            VARCHAR(32)         NOT NULL COMMENT '用户UUID，缓存和按ID查询时可使用强校验',
+    `subdomain`      VARCHAR(10)         NOT NULL DEFAULT '' COMMENT '子域名用户组',
+    `username`       VARCHAR(15)         NOT NULL COMMENT '登录名',
+    `password`       VARCHAR(150)        NOT NULL COMMENT '登录密码',
+    `nickname`       VARCHAR(30)         NOT NULL DEFAULT '' COMMENT '昵称',
+    `phone`          VARCHAR(11)         NOT NULL DEFAULT '' COMMENT '手机号',
+    `email`          VARCHAR(30)         NOT NULL DEFAULT '' COMMENT '邮箱',
+    `roles`          JSON                NOT NULL COMMENT '角色 ID 集合，tab_role.id，{@link Long}[]',
+    `registerSource` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '账户注册渠道',
+    `insertTime`     TIMESTAMP           NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `insertUserId`   BIGINT              NOT NULL COMMENT '创建用户ID',
+    `updateTime`     TIMESTAMP(3)        NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '修改时间',
+    `updateUserId`   BIGINT              NOT NULL COMMENT '修改用户ID',
+    `deleted`        TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否逻辑删除（1、已删除， 0、未删除）',
     KEY (`uid`),
     KEY (`username`),
     KEY (`phone`),
@@ -57,10 +58,10 @@ CREATE TABLE tab_role
     id           BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL COMMENT '数据ID，主键自增',
     uid          VARCHAR(32)                       NOT NULL COMMENT '用户UUID，缓存和按ID查询时可使用强校验',
     name         VARCHAR(200)                      NOT NULL COMMENT '名称',
-    authorities  JSON                              NOT NULL COMMENT '权限代码集合，{@link List<String>}',
+    authorities  JSON                              NOT NULL COMMENT '权限指令集合，{@link String}[]',
     insertTime   TIMESTAMP                         NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     insertUserId BIGINT                            NOT NULL COMMENT '创建用户ID',
-    updateTime   TIMESTAMP(3)                         NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '修改时间',
+    updateTime   TIMESTAMP(3)                      NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '修改时间',
     updateUserId BIGINT                            NOT NULL COMMENT '修改用户ID',
     deleted      TINYINT(1) UNSIGNED               NOT NULL DEFAULT 0 COMMENT '是否逻辑删除（1、已删除， 0、未删除），参考：Enum{@link com.ccx.demo.enums.Bool}',
     KEY (uid)
@@ -71,10 +72,11 @@ CREATE TABLE tab_role
 
 -- 用户登录记录表
 DROP TABLE IF EXISTS tab_user_login;
-CREATE TABLE tab_user_login (
+CREATE TABLE tab_user_login
+(
     `id`        BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '数据ID，主键自增',
-    `userId`    BIGINT                            NOT NULL COMMENT '用户ID，tab_user.id',
-    `timestamp` TIMESTAMP(3)                      NOT NULL DEFAULT CURRENT_TIMESTAMP(3) COMMENT '登录时间',
+    `userId`    BIGINT          NOT NULL COMMENT '用户ID，tab_user.id',
+    `timestamp` TIMESTAMP(3)    NOT NULL DEFAULT CURRENT_TIMESTAMP(3) COMMENT '登录时间',
     KEY (`timestamp`)
 )
     ENGINE InnoDB

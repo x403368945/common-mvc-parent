@@ -4,15 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
 import <%=pkg%>.enums.Bool;
-import <%=pkg%>.support.entity.ITabUserCache;
+import <%=pkg%>.business.user.cache.ITabUserCache;
 import com.google.common.collect.Lists;
-import com.support.mvc.entity.ITable;
-import com.support.mvc.entity.IWhere;
-import com.support.mvc.entity.IWhere.QdslWhere;
-import com.support.mvc.entity.base.Sorts;
-import com.support.mvc.entity.validated.IMarkDelete;
-import com.support.mvc.entity.validated.ISave;
-import com.support.mvc.entity.validated.IUpdate;
 import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;
 import com.querydsl.core.types.EntityPath;
@@ -21,6 +14,13 @@ import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.BeanPath;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import com.querydsl.jpa.impl.JPAUpdateClause;
+import com.support.mvc.entity.ITable;
+import com.support.mvc.entity.IWhere;
+import com.support.mvc.entity.IWhere.QdslWhere;
+import com.support.mvc.entity.base.Sorts;
+import com.support.mvc.entity.validated.IMarkDelete;
+import com.support.mvc.entity.validated.ISave;
+import com.support.mvc.entity.validated.IUpdate;
 import com.utils.util.Then;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -182,11 +182,11 @@ public class <%=TabName%> implements
      */
     public static Expression<?>[] allColumnAppends(final Expression<?>... appends) {
         final List<Expression<?>> columns = Lists.newArrayList(appends);
-        final Class<?> clazz = tabDemoList.getClass();
+        final Class<?> clazz = <%=tabName%>.getClass();
         try {
             for (Field field : clazz.getDeclaredFields()) {
                 if (field.getType().isPrimitive()) continue;
-                final Object o = field.get(tabDemoList);
+                final Object o = field.get(<%=tabName%>);
                 if (o instanceof EntityPath || o instanceof BeanPath) continue;
                 if (o instanceof Path) {
                     columns.add((Path<?>) o);

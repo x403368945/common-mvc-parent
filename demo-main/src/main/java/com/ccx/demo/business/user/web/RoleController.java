@@ -6,6 +6,7 @@ import com.ccx.demo.business.user.entity.TabUser;
 import com.ccx.demo.business.user.service.RoleService;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
+import com.support.mvc.entity.base.MarkDelete;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.entity.base.Result;
 import io.swagger.annotations.Api;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -27,7 +29,7 @@ import java.util.Optional;
  * @author 谢长春 on 2019-08-29
  */
 @Api(tags = "角色")
-@ApiSort(3)
+@ApiSort(3) // 控制接口排序
 @RequestMapping("/1/role")
 @Controller
 @Slf4j
@@ -71,6 +73,7 @@ public class RoleController implements IAuthController<Long, TabRole> {
     }
 
     @PatchMapping("/{id}/{uid}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'RC', 'RC_delete')")
     @ApiOperation(value = "3.逻辑删除角色", tags = {"1.0.0"})
     @ApiOperationSupport(order = 3)
     @ResponseBody
@@ -79,9 +82,19 @@ public class RoleController implements IAuthController<Long, TabRole> {
         return new Result<Void>().call(() -> service.markDeleteByUid(id, uid, user.getId()));
     }
 
+    @PatchMapping
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'RC', 'RC_delete')")
+    @ApiOperation(value = "4.批量逻辑删除角色表", tags = {"1.0.0"})
+    @ApiOperationSupport(order = 4) // order id 相同的接口只能开放一个
+    @ResponseBody
+    @Override
+    public Result<Void> markDelete(final TabUser user, final List<MarkDelete> body) {
+        return new Result<Void>().call(() -> service.markDelete(body, user.getId()));
+    }
+
     @GetMapping("/{id}/{uid}")
-    @ApiOperation(value = "4.按 id 和 uid 查询角色", tags = {"1.0.0"})
-    @ApiOperationSupport(order = 4)
+    @ApiOperation(value = "5.按 id 和 uid 查询角色", tags = {"1.0.0"})
+    @ApiOperationSupport(order = 5)
     @ResponseBody
     @Override
     public Result<TabRole> findByUid(final TabUser user, final Long id, final String uid) {
@@ -90,9 +103,9 @@ public class RoleController implements IAuthController<Long, TabRole> {
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'Menu_Role', 'RC', 'RC_page')")
     @GetMapping("/page/{number}/{size}")
-    @ApiOperation(value = "5.分页查询角色", tags = {"1.0.0"})
+    @ApiOperation(value = "6.分页查询角色", tags = {"1.0.0"})
     @ApiOperationSupport(
-            order = 5,
+            order = 6,
             ignoreParameters = {"insertTime", "updateTime", "authorityTree[0]"}
     )
     @ResponseBody
@@ -105,8 +118,8 @@ public class RoleController implements IAuthController<Long, TabRole> {
     }
 
     @GetMapping("/options")
-    @ApiOperation(value = "6.获取所有有效角色列表", tags = {"1.0.0"})
-    @ApiOperationSupport(order = 6)
+    @ApiOperation(value = "7.获取所有有效角色列表", tags = {"1.0.0"})
+    @ApiOperationSupport(order = 7)
     @ResponseBody
     public Result<TabRole> options(@ApiIgnore @AuthenticationPrincipal final TabUser user) {
         return new Result<TabRole>().execute(result -> result.setSuccess(service.getOptions()));

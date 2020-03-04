@@ -158,14 +158,13 @@ public interface <%=JavaName%>Repository extends
 
     @Override
     default long markDelete(final List<MarkDelete> list, final Long userId) {
-        list.stream().coll(String[]::new);
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Bool.YES)
                 .set(q.updateUserId, userId)
                 .where(q.id.in(list.stream().map(MarkDelete::getLongId).toArray(Long[]::new))
                         .and(q.deleted.eq(Bool.NO))
-                        .and(q.uid.in())
+                        .and(q.uid.in(list.stream().map(MarkDelete::getUid).toArray(String[]::new)))
                 )
                 .execute();
     }

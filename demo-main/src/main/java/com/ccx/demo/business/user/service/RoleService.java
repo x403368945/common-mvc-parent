@@ -36,7 +36,8 @@ import static com.ccx.demo.config.init.BeanInitializer.Beans.cacheManager;
 @Service
 @ServiceAspect
 @RequiredArgsConstructor
-public class RoleService implements IService<TabRole>, ITabRoleCache {
+public class RoleService implements IService<TabRole>
+        , ITabRoleCache {
     private final RoleRepository repository;
     private final AuthorityService authorityService;
 
@@ -55,8 +56,8 @@ public class RoleService implements IService<TabRole>, ITabRoleCache {
      * @param ids {@link TabRole#getId()}
      */
     public void clearKeys(final Collection<Long> ids) {
-        final Cache cache = getCacheManager();
-        ids.stream().distinct().forEach(cache::evict);
+        ids.stream().distinct().forEach(id -> getCacheManager().evict(id));
+
     }
 
     @Override
