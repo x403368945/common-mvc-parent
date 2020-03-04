@@ -9,6 +9,7 @@ import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.support.mvc.dao.IRepository;
+import com.support.mvc.entity.base.MarkDelete;
 import com.support.mvc.entity.base.Pager;
 import org.springframework.data.jpa.repository.JpaRepository;
 

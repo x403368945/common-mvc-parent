@@ -4,6 +4,7 @@ import com.ccx.demo.business.user.cache.ITabRoleCache;
 import com.ccx.demo.business.user.entity.QTabRole;
 import com.ccx.demo.business.user.entity.TabRole;
 import com.ccx.demo.enums.Bool;
+import com.google.common.collect.Lists;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
@@ -15,11 +16,13 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 import static com.ccx.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
-
+import static com.ccx.demo.config.init.BeanInitializer.getAppContext;
 /**
  * 数据操作：角色表
  *
@@ -30,6 +33,51 @@ public interface RoleRepository extends
         IRepository<TabRole, Long> {
     // 每个 DAO 层顶部只能有一个查询实体,且必须以 q 命名,表示当前操作的数据库表. 当 q 作为主表的连接查询方法也必须写在这个类
     QTabRole q = QTabRole.tabRole;
+//    /**
+//     * 如果该表有缓存时请使用缓存，将这段代码注释，然后组合缓存接口。
+//     * 组合模式：定义表数据无缓存时，优化连表查询方法.
+//     * 实体类只需要组合该接口就可以获得按 id 查询方法.
+//     * 这种实现方式可以分解连表查询，减轻数据库压力，对分页查询有优化，让单表查询方法复用范围更广
+//     * 使用参考：
+//     * <pre>
+//     * public class TabEntity implements IRoleRepository{
+//     *     public Long foreignKey;
+//     *     public Set<Long> foreignKeys;
+//     *
+//     *     public TabRole getForeign(){
+//     *         // 连表查询单条记录
+//     *         return getTabRoleById(foreignKey).orElse(null);
+//     *     }
+//     *     public List<TabRole> getForeigns(){
+//     *         // 连表查询多条记录
+//     *         return getTabRoleByIds(foreignKeys);
+//     *     }
+//     * }
+//     * </pre>
+//     */
+//    interface IRoleRepository {
+//        /**
+//         * 按 ID 获取数据行，用于表数据无缓存时，优化连表查询
+//         *
+//         * @param id {@link TabRole#getId()}
+//         * @return {@link Optional<TabRole>}
+//         */
+//        @JSONField(serialize = false, deserialize = false)
+//        default Optional<TabRole> getTabRoleById(final Long id) {
+//            return getAppContext().getBean(RoleRepository.class).findById(id);
+//        }
+//
+//        /**
+//         * 按 ID 获取数据行，用于表数据无缓存时，优化连表查询
+//         *
+//         * @param ids {@link TabRole#getId()}
+//         * @return {@link List<TabRole>}
+//         */
+//        @JSONField(serialize = false, deserialize = false)
+//        default List<TabRole> getTabRoleByIds(final Set<Long> ids) {
+//            return Lists.newArrayList(getAppContext().getBean(RoleRepository.class).findAll(q.id.in(ids)));
+//        }
+//    }
 
     @CacheEvict(cacheNames = ITabRoleCache.CACHE_ROW_BY_ID, key = "#id")
     @Override

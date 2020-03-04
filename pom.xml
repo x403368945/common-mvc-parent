@@ -280,7 +280,8 @@
             <resource>
                 <directory>${basedir}/src/main/resources</directory>
                 <targetPath>${basedir}/target/classes</targetPath>
-                <filtering>true</filtering> <!-- 开启 filtering 会替换静态资源（html|js|...）中使用 ${key:属性名} 占位的属性，可以定义在 pom.xml -> properties -> key  -->
+                <!-- 开启 filtering 会替换静态资源（html|js|...）中使用 ${key:属性名} 占位的属性，可以定义在 pom.xml -> properties -> key  -->
+                <filtering>true</filtering>
                 <excludes> <!-- 经过maven的filter，会破坏font文件的二进制文件格式，到前台解析出错 -->
                     <exclude>static/**</exclude>
                     <!--<exclude>*-web/**</exclude>-->

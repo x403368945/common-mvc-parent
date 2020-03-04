@@ -37,6 +37,7 @@ process.env.DEVELOPMENT = true;
 process.env.BROWSER = false;
 
 gulp.task('default', async () => {
+
 });
 
 gulp.task('listener', function () {
@@ -231,8 +232,12 @@ gulp.task('db:java', async () => {
     user: 'root',
     password: '111111',
     database: 'demo_main_db',
-    table: ['ny_order'], // 表名
-    module: 'demo-service', // 模块名
+    table: [
+      'tab_role',
+      'tab_user',
+      'tab_user_login'
+    ], // 表名
+    module: 'demo-main', // 模块名
     pkg: 'com.ccx.demo', // 包名(也会作为文件输出目录)
     template: 'all_id_long_uid' // 模板代码存放目录名
   });

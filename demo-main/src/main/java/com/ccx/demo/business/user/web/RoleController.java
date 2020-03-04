@@ -93,7 +93,7 @@ public class RoleController implements IAuthController<Long, TabRole> {
     @ApiOperation(value = "5.分页查询角色", tags = {"1.0.0"})
     @ApiOperationSupport(
             order = 5,
-            ignoreParameters = {"insertTime", "updateTime", "authorityTree"}
+            ignoreParameters = {"insertTime", "updateTime", "authorityTree[0]"}
     )
     @ResponseBody
     @Override

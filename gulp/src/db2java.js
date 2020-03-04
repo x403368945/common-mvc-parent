@@ -129,7 +129,7 @@ export class Table {
         comment: this.comment,
         date: new Date().formatDate(),
         orders: this.columns.map(({name}) => `"${name}"`).join(', '),
-        IUser: this.columns.some(({name}) => ['insertUserId', 'updateUserId'].includes(name)) ? 'IUser,' : '',
+        ITabUserCache: this.columns.some(({name}) => ['insertUserId', 'updateUserId'].includes(name)) ? 'ITabUserCache,' : '',
         // ITimestamp: this.columns.some(({name}) => name === 'updateTime') ? 'ITimestamp, // 所有需要更新时间戳的实体类' : '',
         fields: this.columns.map(column => column.field(this.adapters)).filter(Boolean).join('\n'),
         props: this.columns.map(column => column.prop(this.adapters)).filter(Boolean).join(',\n'),
