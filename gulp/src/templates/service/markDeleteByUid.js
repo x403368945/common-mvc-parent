@@ -7,23 +7,16 @@
  */
 const markDeleteByUid = (table, {auth = false, spare = false}) => {
   const {
-    comment,
-    idType,
-    date
+    idType
   } = table;
   const spareBegin = spare ? '/*' : '';
   const spareEnd = spare ? '*/' : '';
-  const authUser = auth ? 'final TabUser user, ' : '';
-  const authUserId = auth ? ', user.getId()' : '';
+  const authUser = auth ? ', final Long userId' : '';
+  const authUserId = auth ? ', userId' : '';
   return `${spareBegin}
-    @PatchMapping("/{id}/{uid}")
-    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
-    @ApiOperation(value = "3.逻辑删除${comment}", tags = {"${date}"})
-    @ApiOperationSupport(order = 3) // order id 相同的接口只能开放一个<
-    @ResponseBody
     @Override
-    public Result<Void> markDeleteByUid(${authUser}final ${idType} id, final String uid) {
-        return new Result<Void>().call(() -> service.markDeleteByUid(id, uid${authUserId}));
+    public void markDeleteByUid(final ${idType} id, final String uid${authUser}) {
+        DeleteRowsException.asserts(repository.markDeleteByUid(id, uid${authUserId}));
     }
 ${spareEnd}`
 };

@@ -7,23 +7,18 @@
  */
 const deleteByUid = (table, {auth = false, spare = false}) => {
   const {
-    comment,
     idType,
-    date
+    names: {TabName}
   } = table;
   const spareBegin = spare ? '/*' : '';
   const spareEnd = spare ? '*/' : '';
-  const authUser = auth ? 'final TabUser user, ' : '';
-  const authUserId = auth ? ', user.getId()' : '';
+  const authUser = auth ? ', final Long userId' : '';
+  const authUserId = auth ? ', userId' : '';
   return `${spareBegin}
-    @DeleteMapping("/{id}/{uid}")
-    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
-    @ApiOperation(value = "3.物理删除${comment}", tags = {"${date}"})
-    @ApiOperationSupport(order = 3) // order id 相同的接口只能开放一个<
-    @ResponseBody
+    // 注释掉的方法只有在需要的时候解开
     @Override
-    public Result<Void> deleteByUid(${authUser}final ${idType} id, final String uid) {
-        return new Result<Void>().call(() -> service.deleteByUid(id, uid${authUserId}));
+    public ${TabName} deleteByUid(final ${idType} id, final String uid${authUser}) {
+        return repository.deleteByUid(id, uid${authUserId});
     }
 ${spareEnd}`
 };

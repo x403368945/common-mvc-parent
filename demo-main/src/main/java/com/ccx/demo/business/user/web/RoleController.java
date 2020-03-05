@@ -51,9 +51,9 @@ public class RoleController implements IAuthController<Long, TabRole> {
     @ResponseBody
     @Override
     public Result<TabRole> save(final TabUser user, final String body) {
-        return new Result<TabRole>().execute(result ->
-                result.setSuccess(service.save(JSON.parseObject(body, TabRole.class), user.getId()))
-        );
+        return new Result<TabRole>().execute(result -> result.setSuccess(
+                service.save(JSON.parseObject(body, TabRole.class), user.getId())
+        ));
     }
 
     @PutMapping("/{id}")

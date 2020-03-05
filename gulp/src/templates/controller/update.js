@@ -14,7 +14,7 @@ const update = (table, {auth = false, spare = false}) => {
   } = table;
   const spareBegin = spare ? '/*' : '';
   const spareEnd = spare ? '*/' : '';
-  const authUser = auth ? 'final TabUser user,' : '';
+  const authUser = auth ? 'final TabUser user, ' : '';
   const authUserId = auth ? ', user.getId()' : '';
   return `${spareBegin}
     @PutMapping("/{id}")

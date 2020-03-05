@@ -1,12 +1,9 @@
 import gulp from 'gulp'
 import watch from 'gulp-watch'
 import batch from 'gulp-batch'
-import zip from 'gulp-zip'
 import flatten from 'gulp-flatten'
 import rename from 'gulp-rename'
 import tap from 'gulp-tap';
-import template from 'gulp-template';
-import concat from 'gulp-concat';
 import del from 'del'
 import fs from 'fs'
 import path from 'path'
@@ -28,6 +25,7 @@ import UserTest from './test/api/User.test';
 import DemoListTest from './test/api/DemoList.test';
 import AuthorityTest from './test/api/Authority.test';
 import RoleTest from './test/api/Role.test';
+
 const web = browser.create();
 
 const options = require('minimist')(process.argv.slice(2), {});
@@ -199,9 +197,9 @@ async function db2java(option) {
       .setColumns(columns)
       .setOutput(module)
       .writeController(template)
-      // .writeEntity(template)
-      // .writeService(template)
-      // .writeRepository(template)
+    // .writeEntity(template)
+    // .writeService(template)
+    // .writeRepository(template)
     ;
   }
   connection.end();
@@ -236,8 +234,8 @@ gulp.task('db:java', async () => {
     database: 'demo_main_db',
     table: [
       'tab_role',
-      'tab_user',
-      'tab_user_login'
+      // 'tab_user',
+      // 'tab_user_login'
     ], // 表名
     module: 'demo-main', // 模块名
     pkg: 'com.ccx.demo', // 包名(也会作为文件输出目录)
@@ -392,7 +390,7 @@ gulp.task('ssr', async () => {
     shell
   )
     .on('line', line => {
-      shell.write(`echo '${line}'\n`)
+      shell.write(`echo '${line}'\n`);
       shell.write(Buffer.from(line.replace(/^ssr:\/\//, ''), 'base64').toString('ascii').concat('\n'))
     })
     .on('close', () => shell.end())

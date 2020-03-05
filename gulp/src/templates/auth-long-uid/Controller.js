@@ -8,7 +8,7 @@ import {markDeleteAuth} from '../controller/markDelete';
 import {findByIdAuthSpare} from '../controller/findById';
 import {findByUidAuth} from '../controller/findByUid';
 import {pageAuth} from '../controller/page';
-import {searchAuth, searchAuthSpare} from '../controller/search';
+import {searchAuthSpare} from '../controller/search';
 
 /**
  *
@@ -22,8 +22,7 @@ const Controller = (table) => {
     date,
     names: {javaname, TabName, JavaName, java_name}
   } = table;
-  return `
-package ${pkg}.code.${javaname}.web;
+  return `package ${pkg}.code.${javaname}.web;
 
 import com.alibaba.fastjson.JSON;
 import ${pkg}.code.${javaname}.entity.${TabName};
@@ -57,7 +56,7 @@ import java.util.*;
 @Controller
 @Slf4j
 @RequiredArgsConstructor
-public class ${JavaName}Controller implements IAuthController<${idType}, ${TabName}>
+public class ${JavaName}Controller implements IAuthController<${idType}, ${TabName}> {
 
     private final ${JavaName}Service service;
 

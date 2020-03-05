@@ -7,23 +7,18 @@
  */
 const markDeleteByIds = (table, {auth = false, spare = false}) => {
   const {
-    comment,
-    idType,
-    date
+    idType
   } = table;
   const spareBegin = spare ? '/*' : '';
   const spareEnd = spare ? '*/' : '';
-  const authUser = auth ? 'final TabUser user, ' : '';
-  const authUserId = auth ? ', user.getId()' : '';
+  const authUser = auth ? ', final Long userId' : '';
+  const authUserId = auth ? ', userId' : '';
   return `${spareBegin}
-    @PatchMapping
-    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
-    @ApiOperation(value = "4.批量逻辑删除${comment}", tags = {"${date}"})
-    @ApiOperationSupport(order = 4) // order id 相同的接口只能开放一个<
-    @ResponseBody
+    // 注释掉的方法只有在需要的时候解开 <
     @Override
-    public Result<Void> markDeleteByIds(${authUser}final Set<${idType}> body) {
-        return new Result<Void>().call(() -> service.markDelete(body${authUserId}));
+    public void markDeleteByIds(final List<${idType}> ids${authUser}) {
+        DeleteRowsException.asserts(repository.markDeleteByIds(ids${authUserId}), ids.size());
+        //clearKeys(ids); // 若使用缓存需要解开代码
     }
 ${spareEnd}`
 };

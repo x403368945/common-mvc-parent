@@ -13,7 +13,7 @@ const save = (table, {auth = false, spare = false}) => {
   } = table;
   const spareBegin = spare ? '/*' : '';
   const spareEnd = spare ? '*/' : '';
-  const authUser = auth ? 'final TabUser user,' : '';
+  const authUser = auth ? 'final TabUser user, ' : '';
   const authUserId = auth ? ', user.getId()' : '';
   return `${spareBegin}
     @PostMapping
@@ -29,7 +29,7 @@ const save = (table, {auth = false, spare = false}) => {
     @Override
     public Result<${TabName}> save(${authUser}final String body) {
         return new Result<${TabName}>().execute(result -> result.setSuccess(
-            service.save(JSON.parseObject(body, ${TabName}.class)${authUserId})
+                service.save(JSON.parseObject(body, ${TabName}.class)${authUserId})
         ));
     }
 ${spareEnd}`

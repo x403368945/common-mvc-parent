@@ -1,16 +1,14 @@
-import gulp from 'gulp'
-import rename from 'gulp-rename';
-import template from 'gulp-template';
 import fs from 'fs';
 import Paths from './utils/entity/Paths';
-import authLongUidController from './templates/auth-long-uid/Controller';
+import Entity from './templates/Entity';
+import AuthLongUidController from './templates/auth-long-uid/Controller';
 
 const templateDirMapping = {
   'auth-long-uid': {
-    controller: authLongUidController,
-    service: authLongUidController,
-    entity: authLongUidController,
-    repository: authLongUidController
+    entity: Entity,
+    controller: AuthLongUidController,
+    service: AuthLongUidController,
+    repository: AuthLongUidController
   }
 };
 
@@ -128,6 +126,78 @@ export class Table {
   }
 
   /**
+   * 实体响应字段排序
+   * @returns {string}
+   */
+  getEntityOrders() {
+    return this.columns.map(({name}) => `"${name}"`).join(', ');
+  }
+
+  /**
+   * 实体是否需要用户缓存
+   * @returns {string}
+   */
+  getEntityITabUserCache() {
+    return this.columns.some(({name}) => ['insertUserId', 'updateUserId'].includes(name)) ? 'ITabUserCache,' : '';
+  }
+
+  /**
+   * 实体字段属性
+   * @returns {string}
+   */
+  getEntityFields() {
+    return this.columns.map(column => column.field(this.adapters)).filter(Boolean).join('\n');
+  }
+
+  /**
+   * 实体排序枚举
+   * @returns {string}
+   */
+  getEntityOrderBy() {
+    return this.columns.map(column => column.orderBy(this)).filter(Boolean).join(',\n');
+  }
+
+  /**
+   * 实体动态更新
+   * @returns {string}
+   */
+  getEntityUpdate() {
+    return this.columns.map(column => column.update()).filter(Boolean).join('\n');
+  }
+
+  /**
+   * 实体动态查询
+   * @returns {string}
+   */
+  getEntityWhere() {
+    return this.columns.map(column => column.where()).filter(Boolean).join('\n');
+  }
+
+  /**
+   * 实体字段属性枚举
+   * @returns {string}
+   */
+  getEntityProps() {
+    return this.columns.map(column => column.prop(this.adapters)).filter(Boolean).join(',\n');
+  }
+
+// const ITimestamp (){return this.columns.some(({name}) => name === 'updateTime') ? 'ITimestamp, // 所有需要更新时间戳的实体类' : '';}
+
+  /**
+   * 写入实体
+   * @param templateDirName {string} 模板目录
+   * @return {Table}
+   */
+  writeEntity(templateDirName) {
+    const filename = `entity/${this.names.TabName.concat('.java')}`;
+    const {entity} = templateDirMapping[templateDirName];
+    const absolute = Paths.resolve(this.output, filename).absolute();
+    console.log(absolute);
+    fs.writeFileSync(absolute, entity(this));
+    return this;
+  }
+
+  /**
    * 写入 Controller
    *
    * (\S+)?IAuthController          => com.support.mvc.web.IController
@@ -140,49 +210,9 @@ export class Table {
   writeController(templateDirName) {
     const {controller} = templateDirMapping[templateDirName];
     const filename = `web/${this.names.JavaName.concat('Controller.java')}`;
-    console.log(Paths.resolve(this.output, filename).absolute());
-    fs.writeFileSync('./temp/Controller.java', controller(this));
-    // gulp.src(`templates/${templateDirName}/Controller.java`)
-    //   .pipe(template(Object.assign(this.names.toObject(), {
-    //     comment: this.comment,
-    //     id: (() => { // 目前只支持 Long 、 String 类型作为ID
-    //       const dataType = (this.columns.find(({name}) => name === 'id') || {dataType: {}}).dataType;
-    //       if (dataType.value === DataType.VARCHAR.value) {
-    //         return dataType.value;
-    //       }
-    //       return DataType.BIGINT.value;
-    //     })()
-    //   })))
-    //   .pipe(rename(filename))
-    //   .pipe(gulp.dest(this.output));
-    return this;
-  }
-
-  /**
-   * 写入实体
-   * @param templateDirName {string} 模板目录
-   * @param pkg {string} 输出包名
-   * @return {Table}
-   */
-  writeEntity(templateDirName, pkg) {
-    const filename = `entity/${this.names.TabName.concat('.java')}`;
-    console.log(Paths.resolve(this.output, filename).absolute());
-    gulp.src(`templates/${templateDirName}/Entity.java`)
-      .pipe(template(Object.assign(this.names.toObject(), {
-        pkg,
-        comment: this.comment,
-        date: new Date().formatDate(),
-        orders: this.columns.map(({name}) => `"${name}"`).join(', '),
-        ITabUserCache: this.columns.some(({name}) => ['insertUserId', 'updateUserId'].includes(name)) ? 'ITabUserCache,' : '',
-        // ITimestamp: this.columns.some(({name}) => name === 'updateTime') ? 'ITimestamp, // 所有需要更新时间戳的实体类' : '',
-        fields: this.columns.map(column => column.field(this.adapters)).filter(Boolean).join('\n'),
-        props: this.columns.map(column => column.prop(this.adapters)).filter(Boolean).join(',\n'),
-        orderBy: this.columns.map(column => column.orderBy(this)).filter(Boolean).join(',\n'),
-        update: this.columns.map(column => column.update()).filter(Boolean).join('\n'),
-        where: this.columns.map(column => column.where()).filter(Boolean).join('\n')
-      })))
-      .pipe(rename(filename))
-      .pipe(gulp.dest(this.output));
+    const absolute = Paths.resolve(this.output, filename).absolute();
+    console.log(absolute);
+    fs.writeFileSync(absolute, controller(this));
     return this;
   }
 
@@ -208,23 +238,11 @@ export class Table {
    * @return {Table}
    */
   writeService(templateDirName, pkg) {
+    const {service} = templateDirMapping[templateDirName];
     const filename = `service/${this.names.JavaName.concat('Service.java')}`;
-    console.log(Paths.resolve(this.output, filename).absolute());
-    gulp.src(`templates/${templateDirName}/Service.java`)
-      .pipe(template(Object.assign(this.names.toObject(), {
-        pkg,
-        comment: this.comment,
-        date: new Date().formatDate(),
-        id: (() => { // 目前只支持 Long 、 String 类型作为ID
-          const dataType = (this.columns.find(({name}) => name === 'id') || {dataType: {}}).dataType;
-          if (dataType.value === DataType.VARCHAR.value) {
-            return dataType.value;
-          }
-          return DataType.BIGINT.value;
-        })()
-      })))
-      .pipe(rename(filename))
-      .pipe(gulp.dest(this.output));
+    const absolute = Paths.resolve(this.output, filename).absolute();
+    console.log(absolute);
+    fs.writeFileSync(absolute, service(this));
     return this;
   }
 
@@ -243,23 +261,11 @@ export class Table {
    * @return {Table}
    */
   writeRepository(templateDirName, pkg) {
+    const {repository} = templateDirMapping[templateDirName];
     const filename = `dao/jpa/${this.names.JavaName.concat('Repository.java')}`;
-    console.log(Paths.resolve(this.output, filename).absolute());
-    gulp.src(`templates/${templateDirName}/Repository.java`)
-      .pipe(template(Object.assign(this.names.toObject(), {
-        pkg,
-        comment: this.comment,
-        date: new Date().formatDate(),
-        id: (() => { // 目前只支持 Long 、 String 类型作为ID
-          const dataType = (this.columns.find(({name}) => name === 'id') || {dataType: {}}).dataType;
-          if (dataType.value === DataType.VARCHAR.value) {
-            return dataType.value;
-          }
-          return DataType.BIGINT.value;
-        })()
-      })))
-      .pipe(rename(filename))
-      .pipe(gulp.dest(this.output));
+    const absolute = Paths.resolve(this.output, filename).absolute();
+    console.log(absolute);
+    fs.writeFileSync(absolute, repository(this));
     return this;
   }
 }

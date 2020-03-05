@@ -7,23 +7,16 @@
  */
 const findByUid = (table, {auth = false, spare = false}) => {
   const {
-    comment,
     idType,
-    date,
     names: {TabName}
   } = table;
   const spareBegin = spare ? '/*' : '';
   const spareEnd = spare ? '*/' : '';
-  const authUser = auth ? 'final TabUser user, ' : '';
   return `${spareBegin}
-    @GetMapping("/{id}/{uid}")
-    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_find')")
-    @ApiOperation(value = "5.按 id 和 uid 查询${comment}", tags = {"${date}"})
-    @ApiOperationSupport(order = 5) // order id 相同的接口只能开放一个<
-    @ResponseBody
-    @Override
-    public Result<${TabName}> findByUid(${authUser}final ${idType} id, final String uid) {
-        return new Result<${TabName}>().execute(result -> result.setSuccess(service.findByUid(id, uid).orElse(null)));
+    @Override // <
+    public Optional<${TabName}> findByUid(final ${idType} id, final String uid) {
+        return repository.findById(id).filter(row -> Objects.equals(row.getUid(), uid));
+//         return Optional.ofNullable(repository.findCacheById(id)).filter(row -> Objects.equals(uid, row.getUid())); // 若使用缓存需要解开代码
     }
 ${spareEnd}`
 };

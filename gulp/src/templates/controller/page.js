@@ -13,7 +13,7 @@ const page = (table, {auth = false, spare = false}) => {
   } = table;
   const spareBegin = spare ? '/*' : '';
   const spareEnd = spare ? '*/' : '';
-  const authUser = auth ? 'final TabUser user,' : '';
+  const authUser = auth ? 'final TabUser user, ' : '';
   return `${spareBegin}
     @GetMapping("/page/{number}/{size}")
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_page')") // <

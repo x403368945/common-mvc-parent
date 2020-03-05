@@ -7,24 +7,16 @@
  */
 const findById = (table, {auth = false, spare = false}) => {
   const {
-    comment,
     idType,
-    date,
     names: {TabName}
   } = table;
   const spareBegin = spare ? '/*' : '';
   const spareEnd = spare ? '*/' : '';
-  const authUser = auth ? 'final TabUser user, ' : '';
   return `${spareBegin}
-    // 优先使用 findByUid 方法，可以阻止平行越权。 只有在实体没有 uid 的情况才能将该方法开放给前端<
-    @GetMapping("/{id}")
-    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_find')")
-    @ApiOperation(value = "5.按 id 查询${comment}", tags = {"${date}"})
-    @ApiOperationSupport(order = 5) // order id 相同的接口只能开放一个
-    @ResponseBody
-    @Override
-    public Result<${TabName}> findById(${authUser}final ${idType} id) {
-        return new Result<${TabName}>().execute(result -> result.setSuccess(service.findById(id).orElse(null)));
+    @Override // <
+    public Optional<${TabName}> findById(final ${idType} id) {
+        return repository.findById(id);
+//         return Optional.ofNullable(repository.findCacheById(id)); // 若使用缓存需要解开代码
     }
 ${spareEnd}`
 };

@@ -7,22 +7,24 @@
  */
 const markDelete = (table, {auth = false, spare = false}) => {
   const {
-    comment,
-    date
+    idType,
+    names: {TabName}
   } = table;
   const spareBegin = spare ? '/*' : '';
   const spareEnd = spare ? '*/' : '';
-  const authUser = auth ? 'final TabUser user, ' : '';
-  const authUserId = auth ? ', user.getId()' : '';
+  const authUser = auth ? ', final Long userId' : '';
+  const authUserId = auth ? '\n                .set(q.updateUserId, userId)' : '';
   return `${spareBegin}
-    @PatchMapping
-    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
-    @ApiOperation(value = "4.批量逻辑删除${comment}", tags = {"${date}"})
-    @ApiOperationSupport(order = 4) // order id 相同的接口只能开放一个<
-    @ResponseBody
-    @Override
-    public Result<Void> markDelete(${authUser}final List<MarkDelete> body) {
-        return new Result<Void>().call(() -> service.markDelete(body${authUserId}));
+    @Override // <
+    default long markDelete(final List<MarkDelete> list${authUser}}) {
+        return jpaQueryFactory.<JPAQueryFactory>get()
+                .update(q)
+                .set(q.deleted, Bool.YES)${authUserId}
+                .where(q.id.in(list.stream().map(MarkDelete::get${idType}Id).toArray(${idType}[]::new))
+                        .and(q.deleted.eq(Bool.NO))
+                        .and(q.uid.in(list.stream().map(MarkDelete::getUid).toArray(String[]::new)))
+                )
+                .execute();
     }
 ${spareEnd}`
 };

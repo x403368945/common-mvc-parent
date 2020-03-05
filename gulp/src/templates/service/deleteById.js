@@ -7,24 +7,18 @@
  */
 const deleteById = (table, {auth = false, spare = false}) => {
   const {
-    comment,
     idType,
-    date
+    names: {TabName}
   } = table;
   const spareBegin = spare ? '/*' : '';
   const spareEnd = spare ? '*/' : '';
-  const authUser = auth ? 'final TabUser user, ' : '';
-  const authUserId = auth ? ', user.getId()' : '';
+  const authUser = auth ? ', final Long userId' : '';
+  const authUserId = auth ? ', userId' : '';
   return `${spareBegin}
-    // 优先使用 deleteByUid 方法，可以阻止平行越权。 只有在实体没有 uid 的情况才能将该方法开放给前端<
-    @DeleteMapping("/{id}")
-    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
-    @ApiOperation(value = "3.物理删除${comment}", tags = {"${date}"})
-    @ApiOperationSupport(order = 3) // order id 相同的接口只能开放一个
-    @ResponseBody
+   // 注释掉的方法只有在需要的时候解开
     @Override
-    public Result<Void> deleteById(${authUser}final ${idType} id) {
-        return new Result<Void>().call(() -> service.deleteById(id${authUserId}));
+    public ${TabName} deleteById(final ${idType} id${authUser}) {
+        return repository.deleteById(id${authUserId});
     }
 ${spareEnd}`
 };

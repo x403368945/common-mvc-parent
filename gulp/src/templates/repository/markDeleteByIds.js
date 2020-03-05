@@ -7,23 +7,20 @@
  */
 const markDeleteByIds = (table, {auth = false, spare = false}) => {
   const {
-    comment,
-    idType,
-    date
+    idType
   } = table;
   const spareBegin = spare ? '/*' : '';
   const spareEnd = spare ? '*/' : '';
-  const authUser = auth ? 'final TabUser user, ' : '';
-  const authUserId = auth ? ', user.getId()' : '';
+  const authUser = auth ? ', final Long userId' : '';
+  const authUserId = auth ? '\n                .set(q.updateUserId, userId)' : '';
   return `${spareBegin}
-    @PatchMapping
-    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
-    @ApiOperation(value = "4.批量逻辑删除${comment}", tags = {"${date}"})
-    @ApiOperationSupport(order = 4) // order id 相同的接口只能开放一个<
-    @ResponseBody
-    @Override
-    public Result<Void> markDeleteByIds(${authUser}final Set<${idType}> body) {
-        return new Result<Void>().call(() -> service.markDelete(body${authUserId}));
+    @Override // <
+    default long markDeleteByIds(final List<${idType}> ids${authUser}) {
+        return jpaQueryFactory.<JPAQueryFactory>get()
+                .update(q)
+                .set(q.deleted, Bool.YES)${authUserId}
+                .where(q.id.in(ids).and(q.deleted.eq(Bool.NO)))
+                .execute();
     }
 ${spareEnd}`
 };

@@ -13,7 +13,7 @@ const search = (table, {auth = false, spare = false}) => {
   } = table;
   const spareBegin = spare ? '/*' : '';
   const spareEnd = spare ? '*/' : '';
-  const authUser = auth ? 'final TabUser user,' : '';
+  const authUser = auth ? 'final TabUser user, ' : '';
   return `${spareBegin}
     // 非必要情况下不要开放列表查询方法，因为没有分页控制，容易内存溢出。大批量查询数据应该使用分页查询<
     @GetMapping

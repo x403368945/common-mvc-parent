@@ -57,18 +57,18 @@ interface ISearch<E> {
         throw new NullPointerException(this.getClass().getName().concat("：方法【findList(final E condition)】未实现"));
     }
 
-    /**
-     * 按条件查询列表
-     *
-     * @param condition E 查询条件
-     * @param exps      {@link Expression} 指定查询字段
-     * @return {@link List<E>} 结果集合
-     */
-    default @NotNull(message = "findList...exps:返回值不能为null") List<E> findList(
-            @NotNull(message = "findList...exps.arg0:【condition】不能为null") final E condition, final Expression<?>... exps) {
-//		return repository.findList(condition, sorts, exps);
-        throw new NullPointerException(this.getClass().getName().concat("：方法【findList(final E condition, final Expression<?>... exps)】未实现"));
-    }
+//    /**
+//     * 按条件查询列表
+//     *
+//     * @param condition E 查询条件
+//     * @param exps      {@link Expression} 指定查询字段
+//     * @return {@link List<E>} 结果集合
+//     */
+//    default @NotNull(message = "findList...exps:返回值不能为null") List<E> findList(
+//            @NotNull(message = "findList...exps.arg0:【condition】不能为null") final E condition, final Expression<?>... exps) {
+////		return repository.findList(condition, sorts, exps);
+//        throw new NullPointerException(this.getClass().getName().concat("：方法【findList(final E condition, final Expression<?>... exps)】未实现"));
+//    }
 
     /**
      * 按条件分页查询列表
@@ -83,17 +83,17 @@ interface ISearch<E> {
         throw new NullPointerException(this.getClass().getName().concat("：方法【findPage(final E condition, final Pager pager)】未实现"));
     }
 
-    /**
-     * 按条件分页查询列表
-     *
-     * @param condition E 查询条件
-     * @param pager     {@link Pager}  分页排序集合
-     * @param exps      {@link Expression} 指定查询字段
-     * @return {@link QueryResults<E>} 分页对象
-     */
-    default @NotNull(message = "findPage...exps:返回值不能为null") QueryResults<E> findPage(
-            @NotNull(message = "findPage...exps.arg0:【condition】不能为null") final E condition, final Pager pager, final Expression<?>... exps) {
-//		return repository.findPage(condition, pager, exps);
-        throw new NullPointerException(this.getClass().getName().concat("：方法【findPage(final E condition, final Pager pager, final Expression<?>... exps)】未实现"));
-    }
+//    /**
+//     * 按条件分页查询列表
+//     *
+//     * @param condition E 查询条件
+//     * @param pager     {@link Pager}  分页排序集合
+//     * @param exps      {@link Expression} 指定查询字段
+//     * @return {@link QueryResults<E>} 分页对象
+//     */
+//    default @NotNull(message = "findPage...exps:返回值不能为null") QueryResults<E> findPage(
+//            @NotNull(message = "findPage...exps.arg0:【condition】不能为null") final E condition, final Pager pager, final Expression<?>... exps) {
+////		return repository.findPage(condition, pager, exps);
+//        throw new NullPointerException(this.getClass().getName().concat("：方法【findPage(final E condition, final Pager pager, final Expression<?>... exps)】未实现"));
+//    }
 }
