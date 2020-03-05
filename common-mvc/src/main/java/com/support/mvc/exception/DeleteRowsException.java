@@ -30,14 +30,14 @@ public class DeleteRowsException extends RuntimeException {
      * @param rows   long 影响行数
      * @param length long 集合大小
      */
-    public static void warn(final long rows, final long length) {
+    public static void asserts(final long rows, final long length) {
         if (rows != length) {
-            log.warn(String.format("批量操作警告，影响行数【%d != %d】集合大小", rows, length));
+            throw new DeleteRowsException(String.format("批量删除失败，影响行数【%d != %d】集合大小", rows, length));
         }
     }
 
-    public static void warn(final int rows, final int length) {
-        warn((long) rows, (long) length);
+    public static void asserts(final int rows, final int length) {
+        asserts((long) rows, (long) length);
     }
 
 //    /**

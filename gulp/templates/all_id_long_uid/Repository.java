@@ -20,6 +20,7 @@ import java.util.Set;
 
 import static <%=pkg%>.config.init.BeanInitializer.Beans.jpaQueryFactory;
 import static <%=pkg%>.config.init.BeanInitializer.getAppContext;
+
 /**
  * 数据操作：<%=comment%>
  *
@@ -85,10 +86,10 @@ public interface <%=JavaName%>Repository extends
                 .where(q.id.eq(id).and(q.uid.eq(obj.getUid())).and(q.updateTime.eq(obj.getUpdateTime())))
                 .execute();
     }
+
 //     @CacheEvict(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
     @Override
     default <%=TabName%> deleteById(final <%=id%> id, final Long userId) {
-        // 只能删除自己创建的数据
         return Optional
                 .ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
                         .selectFrom(q)
@@ -107,7 +108,6 @@ public interface <%=JavaName%>Repository extends
 //     @CacheEvict(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
     @Override
     default <%=TabName%> deleteByUid(final <%=id%> id, final String uid, final Long userId) {
-        // 只能删除自己创建的数据，且使用 UUID 强校验；
         // userId 为可选校验，一般业务场景，能获取到 UUID 已经表示已经加强校验了
         return Optional
                 .ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
@@ -169,10 +169,12 @@ public interface <%=JavaName%>Repository extends
                 .execute();
     }
 
-//     @Cacheable(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
-//     default <%=TabName%> findCacheById(final <%=id%> id){
-//         return findById(id).orElse(null);
-//     }
+/*
+     @Cacheable(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
+     default <%=TabName%> findCacheById(final <%=id%> id){
+         return findById(id).orElse(null);
+     }
+*/
 
     @Override
     default List<<%=TabName%>> findList(final <%=TabName%> condition) {
@@ -203,7 +205,6 @@ public interface <%=JavaName%>Repository extends
                 .orderBy(condition.buildQdslSorts())
                 .fetchResults();
     }
-
 
     @Override
     default QueryResults<<%=TabName%>> findPage(final <%=TabName%> condition, final Pager pager, final Expression<?>... exps) {

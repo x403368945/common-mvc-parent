@@ -1,5 +1,6 @@
 package <%=pkg%>.code.<%=javaname%>.web;
 
+import com.alibaba.fastjson.JSON;
 import <%=pkg%>.code.<%=javaname%>.entity.<%=TabName%>;
 import <%=pkg%>.business.user.entity.TabUser;
 import <%=pkg%>.code.<%=javaname%>.service.<%=JavaName%>Service;
@@ -9,15 +10,16 @@ import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import com.support.mvc.entity.base.MarkDelete;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.entity.base.Result;
-import lombok.extern.slf4j.Slf4j;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 请求操作响应：<%=comment%>
@@ -26,7 +28,7 @@ import java.util.Set;
  */
 @Api(tags = "<%=comment%>")
 //@ApiSort(1) // 控制接口排序
-@RequestMapping("/<%=java_name%>/{version}")
+@RequestMapping("/1/<%=java_name%>")
 @Controller
 @Slf4j
 @RequiredArgsConstructor
@@ -67,6 +69,7 @@ public class <%=JavaName%>Controller implements IAuthController<Long, <%=TabName
     }
 
 /*
+    // 优先使用 deleteByUid 方法，可以阻止平行越权。 只有在实体没有 uid 的情况才能将该方法开放给前端
     @DeleteMapping("/{id}")
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
     @ApiOperation(value = "3.物理删除<%=comment%>", tags = {"<%=date%>"})
@@ -118,7 +121,7 @@ public class <%=JavaName%>Controller implements IAuthController<Long, <%=TabName
     @ResponseBody
     @Override
     public Result<Void> markDeleteByIds(final TabUser user, final Set<Long> body) {
-        return new Result<>().call(() -> service.markDelete(body, user.getId()))
+        return new Result<Void>().call(() -> service.markDelete(body, user.getId()));
     }
 
 /*
@@ -129,7 +132,7 @@ public class <%=JavaName%>Controller implements IAuthController<Long, <%=TabName
     @ResponseBody
     @Override
     public Result<Void> markDelete(final TabUser user, final List<MarkDelete> body) {
-        return new Result<>().call(() -> service.markDelete(body, user.getId()))
+        return new Result<Void>().call(() -> service.markDelete(body, user.getId()));
     }
 */
 
@@ -185,5 +188,5 @@ public class <%=JavaName%>Controller implements IAuthController<Long, <%=TabName
                 Optional.ofNullable(condition).orElseGet(<%=TabName%>::new),
         )));
     }
-/*
+*/
 }

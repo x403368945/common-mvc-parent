@@ -4,6 +4,7 @@ import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
 import com.support.mvc.enums.Code;
 import lombok.Builder;
+import lombok.Getter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,6 +37,7 @@ public class Pager {
     /**
      * 当前页码
      */
+    @Getter
     private int number;
     /**
      * 每页大小
@@ -95,6 +97,15 @@ public class Pager {
      */
     public int limit() {
         return size;
+    }
+
+    /**
+     * 切换到下一页并返回页码
+     *
+     * @return int 页码
+     */
+    public int next() {
+        return ++number;
     }
 
     /**

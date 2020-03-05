@@ -73,7 +73,7 @@ public class <%=TabName%> implements
      */
     @QueryTransient
     @Transient
-    @ApiModelProperty(value = "<%=pkg%>.code.<%=javaname%>.entity.<%=TabName%>$OrderBy")
+    @ApiModelProperty(value = "查询排序字段，<%=pkg%>.code.<%=javaname%>.entity.<%=TabName%>$OrderBy")
     private List<Sorts.Order> sorts;
 
 // Enum Start **********************************************************************************************************
@@ -217,6 +217,7 @@ public class <%=TabName%> implements
 /*
 import com.alibaba.fastjson.annotation.JSONField;
 import com.querydsl.core.annotations.QueryTransient;
+import org.apache.commons.lang3.StringUtils;
 import com.support.mvc.entity.ICache;
 import java.beans.Transient;
 

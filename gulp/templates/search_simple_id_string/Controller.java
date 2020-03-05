@@ -2,12 +2,12 @@ package <%=pkg%>.code.<%=javaname%>.web;
 
 import <%=pkg%>.code.<%=javaname%>.entity.<%=TabName%>;
 import <%=pkg%>.code.<%=javaname%>.service.<%=JavaName%>Service;
-import <%=pkg%>.business.user.web.IController;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import com.support.mvc.entity.base.MarkDelete;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.entity.base.Result;
+import com.support.mvc.web.IController;
 import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
 import io.swagger.annotations.ApiParam;

@@ -21,7 +21,7 @@ public interface ISearchRepository<E> extends QuerydslPredicateExecutor<E> {
     /**
      * 按条件查询列表
      *
-     * @param condition 查询条件
+     * @param condition 查询条件:可使用继承实体的 VO 类传参,扩展实体默认的查询
      * @return List<E> 结果集合
      */
     default List<E> findList(final E condition) {
@@ -31,7 +31,7 @@ public interface ISearchRepository<E> extends QuerydslPredicateExecutor<E> {
     /**
      * 按条件分页查询列表
      *
-     * @param condition 查询条件
+     * @param condition 查询条件:可使用继承实体的 VO 类传参,扩展实体默认的查询
      * @param pager     Pager 分页排序集合
      * @return QueryResults<E> 分页对象
      */
@@ -42,7 +42,7 @@ public interface ISearchRepository<E> extends QuerydslPredicateExecutor<E> {
     /**
      * 按条件分页查询列表
      *
-     * @param condition 查询条件
+     * @param condition 查询条件:可使用继承实体的 VO 类传参,扩展实体默认的查询
      * @param pager     {@link Pager} 分页排序集合
      * @param exps      {@link Expression} 指定查询字段
      * @return QueryResults<E> 分页对象
@@ -54,7 +54,7 @@ public interface ISearchRepository<E> extends QuerydslPredicateExecutor<E> {
     /**
      * 按条件查询列表
      *
-     * @param condition 查询条件
+     * @param condition 查询条件:可使用继承实体的 VO 类传参,扩展实体默认的查询
      * @param exps      {@link Expression} 指定查询字段
      * @return List<E> 结果集合
      */
@@ -109,4 +109,21 @@ public interface ISearchRepository<E> extends QuerydslPredicateExecutor<E> {
     default <T extends E> QueryResults<T> findPageProjection(final E condition, final Pager pager, final Class<T> clazz, final Expression<?>... exps) {
         throw new NullPointerException(this.getClass().getName().concat("：方法【findPageProjection(final E condition, final Pager pager, final Class<T> clazz, final Expression<?>... exps)】未实现"));
     }
+
+//    /**
+//     * 循环分页查询，并消费数据行
+//     * @param condition 查询条件:可使用继承实体的 VO 类传参,扩展实体默认的查询
+//     * @param size      int 分页大小
+//     * @param consumer  {@link BiConsumer} 消费查询结果<Integer:页码, List:查询结果>
+//     */
+//    default void findPageLoop(final E condition, final int size, final BiConsumer<Integer, List<E>> consumer) {
+//        throw new NullPointerException(this.getClass().getName().concat("：方法【findPageLoop(final E condition, final int size, final BiConsumer<Integer, List<E>> consumer)】未实现"));
+////    final Pager pager = Pager.builder().size(size).build();
+////    List<E> results;
+////        do {
+////        results = repository.findPage(condition, Pager.rebuild(pager)).getResults();
+////        consumer.accept(pager.getNumber(), results);
+////        pager.next(); // 换页
+////    } while (results.size() > 0);
+//    }
 }

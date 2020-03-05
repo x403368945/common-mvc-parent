@@ -194,12 +194,14 @@ async function db2java(option) {
     const columns = await query(connection, `SHOW FULL COLUMNS FROM ${table.name}`);
     console.table(columns);
     // console.log(table)
-    table.setColumns(columns)
-      .setOutput(module, pkg)
-      .writeController(template, pkg)
-      .writeEntity(template, pkg)
-      .writeService(template, pkg)
-      .writeRepository(template, pkg)
+    table
+      .setPkg(pkg)
+      .setColumns(columns)
+      .setOutput(module)
+      .writeController(template)
+      // .writeEntity(template)
+      // .writeService(template)
+      // .writeRepository(template)
     ;
   }
   connection.end();
@@ -239,7 +241,7 @@ gulp.task('db:java', async () => {
     ], // 表名
     module: 'demo-main', // 模块名
     pkg: 'com.ccx.demo', // 包名(也会作为文件输出目录)
-    template: 'all_id_long_uid' // 模板代码存放目录名
+    template: 'auth-long-uid' // 模板代码存放目录名
   });
 });
 gulp.task('db:java:ny', async () => {

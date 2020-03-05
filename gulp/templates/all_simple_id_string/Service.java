@@ -4,17 +4,16 @@ import <%=pkg%>.code.<%=javaname%>.dao.jpa.<%=JavaName%>Repository;
 import <%=pkg%>.code.<%=javaname%>.entity.<%=TabName%>;
 import com.querydsl.core.QueryResults;
 import com.support.aop.annotations.ServiceAspect;
+import com.support.mvc.entity.base.MarkDelete;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.exception.DeleteRowsException;
 import com.support.mvc.exception.UpdateRowsException;
 import com.support.mvc.service.str.ISimpleService;
-import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 //import static <%=pkg%>.config.init.BeanInitializer.Beans.cacheManager; // 若使用缓存需要解开代码
 
@@ -45,7 +44,7 @@ public class <%=JavaName%>Service implements ISimpleService<<%=TabName%>>
 //      *
 //      * @param ids {@link <%=TabName%>#getId()}
 //      */
-//     public void clearKeys(Collection<<%=id%>> ids) {
+//     public void clearKeys(final Collection<<%=id%>> ids) {
 //         ids.stream().distinct().forEach(id -> getCacheManager().evict(id));
 //     }
 
@@ -64,10 +63,13 @@ public class <%=JavaName%>Service implements ISimpleService<<%=TabName%>>
         UpdateRowsException.asserts(repository.update(id, obj));
     }
 
+/*
+   // 注释掉的方法只有在需要的时候解开
     @Override
     public <%=TabName%> deleteById(final <%=id%> id) {
         return repository.deleteById(id);
     }
+*/
 
     @Override
     public void markDeleteById(final <%=id%> id) {
@@ -76,15 +78,17 @@ public class <%=JavaName%>Service implements ISimpleService<<%=TabName%>>
 
     @Override
     public void markDeleteByIds(final List<<%=id%>> ids) {
-        DeleteRowsException.warn(repository.markDeleteByIds(ids), ids.size());
+        DeleteRowsException.asserts(repository.markDeleteByIds(ids), ids.size());
         //clearKeys(ids); // 若使用缓存需要解开代码
     }
 
+/*  // 注释掉的方法只有在需要的时候解开
     @Override
     public void markDelete(final List<<%=TabName%>> list) {
-        DeleteRowsException.warn(repository.markDelete(list), list.size());
-        //clearKeys(list.stream().map(<%=TabName%>::getId).collect(Collectors.toSet())); // 若使用缓存需要解开代码
+        DeleteRowsException.asserts(repository.markDelete(list), list.size());
+        //clearKeys(list.stream().map(<%=TabName%>::getStringId).collect(Collectors.toSet())); // 若使用缓存需要解开代码
     }
+*/
 
     @Override
     public Optional<<%=TabName%>> findById(final <%=id%> id) {
@@ -92,16 +96,13 @@ public class <%=JavaName%>Service implements ISimpleService<<%=TabName%>>
 //         return Optional.ofNullable(repository.findCacheById(id)); // 若使用缓存需要解开代码
     }
 
-//    @Override
-//    public Optional<<%=TabName%>> findByUid(final <%=id%> id, final String uid) {
-//        return repository.findById(id).filter(row -> Objects.equals(row.getUid(), uid));
-//         return Optional.ofNullable(repository.findCacheById(id)).filter(row -> Objects.equals(uid, row.getUid())); // 若使用缓存需要解开代码
-//    }
-
+/*
+    // 非必要情况下不要开放列表查询方法，因为没有分页控制，容易内存溢出。大批量查询数据应该使用分页查询
     @Override
     public List<<%=TabName%>> findList(final <%=TabName%> condition) {
         return repository.findList(condition);
     }
+*/
 
     @Override
     public QueryResults<<%=TabName%>> findPage(final <%=TabName%> condition, final Pager pager) {

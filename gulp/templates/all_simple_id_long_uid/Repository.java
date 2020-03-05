@@ -20,6 +20,7 @@ import java.util.Set;
 
 import static <%=pkg%>.config.init.BeanInitializer.Beans.jpaQueryFactory;
 import static <%=pkg%>.config.init.BeanInitializer.getAppContext;
+
 /**
  * 数据操作：<%=comment%>
  *
@@ -78,96 +79,117 @@ public interface <%=JavaName%>Repository extends
     }
 
 //     @CacheEvict(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
-//    @Override
-//    default long update(final <%=id%> id, final <%=TabName%> obj) {
-//        return obj.update(jpaQueryFactory.<JPAQueryFactory>get().update(q))
-//        .get()
-//        .where(q.id.eq(id).and(q.uid.eq(obj.getUid())).and(q.updateTime.eq(obj.getUpdateTime())))
-//        .execute();
-//    }
-//
+    @Override
+    default long update(final <%=id%> id, final <%=TabName%> obj) {
+        return obj.update(jpaQueryFactory.<JPAQueryFactory>get().update(q))
+        .get()
+        .where(q.id.eq(id).and(q.uid.eq(obj.getUid())).and(q.updateTime.eq(obj.getUpdateTime())))
+        .execute();
+    }
+
 //     @CacheEvict(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
-//    @Override
-//    default <%=TabName%> deleteByUid(final <%=id%> id, final String uid) {
-//        // 只能删除自己创建的数据，且使用 UUID 强校验；
-//        return Optional
-//                .ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
-//                        .selectFrom(q)
-//                        .where(q.id.eq(id).and(q.uid.eq(uid)))
-//                        .fetchOne()
-//                )
-//                .map(obj -> {
-//                    delete(obj);
-//                    return obj;
-//                })
-//                .orElseThrow(() -> new NullPointerException("数据物理删除失败：".concat(
-//                        <%=TabName%>.builder().id(id).uid(uid)..build().json())
-//                ));
-//    }
-//
+    @Override
+    default <%=TabName%> deleteById(final <%=id%> id) {
+        return Optional
+                .ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
+                        .selectFrom(q)
+                        .where(q.id.eq(id))
+                        .fetchOne()
+                )
+                .map(obj -> {
+                    delete(obj);
+                    return obj;
+                })
+                .orElseThrow(() -> new NullPointerException("数据物理删除失败：".concat(
+                        <%=TabName%>.builder().id(id).build().json())
+                ));
+    }
+
 //     @CacheEvict(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
-//    @Override
-//    default long markDeleteById(final <%=id%> id) {
-//        return jpaQueryFactory.<JPAQueryFactory>get()
-//                .update(q)
-//                .set(q.deleted, Bool.YES)
-//                .where(q.id.eq(id).and(q.deleted.eq(Bool.NO)))
-//                .execute();
-//    }
+    @Override
+    default <%=TabName%> deleteByUid(final <%=id%> id, final String uid) {
+        // userId 为可选校验，一般业务场景，能获取到 UUID 已经表示已经加强校验了
+        return Optional
+                .ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
+                        .selectFrom(q)
+                        .where(q.id.eq(id).and(q.uid.eq(uid)))
+                        .fetchOne()
+                )
+                .map(obj -> {
+                    delete(obj);
+                    return obj;
+                })
+                .orElseThrow(() -> new NullPointerException("数据物理删除失败：".concat(
+                        <%=TabName%>.builder().id(id).uid(uid)..build().json())
+                ));
+    }
+
 //     @CacheEvict(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
-//    @Override
-//    default long markDeleteByUid(final <%=id%> id, final String uid) {
-//        return jpaQueryFactory.<JPAQueryFactory>get()
-//        .update(q)
-//        .set(q.deleted, Bool.YES)
-//        .where(q.id.eq(id).and(q.uid.eq(uid).and(q.deleted.eq(Bool.NO))))
-//        .execute();
-//    }
+    @Override
+    default long markDeleteById(final <%=id%> id) {
+        return jpaQueryFactory.<JPAQueryFactory>get()
+                .update(q)
+                .set(q.deleted, Bool.YES)
+                .where(q.id.eq(id).and(q.deleted.eq(Bool.NO)))
+                .execute();
+    }
 
-//    @Override
-//    default long markDeleteByIds(final List<<%=id%>> ids) {
-//        return jpaQueryFactory.<JPAQueryFactory>get()
-//                .update(q)
-//                .set(q.deleted, Bool.YES)
-//                .where(q.id.in(ids).and(q.deleted.eq(Bool.NO)))
-//                .execute();
-//    }
+//     @CacheEvict(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
+    @Override
+    default long markDeleteByUid(final <%=id%> id, final String uid) {
+        return jpaQueryFactory.<JPAQueryFactory>get()
+        .update(q)
+        .set(q.deleted, Bool.YES)
+        .where(q.id.eq(id).and(q.uid.eq(uid).and(q.deleted.eq(Bool.NO))))
+        .execute();
+    }
 
-//    @Override
-//    default long markDelete(final List<MarkDelete> list) {
-//        return jpaQueryFactory.<JPAQueryFactory>get()
-//        .update(q)
-//        .set(q.deleted, Bool.YES)
-//        .where(q.id.in(list.stream().map(MarkDelete::getLongId).toArray(Long[]::new))
-//        .and(q.deleted.eq(Bool.NO))
-//        .and(q.uid.in(list.stream().map(MarkDelete::getUid).toArray(String[]::new)))
-//        )
-//        .execute();
-//    }
+    @Override
+    default long markDeleteByIds(final List<<%=id%>> ids) {
+        return jpaQueryFactory.<JPAQueryFactory>get()
+                .update(q)
+                .set(q.deleted, Bool.YES)
+                .where(q.id.in(ids).and(q.deleted.eq(Bool.NO)))
+                .execute();
+    }
 
-//     @Cacheable(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
-//     default <%=TabName%> findCacheById(final <%=id%> id){
-//         return findById(id).orElse(null);
-//     }
+    @Override
+    default long markDelete(final List<MarkDelete> list) {
+        return jpaQueryFactory.<JPAQueryFactory>get()
+        .update(q)
+        .set(q.deleted, Bool.YES)
+        .where(q.id.in(list.stream().map(MarkDelete::getLongId).toArray(Long[]::new))
+        .and(q.deleted.eq(Bool.NO))
+        .and(q.uid.in(list.stream().map(MarkDelete::getUid).toArray(String[]::new)))
+        )
+        .execute();
+    }
 
-//    @Override
-//    default List<<%=TabName%>> findList(final <%=TabName%> condition) {
-//        return jpaQueryFactory.<JPAQueryFactory>get()
-//                .selectFrom(q)
-//                .where(condition.where().toArray())
-//                .orderBy(condition.buildQdslSorts())
-//                .fetch();
-//    }
-//
-//    @Override
-//    default List<<%=TabName%>> findList(final <%=TabName%> condition, final Expression<?>... exps) {
-//        return jpaQueryFactory.<JPAQueryFactory>get()
-//                .select(Projections.bean(<%=TabName%>.class, exps))
-//                .from(q)
-//                .where(condition.where().toArray())
-//                .orderBy(condition.buildQdslSorts())
-//                .fetch();
-//    }
+/*
+     @Cacheable(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
+     default <%=TabName%> findCacheById(final <%=id%> id){
+         return findById(id).orElse(null);
+     }
+*/
+
+    @Override
+    default List<<%=TabName%>> findList(final <%=TabName%> condition) {
+        return jpaQueryFactory.<JPAQueryFactory>get()
+                .selectFrom(q)
+                .where(condition.where().toArray())
+                .orderBy(condition.buildQdslSorts())
+                .fetch();
+    }
+
+    @Override
+    default List<<%=TabName%>> findList(final <%=TabName%> condition, final Expression<?>... exps) {
+        return jpaQueryFactory.<JPAQueryFactory>get()
+                .select(Projections.bean(<%=TabName%>.class, exps))
+                .from(q)
+                .where(condition.where().toArray())
+                .orderBy(condition.buildQdslSorts())
+                .fetch();
+    }
 
     @Override
     default QueryResults<<%=TabName%>> findPage(final <%=TabName%> condition, final Pager pager) {
@@ -223,4 +245,5 @@ public interface <%=JavaName%>Repository extends
                 .orderBy(condition.buildQdslSorts())
                 .fetchResults();
     }
+
 }

@@ -1,7 +1,18 @@
 import gulp from 'gulp'
 import rename from 'gulp-rename';
 import template from 'gulp-template';
+import fs from 'fs';
 import Paths from './utils/entity/Paths';
+import authLongUidController from './templates/auth-long-uid/Controller';
+
+const templateDirMapping = {
+  'auth-long-uid': {
+    controller: authLongUidController,
+    service: authLongUidController,
+    entity: authLongUidController,
+    repository: authLongUidController
+  }
+};
 
 /**
  * 数据库表信息
@@ -12,7 +23,7 @@ export class Table {
    * @param Name {string} 表名
    * @param Engine {string} 存储引擎
    * @param Collation {string} 字符集
-   * @param Comment {string} 说明
+   * @param Comment {string} 表说明
    */
   constructor({Name, Engine, Collation, Comment}) {
     /**
@@ -31,7 +42,7 @@ export class Table {
      */
     this.collation = Collation;
     /**
-     * 说明
+     * 表说明
      * @return {string}
      */
     this.comment = Comment.replace(/\s/g, ' ').replace(/"/g, '\'');
@@ -40,7 +51,26 @@ export class Table {
      * @type {Names}
      */
     this.names = new Names(this.name);
+    /**
+     * 当前日期
+     * @type {string}
+     */
+    this.date = new Date().formatDate();
     this.setAdapters();
+  }
+
+  /**
+   * 设置基础包名
+   * @param pkg {string} 包名
+   * @result {Table}
+   */
+  setPkg(pkg) {
+    /**
+     * 基础包名
+     * @type {string}
+     */
+    this.pkg = pkg;
+    return this;
   }
 
   /**
@@ -54,6 +84,18 @@ export class Table {
      * @return {Column[]}
      */
     this.columns = columns.map(obj => new Column(obj));
+    /**
+     * 主键数据类型
+     * @type {string}
+     */
+    this.idType = (() => {
+      // 目前只支持 Long 、 String 类型作为ID
+      const dataType = (this.columns.find(({name}) => name === 'id') || {dataType: {}}).dataType;
+      if (dataType.value === DataType.VARCHAR.value) {
+        return dataType.value;
+      }
+      return DataType.BIGINT.value;
+    })();
     return this;
   }
 
@@ -74,11 +116,14 @@ export class Table {
   /**
    * 设置输出包目录
    * @param module {string} 模块名
-   * @param pkg {string} 包名
    * @result {Table}
    */
-  setOutput(module, pkg) {
-    this.output = `../${module}/src/test/java/${pkg.replace(/\./g, '/')}/code/${this.names.javaname}`;
+  setOutput(module) {
+    /**
+     * 输出路径
+     * @type {string}
+     */
+    this.output = `${module}/src/test/java/${this.pkg.replace(/\./g, '/')}/code/${this.names.javaname}`;
     return this;
   }
 
@@ -90,27 +135,26 @@ export class Table {
    * ,\s+user.getId\(\)              =>
    *
    * @param templateDirName {string} 模板目录
-   * @param pkg {string} 输出包名
    * @return {Table}
    */
-  writeController(templateDirName, pkg) {
+  writeController(templateDirName) {
+    const {controller} = templateDirMapping[templateDirName];
     const filename = `web/${this.names.JavaName.concat('Controller.java')}`;
     console.log(Paths.resolve(this.output, filename).absolute());
-    gulp.src(`templates/${templateDirName}/Controller.java`)
-      .pipe(template(Object.assign(this.names.toObject(), {
-        pkg,
-        comment: this.comment,
-        date: new Date().formatDate(),
-        id: (() => { // 目前只支持 Long 、 String 类型作为ID
-          const dataType = (this.columns.find(({name}) => name === 'id') || {dataType: {}}).dataType;
-          if (dataType.value === DataType.VARCHAR.value) {
-            return dataType.value;
-          }
-          return DataType.BIGINT.value;
-        })()
-      })))
-      .pipe(rename(filename))
-      .pipe(gulp.dest(this.output));
+    fs.writeFileSync('./temp/Controller.java', controller(this));
+    // gulp.src(`templates/${templateDirName}/Controller.java`)
+    //   .pipe(template(Object.assign(this.names.toObject(), {
+    //     comment: this.comment,
+    //     id: (() => { // 目前只支持 Long 、 String 类型作为ID
+    //       const dataType = (this.columns.find(({name}) => name === 'id') || {dataType: {}}).dataType;
+    //       if (dataType.value === DataType.VARCHAR.value) {
+    //         return dataType.value;
+    //       }
+    //       return DataType.BIGINT.value;
+    //     })()
+    //   })))
+    //   .pipe(rename(filename))
+    //   .pipe(gulp.dest(this.output));
     return this;
   }
 

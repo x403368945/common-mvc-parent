@@ -73,7 +73,7 @@ public class <%=TabName%> implements
      */
     @QueryTransient
     @Transient
-    @ApiModelProperty(value = "<%=pkg%>.code.<%=javaname%>.entity.<%=TabName%>$OrderBy")
+    @ApiModelProperty(value = "查询排序字段，<%=pkg%>.code.<%=javaname%>.entity.<%=TabName%>$OrderBy")
     private List<Sorts.Order> sorts;
 
 // Enum Start **********************************************************************************************************

@@ -19,7 +19,7 @@
       'q+': Math.floor((this.getMonth() + 3) / 3), // 季度
       'S+': this.getMilliseconds() // 毫秒
     };
-    for (let key in values) {
+    for (const key in values) {
       pattern = pattern.replace(new RegExp(key), (match) => {
         return values[key].toString().padStart(match.length, '0');
       });

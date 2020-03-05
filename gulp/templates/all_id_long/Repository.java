@@ -89,7 +89,6 @@ public interface <%=JavaName%>Repository extends
 //     @CacheEvict(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
     @Override
     default <%=TabName%> deleteById(final <%=id%> id, final Long userId) {
-        // 只能删除自己创建的数据
         return Optional
                 .ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
                         .selectFrom(q)
@@ -104,25 +103,26 @@ public interface <%=JavaName%>Repository extends
                         <%=TabName%>.builder().id(id).insertUserId(userId).build().json())
                 ));
     }
-//     @CacheEvict(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
-//    @Override
-//    default <%=TabName%> deleteByUid(final <%=id%> id, final String uid, final Long userId) {
-//        // 只能删除自己创建的数据，且使用 UUID 强校验；
-//        // userId 为可选校验，一般业务场景，能获取到 UUID 已经表示已经加强校验了
-//        return Optional
-//                .ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
-//                        .selectFrom(q)
-//                        .where(q.id.eq(id).and(q.uid.eq(uid)))
-//                        .fetchOne()
-//                )
-//                .map(obj -> {
-//                    delete(obj);
-//                    return obj;
-//                })
-//                .orElseThrow(() -> new NullPointerException("数据物理删除失败：".concat(
-//                        <%=TabName%>.builder().id(id).uid(uid).insertUserId(userId).build().json())
-//                ));
-//    }
+
+/*  //@CacheEvict(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
+    @Override
+    default <%=TabName%> deleteByUid(final <%=id%> id, final String uid, final Long userId) {
+        // userId 为可选校验，一般业务场景，能获取到 UUID 已经表示已经加强校验了
+        return Optional
+                .ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
+                        .selectFrom(q)
+                        .where(q.id.eq(id).and(q.uid.eq(uid)))
+                        .fetchOne()
+                )
+                .map(obj -> {
+                    delete(obj);
+                    return obj;
+                })
+                .orElseThrow(() -> new NullPointerException("数据物理删除失败：".concat(
+                        <%=TabName%>.builder().id(id).uid(uid).insertUserId(userId).build().json())
+                ));
+    }
+*/
 
 //     @CacheEvict(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
     @Override
@@ -135,16 +135,17 @@ public interface <%=JavaName%>Repository extends
                 .execute();
     }
 
-//     @CacheEvict(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
-//    @Override
-//    default long markDeleteByUid(final <%=id%> id, final String uid, final Long userId) {
-//        return jpaQueryFactory.<JPAQueryFactory>get()
-//                .update(q)
-//                .set(q.deleted, Bool.YES)
-//                .set(q.updateUserId, userId)
-//                .where(q.id.eq(id).and(q.uid.eq(uid)).and(q.deleted.eq(Bool.NO)))
-//                .execute();
-//    }
+/*  //@CacheEvict(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
+    @Override
+    default long markDeleteByUid(final <%=id%> id, final String uid, final Long userId) {
+        return jpaQueryFactory.<JPAQueryFactory>get()
+                .update(q)
+                .set(q.deleted, Bool.YES)
+                .set(q.updateUserId, userId)
+                .where(q.id.eq(id).and(q.deleted.eq(Bool.NO)))
+                .execute();
+    }
+*/
 
     @Override
     default long markDeleteByIds(final List<<%=id%>> ids, final Long userId) {
@@ -156,10 +157,24 @@ public interface <%=JavaName%>Repository extends
                 .execute();
     }
 
-//     @Cacheable(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
-//     default <%=TabName%> findCacheById(final <%=id%> id){
-//         return findById(id).orElse(null);
-//     }
+    @Override
+    default long markDelete(final List<MarkDelete> list, final Long userId) {
+        return jpaQueryFactory.<JPAQueryFactory>get()
+                .update(q)
+                .set(q.deleted, Bool.YES)
+                .set(q.updateUserId, userId)
+                .where(q.id.in(list.stream().map(MarkDelete::getLongId).toArray(Long[]::new))
+                        .and(q.deleted.eq(Bool.NO))
+                )
+                .execute();
+    }
+
+/*
+     @Cacheable(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
+     default <%=TabName%> findCacheById(final <%=id%> id){
+         return findById(id).orElse(null);
+     }
+*/
 
     @Override
     default List<<%=TabName%>> findList(final <%=TabName%> condition) {
@@ -190,7 +205,6 @@ public interface <%=JavaName%>Repository extends
                 .orderBy(condition.buildQdslSorts())
                 .fetchResults();
     }
-
 
     @Override
     default QueryResults<<%=TabName%>> findPage(final <%=TabName%> condition, final Pager pager, final Expression<?>... exps) {
@@ -235,4 +249,5 @@ public interface <%=JavaName%>Repository extends
                 .orderBy(condition.buildQdslSorts())
                 .fetchResults();
     }
+
 }

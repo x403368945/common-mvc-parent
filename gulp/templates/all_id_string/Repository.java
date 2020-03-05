@@ -20,6 +20,7 @@ import java.util.Set;
 
 import static <%=pkg%>.config.init.BeanInitializer.Beans.jpaQueryFactory;
 import static <%=pkg%>.config.init.BeanInitializer.getAppContext;
+
 /**
  * 数据操作：<%=comment%>
  *
@@ -85,10 +86,10 @@ public interface <%=JavaName%>Repository extends
                 .where(q.id.eq(id).and(q.updateTime.eq(obj.getUpdateTime())))
                 .execute();
     }
+
 //     @CacheEvict(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
     @Override
     default <%=TabName%> deleteById(final <%=id%> id, final Long userId) {
-        // 只能删除自己创建的数据
         return Optional
                 .ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
                         .selectFrom(q)
@@ -130,16 +131,18 @@ public interface <%=JavaName%>Repository extends
                 .update(q)
                 .set(q.deleted, Bool.YES)
                 .set(q.updateUserId, userId)
-                .where(q.id.in(list.stream().map(MarkDelete::getLongId).toArray(String[]::new))
+                .where(q.id.in(list.stream().map(MarkDelete::getStringId).toArray(String[]::new))
                         .and(q.deleted.eq(Bool.NO))
                 )
                 .execute();
     }
 
-//     @Cacheable(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
-//     default <%=TabName%> findCacheById(final <%=id%> id){
-//         return findById(id).orElse(null);
-//     }
+/*
+     @Cacheable(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
+     default <%=TabName%> findCacheById(final <%=id%> id){
+         return findById(id).orElse(null);
+     }
+*/
 
     @Override
     default List<<%=TabName%>> findList(final <%=TabName%> condition) {

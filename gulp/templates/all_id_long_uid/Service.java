@@ -13,9 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 //import static <%=pkg%>.config.init.BeanInitializer.Beans.cacheManager; // 若使用缓存需要解开代码
 
@@ -65,17 +63,21 @@ public class <%=JavaName%>Service implements IService<<%=TabName%>>
         UpdateRowsException.asserts(repository.update(id, userId, obj));
     }
 
+/* // 注释掉的方法只有在需要的时候解开
     @Override
     public <%=TabName%> deleteById(final <%=id%> id, final Long userId) {
         return repository.deleteById(id, userId);
     }
+*/
 
+/* // 注释掉的方法只有在需要的时候解开
     @Override
     public <%=TabName%> deleteByUid(final <%=id%> id, final String uid, final Long userId) {
         return repository.deleteByUid(id, uid, userId);
     }
+*/
 
-/*
+/* // 注释掉的方法只有在需要的时候解开
     @Override
     public void markDeleteById(final <%=id%> id, final Long userId) {
         DeleteRowsException.asserts(repository.markDeleteById(id, userId));
@@ -87,18 +89,18 @@ public class <%=JavaName%>Service implements IService<<%=TabName%>>
         DeleteRowsException.asserts(repository.markDeleteByUid(id, uid, userId));
     }
 
-/*
+/* // 注释掉的方法只有在需要的时候解开
     @Override
     public void markDeleteByIds(final List<<%=id%>> ids, final Long userId) {
-        DeleteRowsException.warn(repository.markDeleteByIds(ids, userId), ids.size());
+        DeleteRowsException.asserts(repository.markDeleteByIds(ids, userId), ids.size());
         //clearKeys(ids); // 若使用缓存需要解开代码
     }
 */
 
     @Override
     public void markDelete(final List<MarkDelete> list, final Long userId) {
-        DeleteRowsException.warn(repository.markDelete(list, userId), list.size());
-        //clearKeys(list.stream().map(MarkDelete::getId).collect(Collectors.toSet())); // 若使用缓存需要解开代码
+        DeleteRowsException.asserts(repository.markDelete(list, userId), list.size());
+        //clearKeys(list.stream().map(MarkDelete::getLongId).collect(Collectors.toSet())); // 若使用缓存需要解开代码
     }
 
     @Override
@@ -113,8 +115,8 @@ public class <%=JavaName%>Service implements IService<<%=TabName%>>
 //         return Optional.ofNullable(repository.findCacheById(id)).filter(row -> Objects.equals(uid, row.getUid())); // 若使用缓存需要解开代码
     }
 
-    // 非必要情况下不要开放列表查询方法，因为没有分页控制，容易内存溢出。大批量查询数据应该使用分页查询
 /*
+    // 非必要情况下不要开放列表查询方法，因为没有分页控制，容易内存溢出。大批量查询数据应该使用分页查询
     @Override
     public List<<%=TabName%>> findList(final <%=TabName%> condition) {
         return repository.findList(condition);

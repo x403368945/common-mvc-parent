@@ -20,6 +20,7 @@ import java.util.Set;
 
 import static <%=pkg%>.config.init.BeanInitializer.Beans.jpaQueryFactory;
 import static <%=pkg%>.config.init.BeanInitializer.getAppContext;
+
 /**
  * 数据操作：<%=comment%>
  *
@@ -82,8 +83,25 @@ public interface <%=JavaName%>Repository extends
     default long update(final <%=id%> id, final <%=TabName%> obj) {
         return obj.update(jpaQueryFactory.<JPAQueryFactory>get().update(q))
                 .get()
-                .where(q.id.eq(id))
+                .where(q.id.eq(id).and(q.updateTime.eq(obj.getUpdateTime())))
                 .execute();
+    }
+//     @CacheEvict(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
+    @Override
+    default <%=TabName%> deleteById(final <%=id%> id) {
+        return Optional
+                .ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
+                        .selectFrom(q)
+                        .where(q.id.eq(id))
+                        .fetchOne()
+                )
+                .map(obj -> {
+                    delete(obj);
+                    return obj;
+                })
+                .orElseThrow(() -> new NullPointerException("数据物理删除失败：".concat(
+                        <%=TabName%>.builder().id(id).build().json())
+                ));
     }
 
 //     @CacheEvict(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
@@ -105,29 +123,43 @@ public interface <%=JavaName%>Repository extends
                 .execute();
     }
 
-//     @Cacheable(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
-//     default <%=TabName%> findCacheById(final <%=id%> id){
-//         return findById(id).orElse(null);
-//     }
+    @Override
+    default long markDelete(final List<MarkDelete> list, final Long userId) {
+        return jpaQueryFactory.<JPAQueryFactory>get()
+                .update(q)
+                .set(q.deleted, Bool.YES)
+                .set(q.updateUserId, userId)
+                .where(q.id.in(list.stream().map(MarkDelete::getLongId).toArray(Long[]::new))
+                        .and(q.deleted.eq(Bool.NO))
+                )
+                .execute();
+    }
 
-//    @Override
-//    default List<<%=TabName%>> findList(final <%=TabName%> condition) {
-//        return jpaQueryFactory.<JPAQueryFactory>get()
-//                .selectFrom(q)
-//                .where(condition.where().toArray())
-//                .orderBy(condition.buildQdslSorts())
-//                .fetch();
-//    }
-//
-//    @Override
-//    default List<<%=TabName%>> findList(final <%=TabName%> condition, final Expression<?>... exps) {
-//        return jpaQueryFactory.<JPAQueryFactory>get()
-//                .select(Projections.bean(<%=TabName%>.class, exps))
-//                .from(q)
-//                .where(condition.where().toArray())
-//                .orderBy(condition.buildQdslSorts())
-//                .fetch();
-//    }
+/*
+     @Cacheable(cacheNames = I<%=TabName%>Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
+     default <%=TabName%> findCacheById(final <%=id%> id){
+         return findById(id).orElse(null);
+     }
+*/
+
+    @Override
+    default List<<%=TabName%>> findList(final <%=TabName%> condition) {
+        return jpaQueryFactory.<JPAQueryFactory>get()
+                .selectFrom(q)
+                .where(condition.where().toArray())
+                .orderBy(condition.buildQdslSorts())
+                .fetch();
+    }
+
+    @Override
+    default List<<%=TabName%>> findList(final <%=TabName%> condition, final Expression<?>... exps) {
+        return jpaQueryFactory.<JPAQueryFactory>get()
+                .select(Projections.bean(<%=TabName%>.class, exps))
+                .from(q)
+                .where(condition.where().toArray())
+                .orderBy(condition.buildQdslSorts())
+                .fetch();
+    }
 
     @Override
     default QueryResults<<%=TabName%>> findPage(final <%=TabName%> condition, final Pager pager) {
