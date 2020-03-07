@@ -1,7 +1,7 @@
 ### 保存
-POST http://localhost:8080/demo-mongo/1
+POST http://{{host}}:{{port}}/demo-mongo/1
 Content-Type: application/json
-Authorization: basic YWRtaW46YWRtaW4=
+Authorization: Basic {{username}} {{password}}
 
 {
   "json": {
@@ -13,9 +13,9 @@ Authorization: basic YWRtaW46YWRtaW4=
 }
 
 ### 修改
-PUT http://localhost:8080/demo-mongo/1/e157a8b7edc5453381041946026e621a
+PUT http://{{host}}:{{port}}/demo-mongo/1/e157a8b7edc5453381041946026e621a
 Content-Type: application/json
-Authorization: basic YWRtaW46YWRtaW4=
+Authorization: Basic {{username}} {{password}}
 
 {
   "json": {
@@ -28,17 +28,17 @@ Authorization: basic YWRtaW46YWRtaW4=
 }
 
 ### 物理删除:id
-DELETE http://localhost:8080/demo-mongo/1/feb518709d1c4194b34b0e32683c04a9
-Authorization: basic YWRtaW46YWRtaW4=
+DELETE http://{{host}}:{{port}}/demo-mongo/1/feb518709d1c4194b34b0e32683c04a9
+Authorization: Basic {{username}} {{password}}
 
 ### 逻辑删除:id
-PATCH http://localhost:8080/demo-mongo/1/1a22b53f9777405e84725b8f0240f4ad
-Authorization: basic YWRtaW46YWRtaW4=
+PATCH http://{{host}}:{{port}}/demo-mongo/1/1a22b53f9777405e84725b8f0240f4ad
+Authorization: Basic {{username}} {{password}}
 
 ### 批量逻辑删除:id
-PATCH http://localhost:8080/demo-mongo/1
+PATCH http://{{host}}:{{port}}/demo-mongo/1
 Content-Type: application/json
-Authorization: basic YWRtaW46YWRtaW4=
+Authorization: Basic {{username}} {{password}}
 
 {
   "json": [
@@ -48,19 +48,19 @@ Authorization: basic YWRtaW46YWRtaW4=
 }
 
 ### 查询:id+timestamp
-GET http://localhost:8080/demo-mongo/1/2923cf4d0e6c428080f9033e092e7591/1576055446904
-Authorization: basic YWRtaW46YWRtaW4=
+GET http://{{host}}:{{port}}/demo-mongo/1/2923cf4d0e6c428080f9033e092e7591/1576055446904
+Authorization: Basic {{username}} {{password}}
 
 ### 查询:不分页
-GET http://localhost:8080/demo-mongo/1
-Authorization: basic YWRtaW46YWRtaW4=
+GET http://{{host}}:{{port}}/demo-mongo/1
+Authorization: Basic {{username}} {{password}}
 
 ### 查询:不分页
-GET http://localhost:8080/demo-mongo/1?json={"insertTimeRange":{"begin":"2019-01-04", "end":"2019-01-04"}}
-Authorization: basic YWRtaW46YWRtaW4=
+GET http://{{host}}:{{port}}/demo-mongo/1?json={"insertTimeRange":{"begin":"2019-01-04", "end":"2019-01-04"}}
+Authorization: Basic {{username}} {{password}}
 
 ### 查询:分页
-GET http://localhost:8080/demo-mongo/1/page/1/10?json={"ageRange":{"min":1,"max":20}}
-Authorization: basic YWRtaW46YWRtaW4=
+GET http://{{host}}:{{port}}/demo-mongo/1/page/1/10?json={"ageRange":{"min":1,"max":20}}
+Authorization: Basic {{username}} {{password}}
 
 ###

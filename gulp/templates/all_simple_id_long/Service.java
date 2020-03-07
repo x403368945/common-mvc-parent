@@ -8,7 +8,7 @@ import com.support.mvc.entity.base.MarkDelete;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.exception.DeleteRowsException;
 import com.support.mvc.exception.UpdateRowsException;
-import com.support.mvc.service.ISimpleService;
+import com.support.mvc.service.IOpenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ import java.util.*;
 @Service
 @ServiceAspect
 @RequiredArgsConstructor
-public class <%=JavaName%>Service implements ISimpleService<<%=TabName%>>
+public class <%=JavaName%>Service implements IOpenService<<%=TabName%>>
 //	, I<%=TabName%>Cache
  {
     private final <%=JavaName%>Repository repository;

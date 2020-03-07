@@ -1,14 +1,14 @@
 package com.support.aop.annotations;
 
-import com.support.mvc.service.IService;
-import com.support.mvc.service.ISimpleService;
+import com.support.mvc.service.IBaseService;
+import com.support.mvc.service.IOpenService;
 
 import java.lang.annotation.*;
 
 /**
  * <pre>
- * {@link IService}
- * {@link ISimpleService}
+ * {@link IBaseService}
+ * {@link IOpenService}
  * 接口的实现类，save|saveAll|update 方法配置拦截器
  * 该注解支持类和方法上加，方法上的注解优先；一般配置的类头部即可
  * Service 会有代理方法，自动设置 UUID 和 操作用户信息，部分业务场景需要将数据库表同步到 mongo ，需要保留数据库的 ID 和时间戳；

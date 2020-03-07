@@ -17,7 +17,7 @@ const markDeleteById = (table, {auth = false, spare = false}) => {
   return `${spareBegin}
 //     @CacheEvict(cacheNames = I${TabName}Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
     @Override
-    default long markDeleteById(final ${idType} id${authUserId}) {
+    default long markDeleteById(final ${idType} id${authUser}) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Bool.YES)${authUserId}

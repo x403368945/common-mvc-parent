@@ -1,5 +1,5 @@
 ###
-GET http://localhost:8080/open/test/1/codes
+GET http://{{host}}:{{port}}/1/open/test/codes
 Accept: application/json
 
 ###

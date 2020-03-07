@@ -1,20 +1,20 @@
 ### 查看应用全局配置
-GET http://localhost:8080/admin-config/1/app
+GET http://{{host}}:{{port}}/1/admin-config/app
 Content-Type: application/json
-Authorization: basic YWRtaW46YWRtaW4=
+Authorization: Basic {{username}} {{password}}
 
 ### 查看应用目录配置
-GET http://localhost:8080/admin-config/1/path
+GET http://{{host}}:{{port}}/1/admin-config/path
 Content-Type: application/json
-Authorization: basic YWRtaW46YWRtaW4=
+Authorization: Basic {{username}} {{password}}
 
 ### 查看应用 URL 配置
-GET http://localhost:8080/admin-config/1/url
+GET http://{{host}}:{{port}}/1/admin-config/url
 Content-Type: application/json
-Authorization: basic YWRtaW46YWRtaW4=
+Authorization: Basic {{username}} {{password}}
 
 ### 模拟 403
-GET http://localhost:8080/admin-config/1/url
+GET http://{{host}}:{{port}}/1/admin-config/url
 Content-Type: application/json
 Authorization: basic dXNlcjoxMTExMTE=
 

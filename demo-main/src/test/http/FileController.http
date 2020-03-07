@@ -1,6 +1,6 @@
 ### 单文件上传
-POST http://localhost:8080/1/file/upload
-Authorization: basic YWRtaW46YWRtaW4=
+POST http://{{host}}:{{port}}/1/file/upload
+Authorization: Basic {{username}} {{password}}
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
@@ -11,8 +11,8 @@ Element Name
 --WebAppBoundary--
 
 ### 多文件上传
-POST http://localhost:8080/1/file/uploads
-Authorization: basic YWRtaW46YWRtaW4=
+POST http://{{host}}:{{port}}/1/file/uploads
+Authorization: Basic {{username}} {{password}}
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary

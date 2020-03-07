@@ -4,7 +4,7 @@ import com.ccx.demo.business.user.dao.jpa.UserLoginRepository;
 import com.ccx.demo.business.user.entity.TabUserLogin;
 import com.querydsl.core.QueryResults;
 import com.support.mvc.entity.base.Pager;
-import com.support.mvc.service.IService;
+import com.support.mvc.service.IBaseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserLoginService implements IService<TabUserLogin> {
+public class UserLoginService implements IBaseService<TabUserLogin> {
 
     private final UserLoginRepository repository;
 

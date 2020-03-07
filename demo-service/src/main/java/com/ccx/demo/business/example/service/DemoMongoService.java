@@ -8,7 +8,7 @@ import com.support.aop.annotations.MongoServiceAspect;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.exception.DeleteRowsException;
 import com.support.mvc.exception.UpdateRowsException;
-import com.support.mvc.service.str.IService;
+import com.support.mvc.service.str.IBaseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @MongoServiceAspect(deleted = Bool.class)
-public class DemoMongoService implements IService<DemoMongo> {
+public class DemoMongoService implements IBaseService<DemoMongo> {
     private final DemoMongoRepository repository;
 
     @Override
@@ -56,7 +56,7 @@ public class DemoMongoService implements IService<DemoMongo> {
 
     @Override
     public void markDeleteByIds(final List<String> ids, final Long userId) {
-        DeleteRowsException.warn(repository.markDeleteByIds(ids, userId), ids.size());
+        DeleteRowsException.asserts(repository.markDeleteByIds(ids, userId), ids.size());
     }
 
     @Override

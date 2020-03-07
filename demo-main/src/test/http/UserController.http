@@ -1,6 +1,6 @@
 ### 分页查看用户列表
-GET http://localhost:8080/1/user/page/1/10
+GET http://{{host}}:{{port}}/1/user/page/1/10
 Content-Type: application/json
-Authorization: basic YWRtaW46YWRtaW4=
+Authorization: Basic {{username}} {{password}}
 
 ###

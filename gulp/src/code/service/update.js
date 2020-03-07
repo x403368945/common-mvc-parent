@@ -13,15 +13,11 @@ const update = (table, {auth = false, spare = false}) => {
   const spareBegin = spare ? '/*' : '';
   const spareEnd = spare ? '*/' : '';
   const authUser = auth ? ', final Long userId' : '';
-  const authUserId = auth ? '.insertUserId(userId)' : '';
+  const authUserId = auth ? ', userId' : '';
   return `${spareBegin}
-//     @CacheEvict(cacheNames = I${TabName}Cache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
     @Override
-    default long update(final ${idType} id${authUserId}, final ${TabName} obj) {
-        return obj.update(jpaQueryFactory.<JPAQueryFactory>get().update(q))
-                .get()
-                .where(q.id.eq(id).and(q.uid.eq(obj.getUid())).and(q.updateTime.eq(obj.getUpdateTime())))
-                .execute();
+    public void update(final ${idType} id${authUser}, final ${TabName} obj) {
+        UpdateRowsException.asserts(repository.update(id${authUserId}, obj));
     }
 ${spareEnd}`
 };

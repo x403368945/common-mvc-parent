@@ -35,19 +35,19 @@ import java.util.List;
  *     支持三种登录传参
  *
  *     ### 登录： JSON 模式
- *         POST http://localhost:8080/login
+ *         POST http://{{host}}:{{port}}/login
  *          Content-Type: application/json
  *
  *          {"json": {"username": "admin","password": "admin"}}
  *     ###
  *     ### 登录：表单模式
- *         POST http://localhost:8080/login
+ *         POST http://{{host}}:{{port}}/login
  *          Content-Type: application/x-www-form-urlencoded
  *
  *          username=admin&password=admin
  *     ###
  *     ### Basic 模式，无 session
- *         GET http://localhost:8080/user
+ *         GET http://{{host}}:{{port}}/user
  *         Content-Type: application/json
  *         Authorization: basic YWRtaW46c3VwZXJhZG1pbg==
  *     ###

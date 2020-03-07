@@ -6,8 +6,8 @@ import com.querydsl.core.QueryResults;
 import com.support.aop.annotations.ServiceAspect;
 import com.support.mvc.entity.base.MarkDelete;
 import com.support.mvc.entity.base.Pager;
-import com.support.mvc.service.IService;
-import com.support.mvc.service.ISimpleService;
+import com.support.mvc.service.IBaseService;
+import com.support.mvc.service.IOpenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ import java.util.*;
 @Slf4j
 @Service
 @ServiceAspect
-public class ValidService implements IService<TabValid>, ISimpleService<TabValid> {
+public class ValidService implements IBaseService<TabValid>, IOpenService<TabValid> {
 
     public String hasNull(@Null String arg) {
         return (Objects.toString(arg));
@@ -103,7 +103,7 @@ public class ValidService implements IService<TabValid>, ISimpleService<TabValid
     public String future(@Future Timestamp arg) {
         return (Objects.toString(arg));
     }
-    // IService Start **************************************************************************************************
+    // IBaseService Start **************************************************************************************************
 
     @Override
     public TabValid save(final TabValid obj, final Long userId) {
@@ -156,7 +156,7 @@ public class ValidService implements IService<TabValid>, ISimpleService<TabValid
         log.info(JSON.toJSONString(Arrays.asList(list, userId)));
     }
 
-    // IService End && ISimpleService Start ****************************************************************************
+    // IBaseService End && IOpenService Start ****************************************************************************
 
     @Override
     public TabValid save(final TabValid obj) {
@@ -208,7 +208,7 @@ public class ValidService implements IService<TabValid>, ISimpleService<TabValid
     public void markDelete(final List<MarkDelete> list) {
         log.info(JSON.toJSONString(list));
     }
-    // ISimpleService End **********************************************************************************************
+    // IOpenService End **********************************************************************************************
 
     @Override
     public Optional<TabValid> findById(final Long id) {

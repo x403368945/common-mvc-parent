@@ -1,237 +1,590 @@
-### hasNull
-#GET http://localhost:8080/valid/0/hasNull
-GET http://localhost:8080/valid/1/hasNull
-Authorization: basic YWRtaW46YWRtaW4=
+### hasNull ************************************************************************************************************
+GET http://{{host}}:{{port}}/0/valid/hasNull
+Authorization: Basic {{username}} {{password}}
 
-### notNull
-#GET http://localhost:8080/valid/0/notNull
-GET http://localhost:8080/valid/1/notNull
-Authorization: basic YWRtaW46YWRtaW4=
+###
+GET http://{{host}}:{{port}}/1/valid/hasNull
+Authorization: Basic {{username}} {{password}}
 
-### notBlank
-#GET http://localhost:8080/valid/0/notBlank
-#GET http://localhost:8080/valid/1/notBlank
-GET http://localhost:8080/valid/2/notBlank
-Authorization: basic YWRtaW46YWRtaW4=
+### notNull ************************************************************************************************************
+GET http://{{host}}:{{port}}/0/valid/notNull
+Authorization: Basic {{username}} {{password}}
 
-### size
-#GET http://localhost:8080/valid/0/size
-#GET http://localhost:8080/valid/1/size
-#GET http://localhost:8080/valid/2/size
-#GET http://localhost:8080/valid/3/size
-GET http://localhost:8080/valid/4/size
-Authorization: basic YWRtaW46YWRtaW4=
+###
+GET http://{{host}}:{{port}}/1/valid/notNull
+Authorization: Basic {{username}} {{password}}
 
-### pattern
-#GET http://localhost:8080/valid/0/pattern
-#GET http://localhost:8080/valid/1/pattern
-#GET http://localhost:8080/valid/2/pattern
-GET http://localhost:8080/valid/3/pattern
-Authorization: basic YWRtaW46YWRtaW4=
+### notBlank ***********************************************************************************************************
+GET http://{{host}}:{{port}}/0/valid/notBlank
+Authorization: Basic {{username}} {{password}}
 
-### notEmpty
-#GET http://localhost:8080/valid/0/notEmpty
-#GET http://localhost:8080/valid/1/notEmpty
-#GET http://localhost:8080/valid/2/notEmpty
-GET http://localhost:8080/valid/3/notEmpty
-Authorization: basic YWRtaW46YWRtaW4=
+###
+GET http://{{host}}:{{port}}/1/valid/notBlank
+Authorization: Basic {{username}} {{password}}
 
-### min
-#GET http://localhost:8080/valid/0/min
-GET http://localhost:8080/valid/1/min
-Authorization: basic YWRtaW46YWRtaW4=
+###
+GET http://{{host}}:{{port}}/2/valid/notBlank
+Authorization: Basic {{username}} {{password}}
 
-### max
-#GET http://localhost:8080/valid/0/max
-GET http://localhost:8080/valid/1/max
-Authorization: basic YWRtaW46YWRtaW4=
+### size ***************************************************************************************************************
+GET http://{{host}}:{{port}}/0/valid/size
+Authorization: Basic {{username}} {{password}}
 
-### decimalMin
-#GET http://localhost:8080/valid/0/decimalMin
-GET http://localhost:8080/valid/1/decimalMin
-Authorization: basic YWRtaW46YWRtaW4=
+###
+GET http://{{host}}:{{port}}/1/valid/size
+Authorization: Basic {{username}} {{password}}
 
-### decimalMax
-#GET http://localhost:8080/valid/0/decimalMax
-GET http://localhost:8080/valid/1/decimalMax
-Authorization: basic YWRtaW46YWRtaW4=
+###
+GET http://{{host}}:{{port}}/2/valid/size
+Authorization: Basic {{username}} {{password}}
 
-### digits
-#GET http://localhost:8080/valid/0/digits
-GET http://localhost:8080/valid/1/digits
-Authorization: basic YWRtaW46YWRtaW4=
+###
+GET http://{{host}}:{{port}}/3/valid/size
+Authorization: Basic {{username}} {{password}}
 
-### negative
-#GET http://localhost:8080/valid/0/negative
-GET http://localhost:8080/valid/1/negative
-Authorization: basic YWRtaW46YWRtaW4=
+###
+GET http://{{host}}:{{port}}/4/valid/size
+Authorization: Basic {{username}} {{password}}
 
-### negativeOrZero
-#GET http://localhost:8080/valid/0/negativeOrZero
-GET http://localhost:8080/valid/1/negativeOrZero
-Authorization: basic YWRtaW46YWRtaW4=
+### pattern ************************************************************************************************************
+GET http://{{host}}:{{port}}/0/valid/pattern
+Authorization: Basic {{username}} {{password}}
 
-### positive
-#GET http://localhost:8080/valid/0/positive
-GET http://localhost:8080/valid/1/positive
-Authorization: basic YWRtaW46YWRtaW4=
+###
+GET http://{{host}}:{{port}}/1/valid/pattern
+Authorization: Basic {{username}} {{password}}
 
-### positiveOrZero
-#GET http://localhost:8080/valid/0/positiveOrZero
-GET http://localhost:8080/valid/1/positiveOrZero
-Authorization: basic YWRtaW46YWRtaW4=
+###
+GET http://{{host}}:{{port}}/2/valid/pattern
+Authorization: Basic {{username}} {{password}}
 
-### assertTrue
-GET http://localhost:8080/valid/0/assertTrue
-#GET http://localhost:8080/valid/1/assertTrue
-Authorization: basic YWRtaW46YWRtaW4=
+###
+GET http://{{host}}:{{port}}/3/valid/pattern
+Authorization: Basic {{username}} {{password}}
 
-### assertFalse
-#GET http://localhost:8080/valid/0/assertFalse
-GET http://localhost:8080/valid/1/assertFalse
-Authorization: basic YWRtaW46YWRtaW4=
+### notEmpty ***********************************************************************************************************
+GET http://{{host}}:{{port}}/0/valid/notEmpty
+Authorization: Basic {{username}} {{password}}
 
-### email
-#GET http://localhost:8080/valid/0/email
-#GET http://localhost:8080/valid/1/email
-GET http://localhost:8080/valid/2/email
-Authorization: basic YWRtaW46YWRtaW4=
+###
+GET http://{{host}}:{{port}}/1/valid/notEmpty
+Authorization: Basic {{username}} {{password}}
 
-### past
-#GET http://localhost:8080/valid/0/past
-GET http://localhost:8080/valid/1/past
-Authorization: basic YWRtaW46YWRtaW4=
+###
+GET http://{{host}}:{{port}}/2/valid/notEmpty
+Authorization: Basic {{username}} {{password}}
 
-### future
-#GET http://localhost:8080/valid/0/future
-GET http://localhost:8080/valid/1/future
-Authorization: basic YWRtaW46YWRtaW4=
+###
+GET http://{{host}}:{{port}}/3/valid/notEmpty
+Authorization: Basic {{username}} {{password}}
 
-### save
-POST http://localhost:8080/valid/0
-#POST http://localhost:8080/valid/1
-#POST http://localhost:8080/valid/2
-#POST http://localhost:8080/valid/3
-#POST http://localhost:8080/valid/4
-#POST http://localhost:8080/valid/5
-#POST http://localhost:8080/valid/6
-#POST http://localhost:8080/valid/7
-#POST http://localhost:8080/valid/8
-#POST http://localhost:8080/valid/9
-#POST http://localhost:8080/valid/10
-#POST http://localhost:8080/valid/11
-#POST http://localhost:8080/valid/12
-#POST http://localhost:8080/valid/13
-#POST http://localhost:8080/valid/14
-#POST http://localhost:8080/valid/15
-#POST http://localhost:8080/valid/16
-#POST http://localhost:8080/valid/17
-#POST http://localhost:8080/valid/18
-#POST http://localhost:8080/valid/19
-#POST http://localhost:8080/valid/20
-#POST http://localhost:8080/valid/21
-#POST http://localhost:8080/valid/22
-#POST http://localhost:8080/valid/23
-#POST http://localhost:8080/valid/24
-#POST http://localhost:8080/valid/25
-#POST http://localhost:8080/valid/26
-#POST http://localhost:8080/valid/27
-#POST http://localhost:8080/valid/28
-#POST http://localhost:8080/valid/29
-#POST http://localhost:8080/valid/30
-#POST http://localhost:8080/valid/31
-#POST http://localhost:8080/valid/32
-#POST http://localhost:8080/valid/33
-#POST http://localhost:8080/valid/34
-#POST http://localhost:8080/valid/35
-Authorization: basic YWRtaW46YWRtaW4=
+### min ****************************************************************************************************************
+GET http://{{host}}:{{port}}/0/valid/min
+Authorization: Basic {{username}} {{password}}
 
-### update
-PUT http://localhost:8080/valid/0/1
-#PUT http://localhost:8080/valid/1/1
-#PUT http://localhost:8080/valid/2/1
-#PUT http://localhost:8080/valid/3/1
-#PUT http://localhost:8080/valid/4/1
-#PUT http://localhost:8080/valid/5/1
-#PUT http://localhost:8080/valid/6/1
-#PUT http://localhost:8080/valid/7/1
-#PUT http://localhost:8080/valid/8/1
-#PUT http://localhost:8080/valid/9/1
-#PUT http://localhost:8080/valid/10/1
-#PUT http://localhost:8080/valid/11/1
-#PUT http://localhost:8080/valid/12/1
-#PUT http://localhost:8080/valid/13/1
-Authorization: basic YWRtaW46YWRtaW4=
+###
+GET http://{{host}}:{{port}}/1/valid/min
+Authorization: Basic {{username}} {{password}}
 
-### deleteById
-DELETE http://localhost:8080/valid/0/1
-#DELETE http://localhost:8080/valid/1/1
-#DELETE http://localhost:8080/valid/2/1
-#DELETE http://localhost:8080/valid/3/1
-#DELETE http://localhost:8080/valid/4/1
-#DELETE http://localhost:8080/valid/5/1
-Authorization: basic YWRtaW46YWRtaW4=
+### max ****************************************************************************************************************
+GET http://{{host}}:{{port}}/0/valid/max
+Authorization: Basic {{username}} {{password}}
 
-### deleteByUid
-DELETE http://localhost:8080/valid/0/1/1
-#DELETE http://localhost:8080/valid/1/1/1
-#DELETE http://localhost:8080/valid/2/1/1
-#DELETE http://localhost:8080/valid/3/1/1
-#DELETE http://localhost:8080/valid/4/1/1
-#DELETE http://localhost:8080/valid/5/1/1
-#DELETE http://localhost:8080/valid/6/1/1
-#DELETE http://localhost:8080/valid/7/1/1
-Authorization: basic YWRtaW46YWRtaW4=
+###
+GET http://{{host}}:{{port}}/1/valid/max
+Authorization: Basic {{username}} {{password}}
 
-### markDeleteById
-PATCH http://localhost:8080/valid/0/1
-#PATCH http://localhost:8080/valid/1/1
-#PATCH http://localhost:8080/valid/2/1
-#PATCH http://localhost:8080/valid/3/1
-#PATCH http://localhost:8080/valid/4/1
-#PATCH http://localhost:8080/valid/5/1
-Authorization: basic YWRtaW46YWRtaW4=
+### decimalMin *********************************************************************************************************
+GET http://{{host}}:{{port}}/0/valid/decimalMin
+Authorization: Basic {{username}} {{password}}
 
-### markDeleteByUid
-PATCH http://localhost:8080/valid/0/1/1
-#PATCH http://localhost:8080/valid/1/1/1
-#PATCH http://localhost:8080/valid/2/1/1
-#PATCH http://localhost:8080/valid/3/1/1
-#PATCH http://localhost:8080/valid/4/1/1
-#PATCH http://localhost:8080/valid/5/1/1
-#PATCH http://localhost:8080/valid/6/1/1
-#PATCH http://localhost:8080/valid/7/1/1
-Authorization: basic YWRtaW46YWRtaW4=
+###
+GET http://{{host}}:{{port}}/1/valid/decimalMin
+Authorization: Basic {{username}} {{password}}
 
-### markDelete
-PATCH http://localhost:8080/valid/0
-#PATCH http://localhost:8080/valid/1
-#PATCH http://localhost:8080/valid/2
-#PATCH http://localhost:8080/valid/3
-#PATCH http://localhost:8080/valid/4
-#PATCH http://localhost:8080/valid/5
-#PATCH http://localhost:8080/valid/6
-#PATCH http://localhost:8080/valid/7
-#PATCH http://localhost:8080/valid/8
-#PATCH http://localhost:8080/valid/9
-Authorization: basic YWRtaW46YWRtaW4=
+### decimalMax *********************************************************************************************************
+###
+GET http://{{host}}:{{port}}/0/valid/decimalMax
+Authorization: Basic {{username}} {{password}}
 
-### findByUidTimestamp
-GET http://localhost:8080/valid/0/1/1/1
-#GET http://localhost:8080/valid/1/1/1/1
-#GET http://localhost:8080/valid/2/1/1/1
-Authorization: basic YWRtaW46YWRtaW4=
+###
+GET http://{{host}}:{{port}}/1/valid/decimalMax
+Authorization: Basic {{username}} {{password}}
 
-### search
-GET http://localhost:8080/valid/0
-#GET http://localhost:8080/valid/1
-#GET http://localhost:8080/valid/2
-Authorization: basic YWRtaW46YWRtaW4=
+### digits *************************************************************************************************************
+GET http://{{host}}:{{port}}/0/valid/digits
+Authorization: Basic {{username}} {{password}}
 
-### page
-#GET http://localhost:8080/valid/0/page/1/1
-GET http://localhost:8080/valid/1/page/1/1
-#GET http://localhost:8080/valid/2/page/1/1
-Authorization: basic YWRtaW46YWRtaW4=
+###
+GET http://{{host}}:{{port}}/1/valid/digits
+Authorization: Basic {{username}} {{password}}
+
+### negative ***********************************************************************************************************
+GET http://{{host}}:{{port}}/0/valid/negative
+Authorization: Basic {{username}} {{password}}
+
+###
+GET http://{{host}}:{{port}}/1/valid/negative
+Authorization: Basic {{username}} {{password}}
+
+### negativeOrZero *****************************************************************************************************
+GET http://{{host}}:{{port}}/0/valid/negativeOrZero
+Authorization: Basic {{username}} {{password}}
+
+###
+GET http://{{host}}:{{port}}/1/valid/negativeOrZero
+Authorization: Basic {{username}} {{password}}
+
+### positive ***********************************************************************************************************
+GET http://{{host}}:{{port}}/0/valid/positive
+Authorization: Basic {{username}} {{password}}
+
+###
+GET http://{{host}}:{{port}}/1/valid/positive
+Authorization: Basic {{username}} {{password}}
+
+### positiveOrZero *****************************************************************************************************
+GET http://{{host}}:{{port}}/0/valid/positiveOrZero
+Authorization: Basic {{username}} {{password}}
+
+###
+GET http://{{host}}:{{port}}/1/valid/positiveOrZero
+Authorization: Basic {{username}} {{password}}
+
+### assertTrue *********************************************************************************************************
+GET http://{{host}}:{{port}}/0/valid/assertTrue
+Authorization: Basic {{username}} {{password}}
+
+###
+GET http://{{host}}:{{port}}/1/valid/assertTrue
+Authorization: Basic {{username}} {{password}}
+
+### assertFalse ********************************************************************************************************
+GET http://{{host}}:{{port}}/0/valid/assertFalse
+Authorization: Basic {{username}} {{password}}
+
+###
+GET http://{{host}}:{{port}}/1/valid/assertFalse
+Authorization: Basic {{username}} {{password}}
+
+### email **************************************************************************************************************
+GET http://{{host}}:{{port}}/0/valid/email
+Authorization: Basic {{username}} {{password}}
+
+###
+GET http://{{host}}:{{port}}/1/valid/email
+Authorization: Basic {{username}} {{password}}
+
+###
+GET http://{{host}}:{{port}}/2/valid/email
+Authorization: Basic {{username}} {{password}}
+
+### past ***************************************************************************************************************
+GET http://{{host}}:{{port}}/0/valid/past
+Authorization: Basic {{username}} {{password}}
+
+###
+GET http://{{host}}:{{port}}/1/valid/past
+Authorization: Basic {{username}} {{password}}
+
+### future *************************************************************************************************************
+###
+GET http://{{host}}:{{port}}/0/valid/future
+Authorization: Basic {{username}} {{password}}
+
+###
+GET http://{{host}}:{{port}}/1/valid/future
+Authorization: Basic {{username}} {{password}}
+
+### save ***************************************************************************************************************
+POST http://{{host}}:{{port}}/0/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/1/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/2/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/3/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/4/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/5/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/6/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/7/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/8/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/9/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/10/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/11/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/12/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/13/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/14/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/15/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/16/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/17/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/18/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/19/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/20/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/21/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/22/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/23/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/24/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/25/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/26/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/27/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/28/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/29/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/30/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/31/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/32/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/33/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/34/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+POST http://{{host}}:{{port}}/35/valid
+Authorization: Basic {{username}} {{password}}
+
+### update *************************************************************************************************************
+PUT http://{{host}}:{{port}}/0/valid/1
+Authorization: Basic {{username}} {{password}}
+
+###
+PUT http://{{host}}:{{port}}/1/valid/1
+Authorization: Basic {{username}} {{password}}
+
+###
+PUT http://{{host}}:{{port}}/2/valid/1
+Authorization: Basic {{username}} {{password}}
+
+###
+PUT http://{{host}}:{{port}}/3/valid/1
+Authorization: Basic {{username}} {{password}}
+
+###
+PUT http://{{host}}:{{port}}/4/valid/1
+Authorization: Basic {{username}} {{password}}
+
+###
+PUT http://{{host}}:{{port}}/5/valid/1
+Authorization: Basic {{username}} {{password}}
+
+###
+PUT http://{{host}}:{{port}}/6/valid/1
+Authorization: Basic {{username}} {{password}}
+
+###
+PUT http://{{host}}:{{port}}/7/valid/1
+Authorization: Basic {{username}} {{password}}
+
+###
+PUT http://{{host}}:{{port}}/8/valid/1
+Authorization: Basic {{username}} {{password}}
+
+###
+PUT http://{{host}}:{{port}}/9/valid/1
+Authorization: Basic {{username}} {{password}}
+
+###
+PUT http://{{host}}:{{port}}/10/valid/1
+Authorization: Basic {{username}} {{password}}
+
+###
+PUT http://{{host}}:{{port}}/11/valid/1
+Authorization: Basic {{username}} {{password}}
+
+###
+PUT http://{{host}}:{{port}}/12/valid/1
+Authorization: Basic {{username}} {{password}}
+
+###
+PUT http://{{host}}:{{port}}/13/valid/1
+Authorization: Basic {{username}} {{password}}
+
+### deleteById *********************************************************************************************************
+DELETE http://{{host}}:{{port}}/0/valid/1
+Authorization: Basic {{username}} {{password}}
+
+###
+DELETE http://{{host}}:{{port}}/1/valid/1
+Authorization: Basic {{username}} {{password}}
+
+###
+DELETE http://{{host}}:{{port}}/2/valid/1
+Authorization: Basic {{username}} {{password}}
+
+###
+DELETE http://{{host}}:{{port}}/3/valid/1
+Authorization: Basic {{username}} {{password}}
+
+###
+DELETE http://{{host}}:{{port}}/4/valid/1
+Authorization: Basic {{username}} {{password}}
+
+###
+DELETE http://{{host}}:{{port}}/5/valid/1
+Authorization: Basic {{username}} {{password}}
+
+### deleteByUid ********************************************************************************************************
+DELETE http://{{host}}:{{port}}/0/valid/1/1
+Authorization: Basic {{username}} {{password}}
+
+###
+DELETE http://{{host}}:{{port}}/1/valid/1/1
+Authorization: Basic {{username}} {{password}}
+
+###
+DELETE http://{{host}}:{{port}}/2/valid/1/1
+Authorization: Basic {{username}} {{password}}
+
+###
+DELETE http://{{host}}:{{port}}/3/valid/1/1
+Authorization: Basic {{username}} {{password}}
+
+###
+DELETE http://{{host}}:{{port}}/4/valid/1/1
+Authorization: Basic {{username}} {{password}}
+
+###
+DELETE http://{{host}}:{{port}}/5/valid/1/1
+Authorization: Basic {{username}} {{password}}
+
+###
+DELETE http://{{host}}:{{port}}/6/valid/1/1
+Authorization: Basic {{username}} {{password}}
+
+###
+DELETE http://{{host}}:{{port}}/7/valid/1/1
+Authorization: Basic {{username}} {{password}}
+
+### markDeleteById *****************************************************************************************************
+PATCH http://{{host}}:{{port}}/0/valid/1
+Authorization: Basic {{username}} {{password}}
+
+###
+PATCH http://{{host}}:{{port}}/1/valid/1
+Authorization: Basic {{username}} {{password}}
+
+###
+PATCH http://{{host}}:{{port}}/2/valid/1
+Authorization: Basic {{username}} {{password}}
+
+###
+PATCH http://{{host}}:{{port}}/3/valid/1
+Authorization: Basic {{username}} {{password}}
+
+###
+PATCH http://{{host}}:{{port}}/4/valid/1
+Authorization: Basic {{username}} {{password}}
+
+###
+PATCH http://{{host}}:{{port}}/5/valid/1
+Authorization: Basic {{username}} {{password}}
+
+### markDeleteByUid ****************************************************************************************************
+PATCH http://{{host}}:{{port}}/0/valid/1/1
+Authorization: Basic {{username}} {{password}}
+
+###
+PATCH http://{{host}}:{{port}}/1/valid/1/1
+Authorization: Basic {{username}} {{password}}
+
+###
+PATCH http://{{host}}:{{port}}/2/valid/1/1
+Authorization: Basic {{username}} {{password}}
+
+###
+PATCH http://{{host}}:{{port}}/3/valid/1/1
+Authorization: Basic {{username}} {{password}}
+
+###
+PATCH http://{{host}}:{{port}}/4/valid/1/1
+Authorization: Basic {{username}} {{password}}
+
+###
+PATCH http://{{host}}:{{port}}/5/valid/1/1
+Authorization: Basic {{username}} {{password}}
+
+###
+PATCH http://{{host}}:{{port}}/6/valid/1/1
+Authorization: Basic {{username}} {{password}}
+
+###
+PATCH http://{{host}}:{{port}}/7/valid/1/1
+Authorization: Basic {{username}} {{password}}
+
+### markDelete *********************************************************************************************************
+PATCH http://{{host}}:{{port}}/0/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+PATCH http://{{host}}:{{port}}/1/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+PATCH http://{{host}}:{{port}}/2/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+PATCH http://{{host}}:{{port}}/3/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+PATCH http://{{host}}:{{port}}/4/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+PATCH http://{{host}}:{{port}}/5/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+PATCH http://{{host}}:{{port}}/6/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+PATCH http://{{host}}:{{port}}/7/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+PATCH http://{{host}}:{{port}}/8/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+PATCH http://{{host}}:{{port}}/9/valid
+Authorization: Basic {{username}} {{password}}
+
+
+### findByUidTimestamp *************************************************************************************************
+GET http://{{host}}:{{port}}/0/valid/1/1/1
+Authorization: Basic {{username}} {{password}}
+
+###
+GET http://{{host}}:{{port}}/1/valid/1/1/1
+Authorization: Basic {{username}} {{password}}
+
+###
+GET http://{{host}}:{{port}}/2/valid/1/1/1
+Authorization: Basic {{username}} {{password}}
+
+### search *************************************************************************************************************
+GET http://{{host}}:{{port}}/0/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+GET http://{{host}}:{{port}}/1/valid
+Authorization: Basic {{username}} {{password}}
+
+###
+GET http://{{host}}:{{port}}/2/valid
+Authorization: Basic {{username}} {{password}}
+
+
+### page ***************************************************************************************************************
+###
+GET http://{{host}}:{{port}}/0/valid/page/1/1
+Authorization: Basic {{username}} {{password}}
+
+###
+GET http://{{host}}:{{port}}/1/valid/page/1/1
+Authorization: Basic {{username}} {{password}}
+
+###
+GET http://{{host}}:{{port}}/2/valid/page/1/1
+Authorization: Basic {{username}} {{password}}
 
 ###

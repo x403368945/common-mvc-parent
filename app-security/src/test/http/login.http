@@ -1,14 +1,49 @@
-###
-POST http://localhost:8080/login
+### 登录： JSON 模式
+POST http://{{host}}:{{port}}/login
+Content-Type: application/json
+
+{
+  "json": {
+    "username": "admin",
+    "password": "admin"
+  }
+}
+
+### 登录：表单模式
+POST http://{{host}}:{{port}}/login
 Content-Type: application/x-www-form-urlencoded
 
 username=admin&password=admin
 
-###
+### 请求：Basic 模式，无 session
+GET http://{{host}}:{{port}}/1/user/current
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+### 修改当前登录用户昵称
+PATCH http://{{host}}:{{port}}/1/user/nickname
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+{
+  "json": {
+    "nickname": "*.谢"
+  }
+}
+
+### 退出
+POST http://{{host}}:{{port}}/logout
+
+
+### 查看登录日志
+GET http://{{host}}:{{port}}/1/user/log/1/20?json={}
+Authorization: Basic {{username}} {{password}}
 
 ###
-POST http://localhost:8080/login
-Content-Type: application/json;charset=utf-8
+
+### 登录：token 模式
+POST http://{{host}}:{{port}}/open/auth/1/login/TOKEN
+Content-Type: application/json
 
 {
   "json": {

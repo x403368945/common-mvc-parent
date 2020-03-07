@@ -108,7 +108,7 @@ public class WebMvcConfig extends AbstractMvcConfig
         // 需要在 Spring Security 中配置忽略静态资源 WebSecurity.ignoring().antMatchers("/files/**");
 //        registry.addResourceHandler("/files/**")
 //        // TODO 采坑记录结尾带 / 和不带 / 的区别
-//        //   假设请求url为：http://localhost:8080/files/temp/a.txt
+//        //   假设请求url为：http://{{host}}:{{port}}/files/temp/a.txt
 //        //   addResourceLocations 指定绝对路径
 //        //   d:/files => d:/temp/a.txt
 //        //   d:/files/ => d:/files/temp/a.txt

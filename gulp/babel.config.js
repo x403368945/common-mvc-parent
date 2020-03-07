@@ -14,4 +14,3 @@ if (process.env.NODE_ENV) {
   presets.push('@babel/env')
 }
 module.exports = {plugins, presets};
-

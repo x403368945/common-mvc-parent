@@ -21,29 +21,29 @@ import java.util.Optional;
 /**
  * Service 方法拦截器
  * <pre>
- * {@link com.support.mvc.service.IService#save(Object, Long)}
- * {@link com.support.mvc.service.ISimpleService#save(Object)}
- * {@link com.support.mvc.service.IService#save(Object, Long)}
- * {@link com.support.mvc.service.ISimpleService#save(Object)}
+ * {@link com.support.mvc.service.IBaseService#save(Object, Long)}
+ * {@link com.support.mvc.service.IOpenService#save(Object)}
+ * {@link com.support.mvc.service.IBaseService#save(Object, Long)}
+ * {@link com.support.mvc.service.IOpenService#save(Object)}
  *
- * {@link com.support.mvc.service.IService#saveAll(List, Long)}
- * {@link com.support.mvc.service.ISimpleService#saveAll(List)}
- * {@link com.support.mvc.service.IService#saveAll(List, Long)}
- * {@link com.support.mvc.service.ISimpleService#saveAll(List)}
+ * {@link com.support.mvc.service.IBaseService#saveAll(List, Long)}
+ * {@link com.support.mvc.service.IOpenService#saveAll(List)}
+ * {@link com.support.mvc.service.IBaseService#saveAll(List, Long)}
+ * {@link com.support.mvc.service.IOpenService#saveAll(List)}
  *
- * {@link com.support.mvc.service.IService#update(Long, Long, Object)}
- * {@link com.support.mvc.service.ISimpleService#update(Long, Object)}
- * {@link com.support.mvc.service.IService#update(Long, Long, Object)}
- * {@link com.support.mvc.service.ISimpleService#update(Long, Object)}
+ * {@link com.support.mvc.service.IBaseService#update(Long, Long, Object)}
+ * {@link com.support.mvc.service.IOpenService#update(Long, Object)}
+ * {@link com.support.mvc.service.IBaseService#update(Long, Long, Object)}
+ * {@link com.support.mvc.service.IOpenService#update(Long, Object)}
  *
- * {@link com.support.mvc.service.IService#deleteById(Long, Long)}
- * {@link com.support.mvc.service.IService#deleteByUid(Long, String, Long)}
- * {@link com.support.mvc.service.ISimpleService#deleteById(Long)}
- * {@link com.support.mvc.service.ISimpleService#deleteByUid(Long, String)}
- * {@link com.support.mvc.service.IService#deleteById(Long, Long)}
- * {@link com.support.mvc.service.IService#deleteByUid(Long, String, Long)}
- * {@link com.support.mvc.service.ISimpleService#deleteById(Long)}
- * {@link com.support.mvc.service.ISimpleService#deleteByUid(Long, String)}
+ * {@link com.support.mvc.service.IBaseService#deleteById(Long, Long)}
+ * {@link com.support.mvc.service.IBaseService#deleteByUid(Long, String, Long)}
+ * {@link com.support.mvc.service.IOpenService#deleteById(Long)}
+ * {@link com.support.mvc.service.IOpenService#deleteByUid(Long, String)}
+ * {@link com.support.mvc.service.IBaseService#deleteById(Long, Long)}
+ * {@link com.support.mvc.service.IBaseService#deleteByUid(Long, String, Long)}
+ * {@link com.support.mvc.service.IOpenService#deleteById(Long)}
+ * {@link com.support.mvc.service.IOpenService#deleteByUid(Long, String)}
  *
  *
  * @author 谢长春 2018-10-4

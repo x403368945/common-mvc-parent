@@ -12,7 +12,7 @@ import com.support.mvc.entity.base.MarkDelete;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.exception.DeleteRowsException;
 import com.support.mvc.exception.UpdateRowsException;
-import com.support.mvc.service.IService;
+import com.support.mvc.service.IBaseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -37,7 +37,7 @@ import static com.ccx.demo.config.init.BeanInitializer.Beans.cacheManager;
 @Service
 @ServiceAspect
 @RequiredArgsConstructor
-public class RoleService implements IService<TabRole>
+public class RoleService implements IBaseService<TabRole>
         , ITabRoleCache {
     private final RoleRepository repository;
     private final AuthorityService authorityService;
@@ -92,7 +92,7 @@ public class RoleService implements IService<TabRole>
 
     @Override
     public void markDelete(final List<MarkDelete> list, final Long userId) {
-        DeleteRowsException.warn(repository.markDelete(list, userId), list.size());
+        DeleteRowsException.asserts(repository.markDelete(list, userId), list.size());
         clearKeys(list.stream().map(MarkDelete::getLongId).collect(Collectors.toSet()));
     }
 

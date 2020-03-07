@@ -1,175 +1,99 @@
 package com.support.mvc.service;
 
-import com.support.mvc.entity.base.MarkDelete;
-import com.support.mvc.entity.validated.IMarkDelete;
-import com.support.mvc.entity.validated.ISave;
-import com.support.mvc.entity.validated.IUpdate;
-import org.springframework.transaction.annotation.Transactional;
+import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.Expression;
+import com.support.mvc.entity.base.Pager;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
-import javax.validation.groups.Default;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.BiConsumer;
 
 /**
- * 服务接口基础方法规范定义
+ * 服务接口基础方法定义
  *
  * @param <E>
  * @author 谢长春 2017年7月14日 上午11:23:18
  */
-public interface IService<E> extends ISearch<E> {
-//	IRepository<E> getFindRepository();
+@Validated
+interface IService<E> {
 
     /**
-     * 保存；使用 aop 拦截，通过 @ServiceAspect 注解设置 uid 和 用户信息
+     * 按ID查询对象
      *
-     * @param obj    E 实体对象
-     * @param userId {@link Long} 操作用户ID
-     * @return E 实体对象
+     * @param id {@link Long} 数据ID
+     * @return {@link Optional<E>} 实体对象
      */
-    @Validated({Default.class, ISave.class})
-    @Transactional(rollbackFor = Exception.class)
-    default @NotNull(message = "返回值不能为null") E save(
-            @Valid @NotNull(message = "【obj】不能为null") final E obj,
-            @NotNull(message = "【userId】不能为null") @Positive(message = "【userId】必须大于0") final Long userId) {
-/* 以下字段将会在 @ServiceAspect 中设置
-        obj.setId(null);
-        obj.setUid(Util.uuid());
-        obj.setInsertUserId(userId);
-        obj.setUpdateUserId(userId);
-*/
-//        return repository.save(obj);
-        throw new NullPointerException(this.getClass().getName().concat("：方法【save(final E obj, final Long userId)】未实现"));
+    default Optional<E> findById(@NotNull(message = "【id】不能为null") @Positive(message = "【id】必须大于0") final Long id) {
+//		return repository.findById(id);
+        throw new NullPointerException(this.getClass().getName().concat("：方法【findById(final Long id)】未实现"));
     }
 
     /**
-     * 批量保存；使用 aop 拦截，通过 @ServiceAspect 注解设置 uid 和 用户信息
+     * 按ID查询对象，同时匹配 uuid
      *
-     * @param list   {@link List<E>}  实体对象集合
-     * @param userId {@link Long} 操作用户ID
-     * @return List<E> 实体对象集合
+     * @param id  {@link Long} 数据ID
+     * @param uid {@link String} 数据 uuid
+     * @return {@link Optional<E>} 实体对象
      */
-    @Validated({Default.class, ISave.class})
-    @Transactional(rollbackFor = Exception.class)
-    default @NotNull(message = "返回值不能为null") List<E> saveAll(
-            @NotEmpty(message = "【list】不能为空") final List<@Valid @NotNull E> list,
-            @NotNull(message = "【userId】不能为null") @Positive(message = "【userId】必须大于0") final Long userId) {
-/* 以下字段将会在 @ServiceAspect 中设置
-        obj.setId(null);
-        obj.setUid(Util.uuid());
-        obj.setInsertUserId(userId);
-        obj.setUpdateUserId(userId);
-*/
-//        return repository.saveAll(list);
-        throw new NullPointerException(this.getClass().getName().concat("：方法【saveAll(final List<E> list, final Long userId)】未实现"));
+    default Optional<E> findByUid(@NotNull(message = "【id】不能为null") @Positive(message = "【id】必须大于0") final Long id,
+                                  @NotNull(message = "【uid】不能为null") @Size(min = 32, max = 32, message = "【uid】长度必须是32位") final String uid) {
+//		return repository.findById(id).filter(row -> Objects.equals(row.getUid(), uid));
+        throw new NullPointerException(this.getClass().getName().concat("：方法【findByUid(final Long id, final String uid)】未实现"));
     }
 
     /**
-     * 更新数据；使用 aop 拦截，通过 @ServiceAspect 注解设置用户信息
+     * 按条件查询列表
      *
-     * @param id     {@link Long} 数据ID
-     * @param userId {@link Long} 操作用户ID
-     * @param obj    E 实体对象
+     * @param condition E 查询条件
+     * @return {@link List<E>} 结果集合
      */
-    @Validated({Default.class, IUpdate.class})
-    @Transactional(rollbackFor = Exception.class)
-    default void update(@NotNull(message = "【id】不能为null") @Positive(message = "【id】必须大于0") final Long id,
-                        @NotNull(message = "【userId】不能为null") @Positive(message = "【userId】必须大于0") final Long userId,
-                        @Valid @NotNull(message = "【obj】不能为null") final E obj) {
-/* 以下字段将会在 @ServiceAspect 中设置
-        obj.setId(id);
-        obj.setUpdateUserId(userId);
-*/
-//        UpdateRowsException.asserts(repository.update(id, userId, obj));
-        throw new NullPointerException(this.getClass().getName().concat("：方法【update(final Long id, final Long userId, final E obj)】未实现"));
+    default @NotNull(message = "返回值不能为null") List<E> findList(
+            @NotNull(message = "【condition】不能为null") final E condition) {
+//		return repository.findList(condition, sorts);
+        throw new NullPointerException(this.getClass().getName().concat("：方法【findList(final E condition)】未实现"));
     }
 
-    /**
-     * 按ID删除，物理删除；执行物理删除前先查询到数据，等待删除成功之后返回该数据对象，通过 AOP 拦截记录到删除日志中
-     *
-     * @param id     {@link Long} 数据ID
-     * @param userId {@link Long} 操作用户ID
-     * @return E 删除对象数据实体
-     */
-    @Transactional(rollbackFor = Exception.class)
-    default E deleteById(@NotNull(message = "【id】不能为null") @Positive(message = "【id】必须大于0") final Long id,
-                         @NotNull(message = "【userId】不能为null") @Positive(message = "【userId】必须大于0") final Long userId) {
-//        return repository.deleteById(id, userId);
-        throw new NullPointerException(this.getClass().getName().concat("：方法【deleteById(final Long id, final Long userId)】未实现"));
-    }
+//    /**
+//     * 按条件查询列表
+//     *
+//     * @param condition E 查询条件
+//     * @param exps      {@link Expression} 指定查询字段
+//     * @return {@link List<E>} 结果集合
+//     */
+//    default @NotNull(message = "findList...exps:返回值不能为null") List<E> findList(
+//            @NotNull(message = "findList...exps.arg0:【condition】不能为null") final E condition, final Expression<?>... exps) {
+////		return repository.findList(condition, sorts, exps);
+//        throw new NullPointerException(this.getClass().getName().concat("：方法【findList(final E condition, final Expression<?>... exps)】未实现"));
+//    }
 
     /**
-     * 按ID和UUID删除，物理删除；执行物理删除前先查询到数据，等待删除成功之后返回该数据对象，通过 AOP 拦截记录到删除日志中
+     * 按条件分页查询列表
      *
-     * @param id     {@link Long} 数据ID
-     * @param uid    {@link String} 数据UUID
-     * @param userId {@link Long} 操作用户ID
-     * @return E 删除对象数据实体
+     * @param condition E 查询条件
+     * @param pager     {@link Pager} 分页排序集合
+     * @return {@link QueryResults<E>} 分页对象
      */
-    @Transactional(rollbackFor = Exception.class)
-    default E deleteByUid(@NotNull(message = "【id】不能为null") @Positive(message = "【id】必须大于0") final Long id,
-                          @NotNull(message = "【uid】不能为null") @Size(min = 32, max = 32, message = "【uid】长度必须是32位") final String uid,
-                          @NotNull(message = "【userId】不能为null") @Positive(message = "【userId】必须大于0") final Long userId) {
-//        return repository.deleteById(id, uid, userId);
-        throw new NullPointerException(this.getClass().getName().concat("：方法【deleteByUid(final Long id, final String uid, final Long userId)】未实现"));
+    default @NotNull(message = "返回值不能为null") QueryResults<E> findPage(
+            @NotNull(message = "【condition】不能为null") final E condition, final Pager pager) {
+//		return repository.findPage(condition, pager);
+        throw new NullPointerException(this.getClass().getName().concat("：方法【findPage(final E condition, final Pager pager)】未实现"));
     }
 
-    /**
-     * 按ID删除，逻辑删除
-     *
-     * @param id     {@link Long} 数据ID
-     * @param userId {@link Long} 操作用户ID
-     */
-    @Transactional(rollbackFor = Exception.class)
-    default void markDeleteById(@NotNull(message = "【id】不能为null") @Positive(message = "【id】必须大于0") final Long id,
-                                @NotNull(message = "【userId】不能为null") @Positive(message = "【userId】必须大于0") final Long userId) {
-//        DeleteRowsException.asserts(repository.markDeleteById(id, userId));
-        throw new NullPointerException(this.getClass().getName().concat("：方法【markDeleteById(final Long id, final Long userId)】未实现"));
-    }
-
-    /**
-     * 按ID和UUID删除，逻辑删除
-     *
-     * @param id     {@link Long} 数据ID
-     * @param uid    {@link String} 数据UUID
-     * @param userId {@link Long} 操作用户ID
-     */
-    @Transactional(rollbackFor = Exception.class)
-    default void markDeleteByUid(@NotNull(message = "【id】不能为null") @Positive(message = "【id】必须大于0") final Long id,
-                                 @NotNull(message = "【uid】不能为null") @Size(min = 32, max = 32, message = "【uid】长度必须是32位") final String uid,
-                                 @NotNull(message = "【userId】不能为null") @Positive(message = "【userId】必须大于0") final Long userId) {
-//        DeleteRowsException.asserts(repository.markDeleteById(id, uid, userId));
-        throw new NullPointerException(this.getClass().getName().concat("：方法【markDeleteByUid(final Long id, final String uid, final Long userId)】未实现"));
-    }
-
-    /**
-     * 批量操作按ID删除，逻辑删除
-     *
-     * @param ids    {@link List<Long>} 数据ID
-     * @param userId {@link Long} 操作用户ID
-     */
-    @Transactional(rollbackFor = Exception.class)
-    default void markDeleteByIds(@NotEmpty(message = "【ids】不能为空") final List<@NotNull @Positive Long> ids,
-                                 @NotNull(message = "【userId】不能为null") @Positive(message = "【userId】必须大于0") final Long userId) {
-//        DeleteRowsException.batch(repository.markDeleteByIds(ids, userId));
-        throw new NullPointerException(this.getClass().getName().concat("：方法【markDeleteByIds(final List<Long> ids, final Long userId)】未实现"));
-    }
-
-    /**
-     * 批量操作按ID和UUID删除，逻辑删除
-     *
-     * @param list   {@link List<E>} 数据ID
-     * @param userId {@link Long} 操作用户ID
-     */
-    @Validated({Default.class, IMarkDelete.class})
-    @Transactional(rollbackFor = Exception.class)
-    default void markDelete(@NotEmpty(message = "【list】不能为null") final List<@Valid @NotNull MarkDelete> list,
-                            @NotNull(message = "【userId】不能为null") @Positive(message = "【userId】必须大于0") final Long userId) {
-//        DeleteRowsException.batch(repository.markDelete(list, userId));
-        throw new NullPointerException(this.getClass().getName().concat("：方法【markDelete(final List<MarkDelete> list, final Long userId)】未实现"));
-    }
+//    /**
+//     * 按条件分页查询列表
+//     *
+//     * @param condition E 查询条件
+//     * @param pager     {@link Pager}  分页排序集合
+//     * @param exps      {@link Expression} 指定查询字段
+//     * @return {@link QueryResults<E>} 分页对象
+//     */
+//    default @NotNull(message = "findPage...exps:返回值不能为null") QueryResults<E> findPage(
+//            @NotNull(message = "findPage...exps.arg0:【condition】不能为null") final E condition, final Pager pager, final Expression<?>... exps) {
+////		return repository.findPage(condition, pager, exps);
+//        throw new NullPointerException(this.getClass().getName().concat("：方法【findPage(final E condition, final Pager pager, final Expression<?>... exps)】未实现"));
+//    }
 }

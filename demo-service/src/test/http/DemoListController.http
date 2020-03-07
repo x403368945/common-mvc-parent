@@ -1,7 +1,7 @@
 ### 保存
-POST http://localhost:8080/demo-list/1
+POST http://{{host}}:{{port}}/demo-list/1
 Content-Type: application/json
-Authorization: basic YWRtaW46YWRtaW4=
+Authorization: Basic {{username}} {{password}}
 
 {
   "name": "JX",
@@ -11,9 +11,9 @@ Authorization: basic YWRtaW46YWRtaW4=
 }
 
 ### 修改
-PUT http://localhost:8080/demo-list/1/2
+PUT http://{{host}}:{{port}}/demo-list/1/2
 Content-Type: application/json
-Authorization: basic YWRtaW46YWRtaW4=
+Authorization: Basic {{username}} {{password}}
 
 {
   "uid": "8dbdec428e9547d8b11b7253774a674f",
@@ -25,25 +25,25 @@ Authorization: basic YWRtaW46YWRtaW4=
 }
 
 ### 物理删除:id
-DELETE http://localhost:8080/demo-list/1/20
-Authorization: basic YWRtaW46YWRtaW4=
+DELETE http://{{host}}:{{port}}/demo-list/1/20
+Authorization: Basic {{username}} {{password}}
 
 ### 物理删除:id+uid
-DELETE http://localhost:8080/demo-list/1/21/1237cf2c19de4275a62b9c1b819bca7c
-Authorization: basic YWRtaW46YWRtaW4=
+DELETE http://{{host}}:{{port}}/demo-list/1/21/1237cf2c19de4275a62b9c1b819bca7c
+Authorization: Basic {{username}} {{password}}
 
 ### 逻辑删除:id
-PATCH http://localhost:8080/demo-list/1/8
-Authorization: basic YWRtaW46YWRtaW4=
+PATCH http://{{host}}:{{port}}/demo-list/1/8
+Authorization: Basic {{username}} {{password}}
 
 ### 逻辑删除:id+uid
-PATCH http://localhost:8080/demo-list/1/9/426e8907e2914451b3d6a66b8b4880c0
-Authorization: basic YWRtaW46YWRtaW4=
+PATCH http://{{host}}:{{port}}/demo-list/1/9/426e8907e2914451b3d6a66b8b4880c0
+Authorization: Basic {{username}} {{password}}
 
 ### 批量逻辑删除:id+uid
-PATCH http://localhost:8080/demo-list/1
+PATCH http://{{host}}:{{port}}/demo-list/1
 Content-Type: application/json
-Authorization: basic YWRtaW46YWRtaW4=
+Authorization: Basic {{username}} {{password}}
 
 [
   {
@@ -57,39 +57,39 @@ Authorization: basic YWRtaW46YWRtaW4=
 ]
 
 ### 查询:id+timestamp
-GET http://localhost:8080/demo-list/1/4/1562813813000
-Authorization: basic YWRtaW46YWRtaW4=
+GET http://{{host}}:{{port}}/demo-list/1/4/1562813813000
+Authorization: Basic {{username}} {{password}}
 
 ### 查询:id+uid+timestamp
-GET http://localhost:8080/demo-list/1/1/1ec365fd461b44769e61a5c4425b06d3/1562813802000
-Authorization: basic YWRtaW46YWRtaW4=
+GET http://{{host}}:{{port}}/demo-list/1/1/1ec365fd461b44769e61a5c4425b06d3/1562813802000
+Authorization: Basic {{username}} {{password}}
 
 ### 查询:不分页
-GET http://localhost:8080/demo-list/1
-Authorization: basic YWRtaW46YWRtaW4=
+GET http://{{host}}:{{port}}/demo-list/1
+Authorization: Basic {{username}} {{password}}
 
 ### 查询:不分页
-GET http://localhost:8080/demo-list/1??insertTimeRange={"begin":"2018-12-27", "end":"2018-12-27"}
-Authorization: basic YWRtaW46YWRtaW4=
+GET http://{{host}}:{{port}}/demo-list/1??insertTimeRange={"begin":"2018-12-27", "end":"2018-12-27"}
+Authorization: Basic {{username}} {{password}}
 
 ### 查询:分页
-GET http://localhost:8080/demo-list/1/page/1/10?amountRange={"min":0.0,"max":2000.0}
-Authorization: basic YWRtaW46YWRtaW4=
+GET http://{{host}}:{{port}}/demo-list/1/page/1/10?amountRange={"min":0.0,"max":2000.0}
+Authorization: Basic {{username}} {{password}}
 
 ### 查询:分页 + 排序
-GET http://localhost:8080/demo-list/1/page/1/10?amountRange={"min":0.0,"max":2000.0}&sorts=[{name:"updateTime", direction:"DESC"}]
-Authorization: basic YWRtaW46YWRtaW4=
+GET http://{{host}}:{{port}}/demo-list/1/page/1/10?amountRange={"min":0.0,"max":2000.0}&sorts=[{name:"updateTime", direction:"DESC"}]
+Authorization: Basic {{username}} {{password}}
 
 ### 自定义方言
-GET http://localhost:8080/demo-list/1/test
-Authorization: basic YWRtaW46YWRtaW4=
+GET http://{{host}}:{{port}}/demo-list/1/test
+Authorization: Basic {{username}} {{password}}
 
 ### 查询:不分页
-GET http://localhost:8080/demo-list/1/vo
-Authorization: basic YWRtaW46YWRtaW4=
+GET http://{{host}}:{{port}}/demo-list/1/vo
+Authorization: Basic {{username}} {{password}}
 
 ### 查询:不分页
-GET http://localhost:8080/demo-list/1/page/vo/1/10
-Authorization: basic YWRtaW46YWRtaW4=
+GET http://{{host}}:{{port}}/demo-list/1/page/vo/1/10
+Authorization: Basic {{username}} {{password}}
 
 ###

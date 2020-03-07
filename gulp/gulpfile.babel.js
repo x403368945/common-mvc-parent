@@ -16,7 +16,7 @@ import axios from 'axios';
 import browser from 'browser-sync';
 import {query} from './src/utils/db-execute';
 import Paths from './src/utils/entity/Paths';
-import {Table} from './src/db2java';
+import Table from './src/code/core/Table';
 import Result from './src/utils/entity/Result';
 import {devConfig} from './src/api/config'
 import Asserts from './src/utils/entity/Asserts';
@@ -178,7 +178,7 @@ async function db2java(option) {
     table, // = ['ny_order'], 表名
     module, // = 'demo-service', 模块名
     pkg, // = 'com.ccx.demo', 包名(也会作为文件输出目录)
-    template // = 'all_id_long_uid' 模板代码存放目录名
+    template // = 'AuthUid.js' 代码模板
   } = option;
 
   const mysql = require('mysql');
@@ -196,16 +196,16 @@ async function db2java(option) {
       .setPkg(pkg)
       .setColumns(columns)
       .setOutput(module)
-      .writeController(template)
-    // .writeEntity(template)
-    // .writeService(template)
-    // .writeRepository(template)
     ;
+    await table.writeController(template.replace(/\.js/, ''));
+    await table.writeEntity(template.replace(/\.js/, ''));
+    await table.writeService(template.replace(/\.js/, ''));
+    await table.writeRepository(template.replace(/\.js/, ''));
   }
   connection.end();
 }
 
-gulp.task('db:java', async () => {
+gulp.task('db:java:code', async () => {
 //     console.log(`命令需要带参数，代码会默认生成在根目录下的 src/test/java/ ：参考命令：
 // gulp db:java --database demo_main_db --table tab_demo_list --template all_id_long_uid --pkg com.ccx.business
 //
@@ -237,28 +237,9 @@ gulp.task('db:java', async () => {
       // 'tab_user',
       // 'tab_user_login'
     ], // 表名
-    module: 'demo-main', // 模块名
+    module: '../demo-main', // 模块名
     pkg: 'com.ccx.demo', // 包名(也会作为文件输出目录)
-    template: 'auth-long-uid' // 模板代码存放目录名
-  });
-});
-gulp.task('db:java:ny', async () => {
-  await db2java({
-    host: '',
-    port: '3306',
-    user: '',
-    password: '',
-    database: 'ny',
-    // 表名
-    table: [
-      ''
-    ],
-    // 模块名
-    module: '../noah-projects/saas-gravity-pull-request/app-saas-gravity',
-    // 包名(也会作为文件输出目录)
-    pkg: 'com...app',
-    // 模板代码存放目录名
-    template: 'all_simple_id_long'
+    template: 'AuthUid.js' // 代码模板
   });
 });
 

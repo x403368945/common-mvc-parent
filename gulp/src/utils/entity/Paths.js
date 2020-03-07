@@ -6,16 +6,7 @@ import fs from 'fs';
 import path from 'path';
 
 const mkdirs = function (dir) {
-  dir.split(path.sep)
-    .splice(1)
-    .reduce(
-      (s, v) => {
-        s = path.join(s, v);
-        if (!fs.existsSync(s)) fs.mkdirSync(s, 755);
-        return s;
-      },
-      path.parse(dir).root
-    );
+  fs.mkdirSync(dir, {recursive: true});
   return dir;
 };
 

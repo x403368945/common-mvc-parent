@@ -10,7 +10,7 @@ import com.support.aop.annotations.ServiceAspect;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.exception.DeleteRowsException;
 import com.support.mvc.exception.UpdateRowsException;
-import com.support.mvc.service.IService;
+import com.support.mvc.service.IBaseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
@@ -35,7 +35,7 @@ import static com.ccx.demo.config.init.BeanInitializer.Beans.cacheManager;
 @Service
 @ServiceAspect
 @RequiredArgsConstructor
-public class UserService implements IService<TabUser>, ITabUserCache {
+public class UserService implements IBaseService<TabUser>, ITabUserCache {
 
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
@@ -108,7 +108,7 @@ public class UserService implements IService<TabUser>, ITabUserCache {
 
     @Override
     public void markDeleteByIds(final List<Long> ids, final Long userId) {
-        DeleteRowsException.warn(repository.markDeleteByIds(ids, userId), ids.size());
+        DeleteRowsException.asserts(repository.markDeleteByIds(ids, userId), ids.size());
         ids.forEach(this::clearCache);
     }
 

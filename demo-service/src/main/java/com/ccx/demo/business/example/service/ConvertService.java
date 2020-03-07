@@ -8,7 +8,7 @@ import com.support.mvc.entity.base.MarkDelete;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.exception.DeleteRowsException;
 import com.support.mvc.exception.UpdateRowsException;
-import com.support.mvc.service.IService;
+import com.support.mvc.service.IBaseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ import java.util.Optional;
 @Service
 @ServiceAspect
 @RequiredArgsConstructor
-public class ConvertService implements IService<TabConvert> {
+public class ConvertService implements IBaseService<TabConvert> {
     private final ConvertRepository repository;
 
     @Override
@@ -66,12 +66,12 @@ public class ConvertService implements IService<TabConvert> {
 
     @Override
     public void markDeleteByIds(final List<Long> ids, final Long userId) {
-        DeleteRowsException.warn(repository.markDeleteByIds(ids, userId), ids.size());
+        DeleteRowsException.asserts(repository.markDeleteByIds(ids, userId), ids.size());
     }
 
     @Override
     public void markDelete(final List<MarkDelete> list, final Long userId) {
-        DeleteRowsException.warn(repository.markDelete(list, userId), list.size());
+        DeleteRowsException.asserts(repository.markDelete(list, userId), list.size());
     }
 
     @Override

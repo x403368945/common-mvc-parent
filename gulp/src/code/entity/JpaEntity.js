@@ -1,17 +1,19 @@
 /**
+ * JPA 实体模板
  * @param table {Table}
  */
-const Entity = table => {
+import orders from './orders';
+import tabUserCache from './tabUserCache';
+import fields from './fields';
+import orderBy from './orderBy';
+import update from './update';
+import where from './where';
+
+const JpaEntity = table => {
   const {
     pkg,
     comment,
     date,
-    getEntityOrders,
-    getEntityITabUserCache,
-    getEntityFields,
-    getEntityOrderBy,
-    getEntityUpdate,
-    getEntityWhere,
     names: {javaname, TabName, tabName, tab_name, JavaName}
   } = table;
   return `package ${pkg}.code.${javaname}.entity;
@@ -20,7 +22,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
 import ${pkg}.enums.Bool;
-import ${pkg}.business.user.cache.ITabUserCache;
+${tabUserCache(table) ? `import ${pkg}.business.user.cache.ITabUserCache;` : ''}
 import com.google.common.collect.Lists;
 import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;
@@ -50,6 +52,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
@@ -74,15 +77,15 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 @Builder
 @Data
 @ApiModel(description = "${comment}")
-@JSONType(orders = {${getEntityOrders()}})
+@JSONType(orders = {${orders(table)}})
 public class ${TabName} implements
         ITable, // 所有与数据库表 - 实体类映射的表都实现该接口；方便后续一键查看所有表的实体
-        ${getEntityITabUserCache()}
+        ${tabUserCache(table)}
         // JPAUpdateClause => com.support.mvc.dao.IRepository#update 需要的动态更新字段；采用 方案2 时需要实现该接口
         // QdslWhere       => com.support.mvc.dao.IViewRepository 需要的查询条件
         IWhere<JPAUpdateClause, QdslWhere>
 {
-${getEntityFields()}
+${fields(table)}
 
     /**
      * 排序字段
@@ -99,7 +102,7 @@ ${getEntityFields()}
      */
     public enum OrderBy {
         // 按 id 排序可替代按创建时间排序
-${getEntityOrderBy()},
+${orderBy(table)},
         ;
         public final Sorts asc;
         public final Sorts desc;
@@ -139,7 +142,7 @@ ${getEntityOrderBy()},
 //        // 动态拼接 update 语句
 //        // 以下案例中 只有 name 属性 为 null 时才不会加入 update 语句；
 //        return Then.of(jpaUpdateClause)
-${getEntityUpdate()}
+${update(table)}
 ////                // 当 name != null 时更新 name 属性
 ////                .then(name, update -> update.set(q.name, name))
 ////                .then(update -> update.set(q.updateUserId, updateUserId))
@@ -156,7 +159,7 @@ ${getEntityUpdate()}
 //        final Q${TabName} q = ${tabName};
 //        // 构建查询顺序规则请参考：com.support.mvc.entity.IWhere#where
 //        return QdslWhere.of()
-${getEntityWhere()}
+${where(table)}
 ////                .and(phone, () -> q.phone.eq(phone))
 ////                .and(insertUserId, () -> q.insertUserId.eq(insertUserId))
 ////                .and(updateUserId, () -> q.updateUserId.eq(updateUserId))
@@ -261,4 +264,4 @@ public interface I${TabName}Cache extends ICache {
 */
 `
 };
-export default Entity;
+export default JpaEntity;

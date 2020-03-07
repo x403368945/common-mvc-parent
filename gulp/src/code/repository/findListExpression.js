@@ -5,7 +5,7 @@
  * @param spare {boolean} 是否在生成代码时注释该方法，用于备用
  * @returns {string}
  */
-const findList = (table, {auth = false, spare = false}) => {
+const findListExpression = (table, {auth = false, spare = false}) => {
   const {
     names: {TabName}
   } = table;
@@ -23,8 +23,8 @@ const findList = (table, {auth = false, spare = false}) => {
     }
 ${spareEnd}`
 };
-export const findListOpen = table => findList(table, {auth: false, spare: false});
-export const findListOpenSpare = table => findList(table, {auth: false, spare: true});
+export const findListExpressionOpen = table => findListExpression(table, {auth: false, spare: false});
+export const findListExpressionOpenSpare = table => findListExpression(table, {auth: false, spare: true});
 
-export const findListAuth = table => findList(table, {auth: true, spare: false});
-export const findListAuthSpare = table => findList(table, {auth: true, spare: true});
+export const findListExpressionAuth = table => findListExpression(table, {auth: true, spare: false});
+export const findListExpressionAuthSpare = table => findListExpression(table, {auth: true, spare: true});
