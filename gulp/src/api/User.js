@@ -1,5 +1,4 @@
 import axios from 'axios';
-import Asserts from '../utils/entity/Asserts';
 import Result from '../utils/entity/Result';
 import Page from '../utils/entity/Page';
 
@@ -46,12 +45,11 @@ export class UserService {
    * @param vo {UserVO} 用户实体对象
    */
   constructor(vo) {
-    Asserts.of().hasFalse(vo, () => 'vo');
     /**
      * 用户实体对象
      * @type {UserVO}
      */
-    this.vo = vo;
+    this.vo = vo || new UserVO({});
   }
 
   toString() {
@@ -65,7 +63,12 @@ export class UserService {
   async login() {
     const {username, password} = this.vo;
     return await axios
-      .post(USER_URL.login, {json: {username, password}})
+      .post(USER_URL.login, {
+        json: {
+          username,
+          password
+        }
+      })
       .then(Result.ofResponse)
       .catch(Result.ofCatch)
   }
@@ -111,7 +114,16 @@ export class UserService {
   async save() {
     const {username, password, nickname, phone, email, roleList} = this.vo;
     return await axios
-      .post(USER_URL.save, {json: {username, password, nickname, phone, email, roleList}})
+      .post(USER_URL.save, {
+        json: {
+          username,
+          password,
+          nickname,
+          phone,
+          email,
+          roleList
+        }
+      })
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -151,7 +163,18 @@ export class UserService {
         {
           params: {
             json: {
-              id, uid, username, phone, email, insertUserId, updateUserId, expired, locked, nickname, sorts, page
+              id,
+              uid,
+              username,
+              phone,
+              email,
+              insertUserId,
+              updateUserId,
+              expired,
+              locked,
+              nickname,
+              sorts,
+              page
             }
           }
         }

@@ -3,6 +3,7 @@ package com.ccx.demo.config;
 import com.ccx.demo.config.init.AppConfig;
 import com.support.config.AbstractMvcConfig;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -43,6 +44,8 @@ public class WebMvcConfig extends AbstractMvcConfig
 //        implements ApplicationContextAware
 // spring-mvc end <<<<
 {
+    @Autowired
+    private AppConfig appConfig;
     // spring-mvc start >>
 //    private ApplicationContext applicationContext;
 //
@@ -141,7 +144,7 @@ public class WebMvcConfig extends AbstractMvcConfig
                 //   addResourceLocations 指定绝对路径
                 //   d:/files => d:/temp/a.txt
                 //   d:/files/ => d:/files/temp/a.txt
-                .addResourceLocations(String.format("file:%s/", AppConfig.Path.ROOT.absolute()))
+                .addResourceLocations(String.format("file:%s/", appConfig.getPathRoot()))
         ;
     }
 

@@ -30,7 +30,7 @@ public class FileUpload<T> {
         return new FileUpload<>(FileInfo.class).to(absolute);
     }
 
-    public static <T> FileUpload<T> of(final Class<T> clazz, final String absolute) {
+    public static <T extends FileInfo> FileUpload<T> of(final Class<T> clazz, final String absolute) {
         return new FileUpload<>(clazz).to(absolute);
     }
 

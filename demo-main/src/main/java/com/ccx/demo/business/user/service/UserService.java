@@ -7,6 +7,7 @@ import com.ccx.demo.business.user.entity.TabUser;
 import com.google.common.collect.Sets;
 import com.querydsl.core.QueryResults;
 import com.support.aop.annotations.ServiceAspect;
+import com.support.mvc.entity.base.MarkDelete;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.exception.DeleteRowsException;
 import com.support.mvc.exception.UpdateRowsException;
@@ -107,9 +108,21 @@ public class UserService implements IBaseService<TabUser>, ITabUserCache {
     }
 
     @Override
+    public void markDeleteByUid(final Long id, final String uid, final Long userId) {
+        DeleteRowsException.asserts(repository.markDeleteByUid(id, uid, userId));
+        clearCache(id);
+    }
+
+    @Override
     public void markDeleteByIds(final List<Long> ids, final Long userId) {
         DeleteRowsException.asserts(repository.markDeleteByIds(ids, userId), ids.size());
         ids.forEach(this::clearCache);
+    }
+
+    @Override
+    public void markDelete(final List<MarkDelete> list, final Long userId) {
+        DeleteRowsException.asserts(repository.markDelete(list, userId), list.size());
+        list.forEach(obj -> clearCache(obj.getLongId()));
     }
 
     @Override

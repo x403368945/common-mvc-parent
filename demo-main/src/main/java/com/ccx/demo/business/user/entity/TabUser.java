@@ -3,13 +3,20 @@ package com.ccx.demo.business.user.entity;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
+import com.ccx.demo.business.common.vo.UserFileInfo;
+import com.ccx.demo.business.common.vo.convert.UserFileInfoJsonConvert;
 import com.ccx.demo.business.user.cache.ITabUserCache;
 import com.ccx.demo.business.user.vo.UserDetail;
 import com.ccx.demo.enums.Bool;
 import com.ccx.demo.enums.RegisterSource;
 import com.ccx.demo.open.auth.cache.TokenCache;
+import com.google.common.collect.Lists;
 import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;
+import com.querydsl.core.types.EntityPath;
+import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.BeanPath;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAUpdateClause;
@@ -18,19 +25,19 @@ import com.support.mvc.entity.IWhere;
 import com.support.mvc.entity.IWhere.QdslWhere;
 import com.support.mvc.entity.base.Sorts;
 import com.support.mvc.entity.convert.ArrayLongJsonConvert;
+import com.support.mvc.entity.validated.IMarkDelete;
 import com.support.mvc.entity.validated.ISave;
 import com.support.mvc.entity.validated.IUpdate;
 import com.utils.util.Then;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
+import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
@@ -58,99 +65,137 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 @AllArgsConstructor
 @Builder
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @ToString(exclude = {"password"})
 @JSONType(orders = {"id", "uid", "subdomain", "username", "nickname", "phone", "email", "role", "registerSource", "deleted"})
 public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere<JPAUpdateClause, QdslWhere> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull(groups = {IUpdate.class, IMarkDelete.class})
+    @Positive
+    @ApiModelProperty(value = "数据ID")
     private Long id;
     /**
      * 用户UUID，缓存和按ID查询时可使用强校验
      */
-    @NotNull(groups = {ISave.class})
-    @Size(min = 32, max = 32)
     @Column(updatable = false)
+    @NotNull(groups = {ISave.class, IUpdate.class, IMarkDelete.class})
+    @Size(min = 32, max = 32)
+    @ApiModelProperty(value = "数据uid")
     private String uid;
     /**
      * 子域名用户组
      */
     @Column(updatable = false)
+    @NotNull(groups = {ISave.class})
+    @Size(max = 10)
+    @ApiModelProperty(value = "子域名用户组")
     private String subdomain;
     /**
      * 登录名
      */
-    @Column(updatable = false)
-    @NotBlank(groups = {ISave.class})
+    @NotNull(groups = {ISave.class})
+    @Size(max = 15)
+    @ApiModelProperty(value = "登录名")
     private String username;
     /**
      * 登录密码
      */
     @Column(updatable = false)
-    @NotBlank(groups = {ISave.class})
-    @JSONField(serialize = false)
+    @NotNull(groups = {ISave.class})
+    @Size(max = 150)
+    @ApiModelProperty(value = "登录密码")
     private String password;
     /**
      * 用户昵称
      */
+    @NotNull(groups = {ISave.class})
+    @Size(max = 30)
+    @ApiModelProperty(value = "昵称")
     private String nickname;
     /**
      * 手机号
      */
     @Column(updatable = false)
+    @NotNull(groups = {ISave.class})
+    @Size(max = 11)
+    @ApiModelProperty(value = "手机号")
     private String phone;
     /**
      * 邮箱
      */
     @Column(updatable = false)
+    @NotNull(groups = {ISave.class})
+    @Size(max = 30)
+    @ApiModelProperty(value = "邮箱")
     private String email;
-
     /**
-     * 用户角色
-     * {@link TabRole#getId()}
+     * 用户头像
+     */
+    @Convert(converter = UserFileInfoJsonConvert.class)
+    @ApiModelProperty(value = "用户头像")
+    private UserFileInfo avatar;
+    /**
+     * 角色 ID 集合，tab_role.id，{@link Long}[]
+     * 角色 ID 集合，tab_role.id {@link TabRole#getId()}
      */
     @Convert(converter = ArrayLongJsonConvert.class)
+    @ApiModelProperty(value = "角色 ID 集合，tab_role.id，{@link Long}[]")
     private Long[] roles;
     /**
      * 注册渠道
      */
+
     @Column(updatable = false)
+    @ApiModelProperty(value = "账户注册渠道", hidden = true)
     private RegisterSource registerSource;
     /**
      * 创建时间
      */
-    @JSONField(serialize = false, deserialize = false, format = "yyyy-MM-dd HH:mm:ss")
     @Column(insertable = false, updatable = false)
+    @JSONField(serialize = false, deserialize = false, format = "yyyy-MM-dd HH:mm:ss")
+    @Null(groups = {ISave.class})
+    @ApiModelProperty(value = "数据新增时间", example = "2020-02-02 02:02:02")
     private Timestamp insertTime;
     /**
      * 创建用户ID
      */
-    @JSONField(serialize = false, deserialize = false)
     @Column(updatable = false)
+    @JSONField(serialize = false, deserialize = false)
+    @NotNull(groups = {ISave.class})
+    @Positive
+    @ApiModelProperty(value = "新增操作人id")
     private Long insertUserId;
     /**
      * 修改时间
      */
-    @JSONField(serialize = false, deserialize = false, format = "yyyy-MM-dd HH:mm:ss.SSS")
     @Column(insertable = false, updatable = false)
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")
+    @Null(groups = {ISave.class})
+    @ApiModelProperty(value = "数据最后一次更新时间", example = "2020-02-02 02:02:02.002")
     private Timestamp updateTime;
     /**
      * 修改用户ID
      */
-    @JSONField(serialize = false, deserialize = false)
-    @Column(updatable = false)
+    @NotNull(groups = {ISave.class, IUpdate.class})
+    @Positive
+    @ApiModelProperty(value = "更新操作人id")
     private Long updateUserId;
     /**
-     * 是否有效
+     * 是否逻辑删除，参考：Enum{@link com.ccx.demo.enums.Bool}
      */
     @Column(insertable = false, updatable = false)
+    @Null(groups = {ISave.class})
+    @ApiModelProperty(value = "是否逻辑删除，com.ccx.demo.enums.Bool")
     private Bool deleted;
+
     /**
      * 排序字段
      */
     @QueryTransient
     @Transient
+    @ApiModelProperty(value = "查询排序字段，com.ccx.demo.code.user.entity.TabUser$OrderBy")
     private List<Sorts.Order> sorts;
     /**
      * 新增用户时，选择的角色集合，经过验证之后，将角色 ID 保存到 {@link TabUser#roles}
@@ -158,6 +203,7 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
     @NotEmpty(groups = {ISave.class, IUpdate.class})
     @QueryTransient
     @Transient
+    @ApiModelProperty(value = "角色集合，新增用户时，选择的角色集合，经过验证之后，才保存角色 ID ")
     private Set<TabRole> roleList;
 
     @Override
@@ -169,16 +215,29 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
      * 枚举：定义排序字段
      */
     public enum OrderBy {
-        id(tabUser.id),
         // 按 id 排序可替代按创建时间排序
+        id(tabUser.id),
+//        uid(tabUser.uid),
+//        subdomain(tabUser.subdomain),
+//        username(tabUser.username),
+//        password(tabUser.password),
+//        nickname(tabUser.nickname),
+//        phone(tabUser.phone),
+//        email(tabUser.email),
+//        avatar(tabUser.avatar),
+//        roles(tabUser.roles),
+//        registerSource(tabUser.registerSource),
 //        insertTime(tabUser.insertTime),
-        updateTime(tabUser.updateTime),
+//        insertUserId(tabUser.insertUserId),
+//        updateTime(tabUser.updateTime),
+//        updateUserId(tabUser.updateUserId),
+        deleted(tabUser.deleted),
         ;
         public final Sorts asc;
         public final Sorts desc;
 
         public Sorts get(final Sorts.Direction direction) {
-            return Objects.equals(direction, Sorts.Direction.DESC) ? desc : asc;
+            return Objects.equals(direction, Sorts.Direction.ASC) ? asc : desc;
         }
 
         public Sorts.Order asc() {
@@ -206,14 +265,15 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
 
     // DB Start ********************************************************************************************************
     @Override
-    public Then<JPAUpdateClause> update(final JPAUpdateClause update) {
+    public Then<JPAUpdateClause> update(final JPAUpdateClause jpaUpdateClause) {
         final QTabUser q = tabUser;
-        return Then.of(update)
-                .then(nickname, dest -> dest.set(q.nickname, nickname))
-                .then(phone, dest -> dest.set(q.phone, phone))
-                .then(email, dest -> dest.set(q.email, email))
-                .then(roles, dest -> dest.set(q.roles, roles))
-                .then(dest -> dest.set(q.updateUserId, updateUserId))
+        return Then.of(jpaUpdateClause)
+                .then(nickname, update -> update.set(q.nickname, nickname))
+                .then(phone, update -> update.set(q.phone, phone))
+                .then(email, update -> update.set(q.email, email))
+                .then(avatar, update -> update.set(q.avatar, avatar))
+                .then(roles, update -> update.set(q.roles, roles))
+                .then(update -> update.set(q.updateUserId, updateUserId))
                 ;
     }
 
@@ -231,7 +291,7 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
                 .and(updateUserId, () -> q.updateUserId.eq(updateUserId))
                 .and(q.deleted.eq(Objects.isNull(getDeleted()) ? Bool.NO : deleted))
                 .and(nickname, () -> q.nickname.containsIgnoreCase(nickname))
-//              Expressions.booleanTemplate("JSON_CONTAINS({0},{1})>0",q.roles,roleId)
+//              Expressions.booleanTemplate("JSON_CONTAINS({0},{1})>0", q.roles, roleId)
 //              Expressions.booleanTemplate("JSON_CONTAINS({0},{1})>0", q.roles, JSON.toJSONString(roles))
                 .and(roles, () -> Expressions.booleanTemplate("JSON_CONTAINS({0},{1})>0", q.roles, JSON.toJSONString(roles)))
                 ;
@@ -262,6 +322,73 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
                 .build()
                 .token();
     }
+    /**
+     * 获取查询实体与数据库表映射的所有字段,用于投影到 VO 类
+     * 支持追加扩展字段,追加扩展字段一般用于连表查询
+     *
+     * @param appends {@link Expression}[] 追加扩展连表查询字段
+     * @return {@link Expression}[]
+     */
+    public static Expression<?>[] allColumnAppends(final Expression<?>... appends) {
+        final List<Expression<?>> columns = Lists.newArrayList(appends);
+        final Class<?> clazz = tabUser.getClass();
+        try {
+            for (Field field : clazz.getDeclaredFields()) {
+                if (field.getType().isPrimitive()) continue;
+                final Object o = field.get(tabUser);
+                if (o instanceof EntityPath || o instanceof BeanPath) continue;
+                if (o instanceof Path) {
+                    columns.add((Path<?>) o);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("获取查询实体属性与数据库映射的字段异常", e);
+        }
+        return columns.toArray(new Expression<?>[0]);
+    }
 
 // DB End **************************************************************************************************************
+
 }
+/* ehcache 配置
+<cache alias="ITabUserCache">
+    <key-type>java.lang.Long</key-type>
+    <value-type>com.ccx.demo.code.user.entity.TabUser</value-type>
+    <expiry>
+        <ttl unit="days">10</ttl>
+    </expiry>
+    <resources>
+        <heap>100</heap>
+        <offheap unit="MB">30</offheap>
+    </resources>
+</cache>
+*/
+/*
+import com.alibaba.fastjson.annotation.JSONField;
+import com.querydsl.core.annotations.QueryTransient;
+import com.support.mvc.entity.ICache;
+import java.beans.Transient;
+
+import static com.ccx.demo.config.init.BeanInitializer.Beans.getAppContext;
+/**
+ * 缓存：用户表
+ *
+ * @author 谢长春 on 2020-03-08
+ *\/
+public interface ITabUserCache extends ICache {
+    String CACHE_ROW_BY_ID = "ITabUserCache";
+
+    /**
+     * 按 ID 获取数据缓存行
+     *
+     * @param id {@link TabUser#getId()}
+     * @return {@link Optional<TabUser>}
+     *\/
+    @JSONField(serialize = false, deserialize = false)
+    default Optional<TabUser> getTabUserCacheById(final Long id) {
+        return Optional.ofNullable(id)
+                .filter(v -> v > 0)
+                .map(v -> getAppContext().getBean(UserRepository.class).findCacheById(v));
+    }
+}
+*/

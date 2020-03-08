@@ -1,10 +1,6 @@
 import gulp from 'gulp'
 import watch from 'gulp-watch'
 import batch from 'gulp-batch'
-import flatten from 'gulp-flatten'
-import rename from 'gulp-rename'
-import tap from 'gulp-tap';
-import del from 'del'
 import fs from 'fs'
 import path from 'path'
 import readline from 'readline'
@@ -12,15 +8,10 @@ import _ from 'lodash';
 import './src/utils/string-prototype'
 import './src/utils/date-prototype'
 import xlsx from 'xlsx';
-import axios from 'axios';
 import browser from 'browser-sync';
 import {query} from './src/utils/db-execute';
-import Paths from './src/utils/entity/Paths';
 import Table from './src/code/core/Table';
-import Result from './src/utils/entity/Result';
 import {devConfig} from './src/api/config'
-import Asserts from './src/utils/entity/Asserts';
-import OpenDemoTest from './test/api/OpenDemo.test';
 import UserTest from './test/api/User.test';
 import DemoListTest from './test/api/DemoList.test';
 import AuthorityTest from './test/api/Authority.test';
@@ -35,7 +26,6 @@ process.env.DEVELOPMENT = true;
 process.env.BROWSER = false;
 
 gulp.task('default', async () => {
-
 });
 
 gulp.task('listener', function () {
@@ -197,6 +187,7 @@ async function db2java(option) {
       .setColumns(columns)
       .setOutput(module)
     ;
+    await table.writeHttp(template.replace(/\.js/, ''));
     await table.writeController(template.replace(/\.js/, ''));
     await table.writeEntity(template.replace(/\.js/, ''));
     await table.writeService(template.replace(/\.js/, ''));
@@ -206,26 +197,6 @@ async function db2java(option) {
 }
 
 gulp.task('db:java:code', async () => {
-//     console.log(`命令需要带参数，代码会默认生成在根目录下的 src/test/java/ ：参考命令：
-// gulp db:java --database demo_main_db --table tab_demo_list --template all_id_long_uid --pkg com.ccx.business
-//
-// 参数说明：
-// --database {操作数据库名称：必填}
-// --table {指定表名：必填，其实 table 是可选的，如果不指定 table 则所有表的代码都会生成代码}
-// --template 选择模板代码目录：必填[
-//                               'all_id_long => 全部 CRUD 代码[id:Long]',
-//                               'all_id_long_uid => 全部 CRUD 代码[id:Long,uid:String]',
-//                               'all_id_string => 全部 CRUD 代码[id:String]',
-//                               'search_simple_id_long => 仅支持查询代码[id:Long]',
-//                               'search_simple_id_string => 仅支持查询代码[id:String]',
-//                               ]
-// --pkg {指定输出文件包名：默认：com.ccx.demo}
-//
-// --user {操作用户：默认 root}
-// --password {操作密码：默认 111111}
-// --host {数据库主机：默认 localhost}
-// --port {端口：默认 3306}
-//     `);
   await db2java({
     host: 'localhost',
     port: '3306',
@@ -233,9 +204,8 @@ gulp.task('db:java:code', async () => {
     password: '111111',
     database: 'demo_main_db',
     table: [
-      'tab_role',
-      // 'tab_user',
-      // 'tab_user_login'
+      'tab_user',
+      'tab_role'
     ], // 表名
     module: '../demo-main', // 模块名
     pkg: 'com.ccx.demo', // 包名(也会作为文件输出目录)

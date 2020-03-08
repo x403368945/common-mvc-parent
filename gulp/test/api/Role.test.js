@@ -121,7 +121,7 @@ export default class RoleTest {
 
   /**
    *
-   * @return {Promise<RoleTest>}
+   * @return {RoleTest}
    */
   filename() {
     console.log(__filename);
@@ -130,7 +130,7 @@ export default class RoleTest {
 
   /**
    *
-   * @return {Promise<RoleTest>}
+   * @return {RoleTest}
    */
   newline() {
     console.log('');

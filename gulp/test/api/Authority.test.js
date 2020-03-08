@@ -2,7 +2,7 @@
  * 测试：后台服务请求：权限指令
  * @author 谢长春 2019-8-30
  */
-import AuthorityVO from '../../src/api/Authority';
+import {AuthorityService} from '../../src/api/Authority';
 import UserTest from './User.test';
 
 export default class AuthorityTest {
@@ -38,7 +38,7 @@ export default class AuthorityTest {
    */
   async getTree() {
     console.log('> 查询权限指令树 ----------------------------------------------------------------------------------------------------');
-    (await new AuthorityVO().getService().getTree()).print().assertVersion().assertData();
+    (await new AuthorityService().getTree()).print().assertVersion().assertData();
     return this;
   }
 
@@ -47,13 +47,13 @@ export default class AuthorityTest {
    */
   async getList() {
     console.log('> 查询权限指令列表 ----------------------------------------------------------------------------------------------------');
-    (await new AuthorityVO().getService().getList()).print().assertVersion().assertData();
+    (await new AuthorityService().getList()).print().assertVersion().assertData();
     return this;
   }
 
   /**
    *
-   * @return {Promise<AuthorityTest>}
+   * @return {AuthorityTest}
    */
   filename() {
     console.log(__filename);
@@ -62,7 +62,7 @@ export default class AuthorityTest {
 
   /**
    *
-   * @return {Promise<AuthorityTest>}
+   * @return {AuthorityTest}
    */
   newline() {
     console.log('');

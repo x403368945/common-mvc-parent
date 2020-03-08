@@ -1,7 +1,6 @@
 import axios from 'axios';
 import Page from '../utils/entity/Page';
 import Result from '../utils/entity/Result';
-import Asserts from '../utils/entity/Asserts';
 
 /**
  * 请求 url 定义
@@ -44,12 +43,11 @@ export class RoleService {
    * @param vo {RoleVO} 参考案例对象
    */
   constructor(vo) {
-    Asserts.of().hasFalse(vo, () => 'vo');
     /**
      * 参考案例对象
      * @type {RoleVO}
      */
-    this.vo = vo;
+    this.vo = vo || new RoleVO({});
   }
 
   toString() {
@@ -63,7 +61,12 @@ export class RoleService {
   async save() {
     const {name, authorityTree} = this.vo;
     return await axios
-      .post(ROLE_URL.save, {json: {name, authorityTree}})
+      .post(ROLE_URL.save, {
+        json: {
+          name,
+          authorityTree
+        }
+      })
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }

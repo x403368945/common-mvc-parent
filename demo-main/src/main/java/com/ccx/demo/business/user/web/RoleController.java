@@ -29,7 +29,7 @@ import java.util.Optional;
  * @author 谢长春 on 2019-08-29
  */
 @Api(tags = "角色")
-@ApiSort(3) // 控制接口排序
+@ApiSort(4) // 控制接口排序
 @RequestMapping("/1/role")
 @Controller
 @Slf4j
@@ -106,7 +106,7 @@ public class RoleController implements IAuthController<Long, TabRole> {
     @ApiOperation(value = "6.分页查询角色", tags = {"1.0.0"})
     @ApiOperationSupport(
             order = 6,
-            ignoreParameters = {"insertTime", "updateTime", "authorityTree[0]"}
+            ignoreParameters = {"insertTime", "updateTime", "authorityTree", "authorities"}
     )
     @ResponseBody
     @Override

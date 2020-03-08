@@ -89,7 +89,12 @@ export class OpenDemoService {
   async save() {
     const {name, phone} = this.vo;
     return await axios
-      .post(OPEN_DEMO_URL.save, {json: {name, phone}})
+      .post(OPEN_DEMO_URL.save, {
+        json: {
+          name,
+          phone
+        }
+      })
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -101,7 +106,12 @@ export class OpenDemoService {
   async update() {
     const {id, name, phone} = this.vo;
     return await axios
-      .put(OPEN_DEMO_URL.update.format(id || 0), {json: {name, phone}})
+      .put(OPEN_DEMO_URL.update.format(id || 0), {
+        json: {
+          name,
+          phone
+        }
+      })
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -161,7 +171,15 @@ export class OpenDemoService {
   async search() {
     const {id, name, phone} = this.vo;
     return await axios
-      .get(OPEN_DEMO_URL.search, {params: {json: {id, name, phone}}})
+      .get(OPEN_DEMO_URL.search, {
+        params: {
+          json: {
+            id,
+            name,
+            phone
+          }
+        }
+      })
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -174,7 +192,15 @@ export class OpenDemoService {
     const {id, name, phone, page} = this.vo;
     return await axios
       .get(OPEN_DEMO_URL.page.formatObject(page || Page.ofDefault()),
-        {params: {json: {id, name, phone}}}
+        {
+          params: {
+            json: {
+              id,
+              name,
+              phone
+            }
+          }
+        }
       )
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
@@ -197,7 +223,7 @@ export default class OpenDemoVO {
 
   /**
    * 将 result 对象中的 data 集合转换为当前对象集合
-   * @param data {Array<object>}
+   * @param data {Array}
    * @return {Array<OpenDemoVO>}
    */
   static parseList(data) {

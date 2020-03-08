@@ -33,7 +33,7 @@ public interface IAdapter {
     interface Cors extends IAdapter {
         @Override
         default String matcher() {
-            return "/cors/**";
+            return "^/\\d+/cors/.+";
         }
 
         @Override
@@ -62,13 +62,13 @@ public interface IAdapter {
     interface Open extends IAdapter {
         @Override
         default String matcher() {
-            return "/open/**";
+            return "^/\\d+/open/.+";
         }
 
         @Override
         default void config(final HttpSecurity http) throws Exception {
             http
-                    .antMatcher(matcher())
+                    .regexMatcher(matcher())
                     .csrf().disable()
 //                    .headers().addHeaderWriter((req, res) -> Optional.ofNullable(getRequestIdFilter()).ifPresent(requestIdFilter -> requestIdFilter.writeHeaders(req, res))).and()
                     .anonymous().and()

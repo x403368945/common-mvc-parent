@@ -22,7 +22,7 @@ export default class BaseAdapter {
         const list = [];
         if (notNull) list.push('    @NotNull(groups = {ISave.class})');
         if (db_name.includes('_')) list.push(`    @Column(name = "${db_name}")`); // 数据库自字段 is_ 开头的特殊处理
-        switch (dataType.name) {
+        switch (dataType.mysql) {
           case 'TINYINT':
             if (unsigned) {
               list.push('    @Min(0)');
@@ -89,17 +89,17 @@ export default class BaseAdapter {
             break;
         }
         list.push(`    @ApiModelProperty(value = "${comment}")`);
-        list.push(`    private ${dataType.value} ${name};`);
+        list.push(`    private ${dataType.java} ${name};`);
         return list.join('\n');
       },
       id: ({name, dataType, length}) => {
-        if ([DataType.BIGINT.name, DataType.INT.name].includes(dataType.name)) {
+        if ([DataType.BIGINT.mysql, DataType.INT.mysql].includes(dataType.mysql)) {
           return `    @Id\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\n    @NotNull(groups = {IUpdate.class, IMarkDelete.class})\n    @Positive\n    @ApiModelProperty(value = "数据ID")\n    private Long ${name};`
         } else {
           return `    @Id\n    @NotBlank(groups = {IUpdate.class, IMarkDelete.class})\n    @Size(max = ${length})\n    @ApiModelProperty(value = "数据id")\n    private String ${name};`
         }
       },
-      uid: ({name}) => `    @Column(updatable = false)\n    @NotNull(groups = {IUpdate.class, IMarkDelete.class})\n    @Size(min = 32, max = 32)\n    @ApiModelProperty(value = "数据uid")\n    private String ${name};`,
+      uid: ({name}) => `    @Column(updatable = false)\n    @NotNull(groups = {ISave.class, IUpdate.class, IMarkDelete.class})\n    @Size(min = 32, max = 32)\n    @ApiModelProperty(value = "数据uid")\n    private String ${name};`,
       deleted: ({name}) => `    @Column(insertable = false, updatable = false)\n    @Null(groups = {ISave.class})\n    @ApiModelProperty(value = "是否逻辑删除，com.ccx.demo.enums.Bool")\n    private Bool ${name};`,
       insertTime: ({name}) => `    @Column(insertable = false, updatable = false)\n    @JSONField(format = "yyyy-MM-dd HH:mm:ss")\n    @Null(groups = {ISave.class})\n    @ApiModelProperty(value = "数据新增时间", example = "2020-02-02 02:02:02")\n    private Timestamp ${name};`,
       updateTime: ({name}) => `    @Column(insertable = false, updatable = false)\n    @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")\n    @Null(groups = {ISave.class})\n    @ApiModelProperty(value = "数据最后一次更新时间", example = "2020-02-02 02:02:02.002")\n    private Timestamp ${name};`,
@@ -109,8 +109,8 @@ export default class BaseAdapter {
       updateUserName: ({name, length}) => `    @NotNull(groups = {ISave.class, IUpdate.class})\n    @Size(max = ${length})\n    @ApiModelProperty(value = "更新操作人昵称")\n    private String ${name};`
     };
     this.props = {
-      default: ({name, dataType, notNull, comment}) => `        ${name}(${dataType.value.toUpperCase()}.build(${notNull ? 'true, ' : ''}"${comment}"))`,
-      id: ({name, dataType, comment}) => `        ${name}(${[DataType.BIGINT.name, DataType.INT.name].includes(dataType.name) ? 'LONG' : 'STRING'}.build(true, "${comment}"))`,
+      default: ({name, dataType, notNull, comment}) => `        ${name}(${dataType.java.toUpperCase()}.build(${notNull ? 'true, ' : ''}"${comment}"))`,
+      id: ({name, dataType, comment}) => `        ${name}(${[DataType.BIGINT.mysql, DataType.INT.mysql].includes(dataType.mysql) ? 'LONG' : 'STRING'}.build(true, "${comment}"))`,
       uid: ({name, comment}) => `        ${name}(STRING.build(true, "${comment}"))`,
       deleted: ({name, comment}) => `        ${name}(ENUM.build("是否逻辑删除"))`,
       insertTime: ({name, comment}) => `        ${name}(TIMESTAMP.build("${comment}"))`,

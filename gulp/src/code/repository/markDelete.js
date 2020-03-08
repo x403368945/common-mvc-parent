@@ -16,7 +16,7 @@ const markDelete = (table, {auth = false, spare = false}) => {
   const authUserId = auth ? '\n                .set(q.updateUserId, userId)' : '';
   return `${spareBegin}
     @Override // <
-    default long markDelete(final List<MarkDelete> list${authUser}}) {
+    default long markDelete(final List<MarkDelete> list${authUser}) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Bool.YES)${authUserId}

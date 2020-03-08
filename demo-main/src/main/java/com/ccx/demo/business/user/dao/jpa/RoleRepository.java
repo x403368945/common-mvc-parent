@@ -83,7 +83,61 @@ public interface RoleRepository extends
                 .execute();
     }
 
-    @CacheEvict(cacheNames = ITabRoleCache.CACHE_ROW_BY_ID, key = "#id")
+/*
+//     @CacheEvict(cacheNames = ITabRoleCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
+    @Override
+    default TabRole deleteById(final Long id, final Long userId) {
+        return Optional
+                .ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
+                        .selectFrom(q)
+                        .where(q.id.eq(id))
+                        .fetchOne()
+                )
+                .map(obj -> {
+                    delete(obj);
+                    return obj;
+                })
+                .orElseThrow(() -> new NullPointerException("数据物理删除失败：".concat(
+                        TabRole.builder().id(id).insertUserId(userId).build().json())
+                ));
+    }
+*/
+
+/*
+//     @CacheEvict(cacheNames = ITabRoleCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
+    @Override
+    default TabRole deleteByUid(final Long id, final String uid, final Long userId) {
+        // userId 为可选校验，一般业务场景，能获取到 UUID 已经表示已经加强校验了
+        return Optional
+                .ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
+                        .selectFrom(q)
+                        .where(q.id.eq(id).and(q.uid.eq(uid)))
+                        .fetchOne()
+                )
+                .map(obj -> {
+                    delete(obj);
+                    return obj;
+                })
+                .orElseThrow(() -> new NullPointerException("数据物理删除失败：".concat(
+                        TabRole.builder().id(id).uid(uid).insertUserId(userId).build().json())
+                ));
+    }
+*/
+
+
+//     @CacheEvict(cacheNames = ITabRoleCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
+    @Override
+    default long markDeleteById(final Long id, final Long userId) {
+        return jpaQueryFactory.<JPAQueryFactory>get()
+                .update(q)
+                .set(q.deleted, Bool.YES)
+                .set(q.updateUserId, userId)
+                .where(q.id.eq(id).and(q.deleted.eq(Bool.NO)))
+                .execute();
+    }
+
+
+//     @CacheEvict(cacheNames = ITabRoleCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
     @Override
     default long markDeleteByUid(final Long id, final String uid, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
@@ -94,7 +148,19 @@ public interface RoleRepository extends
                 .execute();
     }
 
-    @Override
+
+    @Override // <
+    default long markDeleteByIds(final List<Long> ids, final Long userId) {
+        return jpaQueryFactory.<JPAQueryFactory>get()
+                .update(q)
+                .set(q.deleted, Bool.YES)
+                .set(q.updateUserId, userId)
+                .where(q.id.in(ids).and(q.deleted.eq(Bool.NO)))
+                .execute();
+    }
+
+
+    @Override // <
     default long markDelete(final List<MarkDelete> list, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)

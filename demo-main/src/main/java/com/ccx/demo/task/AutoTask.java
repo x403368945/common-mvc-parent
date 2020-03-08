@@ -1,10 +1,11 @@
 package com.ccx.demo.task;
 
-import com.ccx.demo.config.init.AppConfig.Path;
-import com.utils.util.FPath;
+import com.ccx.demo.business.common.service.AutoTaskService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.jboss.logging.MDC;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @ConditionalOnProperty(value = "app.auto-task.enabled", havingValue = "true")
 public class AutoTask {
+    @Autowired
+    private AutoTaskService autoTaskService;
 //	/**
 //	 * 测试定时任务
 //	 */
@@ -33,21 +36,16 @@ public class AutoTask {
      */
     @Scheduled(cron = "0 0/30 * * * ?")
     public void minute30() {
-        log.info("开始:");
-        log.info("结束:");
-    }
-
-    /**
-     * 触发时间：每天凌晨0点
-     */
-    @Scheduled(cron = "0 0 0 * * ?")
-    public void day() {
-        log.info("开始:重置任务");
         try {
+            MDC.put("rid", RandomStringUtils.randomAlphanumeric(8));
+            log.info("开始:");
+            autoTaskService.clearTempDirectory();
         } catch (Exception e) {
-            log.error("异常:重置任务", e);
+            log.error("异常:", e);
+        } finally {
+            log.info("结束:");
+            MDC.clear();
         }
-        log.info("结束:重置任务");
     }
 
     /**
@@ -56,14 +54,16 @@ public class AutoTask {
      */
     @Scheduled(cron = "0 0 0 1 * ?")
     public void month() {
-        log.info("开始:清除临时文件目录");
         try {
-            FPath.of(Path.TEMP.file()).deleteAll();
-            FPath.of(System.getProperty("java.io.tmpdir")).deleteAll();
+            MDC.put("rid", RandomStringUtils.randomAlphanumeric(8));
+            log.info("开始:清除临时文件目录");
+            autoTaskService.clearTempDirectory();
         } catch (Exception e) {
             log.error("异常:清除临时文件目录", e);
+        } finally {
+            log.info("结束:清除临时文件目录");
+            MDC.clear();
         }
-        log.info("结束:清除临时文件目录");
     }
 
 //

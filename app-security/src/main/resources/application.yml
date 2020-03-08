@@ -3,7 +3,7 @@ app: # 本地开发 windows 环境
   admin-user-id: 1 # 管理员用户ID
   admin-user: admin # 管理员账户登录账户
   ip: 127.0.0.1 # 当前主机 IP 地址
-  domain: http://127.0.0.1:8080 # 应用路径，域名；可使用 frp 服务器域名
+  domain: http://127.0.0.1:8080 # 应用路径，域名；
   path-root: /app/files # 应用文件根目录
   token-expired: 30 # token 默认过期时间，30 天
 
@@ -21,5 +21,6 @@ spring:
       max-request-size: 50MB
   autoconfigure:
     exclude: # 禁用自动配置类
+      - org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration # 禁止自动装配 jackson
       - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
       - com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure

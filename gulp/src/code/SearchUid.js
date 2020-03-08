@@ -13,6 +13,23 @@ export const Entity = async (table) => {
  *
  * @param table {Table}
  */
+export const Http = async (table) => {
+  const {comment, date} = table;
+  return `### ********************************************************************************************************************
+### ${comment}
+### @author 谢长春 on ${date}
+### ********************************************************************************************************************
+${(await import('./http/page')).pageOpen(table)}
+${(await import('./http/search')).searchOpenSpare(table)}
+${(await import('./http/findById')).findByIdOpenSpare(table)}
+${(await import('./http/findByUid')).findByUidOpen(table)}
+`
+};
+
+/**
+ *
+ * @param table {Table}
+ */
 export const Controller = async (table) => {
   const {
     pkg,
@@ -84,7 +101,7 @@ import ${pkg}.code.${javaname}.dao.jpa.${JavaName}Repository;
 import ${pkg}.code.${javaname}.entity.${TabName};
 import com.querydsl.core.QueryResults;
 import com.support.mvc.entity.base.Pager;
-import com.support.mvc.service${idType === DataType.VARCHAR.value ? '.str' : ''}.ISearchService;
+import com.support.mvc.service${idType === DataType.VARCHAR.java ? '.str' : ''}.ISearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -13,6 +13,27 @@ export const Entity = async (table) => {
  *
  * @param table {Table}
  */
+export const Http = async (table) => {
+  const {comment, date} = table;
+  return `### ********************************************************************************************************************
+### ${comment}
+### @author 谢长春 on ${date}
+### ********************************************************************************************************************
+${(await import('./http/page')).pageOpen(table)}
+${(await import('./http/search')).searchOpenSpare(table)}
+${(await import('./http/findById')).findByIdOpen(table)}
+${(await import('./http/save')).saveOpen(table)}
+${(await import('./http/update')).updateOpen(table)}
+${(await import('./http/deleteById')).deleteByIdOpenSpare(table)}
+${(await import('./http/markDeleteByIds')).markDeleteByIdsOpen(table)}
+${(await import('./http/markDelete')).markDeleteOpenSpare(table)}
+`
+};
+
+/**
+ *
+ * @param table {Table}
+ */
 export const Controller = async (table) => {
   const {
     pkg,
@@ -93,7 +114,7 @@ import com.support.mvc.entity.base.MarkDelete;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.exception.DeleteRowsException;
 import com.support.mvc.exception.UpdateRowsException;
-import com.support.mvc.service${idType === DataType.VARCHAR.value ? '.str' : ''}.IOpenService;
+import com.support.mvc.service${idType === DataType.VARCHAR.java ? '.str' : ''}.IOpenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

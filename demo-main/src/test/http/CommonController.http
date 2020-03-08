@@ -1,5 +1,20 @@
+### 获取系统环境变量
+GET http://{{host}}:{{port}}/1/common/system
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+### 获取枚举选项
+GET http://{{host}}:{{port}}/1/common/enum/com.support.mvc.enums.Code
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+### 获取枚举选项
+GET http://{{host}}:{{port}}/1/common/enum/com.ccx.demo.business.user.entity.TabUser$OrderBy
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
 ### 单文件上传
-POST http://{{host}}:{{port}}/1/file/upload
+POST http://{{host}}:{{port}}/1/common/upload/temp
 Authorization: Basic {{username}} {{password}}
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
@@ -11,7 +26,7 @@ Element Name
 --WebAppBoundary--
 
 ### 多文件上传
-POST http://{{host}}:{{port}}/1/file/uploads
+POST http://{{host}}:{{port}}/1/common/uploads/temp
 Authorization: Basic {{username}} {{password}}
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 

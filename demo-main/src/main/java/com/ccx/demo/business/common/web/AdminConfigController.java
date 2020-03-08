@@ -7,7 +7,6 @@ import com.ccx.demo.config.init.AppConfig.Path;
 import com.ccx.demo.config.init.AppConfig.URL;
 import com.support.mvc.entity.base.Item;
 import com.support.mvc.entity.base.Result;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
@@ -39,7 +39,7 @@ public class AdminConfigController {
 
     @GetMapping("/app")
     @ResponseBody
-    public Result<?> getApp(@AuthenticationPrincipal final TabUser user) {
+    public Result<Item> getApp(@ApiIgnore @AuthenticationPrincipal final TabUser user) {
         return new Result<Item>().execute(result -> result
                 .setSuccess(Stream.of(App.values())
                         .map(key -> Item.builder().key(key.name()).value(key.value()).comment(key.comment).build())
@@ -50,7 +50,7 @@ public class AdminConfigController {
 
     @GetMapping("/path")
     @ResponseBody
-    public Result<?> getPath(@AuthenticationPrincipal final TabUser user) {
+    public Result<Item> getPath(@ApiIgnore @AuthenticationPrincipal final TabUser user) {
         return new Result<Item>().execute(result -> result
                 .setSuccess(Stream.of(Path.values())
                         .map(key -> Item.builder().key(key.name()).value(key.absolute()).comment(key.comment).build())
@@ -61,7 +61,7 @@ public class AdminConfigController {
 
     @GetMapping("/url")
     @ResponseBody
-    public Result<?> getUrl(@AuthenticationPrincipal final TabUser user) {
+    public Result<Item> getUrl(@ApiIgnore @AuthenticationPrincipal final TabUser user) {
         return new Result<Item>().execute(result -> result
                 .setSuccess(Stream.of(URL.values())
                         .map(key -> Item.builder().key(key.name()).value(key.value()).comment(key.comment).build())
@@ -72,7 +72,7 @@ public class AdminConfigController {
 
     @GetMapping("/{key}")
     @ResponseBody
-    public Result<?> getByKey(@PathVariable String key) {
+    public Result<String> getByKey(@ApiIgnore @PathVariable String key) {
         return new Result<String>().execute(result -> result.setSuccess(App.valueOf(key).value()));
     }
 }

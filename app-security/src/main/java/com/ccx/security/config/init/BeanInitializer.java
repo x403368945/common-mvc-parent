@@ -43,7 +43,7 @@ public class BeanInitializer implements InitConfig.Initializer {
         public final String comment;
         private final Supplier<?> supplier;
 
-        Beans(final String comment, final Class<?> clazz) {
+        <T> Beans(final String comment, final Class<T> clazz) {
             this.comment = comment;
             supplier = () -> APP_CONTEXT.getBean(this.name(), clazz);
         }
@@ -71,4 +71,5 @@ public class BeanInitializer implements InitConfig.Initializer {
     public static ApplicationContext getAppContext() {
         return APP_CONTEXT;
     }
+
 }

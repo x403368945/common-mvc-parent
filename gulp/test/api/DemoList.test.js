@@ -185,7 +185,7 @@ export default class DemoListTest {
 
   /**
    *
-   * @return {Promise<DemoListTest>}
+   * @return {DemoListTest}
    */
   filename() {
     console.log(__filename);
@@ -194,7 +194,7 @@ export default class DemoListTest {
 
   /**
    *
-   * @return {Promise<DemoListTest>}
+   * @return {DemoListTest}
    */
   newline() {
     console.log('');

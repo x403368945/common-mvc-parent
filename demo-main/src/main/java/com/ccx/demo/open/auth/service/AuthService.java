@@ -52,7 +52,6 @@ public class AuthService implements UserDetailsService {
         return userService.findUser(username)
                 .map(TabUser::loadUserDetail)
                 .orElseThrow(() -> new UsernameNotFoundException("用户不存在：".concat(username)));
-
     }
 
     /**

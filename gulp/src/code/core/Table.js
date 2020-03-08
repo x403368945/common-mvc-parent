@@ -82,10 +82,10 @@ export default class Table {
     this.idType = (() => {
       // 目前只支持 Long 、 String 类型作为ID
       const dataType = (this.columns.find(({name}) => name === 'id') || {dataType: {}}).dataType;
-      if (dataType.value === DataType.VARCHAR.value) {
-        return dataType.value;
+      if (dataType.java === DataType.VARCHAR.java) {
+        return dataType.java;
       }
-      return DataType.BIGINT.value;
+      return DataType.BIGINT.java;
     })();
     return this;
   }
@@ -143,7 +143,7 @@ export default class Table {
    */
   async writeEntity(templateName) {
     const {Entity} = await import(`../${templateName}`);
-    const filename = `entity/${this.names.TabName.concat('.java')}`;
+    const filename = `entity/${this.names.TabName}.java`;
     const absolute = Paths.resolve(this.output, filename).mkdirsParent().absolute();
     console.log(absolute);
     const content = await Entity(this);
@@ -152,18 +152,31 @@ export default class Table {
   }
 
   /**
-   * 写入 Controller
+   * 写入 http 文件
    *
-   * (\S+)?IAuthController          => com.support.mvc.web.IController
-   * @AuthenticationPrincipal.*\s+   =>
-   * ,\s+user.getId\(\)              =>
+   * @param templateName {string} 模板目录
+   * @return {Table}
+   */
+  async writeHttp(templateName) {
+    const {Http} = await import(`../${templateName}`);
+    const output = this.output.replace(/(\/src\/test\/)java\/.*$/, '$1');
+    const filename = `http/${this.names.JavaName}Controller.http`;
+    const absolute = Paths.resolve(output, filename).mkdirsParent().absolute();
+    console.log(absolute);
+    const content = await Http(this);
+    fs.writeFileSync(absolute, content);
+    return this;
+  }
+
+  /**
+   * 写入 Controller
    *
    * @param templateName {string} 模板目录
    * @return {Table}
    */
   async writeController(templateName) {
     const {Controller} = await import(`../${templateName}`);
-    const filename = `web/${this.names.JavaName.concat('Controller.java')}`;
+    const filename = `web/${this.names.JavaName}Controller.java`;
     const absolute = Paths.resolve(this.output, filename).mkdirsParent().absolute();
     console.log(absolute);
     const content = await Controller(this);
@@ -174,26 +187,12 @@ export default class Table {
   /**
    * 写入 Service
    *
-   * IOpenService
-   * IBaseService => IOpenService
-   * , userId => null
-   * , \w+ \w+ userId =>
-   *
-   * IBaseService:String id
-   * (\S+)?IBaseService => com.support.mvc.service.str.IBaseService
-   *
-   *
-   * IOpenService:String id
-   * (\S+)?IBaseService => com.support.mvc.service.str.IOpenService
-   * , userId => null
-   * , \w+ \w+ userId =>
-   *
    * @param templateName {string} 模板目录
    * @return {Table}
    */
   async writeService(templateName) {
     const {Service} = await import(`../${templateName}`);
-    const filename = `service/${this.names.JavaName.concat('Service.java')}`;
+    const filename = `service/${this.names.JavaName}Service.java`;
     const absolute = Paths.resolve(this.output, filename).mkdirsParent().absolute();
     console.log(absolute);
     const content = await Service(this);
@@ -204,19 +203,12 @@ export default class Table {
   /**
    * 写入 Repository
    *
-   * .and(q.insertUserId.eq(userId)) =>
-   * .insertUserId(userId)           =>
-   * .set(q.updateUserId, userId)    =>
-   *
-   * updateTime 字段不存在
-   *.and(q.updateTime.eq(obj.getUpdateTime())) =>
-   *
    * @param templateName {string} 模板目录
    * @return {Table}
    */
   async writeRepository(templateName) {
     const {Repository} = await import(`../${templateName}`);
-    const filename = `dao/jpa/${this.names.JavaName.concat('Repository.java')}`;
+    const filename = `dao/jpa/${this.names.JavaName}Repository.java`;
     const absolute = Paths.resolve(this.output, filename).mkdirsParent().absolute();
     console.log(absolute);
     const content = await Repository(this);

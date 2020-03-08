@@ -1,6 +1,5 @@
 package com.ccx.demo;
 
-import com.ccx.demo.config.init.AppProperties;
 import com.support.config.InitConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,10 +21,10 @@ import org.springframework.data.mongodb.config.EnableMongoAuditing;
 // spring-boot start >>
 @SpringBootApplication
 @Import(value = {InitConfig.class})
-@EnableConfigurationProperties(value = {AppProperties.class})
 @EnableJpaAuditing
 @EnableMongoAuditing
 @EnableCaching
+@EnableConfigurationProperties
 public class DemoMainApplication extends SpringBootServletInitializer {
     public static void main(String[] args) {
         SpringApplication.run(DemoMainApplication.class, args);

@@ -86,8 +86,6 @@ public class AuthService implements UserDetailsService {
                 throw Code.USER_DISABLED.exception("账户已禁用");
             }
             throw Code.USER_PWD.exception("用户名或密码错误");
-        } catch (Exception e) {
-            throw e;
         }
     }
 

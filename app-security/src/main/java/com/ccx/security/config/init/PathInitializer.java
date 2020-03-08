@@ -17,6 +17,10 @@ import java.util.stream.Stream;
 @Component
 @Slf4j
 public class PathInitializer implements InitConfig.Initializer {
+    @Override
+    public int priority() {
+        return 1;
+    }
 
     @Override
     public void init() {

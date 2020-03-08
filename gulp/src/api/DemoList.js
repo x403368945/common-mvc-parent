@@ -1,7 +1,6 @@
 import axios from 'axios';
 import Page from '../utils/entity/Page';
 import Result from '../utils/entity/Result';
-import Asserts from '../utils/entity/Asserts';
 
 /**
  * 请求 url 定义
@@ -49,12 +48,11 @@ export class DemoListService {
    * @param vo {DemoListVO} 参考案例对象
    */
   constructor(vo) {
-    Asserts.of().hasFalse(vo, () => 'vo');
     /**
      * 参考案例对象
      * @type {DemoListVO}
      */
-    this.vo = vo;
+    this.vo = vo || new DemoListVO({});
   }
 
   toString() {
@@ -68,7 +66,12 @@ export class DemoListService {
   async save() {
     const {name, phone} = this.vo;
     return await axios
-      .post(DEMO_LIST_URL.save, {json: {name, phone}})
+      .post(DEMO_LIST_URL.save, {
+        json: {
+          name,
+          phone
+        }
+      })
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }

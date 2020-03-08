@@ -65,6 +65,11 @@ import static com.alibaba.fastjson.serializer.SerializerFeature.PrettyFormat;
 // @EnableGlobalMethodSecurity(prePostEnabled = true) // 启用注解：@PreAuthorize；[@PreAuthorize("hasAuthority('ROLE_USER')"), @PreAuthorize("isAnonymous()")]
 @Slf4j
 public class SecurityConfig {
+    private static AppConfig appConfig;
+
+    public SecurityConfig(AppConfig appConfig) {
+        SecurityConfig.appConfig = appConfig;
+    }
 //    /**
 //     * 自定义校验规则
 //     */
@@ -129,7 +134,7 @@ public class SecurityConfig {
     public static class OpenWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter implements IAdapter.Open {
         @Override
         public boolean cors() {
-            return !AppConfig.isProd(); // ************************************************** 环境发布：非生产环境才能跨域
+            return !appConfig.isProd(); // ************************************************** 环境发布：非生产环境才能跨域
         }
 
         @Override
@@ -173,7 +178,7 @@ public class SecurityConfig {
                     .successHandler(authHandler)
                     .failureHandler(authHandler)
             ;
-            if (!AppConfig.isProd()) {
+            if (!appConfig.isProd()) {
                 http.cors().and(); // ******************************************************* 环境发布：非生产环境才能跨域
             }
             // 启用缓存

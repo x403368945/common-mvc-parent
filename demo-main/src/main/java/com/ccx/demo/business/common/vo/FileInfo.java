@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -23,7 +22,6 @@ import org.apache.commons.lang3.StringUtils;
 @AllArgsConstructor
 @Builder
 @Data
-@Accessors(chain = true)
 @ApiModel(description = "上传文件对象")
 public class FileInfo implements IJson {
 
@@ -35,7 +33,7 @@ public class FileInfo implements IJson {
     /**
      * 唯一文件名，磁盘上存储的uuid文件名
      */
-    @ApiModelProperty(position = 2, value = "唯一文件名，磁盘上存储的uuid文件名", example = "{uuid}.png")
+    @ApiModelProperty(position = 2, value = "唯一文件名，磁盘上存储的uuid文件名", example = "uuid.png")
     protected String uname;
 
     /**
@@ -54,8 +52,7 @@ public class FileInfo implements IJson {
      *
      * @return String
      */
-    @ApiModelProperty(position = 3, value = "文件访问路径", example = "http://127.0.0.1/app/{uuid}.png")
-    @JSONField(serialize = false, deserialize = false)
+    @ApiModelProperty(position = 3, value = "文件访问路径", example = "http://127.0.0.1/app/uuid.png")
     public String getUrl() {
         return StringUtils.isEmpty(uname) ? null : URL.TEMP.append(uname);
     }

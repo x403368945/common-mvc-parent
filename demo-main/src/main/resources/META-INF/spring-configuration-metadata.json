@@ -23,7 +23,7 @@
     {
       "name": "app.domain",
       "type": "java.lang.String",
-      "description": "应用路径，域名；可使用 frp 服务器域名."
+      "description": "应用路径，域名；."
     },
     {
       "name": "app.path-root",

@@ -1,7 +1,5 @@
 import axios from 'axios';
-import Page from '../utils/entity/Page';
 import Result from '../utils/entity/Result';
-import Asserts from '../utils/entity/Asserts';
 
 /**
  * 请求 url 定义
@@ -40,12 +38,11 @@ export class AuthorityService {
    * @param vo {AuthorityVO} 参考案例对象
    */
   constructor(vo) {
-    Asserts.of().hasFalse(vo, () => 'vo');
     /**
      * 参考案例对象
      * @type {AuthorityVO}
      */
-    this.vo = vo;
+    this.vo = vo || new AuthorityVO({});
   }
 
   toString() {

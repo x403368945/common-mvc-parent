@@ -13,6 +13,27 @@ export const Entity = async (table) => {
  *
  * @param table {Table}
  */
+export const Http = async (table) => {
+  const {comment, date} = table;
+  return `### ********************************************************************************************************************
+### ${comment}
+### @author 谢长春 on ${date}
+### ********************************************************************************************************************
+${(await import('./http/page')).pageAuth(table)}
+${(await import('./http/search')).searchAuthSpare(table)}
+${(await import('./http/findById')).findByIdAuth(table)}
+${(await import('./http/save')).saveAuth(table)}
+${(await import('./http/update')).updateAuth(table)}
+${(await import('./http/deleteById')).deleteByIdAuthSpare(table)}
+${(await import('./http/markDeleteByIds')).markDeleteByIdsAuth(table)}
+${(await import('./http/markDelete')).markDeleteAuthSpare(table)}
+`
+};
+
+/**
+ *
+ * @param table {Table}
+ */
 export const Controller = async (table) => {
   const {
     pkg,
@@ -93,7 +114,7 @@ import com.support.mvc.entity.base.MarkDelete;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.exception.DeleteRowsException;
 import com.support.mvc.exception.UpdateRowsException;
-import com.support.mvc.service${idType === DataType.VARCHAR.value ? '.str' : ''}.IBaseService;
+import com.support.mvc.service${idType === DataType.VARCHAR.java ? '.str' : ''}.IBaseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

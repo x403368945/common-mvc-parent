@@ -6,7 +6,7 @@ import UserVO from '../../src/api/User';
 import axios from 'axios';
 import sample from 'lodash/sample';
 import sampleSize from 'lodash/sampleSize';
-import RoleVO, {RoleService} from '../../src/api/Role';
+import {RoleService} from '../../src/api/Role';
 
 export default class UserTest {
   /**
@@ -87,7 +87,7 @@ export default class UserTest {
    */
   async save() {
     console.log('> 新增用户 ----------------------------------------------------------------------------------------------------');
-    const {data: roles} = await new RoleVO().getService().options();
+    const {data: roles} = await new RoleService().options();
     (await UserVO.of({
       username: `${new Date().getTime()}`,
       password: '111111',
@@ -109,9 +109,9 @@ export default class UserTest {
    */
   async update() {
     console.log('> 修改用户 ----------------------------------------------------------------------------------------------------');
-    const {data: roles} = await new RoleVO().getService().options();
+    const {data: roles} = await new RoleService().options();
     const {data: users} = await new UserVO().getService().pageable();
-    const user = sample(users.filter(row => ![1, 2].includes(row.id)), 1);
+    const user = sample(users.filter(row => ![1, 2].includes(row.id)));
     (await UserVO.of(Object.assign(user, {
       nickname: `编辑用户-${new Date().formatDate()}`,
       roleList: sampleSize(roles, parseInt(`${Math.random()}`.slice(-1)) + 1)
@@ -126,7 +126,7 @@ export default class UserTest {
   async findByUid() {
     console.log('> 查看用户详细信息 ----------------------------------------------------------------------------------------------------');
     const {data: users} = await new UserVO().getService().pageable();
-    const {id, uid} = sample(users, 1);
+    const {id, uid} = sample(users);
     (await UserVO.of({
       id, uid
     }).getService().findByUid()).print().assertVersion().assertCode().assertData();
@@ -155,7 +155,7 @@ export default class UserTest {
 
   /**
    *
-   * @return {Promise<UserTest>}
+   * @return {UserTest}
    */
   filename() {
     console.log(__filename);
@@ -164,7 +164,7 @@ export default class UserTest {
 
   /**
    *
-   * @return {Promise<UserTest>}
+   * @return {UserTest}
    */
   newline() {
     console.log('');

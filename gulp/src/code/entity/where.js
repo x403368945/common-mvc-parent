@@ -8,7 +8,7 @@ const where = table => {
   return columns
     .map(column => {
       const {name, dataType, length} = column;
-      switch (dataType.name) {
+      switch (dataType.mysql) {
         case 'CHAR':
           return `//                .and(${name}, () -> ${name}.endsWith("%") || ${name}.startsWith("%") ? q.${name}.like(${name}) : q.${name}.eq(${name}))`;
         case 'VARCHAR':

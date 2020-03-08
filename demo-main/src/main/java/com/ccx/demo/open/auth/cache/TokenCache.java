@@ -97,7 +97,7 @@ public class TokenCache implements ICache, ITabUserCache, Serializable {
     public String token() {
         this.uuid = UUID.randomUUID().toString().replace("-", "");
         this.timestamp = Dates.now().timestamp();
-        this.expired = Dates.now().addDay(AppConfig.getTokenExpired()).timestamp();
+        this.expired = Dates.now().addDay(AppConfig.INSTANCE().getTokenExpired()).timestamp();
 
         final Cache cache = Objects.requireNonNull(cacheManager.<CacheManager>get().getCache(CACHE_TOKEN), CACHE_TOKEN.concat(": 不能为 null"));
         cache.put(userId, this);
@@ -125,7 +125,7 @@ public class TokenCache implements ICache, ITabUserCache, Serializable {
         }
 
         // 更新过期时间
-        tokenCache.setExpired(Dates.now().addDay(AppConfig.getTokenExpired()).timestamp());
+        tokenCache.setExpired(Dates.now().addDay(AppConfig.INSTANCE().getTokenExpired()).timestamp());
         cache.put(userId, tokenCache);
 
         return tokenCache;

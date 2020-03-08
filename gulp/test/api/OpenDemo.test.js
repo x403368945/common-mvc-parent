@@ -118,7 +118,7 @@ export default class OpenDemoTest {
 
   /**
    *
-   * @return {Promise<OpenDemoTest>}
+   * @return {OpenDemoTest}
    */
   filename() {
     console.log(__filename);
@@ -127,7 +127,7 @@ export default class OpenDemoTest {
 
   /**
    *
-   * @return {Promise<OpenDemoTest>}
+   * @return {OpenDemoTest}
    */
   newline() {
     console.log('');

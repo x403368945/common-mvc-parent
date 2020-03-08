@@ -1,5 +1,0 @@
-###
-GET http://{{host}}:{{port}}/1/open/test/codes
-Accept: application/json
-
-###

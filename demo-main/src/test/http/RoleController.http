@@ -1,11 +1,76 @@
-### 分页查看角色
+### ********************************************************************************************************************
+### 角色表
+### @author 谢长春 on 2020-03-08
+### ********************************************************************************************************************
+### 角色表: 分页查询
 GET http://{{host}}:{{port}}/1/role/page/1/10
 Content-Type: application/json
 Authorization: Basic {{username}} {{password}}
 
-###
-GET http://{{host}}:{{port}}/1/role/options
+### 角色表: 列表查询，不分页
+#GET http://{{host}}:{{port}}/1/role
+#Content-Type: application/json
+#Authorization: Basic {{username}} {{password}}
+
+### 角色表: 按 id 查询单条记录
+#GET http://{{host}}:{{port}}/1/role/{{id}}
+#Content-Type: application/json
+#Authorization: Basic {{username}} {{password}}
+
+### 角色表: 按 id+uid 查询单条记录
+GET http://{{host}}:{{port}}/1/role/{{id}}/{{uid}}
 Content-Type: application/json
 Authorization: Basic {{username}} {{password}}
 
-###
+### 角色表: 保存
+POST http://{{host}}:{{port}}/1/role
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+{
+
+}
+
+### 角色表: 修改
+PUT http://{{host}}:{{port}}/1/role/{{id}}
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+{
+
+}
+
+### 角色表: 按 id 物理删除
+#DELETE http://{{host}}:{{port}}/1/role/{{id}}
+#Content-Type: application/json
+#Authorization: Basic {{username}} {{password}}
+
+### 角色表: 按 id + uid 物理删除
+#DELETE http://{{host}}:{{port}}/1/role/{{id}}/{{uid}}
+#Content-Type: application/json
+#Authorization: Basic {{username}} {{password}}
+
+### 角色表: 按 id+uid 删除单条记录
+PATCH http://{{host}}:{{port}}/1/role/{{id}}/{{uid}}
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+### 角色表: 按 id 批量逻辑删除
+#PATCH http://{{host}}:{{port}}/1/role
+#Content-Type: application/json
+#Authorization: Basic {{username}} {{password}}
+#
+#[1,2]
+
+### 角色表: 按 id+uid 批量逻辑删除
+PATCH http://{{host}}:{{port}}/1/role
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+[
+  {
+    "id": 0,
+    "uid": ""
+  }
+]
+

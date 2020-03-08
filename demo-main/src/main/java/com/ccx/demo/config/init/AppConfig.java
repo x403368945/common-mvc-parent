@@ -2,7 +2,11 @@ package com.ccx.demo.config.init;
 
 import com.utils.util.FPath;
 import com.utils.util.FWrite;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -17,31 +21,42 @@ import static com.ccx.demo.config.init.AppConfig.App.PATH_ROOT;
 
 /**
  * 初始化 application.properties 中的应用配置参数；
- * <pre>
- * TODO
- *   先在 {@link App} 中定义好枚举，然后到 {@link AppProperties} 中初始化；
- *   {@link Path} 应用中所有依赖的文件目录
- *   {@link URL} 应用中所有依赖的请求URL
- *
  *
  * @author 谢长春 on 2018-10-2
  */
 @Component
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Slf4j
+@ConfigurationProperties("app")
 public class AppConfig {
-    private static AppProperties properties;
 
-    public AppConfig(AppProperties appProperties) {
-        AppConfig.properties = appProperties;
+    /**
+     * 获取 {@link AppConfig} 实例，用于静态类或实体类获取配置参数
+     *
+     * @return {@link AppConfig}
+     */
+    public static AppConfig INSTANCE() {
+        return BeanInitializer.getAppContext().getBean(AppConfig.class);
     }
+
+    private String env;
+    private long adminUserId;
+    private String adminUser;
+    private String ip;
+    private String domain;
+    private String pathRoot;
+    private Integer tokenExpired;
+
 
     /**
      * 判断当前是否属于本地开发环境
      *
      * @return boolean true：本地开发环境
      */
-    public static boolean isDev() {
-        return "dev".equals(properties.getEnv());
+    public boolean isDev() {
+        return Objects.equals("dev", env);
     }
 
     /**
@@ -49,8 +64,8 @@ public class AppConfig {
      *
      * @return boolean true：云开发测试环境
      */
-    public static boolean isBeta() {
-        return "beta".equals(properties.getEnv());
+    public boolean isBeta() {
+        return Objects.equals("beta", env);
     }
 
     /**
@@ -58,17 +73,8 @@ public class AppConfig {
      *
      * @return boolean true：线上生产环境
      */
-    public static boolean isProd() {
-        return "prod".equals(properties.getEnv());
-    }
-
-    /**
-     * 获取 token 默认过期时间
-     *
-     * @return int
-     */
-    public static int getTokenExpired() {
-        return properties.getTokenExpired();
+    public boolean isProd() {
+        return Objects.equals("prod", env);
     }
 
 
@@ -78,19 +84,19 @@ public class AppConfig {
      */
     public enum App {
         ENV("当前环境：[dev:本地|beta:测试|prod:生产]",
-                "app.env", () -> Objects.toString(properties.getEnv())),
+                "app.env", () -> Objects.toString(AppConfig.INSTANCE().getEnv())),
         ADMIN_USER_ID("管理员用户ID",
-                "app.admin-user-id", () -> Objects.toString(properties.getAdminUserId())),
+                "app.admin-user-id", () -> Objects.toString(AppConfig.INSTANCE().getAdminUserId())),
         ADMIN_USER("管理员账户登录账户",
-                "app.admin-user", () -> properties.getAdminUser()),
+                "app.admin-user", () -> AppConfig.INSTANCE().getAdminUser()),
         IP("当前主机 IP 地址",
-                "app.ip", () -> properties.getIp()),
-        DOMAIN("应用路径，域名；可使用 frp 服务器域名",
-                "app.domain", () -> properties.getDomain()),
+                "app.ip", () -> AppConfig.INSTANCE().getIp()),
+        DOMAIN("应用路径，域名；",
+                "app.domain", () -> AppConfig.INSTANCE().getDomain()),
         PATH_ROOT("应用文件根目录",
-                "app.path-root", () -> properties.getPathRoot()),
+                "app.path-root", () -> AppConfig.INSTANCE().getPathRoot()),
         TOKEN_EXPIRED("token 默认过期时间",
-                "app.token-expired", () -> Objects.toString(properties.getTokenExpired())),
+                "app.token-expired", () -> Objects.toString(AppConfig.INSTANCE().getTokenExpired())),
         ;
         public final String key;
         public final String comment;
@@ -137,6 +143,7 @@ public class AppConfig {
         HTML("html模板文件目录", "                                 /html/"),
         MD("markdown文件目录", "                                   /md/"),
         TEMP("文件上传及临时文件存储目录", "                         /temp/"),
+        USER("用户头像存储目录", "                                  /user/"),
         ;
         /**
          * 枚举属性说明
@@ -219,8 +226,7 @@ public class AppConfig {
 
         CONFIG("配置文件访问路径", "                    /files/config/"),
         TEMP("临时文件访问路径", "                      /files/temp/"),
-        USER("临时文件访问路径", "                      /files/user/"),
-        ROLE("临时文件访问路径", "                      /files/role/"),
+        USER("用户头像访问路径", "                      /files/user/"),
         ;
         /**
          * 枚举属性说明

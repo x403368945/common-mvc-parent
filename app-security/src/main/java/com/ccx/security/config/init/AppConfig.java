@@ -86,7 +86,7 @@ public class AppConfig {
                 "app.admin-user", () -> properties.getAdminUser()),
         IP("当前主机 IP 地址",
                 "app.ip", () -> properties.getIp()),
-        DOMAIN("应用路径，域名；可使用 frp 服务器域名",
+        DOMAIN("应用路径，域名；",
                 "app.domain", () -> properties.getDomain()),
         PATH_ROOT("应用文件根目录",
                 "app.path-root", () -> properties.getPathRoot()),
@@ -132,11 +132,12 @@ public class AppConfig {
     public enum Path {
         ROOT("文件存储根目录:(d:/files | /root/files)", "          /"),
         CONFIG("配置文件路径", "                                   /config/"),
+        EHCACHE("Ehcache缓存文件路径", "                           /ehcache/"),
         EXCEL("Excel模板文件目录", "                               /excel/"),
         JSON("json配置文件目录", "                                 /json/"),
         HTML("html模板文件目录", "                                 /html/"),
         MD("markdown文件目录", "                                   /md/"),
-        TEMP("文件上传及临时文件存储目录", "                       /temp/"),
+        TEMP("文件上传及临时文件存储目录", "                         /temp/"),
         ;
         /**
          * 枚举属性说明
@@ -219,6 +220,8 @@ public class AppConfig {
 
         CONFIG("配置文件访问路径", "                    /files/config/"),
         TEMP("临时文件访问路径", "                      /files/temp/"),
+        USER("临时文件访问路径", "                      /files/user/"),
+        ROLE("临时文件访问路径", "                      /files/role/"),
         ;
         /**
          * 枚举属性说明

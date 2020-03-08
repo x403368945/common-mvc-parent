@@ -10,6 +10,7 @@ import com.utils.util.CodeImage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +32,9 @@ import java.util.Objects;
 @RequestMapping("/1/open/code")
 @Controller
 @Slf4j
+@RequiredArgsConstructor
 public class OpenCodeController {
+    private final AppConfig appConfig;
 
 //    private EmailCode emailCode;
 //    private PhoneCode phoneCode;
@@ -46,7 +49,7 @@ public class OpenCodeController {
             result.setSuccess(CodeImage.ofDefault()
                     .generate(code -> {
                         session.setAttribute(Session.code.name(), code);
-                        if (AppConfig.isDev() || AppConfig.isBeta()) {
+                        if (appConfig.isDev() || appConfig.isBeta()) {
                             result.addExtras("code", code);
                         }
                     })
@@ -69,7 +72,7 @@ public class OpenCodeController {
                         .setSuccess(CodeImage.ofDefault()
                                 .generate(value -> {
                                     session.setAttribute(Session.code.name(), value);
-                                    if (AppConfig.isDev() || AppConfig.isBeta()) {
+                                    if (appConfig.isDev() || appConfig.isBeta()) {
                                         result.addExtras("code", value);
                                     }
                                 })
