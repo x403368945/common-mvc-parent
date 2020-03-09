@@ -6,8 +6,8 @@ import Result from '../utils/entity/Result';
  * @author 谢长春 2019-8-30
  */
 const AUTHORITY_URL = Object.freeze({
-  list: '/authority/1/list', // 权限指令列表
-  tree: '/authority/1/tree' // 权限指令树
+  list: '/1/authority/list', // 权限指令列表
+  tree: '/1/authority/tree' // 权限指令树
 });
 
 /**
@@ -43,6 +43,24 @@ export class AuthorityService {
      * @type {AuthorityVO}
      */
     this.vo = vo || new AuthorityVO({});
+    if (vo) {
+      /**
+       * 参考案例对象
+       * @type {AuthorityVO}
+       */
+      this.vo = new AuthorityVO({...vo});
+      Object.keys(this.vo).forEach(key => { // 移除空字符串参数，前端组件默认值为空字符串，带到后端查询会有问题
+        if (this.vo[key] === '') {
+          delete this.vo[key];
+        }
+      })
+    } else {
+      /**
+       * 参考案例对象
+       * @type {AuthorityVO}
+       */
+      this.vo = new AuthorityVO({});
+    }
   }
 
   toString() {

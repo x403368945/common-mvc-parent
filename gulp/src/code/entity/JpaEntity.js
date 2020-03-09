@@ -85,6 +85,8 @@ public class ${TabName} implements
         // QdslWhere       => com.support.mvc.dao.IViewRepository 需要的查询条件
         IWhere<JPAUpdateClause, QdslWhere>
 {
+    private static final long serialVersionUID = 1L;
+
 ${fields(table)}
 
     /**

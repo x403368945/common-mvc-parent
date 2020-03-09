@@ -70,6 +70,7 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 @JSONType(orders = {"id", "uid", "subdomain", "username", "nickname", "phone", "email", "role", "registerSource", "deleted"})
 public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere<JPAUpdateClause, QdslWhere> {
 
+    private static final long serialVersionUID = 1945320644170494162L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull(groups = {IUpdate.class, IMarkDelete.class})

@@ -3,10 +3,8 @@ POST http://{{host}}:{{port}}/login
 Content-Type: application/json
 
 {
-  "json": {
-    "username": "admin",
-    "password": "admin"
-  }
+  "username": "admin",
+  "password": "admin"
 }
 
 ### 登录：表单模式
@@ -26,9 +24,7 @@ Content-Type: application/json
 Authorization: Basic {{username}} {{password}}
 
 {
-  "json": {
-    "nickname": "*.谢"
-  }
+  "nickname": "*.谢"
 }
 
 ### 退出
@@ -42,14 +38,12 @@ Authorization: Basic {{username}} {{password}}
 ###
 
 ### 登录：token 模式
-POST http://{{host}}:{{port}}/open/auth/1/login/TOKEN
+POST http://{{host}}:{{port}}/1/open/auth/login/TOKEN
 Content-Type: application/json
 
 {
-  "json": {
-    "username": "admin",
-    "password": "admin"
-  }
+  "username": "admin",
+  "password": "admin"
 }
 
 ###

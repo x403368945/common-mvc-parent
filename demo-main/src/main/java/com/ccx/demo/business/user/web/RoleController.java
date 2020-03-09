@@ -29,7 +29,7 @@ import java.util.Optional;
  * @author 谢长春 on 2019-08-29
  */
 @Api(tags = "角色")
-@ApiSort(4) // 控制接口排序
+@ApiSort(5) // 控制接口排序
 @RequestMapping("/1/role")
 @Controller
 @Slf4j

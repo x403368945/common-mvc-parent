@@ -24,7 +24,7 @@ import java.util.Optional;
  * @author 谢长春 on 2020-03-08
  */
 @Api(tags = "用户登录记录表")
-@ApiSort(6) // 控制接口排序 <
+@ApiSort(7) // 控制接口排序 <
 @RequestMapping("/1/user-login")
 @Controller
 @Slf4j

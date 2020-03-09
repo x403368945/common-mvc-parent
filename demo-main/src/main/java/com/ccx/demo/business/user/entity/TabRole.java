@@ -68,6 +68,8 @@ public class TabRole implements
         // JPAUpdateClause => com.support.mvc.dao.IRepository#update 需要的动态更新字段；采用 方案2 时需要实现该接口
         // QdslWhere       => com.support.mvc.dao.IViewRepository 需要的查询条件
         IWhere<JPAUpdateClause, QdslWhere> {
+
+    private static final long serialVersionUID = -3752479204599023144L;
     /**
      * 数据ID，主键自增
      */

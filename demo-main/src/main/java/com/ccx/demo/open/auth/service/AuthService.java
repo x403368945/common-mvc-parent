@@ -62,7 +62,10 @@ public class AuthService implements UserDetailsService {
      * @return TabUser
      */
     @Validated
-    public TabUser login(@NotBlank final String username, @NotBlank final String password) {
+    public TabUser login(@NotBlank final String username,
+                         @NotBlank final String password,
+                         @NotBlank final String ip
+    ) {
         try {
             // 构造 username、password 登录认证token
             final UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
@@ -71,7 +74,7 @@ public class AuthService implements UserDetailsService {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             final TabUser user = (TabUser) authentication.getPrincipal();
             // 保存登录记录
-            userLoginService.save(TabUserLogin.builder().userId(user.getId()).build(), user.getId());
+            userLoginService.save(TabUserLogin.builder().userId(user.getId()).ip(ip).build(), user.getId());
             return user;
         } catch (AuthenticationException e) {
             log.error(e.getMessage(), e);

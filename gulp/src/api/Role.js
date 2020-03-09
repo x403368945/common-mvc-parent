@@ -7,12 +7,12 @@ import Result from '../utils/entity/Result';
  * @author 谢长春 2019-8-30
  */
 const ROLE_URL = Object.freeze({
-  save: '/role/1', // 新增
-  update: '/role/1/{id}', // 修改
-  markDeleteByUid: '/role/1/{id}/{uid}', // 按 id + uid 逻辑删除
-  findByUid: '/role/1/{id}/{uid}', // 按 id + uid + 时间戳 查询单条记录
-  page: '/role/1/page/{number}/{size}', // 分页：多条件批量查询
-  options: '/role/1/options' // 角色下拉列表选项
+  save: '/1/role', // 新增
+  update: '/1/role/{id}', // 修改
+  markDeleteByUid: '/1/role/{id}/{uid}', // 按 id + uid 逻辑删除
+  findByUid: '/1/role/{id}/{uid}', // 按 id + uid + 时间戳 查询单条记录
+  page: '/1/role/page/{number}/{size}', // 分页：多条件批量查询
+  options: '/1/role/options' // 角色下拉列表选项
 });
 
 /**
@@ -62,10 +62,8 @@ export class RoleService {
     const {name, authorityTree} = this.vo;
     return await axios
       .post(ROLE_URL.save, {
-        json: {
-          name,
-          authorityTree
-        }
+        name,
+        authorityTree
       })
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
@@ -76,9 +74,9 @@ export class RoleService {
    * @return {Promise<Result>}
    */
   async update() {
-    const {id, ...json} = this.vo;
+    const {id, ...body} = this.vo;
     return await axios
-      .put(ROLE_URL.update.format(id || 0), {json})
+      .put(ROLE_URL.update.format(id || 0), body)
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -112,19 +110,16 @@ export class RoleService {
    * @return {Promise<Result>}
    */
   async pageable() {
-    const {id, name, phone, amountRange, insertTimeRange, sorts, page} = this.vo;
+    const {id, name, amountRange, insertTimeRange, sorts, page} = this.vo;
     return await axios
       .get(ROLE_URL.page.formatObject(page || Page.ofDefault()),
         {
           params: {
-            json: {
-              id: id || undefined,
-              name: name || undefined,
-              phone: name || undefined,
-              amountRange,
-              insertTimeRange,
-              sorts
-            }
+            id: id || undefined,
+            name: name || undefined,
+            amountRange,
+            insertTimeRange,
+            sorts
           }
         }
       )

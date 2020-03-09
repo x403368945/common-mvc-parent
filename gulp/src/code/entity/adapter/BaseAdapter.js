@@ -112,7 +112,7 @@ export default class BaseAdapter {
       default: ({name, dataType, notNull, comment}) => `        ${name}(${dataType.java.toUpperCase()}.build(${notNull ? 'true, ' : ''}"${comment}"))`,
       id: ({name, dataType, comment}) => `        ${name}(${[DataType.BIGINT.mysql, DataType.INT.mysql].includes(dataType.mysql) ? 'LONG' : 'STRING'}.build(true, "${comment}"))`,
       uid: ({name, comment}) => `        ${name}(STRING.build(true, "${comment}"))`,
-      deleted: ({name, comment}) => `        ${name}(ENUM.build("是否逻辑删除"))`,
+      deleted: ({name}) => `        ${name}(ENUM.build("是否逻辑删除"))`,
       insertTime: ({name, comment}) => `        ${name}(TIMESTAMP.build("${comment}"))`,
       updateTime: (column) => this.props.insertTime(column),
       insertUserId: ({name, comment}) => `        ${name}(LONG.build("${comment}"))`,

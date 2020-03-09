@@ -219,7 +219,7 @@ export default class Result {
   /**
    * 判断后端响应状态为成功时，执行 call(Result:当前 Result 对象) 方法，
    * 返回当前 {@link Result} 对象，便于链式调用和重复操作响应结果
-   * @param call {Function<Result>}
+   * @param call {Function} Function<Result>
    * @return {Result}
    */
   hasSuccess(call = (result) => {
@@ -231,7 +231,7 @@ export default class Result {
   /**
    * 判断后端响应状态为失败时，执行 call(Result:当前 Result 对象) 方法，
    * 返回当前 {@link Result} 对象，便于链式调用和重复操作响应结果
-   * @param call {Function<Result>}
+   * @param call {Function} Function<Result>
    * @return {Result}
    */
   hasFailure(call = (result) => {
@@ -243,7 +243,7 @@ export default class Result {
   /**
    * 判断后端响应状态为成功时，执行 call(Result.data:当前 Result 对象中的 data 数据) 方法
    * 返回当前 {@link Result} 对象，便于链式调用和重复操作响应结果
-   * @param call {Function<any>}
+   * @param call {Function} Function<any>
    * @return {Result}
    */
   hasData(call = (data) => {
@@ -255,7 +255,7 @@ export default class Result {
   /**
    * 判断后端响应状态为成功时，执行 call(Result.data:当前 Result 对象中的 data 数据) 方法
    * 返回当前 {@link Result} 对象，便于链式调用和重复操作响应结果
-   * @param call {Function<any>}
+   * @param call {Function} Function<any>
    * @return {Result}
    */
   dataFirst(call = (obj) => {
@@ -268,8 +268,8 @@ export default class Result {
    * 获取 extras 指定 key 的值，当获取值为有效值时执行 call(value) 方法
    * 返回当前 {@link Result} 对象，便于链式调用和重复操作响应结果
    * @param key {string} key 可以是有层级的，例如: ‘parent.child.name’ 将会按层级获取对象中的属性 {parent:{child:{name:‘value’}}}，更详细的规则请参考 lodash 库中的 get 方法
-   * @param nonNull {Function<any>} 参数非空时执行该方法
-   * @param hasNull {Function<any>} 参数为空时执行该方法
+   * @param nonNull {Function} Function<any> 参数非空时执行该方法
+   * @param hasNull {Function} Function<any> 参数为空时执行该方法
    * @return {Result}
    */
   getExtras(key, nonNull = (data) => ({}), hasNull = () => ({})) {
@@ -324,21 +324,21 @@ export default class Result {
   assertData() {
     this.assertCode();
     if (!(this.data && this.data.length)) {
-      throw new Error(`响应结果集合异常，预期结果集长度必须大于0`)
+      throw new Error('响应结果集合异常，预期结果集长度必须大于0')
     }
     return this;
   }
 
   /**
    * 断言响应代码为成功且数据集合不能为空，且对第一条数据逻辑断言，用于测试接口，直接抛出异常
-   * @param call {Function<any>} 该方法需要返回 Promise
+   * @param call {Function} Function<any> 该方法需要返回 Promise
    * @return {Result}
    */
   assertDataFirst(call = obj => {
   }) {
     this.assertCode();
     if (!(this.data && this.data.length)) {
-      throw new Error(`响应结果集合异常，预期结果集长度必须大于0`)
+      throw new Error('响应结果集合异常，预期结果集长度必须大于0')
     } else {
       const promise = call(this.data[0]);
       if (promise && promise instanceof Promise) {
@@ -346,7 +346,7 @@ export default class Result {
           throw new Error(`响应结果第一条数据异常:${msg}`)
         })
       } else {
-        throw new Error(`call 方法必须返回 Promise`)
+        throw new Error('call 方法必须返回 Promise')
       }
     }
     return this;

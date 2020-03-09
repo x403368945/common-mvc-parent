@@ -55,6 +55,8 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 @ApiModel(description = "用户登录记录表")
 @JSONType(orders = {"id", "userId", "ip", "timestamp"})
 public class TabUserLogin implements ITable, IWhere<JPAUpdateClause, QdslWhere> {
+
+    private static final long serialVersionUID = -190410093317625771L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull(groups = {IUpdate.class, IMarkDelete.class})

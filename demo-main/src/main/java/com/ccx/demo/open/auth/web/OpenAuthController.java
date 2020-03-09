@@ -104,7 +104,7 @@ public class OpenAuthController {
                     Assert.hasText(body.getUsername(), "用户名不能为空");
                     Assert.hasText(body.getPassword(), "密码不能为空");
                     // 登录成功之后，将用户信息放入session
-                    final TabUser user = authService.login(body.getUsername(), body.getPassword());
+                    final TabUser user = authService.login(body.getUsername(), body.getPassword(), request.getRemoteAddr());
                     final HttpSession session = request.getSession(true);
 //            session.setMaxInactiveInterval(60); // 测试时，设置 session 超时时间为60s
                     session.setAttribute(Session.user.name(), user);
@@ -122,12 +122,13 @@ public class OpenAuthController {
                                           HttpServletRequest request,
                                           HttpServletResponse response
     ) {
+
         final Result<TabUserVO> result = new Result<>();
         try {
             Assert.hasText(body.getUsername(), "用户名不能为空");
             Assert.hasText(body.getPassword(), "密码不能为空");
             // 登录成功之后，将用户信息放入session； 同时生成 token 回传到前端
-            TabUser user = authService.login(body.getUsername(), body.getPassword());
+            TabUser user = authService.login(body.getUsername(), body.getPassword(), request.getRemoteAddr());
             // 生成token 放在响应头
             final String token = user.token();
             response.setHeader(Session.token.name(), token);

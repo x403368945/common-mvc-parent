@@ -24,7 +24,7 @@ import java.util.*;
 import static com.support.mvc.enums.Code.FILE_EMPTY;
 
 @Api(tags = "通用模块")
-@ApiSort(5)
+@ApiSort(6)
 @Controller
 @RequestMapping("/1/common")
 @Slf4j

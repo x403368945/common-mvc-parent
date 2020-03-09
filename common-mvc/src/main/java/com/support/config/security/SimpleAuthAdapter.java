@@ -38,7 +38,7 @@ import java.util.List;
  *         POST http://{{host}}:{{port}}/login
  *          Content-Type: application/json
  *
- *          {"json": {"username": "admin","password": "admin"}}
+ *          {"username": "admin","password": "admin"}
  *     ###
  *     ### 登录：表单模式
  *         POST http://{{host}}:{{port}}/login

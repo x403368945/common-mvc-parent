@@ -4,17 +4,35 @@ Content-Type: application/json
 Authorization: Basic {{username}} {{password}}
 
 {
-  "json": {
-    "ids": [
-      1,
-      2
-    ],
-    "item": {
+  "ids": [
+    1,
+    2
+  ],
+  "item": {
+    "key": "SUCCESS",
+    "value": "1",
+    "comment": "成功"
+  }
+}
+
+### 保存
+POST http://{{host}}:{{port}}/convert/1
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+{
+  "items": [
+    {
       "key": "SUCCESS",
       "value": "1",
       "comment": "成功"
+    },
+    {
+      "key": "FAILURE",
+      "value": "0",
+      "comment": "失败"
     }
-  }
+  ]
 }
 
 ### 保存
@@ -23,20 +41,11 @@ Content-Type: application/json
 Authorization: Basic {{username}} {{password}}
 
 {
-  "json": {
-    "items": [
-      {
-        "key": "SUCCESS",
-        "value": "1",
-        "comment": "成功"
-      },
-      {
-        "key": "FAILURE",
-        "value": "0",
-        "comment": "失败"
-      }
-    ]
-  }
+  "ids": [
+    100,
+    101,
+    102
+  ]
 }
 
 ### 保存
@@ -45,28 +54,11 @@ Content-Type: application/json
 Authorization: Basic {{username}} {{password}}
 
 {
-  "json": {
-    "ids": [
-      100,
-      101,
-      102
-    ]
-  }
-}
-
-### 保存
-POST http://{{host}}:{{port}}/convert/1
-Content-Type: application/json
-Authorization: Basic {{username}} {{password}}
-
-{
-  "json": {
-    "images": [
-      "100000000000000000000000000000000000000.png",
-      "200000000000000000000000000000000000000.png",
-      "300000000000000000000000000000000000000.png"
-    ]
-  }
+  "images": [
+    "100000000000000000000000000000000000000.png",
+    "200000000000000000000000000000000000000.png",
+    "300000000000000000000000000000000000000.png"
+  ]
 }
 
 ### 修改
@@ -75,47 +67,45 @@ Content-Type: application/json
 Authorization: Basic {{username}} {{password}}
 
 {
-  "json": {
-    "id": 1,
-    "uid": "c252869c6a154b1b905ada988906cb0a",
-    "ids": [
-      1,
-      2
-    ],
-    "images": [
-      "100000000000000000000000000000000000000.png",
-      "200000000000000000000000000000000000000.png",
-      "300000000000000000000000000000000000000.png"
-    ],
-    "codes": [
-      "CUSTOMIZE",
-      "FILE_COPY",
-      "ORDER_BY"
-    ],
-    "items": [
-      {
-        "key": "SUCCESS",
-        "value": "1",
-        "comment": "成功"
-      },
-      {
-        "key": "FAILURE",
-        "value": "0",
-        "comment": "失败"
-      }
-    ],
-    "item": {
+  "id": 1,
+  "uid": "c252869c6a154b1b905ada988906cb0a",
+  "ids": [
+    1,
+    2
+  ],
+  "images": [
+    "100000000000000000000000000000000000000.png",
+    "200000000000000000000000000000000000000.png",
+    "300000000000000000000000000000000000000.png"
+  ],
+  "codes": [
+    "CUSTOMIZE",
+    "FILE_COPY",
+    "ORDER_BY"
+  ],
+  "items": [
+    {
       "key": "SUCCESS",
-      "value": "3",
+      "value": "1",
       "comment": "成功"
     },
-    "insertTime": "2019-12-12 11:50:09.000",
-    "insertUserId": 1,
-    "updateTime": "2019-12-13 03:53:53.137",
-    "updateUserId": 1,
-    "deleted": "NO",
-    "timestamp": 1576124577146
-  }
+    {
+      "key": "FAILURE",
+      "value": "0",
+      "comment": "失败"
+    }
+  ],
+  "item": {
+    "key": "SUCCESS",
+    "value": "3",
+    "comment": "成功"
+  },
+  "insertTime": "2019-12-12 11:50:09.000",
+  "insertUserId": 1,
+  "updateTime": "2019-12-13 03:53:53.137",
+  "updateUserId": 1,
+  "deleted": "NO",
+  "timestamp": 1576124577146
 }
 
 ### 修改
@@ -124,15 +114,13 @@ Content-Type: application/json
 Authorization: Basic {{username}} {{password}}
 
 {
-  "json": {
-    "uid": "dde9f290c6314f9bab88dd698941c6cb",
-    "updateTime": "2019-08-21 18:04:38.116",
-    "ids": [
-      200,
-      201,
-      202
-    ]
-  }
+  "uid": "dde9f290c6314f9bab88dd698941c6cb",
+  "updateTime": "2019-08-21 18:04:38.116",
+  "ids": [
+    200,
+    201,
+    202
+  ]
 }
 
 ### 查询:不分页

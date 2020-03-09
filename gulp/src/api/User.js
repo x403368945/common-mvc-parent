@@ -9,13 +9,13 @@ import Page from '../utils/entity/Page';
 const USER_URL = Object.freeze({
   login: '/login', // 登录
   logout: '/logout', // 退出
-  currentUser: '/user/1/current', // 当前登录用户信息
-  updateNickname: '/user/1/nickname', // 修改昵称
-  save: '/user/1', // 新增用户
-  update: '/user/1/{id}', // 修改用户信息
-  findByUid: '/user/1/{id}/{uid}', // 查看用户详细信息
-  page: '/user/1/page/{number}/{size}' // 分页查看用户信息
-  // users: '/user/1/users/{roleId}' // 按角色查询用户集合
+  currentUser: '/1/user/current', // 当前登录用户信息
+  updateNickname: '/1/user/nickname', // 修改昵称
+  save: '/1/user', // 新增用户
+  update: '/1/user/{id}', // 修改用户信息
+  findByUid: '/1/user/{id}/{uid}', // 查看用户详细信息
+  page: '/1/user/page/{number}/{size}' // 分页查看用户信息
+  // users: '/1/user/users/{roleId}' // 按角色查询用户集合
 });
 
 /**
@@ -45,11 +45,24 @@ export class UserService {
    * @param vo {UserVO} 用户实体对象
    */
   constructor(vo) {
-    /**
-     * 用户实体对象
-     * @type {UserVO}
-     */
-    this.vo = vo || new UserVO({});
+    if (vo) {
+      /**
+       * 用户实体对象
+       * @type {UserVO}
+       */
+      this.vo = new UserVO({...vo});
+      Object.keys(this.vo).forEach(key => { // 移除空字符串参数，前端组件默认值为空字符串，带到后端查询会有问题
+        if (this.vo[key] === '') {
+          delete this.vo[key];
+        }
+      })
+    } else {
+      /**
+       * 用户实体对象
+       * @type {UserVO}
+       */
+      this.vo = new UserVO({});
+    }
   }
 
   toString() {
@@ -64,10 +77,8 @@ export class UserService {
     const {username, password} = this.vo;
     return await axios
       .post(USER_URL.login, {
-        json: {
-          username,
-          password
-        }
+        username,
+        password
       })
       .then(Result.ofResponse)
       .catch(Result.ofCatch)
@@ -102,7 +113,7 @@ export class UserService {
   async updateNickname() {
     const {nickname} = this.vo;
     return await axios
-      .patch(USER_URL.updateNickname, {json: {nickname}})
+      .patch(USER_URL.updateNickname, {nickname})
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -115,14 +126,12 @@ export class UserService {
     const {username, password, nickname, phone, email, roleList} = this.vo;
     return await axios
       .post(USER_URL.save, {
-        json: {
-          username,
-          password,
-          nickname,
-          phone,
-          email,
-          roleList
-        }
+        username,
+        password,
+        nickname,
+        phone,
+        email,
+        roleList
       })
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
@@ -133,9 +142,9 @@ export class UserService {
    * @return {Promise<Result>}
    */
   async update() {
-    const {id, ...json} = this.vo;
+    const {id, ...body} = this.vo;
     return await axios
-      .put(USER_URL.update.format(id || 0), {json})
+      .put(USER_URL.update.format(id || 0), body)
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -157,28 +166,9 @@ export class UserService {
    * @return {Promise<Result>}
    */
   async pageable() {
-    const {id, uid, username, phone, email, insertUserId, updateUserId, expired, locked, nickname, sorts, page} = this.vo;
+    const {page, ...params} = this.vo;
     return await axios
-      .get(USER_URL.page.formatObject(page || Page.ofDefault()),
-        {
-          params: {
-            json: {
-              id,
-              uid,
-              username,
-              phone,
-              email,
-              insertUserId,
-              updateUserId,
-              expired,
-              locked,
-              nickname,
-              sorts,
-              page
-            }
-          }
-        }
-      )
+      .get(USER_URL.page.formatObject(page || Page.ofDefault()), {params})
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }

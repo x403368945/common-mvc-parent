@@ -7,17 +7,17 @@ import Result from '../utils/entity/Result';
  * @author 谢长春 2019-7-28
  */
 const DEMO_LIST_URL = Object.freeze({
-  save: '/demo-list/1', // 新增
-  update: '/demo-list/1/{id}', // 修改
-  deleteById: '/demo-list/1/{id}', // 按 id 删除
-  deleteByUid: '/demo-list/1/{id}/{uid}', // 按 id + uid 删除
-  markDeleteById: '/demo-list/1/{id}', // 按 id 逻辑删除
-  markDeleteByUid: '/demo-list/1/{id}/{uid}', // 按 id + uid 逻辑删除
-  markDelete: '/demo-list/1', // 按 id + uid 批量逻辑删除
-  findById: '/demo-list/1/{id}', // 按 id 查询单条记录
-  findByUid: '/demo-list/1/{id}/{uid}', // 按 id + uid + 时间戳 查询单条记录
-  search: '/demo-list/1', // 多条件批量查询，不分页
-  page: '/demo-list/1/page/{number}/{size}' // 分页：多条件批量查询
+  save: '/1/demo-list', // 新增
+  update: '/1/demo-list/{id}', // 修改
+  deleteById: '/1/demo-list/{id}', // 按 id 删除
+  deleteByUid: '/1/demo-list/{id}/{uid}', // 按 id + uid 删除
+  markDeleteById: '/1/demo-list/{id}', // 按 id 逻辑删除
+  markDeleteByUid: '/1/demo-list/{id}/{uid}', // 按 id + uid 逻辑删除
+  markDelete: '/1/demo-list', // 按 id + uid 批量逻辑删除
+  findById: '/1/demo-list/{id}', // 按 id 查询单条记录
+  findByUid: '/1/demo-list/{id}/{uid}', // 按 id + uid + 时间戳 查询单条记录
+  search: '/1/demo-list', // 多条件批量查询，不分页
+  page: '/1/demo-list/page/{number}/{size}' // 分页：多条件批量查询
 });
 
 /**
@@ -64,14 +64,8 @@ export class DemoListService {
    * @return {Promise<Result>}
    */
   async save() {
-    const {name, phone} = this.vo;
     return await axios
-      .post(DEMO_LIST_URL.save, {
-        json: {
-          name,
-          phone
-        }
-      })
+      .post(DEMO_LIST_URL.save, this.vo)
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -81,9 +75,9 @@ export class DemoListService {
    * @return {Promise<Result>}
    */
   async update() {
-    const {id, ...json} = this.vo;
+    const {id, ...body} = this.vo;
     return await axios
-      .put(DEMO_LIST_URL.update.format(id || 0), {json})
+      .put(DEMO_LIST_URL.update.format(id || 0), body)
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -143,7 +137,7 @@ export class DemoListService {
   async markDelete() {
     const {uids} = this.vo;
     return await axios
-      .patch(DEMO_LIST_URL.markDelete, {json: uids})
+      .patch(DEMO_LIST_URL.markDelete, uids)
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -177,20 +171,8 @@ export class DemoListService {
    * @return {Promise<Result>}
    */
   async search() {
-    const {id, name, phone, amountRange, insertTimeRange, sorts} = this.vo;
     return await axios
-      .get(DEMO_LIST_URL.search, {
-        params: {
-          json: {
-            id: id || undefined,
-            name: name || undefined,
-            phone: name || undefined,
-            amountRange,
-            insertTimeRange,
-            sorts
-          }
-        }
-      })
+      .get(DEMO_LIST_URL.search, {params: this.vo})
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -200,22 +182,9 @@ export class DemoListService {
    * @return {Promise<Result>}
    */
   async pageable() {
-    const {id, name, phone, amountRange, insertTimeRange, sorts, page} = this.vo;
+    const {page, params} = this.vo;
     return await axios
-      .get(DEMO_LIST_URL.page.formatObject(page || Page.ofDefault()),
-        {
-          params: {
-            json: {
-              id: id || undefined,
-              name: name || undefined,
-              phone: name || undefined,
-              amountRange,
-              insertTimeRange,
-              sorts
-            }
-          }
-        }
-      )
+      .get(DEMO_LIST_URL.page.formatObject(page || Page.ofDefault()), {params})
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }

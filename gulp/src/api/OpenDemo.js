@@ -20,15 +20,15 @@ const OPEN_DEMO_URL = Object.freeze({
   // findByUidTimestamp: '', // 按 id + uid + 时间戳 查询单条记录
   // search: '', // 多条件批量查询，不分页
   // page: '' // 分页：多条件批量查询
-  codes: '/open/test/1/codes', // 查询所有状态码
-  save: '/open/test/1', // 新增
-  update: '/open/test/1/{id}', // 修改
-  deleteById: '/open/test/1/{id}', // 按 id 删除
-  markDeleteById: '/open/test/1/{id}', // 按 id 逻辑删除
-  markDelete: '/open/test/1', // 按 id + uid 批量逻辑删除
-  findById: '/open/test/1/{id}', // 按 id 查询单条记录
-  search: '/open/test/1', // 多条件批量查询，不分页
-  page: '/open/test/1/{number}/{size}' // 分页：多条件批量查询
+  codes: '/1/open/test/codes', // 查询所有状态码
+  save: '/1/open/test', // 新增
+  update: '/1/open/test/{id}', // 修改
+  deleteById: '/1/open/test/{id}', // 按 id 删除
+  markDeleteById: '/1/open/test/{id}', // 按 id 逻辑删除
+  markDelete: '/1/open/test', // 按 id + uid 批量逻辑删除
+  findById: '/1/open/test/{id}', // 按 id 查询单条记录
+  search: '/1/open/test', // 多条件批量查询，不分页
+  page: '/1/open/test/{number}/{size}' // 分页：多条件批量查询
 });
 
 /**

@@ -26,6 +26,9 @@ process.env.DEVELOPMENT = true;
 process.env.BROWSER = false;
 
 gulp.task('default', async () => {
+const vo = undefined;
+// const obj = {...vo};
+console.log([vo || 'aaa'])
 });
 
 gulp.task('listener', function () {

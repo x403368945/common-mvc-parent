@@ -24,6 +24,8 @@ import javax.validation.constraints.*;
 @Slf4j
 @JSONType(orders = {"id", "uid", "label", "value", "content"})
 public class TabValid implements ITable, IJson {
+
+    private static final long serialVersionUID = 1494537060273446575L;
     @NotNull(groups = {IUpdate.class, IMarkDelete.class})
     @Positive
     private Long id;

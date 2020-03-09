@@ -9,10 +9,8 @@ POST http://{{host}}:{{port}}/login
 Content-Type: application/json;charset=utf-8
 
 {
-  "json": {
-    "username": "user",
-    "password": "111111"
-  }
+  "username": "user",
+  "password": "111111"
 }
 
 ###

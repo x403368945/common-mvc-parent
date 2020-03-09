@@ -4,12 +4,10 @@ Content-Type: application/json
 Authorization: Basic {{username}} {{password}}
 
 {
-  "json": {
-    "name": "JX",
-    "phone": "18700000000",
-    "status": "WATING",
-    "age": 18
-  }
+  "name": "JX",
+  "phone": "18700000000",
+  "status": "WATING",
+  "age": 18
 }
 
 ### 修改
@@ -18,13 +16,11 @@ Content-Type: application/json
 Authorization: Basic {{username}} {{password}}
 
 {
-  "json": {
-    "name": "PeXImPsqeI",
-    "content": "OyTlwNFavgqaHgc",
-    "status": "RUNNING",
-    "age": 100,
-    "updateTime": "2019-07-12 18:13:54.329"
-  }
+  "name": "PeXImPsqeI",
+  "content": "OyTlwNFavgqaHgc",
+  "status": "RUNNING",
+  "age": 100,
+  "updateTime": "2019-07-12 18:13:54.329"
 }
 
 ### 物理删除:id
