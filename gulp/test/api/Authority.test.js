@@ -57,6 +57,7 @@ export default class AuthorityTest {
    */
   filename() {
     console.log(__filename);
+    console.log('');
     return this;
   }
 
@@ -77,7 +78,7 @@ export default class AuthorityTest {
     const moduleName = '权限指令';
     console.info(`${moduleName}：start ${'*'.repeat(200)}`);
     await Promise.resolve(AuthorityTest.of())
-      .then(service => service.filename()).then(s => s.newline())
+      .then(service => service.filename())
       // admin 登录
       .then(service => service.call(() => UserTest.of().loginAdminBasic()))
       // 开始

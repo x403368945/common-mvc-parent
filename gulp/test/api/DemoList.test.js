@@ -189,6 +189,7 @@ export default class DemoListTest {
    */
   filename() {
     console.log(__filename);
+    console.log('');
     return this;
   }
 
@@ -209,7 +210,7 @@ export default class DemoListTest {
     const moduleName = '实体表操作';
     console.info(`${moduleName}：start ${'*'.repeat(200)}`);
     await Promise.resolve(DemoListTest.of())
-      .then(service => service.filename()).then(s => s.newline())
+      .then(service => service.filename())
       // admin 登录
       .then(service => service.call(() => UserTest.of().loginAdminBasic()))
       // 开始

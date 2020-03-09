@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Collection;
 import java.util.List;
@@ -32,6 +33,7 @@ public class UserDetail implements UserDetails, ITabRoleCache {
     }
 
     @QueryTransient
+    @ApiIgnore
     @JSONField(serialize = false, deserialize = false)
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -61,6 +63,7 @@ public class UserDetail implements UserDetails, ITabRoleCache {
     }
 
     @QueryTransient
+    @ApiIgnore
     @JSONField(serialize = false, deserialize = false)
     @ApiModelProperty(hidden = true)
     @Override
@@ -70,6 +73,7 @@ public class UserDetail implements UserDetails, ITabRoleCache {
     }
 
     @QueryTransient
+    @ApiIgnore
     @JSONField(serialize = false, deserialize = false)
     @ApiModelProperty(hidden = true)
     @Override
@@ -78,6 +82,7 @@ public class UserDetail implements UserDetails, ITabRoleCache {
     }
 
     @QueryTransient
+    @ApiIgnore
     @JSONField(serialize = false, deserialize = false)
     @ApiModelProperty(hidden = true)
     @Override
@@ -86,6 +91,7 @@ public class UserDetail implements UserDetails, ITabRoleCache {
     }
 
     @QueryTransient
+    @ApiIgnore
     @JSONField(serialize = false, deserialize = false)
     @Override
     public boolean isEnabled() {

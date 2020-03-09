@@ -4,7 +4,10 @@ import com.ccx.demo.business.user.vo.Authority;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.ccx.demo.business.user.enums.AuthorityCode.*;
@@ -23,21 +26,19 @@ public class AuthorityService {
 
     static {
         TREE.add(Menu_Home.build());
-        TREE.add(
-                Menu_Setting.nodes(
-                        Menu_UC.nodes(
-                                UC_page.build(),
-                                UC_save.build(),
-                                UC_update.build(),
-                                UC_reset.build()
-                        ),
-                        Menu_RC.nodes(
-                                RC_page.build(),
-                                RC_save.build(),
-                                RC_update.build()
-                        )
+        TREE.add(Menu_Setting.nodes(
+                Menu_UC.nodes(
+                        UC_page.build(),
+                        UC_save.build(),
+                        UC_update.build(),
+                        UC_reset.build()
+                ),
+                Menu_RC.nodes(
+                        RC_page.build(),
+                        RC_save.build(),
+                        RC_update.build()
                 )
-        );
+        ));
 
     }
 
@@ -51,7 +52,7 @@ public class AuthorityService {
      * @return {@link List<Authority>}
      */
     private static List<Authority> recursion(final Set<Authority> tree) {
-        final Set<Authority> list = new HashSet<>();
+        final Set<Authority> list = new LinkedHashSet<>();
         tree.forEach(node -> {
             if (Objects.nonNull(node.getNodes()) && !node.getNodes().isEmpty()) {
                 list.addAll(recursion(node.getNodes()).stream().peek(item -> item.setParentCode(node.getCode())).collect(Collectors.toList()));
@@ -68,7 +69,7 @@ public class AuthorityService {
      * @return {@link Set<Authority>}
      */
     private static Set<Authority> recursionChecked(final Set<Authority> tree) {
-        final Set<Authority> list = new HashSet<>();
+        final Set<Authority> list = new LinkedHashSet<>();
         tree.forEach(node -> {
             if (Objects.nonNull(node.getNodes()) && !node.getNodes().isEmpty()) {
                 final Set<Authority> nodes = recursionChecked(node.getNodes()).stream()
@@ -129,7 +130,7 @@ public class AuthorityService {
 //        System.out.println(JSON.toJSONString(TREE));
 //        System.out.println(JSON.toJSONString(LIST));
 //        System.out.println(new PermissionService().expendFilterCheckedSet(
-//                JSON.parseArray("[{\"code\": \"Menu_Home\", \"name\": \"主页\", \"type\": \"MENU\", \"nodes\": [{\"code\": \"HomeController_getDemoA\", \"name\": \"虚拟查询接口1\", \"type\": \"LOAD\", \"checked\": true}, {\"code\": \"HomeController_getDemoB\", \"name\": \"虚拟查询接口2\", \"type\": \"LOAD\", \"checked\": false}, {\"code\": \"HomeController_getDemoC\", \"name\": \"虚拟查询接口3\", \"type\": \"LOAD\", \"checked\": false}], \"checked\": false}, {\"code\": \"Menu_User_Setting\", \"name\": \"用户权限\", \"type\": \"MENU\", \"nodes\": [{\"code\": \"Menu_User\", \"name\": \"用户\", \"type\": \"MENU\", \"nodes\": [{\"code\": \"UserController_page\", \"name\": \"分页查询\", \"type\": \"LOAD\", \"checked\": false}, {\"code\": \"UserController_save\", \"name\": \"新增按钮，保存数据\", \"type\": \"BUTTON\", \"checked\": false}], \"checked\": false}, {\"code\": \"Menu_Role\", \"name\": \"角色\", \"type\": \"MENU\", \"nodes\": [{\"code\": \"RoleController_page\", \"name\": \"分页查询\", \"type\": \"LOAD\", \"checked\": true}, {\"code\": \"RoleController_save\", \"name\": \"新增按钮，保存数据\", \"type\": \"BUTTON\", \"checked\": false}, {\"code\": \"RoleController_update\", \"name\": \"更新按钮，更新单条数据\", \"type\": \"BUTTON\", \"checked\": false}, {\"code\": \"RoleController_markDeleteById\", \"name\": \"逻辑删除按钮，逻辑删除单条数据\", \"type\": \"BUTTON\", \"checked\": false}, {\"code\": \"RoleController_markDeleteByIds\", \"name\": \"批量逻辑删除按钮，批量逻辑删除多条数据\", \"type\": \"BUTTON\", \"checked\": false}, {\"code\": \"RoleController_getById\", \"name\": \"查看详情按钮，查看单条数据详情\", \"type\": \"BUTTON\", \"checked\": false}], \"checked\": false}, {\"code\": \"Menu_Permission\", \"name\": \"权限\", \"type\": \"MENU\", \"nodes\": [{\"code\": \"PermissionController_list\", \"name\": \"查询列表\", \"type\": \"LOAD\", \"checked\": true}], \"checked\": false}], \"checked\": false}, {\"code\": \"Menu_Setting\", \"name\": \"系统设置\", \"type\": \"MENU\", \"nodes\": [{\"code\": \"Menu_Setting_Config\", \"name\": \"系统配置信息\", \"type\": \"MENU\", \"nodes\": [{\"code\": \"AdminConfigController_getApp\", \"name\": \"查看 APP 配置参数\", \"type\": \"LOAD\", \"checked\": false}, {\"code\": \"AdminConfigController_getPath\", \"name\": \"查看 APP 文件路径\", \"type\": \"LOAD\", \"checked\": false}, {\"code\": \"AdminConfigController_getUrl\", \"name\": \"查看 APP 文件访问地址\", \"type\": \"LOAD\", \"checked\": false}, {\"code\": \"AdminConfigController_getByKey\", \"name\": \"查看 APP 指定配置\", \"type\": \"LOAD\", \"checked\": false}], \"checked\": false}], \"checked\": true}]", AuthorityCode.class)
+//                JSON.parseArray("[{\"code\": \"Menu_Home\", \"name\": \"主页\", \"type\": \"MENU\", \"nodes\": [{\"code\": \"HomeController_getDemoA\", \"name\": \"虚拟查询接口1\", \"type\": \"LOAD\", \"checked\": true}, {\"code\": \"HomeController_getDemoB\", \"name\": \"虚拟查询接口2\", \"type\": \"LOAD\", \"checked\": false}, {\"code\": \"HomeController_getDemoC\", \"name\": \"虚拟查询接口3\", \"type\": \"LOAD\", \"checked\": false}], \"checked\": false}, {\"code\": \"Menu_User_Setting\", \"name\": \"用户权限\", \"type\": \"MENU\", \"nodes\": [{\"code\": \"Menu_User\", \"name\": \"用户\", \"type\": \"MENU\", \"nodes\": [{\"code\": \"UserController_page\", \"name\": \"分页查询\", \"type\": \"LOAD\", \"checked\": false}, {\"code\": \"UserController_save\", \"name\": \"新增按钮，保存数据\", \"type\": \"BUTTON\", \"checked\": false}], \"checked\": false}, {\"code\": \"Menu_RC\", \"name\": \"角色\", \"type\": \"MENU\", \"nodes\": [{\"code\": \"RoleController_page\", \"name\": \"分页查询\", \"type\": \"LOAD\", \"checked\": true}, {\"code\": \"RoleController_save\", \"name\": \"新增按钮，保存数据\", \"type\": \"BUTTON\", \"checked\": false}, {\"code\": \"RoleController_update\", \"name\": \"更新按钮，更新单条数据\", \"type\": \"BUTTON\", \"checked\": false}, {\"code\": \"RoleController_markDeleteById\", \"name\": \"逻辑删除按钮，逻辑删除单条数据\", \"type\": \"BUTTON\", \"checked\": false}, {\"code\": \"RoleController_markDeleteByIds\", \"name\": \"批量逻辑删除按钮，批量逻辑删除多条数据\", \"type\": \"BUTTON\", \"checked\": false}, {\"code\": \"RoleController_getById\", \"name\": \"查看详情按钮，查看单条数据详情\", \"type\": \"BUTTON\", \"checked\": false}], \"checked\": false}, {\"code\": \"Menu_Permission\", \"name\": \"权限\", \"type\": \"MENU\", \"nodes\": [{\"code\": \"PermissionController_list\", \"name\": \"查询列表\", \"type\": \"LOAD\", \"checked\": true}], \"checked\": false}], \"checked\": false}, {\"code\": \"Menu_Setting\", \"name\": \"系统设置\", \"type\": \"MENU\", \"nodes\": [{\"code\": \"Menu_Setting_Config\", \"name\": \"系统配置信息\", \"type\": \"MENU\", \"nodes\": [{\"code\": \"AdminConfigController_getApp\", \"name\": \"查看 APP 配置参数\", \"type\": \"LOAD\", \"checked\": false}, {\"code\": \"AdminConfigController_getPath\", \"name\": \"查看 APP 文件路径\", \"type\": \"LOAD\", \"checked\": false}, {\"code\": \"AdminConfigController_getUrl\", \"name\": \"查看 APP 文件访问地址\", \"type\": \"LOAD\", \"checked\": false}, {\"code\": \"AdminConfigController_getByKey\", \"name\": \"查看 APP 指定配置\", \"type\": \"LOAD\", \"checked\": false}], \"checked\": false}], \"checked\": true}]", AuthorityCode.class)
 //        ));
 //    }
 }

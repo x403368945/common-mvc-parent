@@ -37,21 +37,19 @@ public class AuthorityController implements IAuthController<Long, Authority> {
     @ApiOperation(value = "1.获取全部权限配置树集合", tags = {"1.0.0"})
     @ApiOperationSupport(order = 1)
     @GetMapping("/tree")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'Menu_Role')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'Menu_RC')")
     @ResponseBody
     public Result<Authority> tree(@ApiIgnore @AuthenticationPrincipal final TabUser user) {
-        return new Result<Authority>()
-                .execute(result -> result.setSuccess(Lists.newArrayList(service.getTree())));
+        return new Result<Authority>().execute(result -> result.setSuccess(Lists.newArrayList(service.getTree())));
     }
 
     @ApiOperation(value = "2.获取全部展开后的权限配置集合，可通过 parentCode 构造成权限树", tags = {"1.0.0"})
     @ApiOperationSupport(order = 2)
     @GetMapping("/list")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'Menu_Role')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'Menu_RC')")
     @ResponseBody
     public Result<Authority> list(@ApiIgnore @AuthenticationPrincipal final TabUser user) {
-        return new Result<Authority>()
-                .execute(result -> result.setSuccess(service.getList()));
+        return new Result<Authority>().execute(result -> result.setSuccess(service.getList()));
     }
 
 }

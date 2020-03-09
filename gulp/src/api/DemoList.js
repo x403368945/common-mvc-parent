@@ -6,19 +6,17 @@ import Result from '../utils/entity/Result';
  * 请求 url 定义
  * @author 谢长春 2019-7-28
  */
-const DEMO_LIST_URL = Object.freeze({
-  save: '/1/demo-list', // 新增
-  update: '/1/demo-list/{id}', // 修改
-  deleteById: '/1/demo-list/{id}', // 按 id 删除
-  deleteByUid: '/1/demo-list/{id}/{uid}', // 按 id + uid 删除
-  markDeleteById: '/1/demo-list/{id}', // 按 id 逻辑删除
-  markDeleteByUid: '/1/demo-list/{id}/{uid}', // 按 id + uid 逻辑删除
-  markDelete: '/1/demo-list', // 按 id + uid 批量逻辑删除
-  findById: '/1/demo-list/{id}', // 按 id 查询单条记录
-  findByUid: '/1/demo-list/{id}/{uid}', // 按 id + uid + 时间戳 查询单条记录
-  search: '/1/demo-list', // 多条件批量查询，不分页
-  page: '/1/demo-list/page/{number}/{size}' // 分页：多条件批量查询
-});
+const saveURL = '/1/demo-list'; // 新增
+const updateURL = '/1/demo-list/{id}'; // 修改
+const deleteByIdURL = '/1/demo-list/{id}'; // 按 id 删除
+const deleteByUidURL = '/1/demo-list/{id}/{uid}'; // 按 id + uid 删除
+const markDeleteByIdURL = '/1/demo-list/{id}'; // 按 id 逻辑删除
+const markDeleteByUidURL = '/1/demo-list/{id}/{uid}'; // 按 id + uid 逻辑删除
+const markDeleteURL = '/1/demo-list'; // 按 id + uid 批量逻辑删除
+const findByIdURL = '/1/demo-list/{id}'; // 按 id 查询单条记录
+const findByUidURL = '/1/demo-list/{id}/{uid}'; // 按 id + uid + 时间戳 查询单条记录
+const searchURL = '/1/demo-list'; // 多条件批量查询，不分页
+const pageURL = '/1/demo-list/page/{number}/{size}'; // 分页：多条件批量查询
 
 /**
  * 后台服务请求：参考案例：实体表操作
@@ -48,6 +46,15 @@ export class DemoListService {
    * @param vo {DemoListVO} 参考案例对象
    */
   constructor(vo) {
+    let vobject = null;
+    if (vo) {
+      vobject = new DemoListVO({...vo});
+      Object.keys(vobject).forEach(key => { // 移除空字符串参数，前端组件默认值为空字符串，带到后端查询会有问题
+        if (vobject[key] === '') {
+          delete vobject[key];
+        }
+      })
+    }
     /**
      * 参考案例对象
      * @type {DemoListVO}
@@ -65,7 +72,7 @@ export class DemoListService {
    */
   async save() {
     return await axios
-      .post(DEMO_LIST_URL.save, this.vo)
+      .post(saveURL, this.vo)
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -77,7 +84,7 @@ export class DemoListService {
   async update() {
     const {id, ...body} = this.vo;
     return await axios
-      .put(DEMO_LIST_URL.update.format(id || 0), body)
+      .put(updateURL.format(id || 0), body)
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -89,7 +96,7 @@ export class DemoListService {
   async deleteById() {
     const {id} = this.vo;
     return await axios
-      .delete(DEMO_LIST_URL.deleteById.format(id || 0))
+      .delete(deleteByIdURL.format(id || 0))
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -101,7 +108,7 @@ export class DemoListService {
   async deleteByUid() {
     const {id, uid} = this.vo;
     return await axios
-      .delete(DEMO_LIST_URL.deleteByUid.format(id || 0, uid))
+      .delete(deleteByUidURL.format(id || 0, uid))
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -113,7 +120,7 @@ export class DemoListService {
   async markDeleteById() {
     const {id} = this.vo;
     return await axios
-      .patch(DEMO_LIST_URL.markDeleteById.format(id || 0))
+      .patch(markDeleteByIdURL.format(id || 0))
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -125,7 +132,7 @@ export class DemoListService {
   async markDeleteByUid() {
     const {id, uid} = this.vo;
     return await axios
-      .patch(DEMO_LIST_URL.markDeleteByUid.format(id || 0, uid))
+      .patch(markDeleteByUidURL.format(id || 0, uid))
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -137,7 +144,7 @@ export class DemoListService {
   async markDelete() {
     const {uids} = this.vo;
     return await axios
-      .patch(DEMO_LIST_URL.markDelete, uids)
+      .patch(markDeleteURL, uids)
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -146,10 +153,10 @@ export class DemoListService {
    * 按 id + 时间戳 查询单条记录
    * @return {Promise<Result>}
    */
-  async findByIdTimestamp() {
+  async findById() {
     const {id, timestamp} = this.vo;
     return await axios
-      .get(DEMO_LIST_URL.findByIdTimestamp.format(id || 0, timestamp))
+      .get(findByIdURL.format(id || 0, timestamp))
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -158,10 +165,10 @@ export class DemoListService {
    * 按 id + uid + 时间戳 查询单条记录
    * @return {Promise<Result>}
    */
-  async findByUidTimestamp() {
+  async findByUid() {
     const {id, uid, timestamp} = this.vo;
     return await axios
-      .get(DEMO_LIST_URL.findByUidTimestamp.format(id || 0, uid, timestamp))
+      .get(findByUidURL.format(id || 0, uid, timestamp))
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -172,7 +179,7 @@ export class DemoListService {
    */
   async search() {
     return await axios
-      .get(DEMO_LIST_URL.search, {params: this.vo})
+      .get(searchURL, {params: this.vo})
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -182,9 +189,9 @@ export class DemoListService {
    * @return {Promise<Result>}
    */
   async pageable() {
-    const {page, params} = this.vo;
+    const {page, ...params} = this.vo;
     return await axios
-      .get(DEMO_LIST_URL.page.formatObject(page || Page.ofDefault()), {params})
+      .get(pageURL.formatObject(page || Page.ofDefault()), {params})
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -202,15 +209,6 @@ export default class DemoListVO {
    */
   static self(self) {
     return self;
-  }
-
-  /**
-   * 将 result 对象中的 data 集合转换为当前对象集合
-   * @param data {Array<object>}
-   * @return {Array<DemoListVO>}
-   */
-  static parseList(data) {
-    return data.map(new DemoListVO(data || {}));
   }
 
   /**

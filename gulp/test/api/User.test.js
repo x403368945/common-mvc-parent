@@ -31,7 +31,10 @@ export default class UserTest {
    */
   async login() {
     console.log('> 登录：管理员(admin:admin) ----------------------------------------------------------------------------------------------------');
-    (await UserVO.of({username: 'admin', password: 'admin'}).getService().login()).print().assertData();
+    (await UserVO.of({
+      username: 'admin',
+      password: 'admin'
+    }).getService().login()).print().assertData();
     return this;
   }
 
@@ -40,7 +43,10 @@ export default class UserTest {
    */
   async loginAdminBasic() {
     console.log('> 登录[basic]）：用户(admin:admin) ----------------------------------------------------------------------------------------------------');
-    axios.defaults.auth = {username: 'admin', password: 'admin'};
+    axios.defaults.auth = {
+      username: 'admin',
+      password: 'admin'
+    };
     return this;
   }
 
@@ -49,7 +55,10 @@ export default class UserTest {
    */
   async loginUserBasic() {
     console.log('> 登录[basic]：用户(user:111111) ----------------------------------------------------------------------------------------------------');
-    axios.defaults.auth = {username: 'user', password: '111111'};
+    axios.defaults.auth = {
+      username: 'user',
+      password: '111111'
+    };
     return this;
   }
 
@@ -77,7 +86,7 @@ export default class UserTest {
    */
   async updateNickname() {
     console.log('> 修改昵称 ----------------------------------------------------------------------------------------------------');
-    (await UserVO.of({nickname: '张三'}).getService().updateNickname()).print().assertVersion().assertCode();
+    (await UserVO.of({nickname: `管理员${Math.random()}`}).getService().updateNickname()).print().assertVersion().assertCode();
     return this;
   }
 
@@ -92,12 +101,14 @@ export default class UserTest {
       username: `${new Date().getTime()}`,
       password: '111111',
       nickname: '随机单个角色',
+      registerSource: 'TEMP',
       roleList: [sample(roles)]
     }).getService().save()).print().assertVersion().assertCode();
     (await UserVO.of({
       username: `${new Date().getTime()}`,
       password: '111111',
       nickname: '随机多个角色',
+      registerSource: 'TEMP',
       roleList: sampleSize(roles, parseInt(`${Math.random()}`.slice(-1)) + 1)
     }).getService().save()).print().assertVersion().assertCode();
     return this;
@@ -110,7 +121,9 @@ export default class UserTest {
   async update() {
     console.log('> 修改用户 ----------------------------------------------------------------------------------------------------');
     const {data: roles} = await new RoleService().options();
-    const {data: users} = await new UserVO().getService().pageable();
+    const {data: users} = await new UserVO({
+      registerSource: 'TEMP'
+    }).getService().pageable();
     const user = sample(users.filter(row => ![1, 2].includes(row.id)));
     (await UserVO.of(Object.assign(user, {
       nickname: `编辑用户-${new Date().formatDate()}`,
@@ -128,7 +141,8 @@ export default class UserTest {
     const {data: users} = await new UserVO().getService().pageable();
     const {id, uid} = sample(users);
     (await UserVO.of({
-      id, uid
+      id,
+      uid
     }).getService().findByUid()).print().assertVersion().assertCode().assertData();
     return this;
   }
@@ -159,6 +173,7 @@ export default class UserTest {
    */
   filename() {
     console.log(__filename);
+    console.log('');
     return this;
   }
 

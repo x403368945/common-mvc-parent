@@ -6,7 +6,6 @@ import com.support.mvc.entity.base.Item;
 /**
  * 枚举：Demo数据状态
  *
- *
  * @author 谢长春 2018/12/17
  */
 public enum DemoStatus {
@@ -19,10 +18,19 @@ public enum DemoStatus {
     /**
      * 枚举属性说明
      */
-    final String comment;
+    public final String comment;
+    /**
+     * 是否已废弃
+     */
+    public final boolean deprecated;
 
     DemoStatus(final String comment) {
+        this(comment, false);
+    }
+
+    DemoStatus(final String comment, final boolean deprecated) {
         this.comment = comment;
+        this.deprecated = deprecated;
     }
 
     /**

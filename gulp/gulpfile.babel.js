@@ -26,9 +26,6 @@ process.env.DEVELOPMENT = true;
 process.env.BROWSER = false;
 
 gulp.task('default', async () => {
-const vo = undefined;
-// const obj = {...vo};
-console.log([vo || 'aaa'])
 });
 
 gulp.task('listener', function () {
@@ -76,7 +73,8 @@ gulp.task('test', async () => {
 });
 gulp.task('test:one', async () => {
   devConfig();
-  (await UserTest.of().loginUserBasic());
+  (await UserTest.of().loginAdminBasic());
+  await RoleTest.of().testAll();
 });
 
 gulp.task('mysql:read:write', async () => {

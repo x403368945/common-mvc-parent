@@ -6,17 +6,17 @@ import Page from '../utils/entity/Page';
  * 请求 url 定义
  * @author 谢长春 2019-8-1
  */
-const USER_URL = Object.freeze({
-  login: '/login', // 登录
-  logout: '/logout', // 退出
-  currentUser: '/1/user/current', // 当前登录用户信息
-  updateNickname: '/1/user/nickname', // 修改昵称
-  save: '/1/user', // 新增用户
-  update: '/1/user/{id}', // 修改用户信息
-  findByUid: '/1/user/{id}/{uid}', // 查看用户详细信息
-  page: '/1/user/page/{number}/{size}' // 分页查看用户信息
-  // users: '/1/user/users/{roleId}' // 按角色查询用户集合
-});
+const loginURL = '/login'; // 登录
+const logoutURL = '/logout'; // 退出
+const currentUserURL = '/1/user/current'; // 当前登录用户信息
+const updateNicknameURL = '/1/user/nickname'; // 修改昵称
+const saveURL = '/1/user'; // 新增用户
+const updateURL = '/1/user/{id}'; // 修改用户信息
+const markDeleteByUidURL = '/1/user/{id}/{uid}'; // 按 id + uid 逻辑删除
+const markDeleteURL = '/1/user'; // 按 id + uid 批量逻辑删除
+const findByUidURL = '/1/user/{id}/{uid}'; // 查看用户详细信息
+const pageURL = '/1/user/page/{number}/{size}'; // 分页查看用户信息
+// users: '/1/user/users/{roleId}' // 按角色查询用户集合
 
 /**
  * 后台服务请求：用户
@@ -45,24 +45,20 @@ export class UserService {
    * @param vo {UserVO} 用户实体对象
    */
   constructor(vo) {
+    let vobject = null;
     if (vo) {
-      /**
-       * 用户实体对象
-       * @type {UserVO}
-       */
-      this.vo = new UserVO({...vo});
-      Object.keys(this.vo).forEach(key => { // 移除空字符串参数，前端组件默认值为空字符串，带到后端查询会有问题
-        if (this.vo[key] === '') {
-          delete this.vo[key];
+      vobject = new UserVO({...vo});
+      Object.keys(vobject).forEach(key => { // 移除空字符串参数，前端组件默认值为空字符串，带到后端查询会有问题
+        if (vobject[key] === '') {
+          delete vobject[key];
         }
       })
-    } else {
-      /**
-       * 用户实体对象
-       * @type {UserVO}
-       */
-      this.vo = new UserVO({});
     }
+    /**
+     * 用户实体对象
+     * @type {UserVO}
+     */
+    this.vo = vobject || new UserVO({});
   }
 
   toString() {
@@ -76,7 +72,7 @@ export class UserService {
   async login() {
     const {username, password} = this.vo;
     return await axios
-      .post(USER_URL.login, {
+      .post(loginURL, {
         username,
         password
       })
@@ -90,7 +86,7 @@ export class UserService {
    */
   async logout() {
     return await axios
-      .post(USER_URL.logout)
+      .post(logoutURL)
       .then(Result.ofResponse)
       .catch(Result.ofCatch)
   }
@@ -101,7 +97,7 @@ export class UserService {
    */
   async getCurrentUser() {
     return await axios
-      .get(USER_URL.currentUser)
+      .get(currentUserURL)
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -113,7 +109,7 @@ export class UserService {
   async updateNickname() {
     const {nickname} = this.vo;
     return await axios
-      .patch(USER_URL.updateNickname, {nickname})
+      .patch(updateNicknameURL, {nickname})
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -123,15 +119,16 @@ export class UserService {
    * @return {Promise<Result>}
    */
   async save() {
-    const {username, password, nickname, phone, email, roleList} = this.vo;
+    const {username, password, nickname, phone, email, roleList, registerSource} = this.vo;
     return await axios
-      .post(USER_URL.save, {
+      .post(saveURL, {
         username,
         password,
         nickname,
         phone,
         email,
-        roleList
+        roleList,
+        registerSource
       })
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
@@ -144,7 +141,31 @@ export class UserService {
   async update() {
     const {id, ...body} = this.vo;
     return await axios
-      .put(USER_URL.update.format(id || 0), body)
+      .put(updateURL.format(id || 0), body)
+      .then(Result.ofResponse)
+      .catch(Result.ofCatch);
+  }
+
+  /**
+   * 按 id + uid 逻辑删除
+   * @return {Promise<Result>}
+   */
+  async markDeleteByUid() {
+    const {id, uid} = this.vo;
+    return await axios
+      .patch(markDeleteByUidURL.format(id || 0, uid))
+      .then(Result.ofResponse)
+      .catch(Result.ofCatch);
+  }
+
+  /**
+   * 按 id + uid 批量逻辑删除
+   * @return {Promise<Result>}
+   */
+  async markDelete() {
+    const {markDeleteArray} = this.vo;
+    return await axios
+      .patch(markDeleteURL, markDeleteArray)
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -156,7 +177,7 @@ export class UserService {
   async findByUid() {
     const {id, uid} = this.vo;
     return await axios
-      .get(USER_URL.findByUid.format(id || 0, uid))
+      .get(findByUidURL.format(id || 0, uid))
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -166,9 +187,9 @@ export class UserService {
    * @return {Promise<Result>}
    */
   async pageable() {
-    const {page, ...params} = this.vo;
+    const {page, markDeleteArray, ...params} = this.vo;
     return await axios
-      .get(USER_URL.page.formatObject(page || Page.ofDefault()), {params})
+      .get(pageURL.formatObject(page || Page.ofDefault()), {params})
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -180,7 +201,7 @@ export class UserService {
   // async getUsersFromRole() {
   //   const {roleId} = this.vo;
   //   return await axios
-  //     .get(USER_URL.users.format(roleId))
+  //     .get(usersURL.format(roleId))
   //     .then(Result.ofResponse)
   //     .catch(Result.ofCatch);
   // }
@@ -218,9 +239,13 @@ export default class UserVO {
    * @param phone {string} 手机号
    * @param email {string} 邮箱
    * @param roles {Array<number>} 角色 ID 集合
+   * @param registerSource {string} 该属性目前只有测试时使用，常规接口不用传值，测试接口传 TEMP
    * @param roleList {Array<RoleVO>} 新增用户时，选择的角色集合，经过验证之后，将角色 ID 保存到 roles
    * @param authorityList {Array<string>} 角色对应的权限指令集合
    * @param roleId {number} 角色 id {@link RoleVO#id}，按角色查询用户列表时使用该字段
+   * @param sorts {Array<OrderBy>} 排序字段集合
+   * @param page {Page} 分页对象
+   * @param markDeleteArray {Array<MarkDelete>} 批量删除
    */
   constructor({
                 id = undefined,
@@ -231,9 +256,13 @@ export default class UserVO {
                 phone = undefined,
                 email = undefined,
                 roles = undefined,
+                registerSource = undefined,
                 roleList = undefined,
                 authorityList = undefined,
-                roleId = undefined
+                roleId = undefined,
+                sorts = undefined,
+                page = undefined,
+                markDeleteArray = undefined
               } = {}) {
     /**
      * 数据 ID
@@ -276,6 +305,11 @@ export default class UserVO {
      */
     this.roles = roles;
     /**
+     * 该属性目前只有测试时使用，常规接口不用传值，测试接口传 TEMP
+     * @type {string}
+     */
+    this.registerSource = registerSource;
+    /**
      * 新增用户时，选择的角色集合，经过验证之后，将角色 ID 保存到 roles
      * @type {Array<RoleVO>}
      */
@@ -290,6 +324,21 @@ export default class UserVO {
      * @type {number}
      */
     this.roleId = roleId;
+    /**
+     * 排序字段集合
+     * @type {Array<OrderBy>}
+     */
+    this.sorts = sorts;
+    /**
+     * 分页对象
+     * @type {Page}
+     */
+    this.page = page;
+    /**
+     * 批量删除
+     * @type {Array<MarkDelete>}
+     */
+    this.markDeleteArray = markDeleteArray;
   }
 
   toString() {

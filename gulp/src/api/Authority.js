@@ -5,10 +5,8 @@ import Result from '../utils/entity/Result';
  * 请求 url 定义
  * @author 谢长春 2019-8-30
  */
-const AUTHORITY_URL = Object.freeze({
-  list: '/1/authority/list', // 权限指令列表
-  tree: '/1/authority/tree' // 权限指令树
-});
+const listURL = '/1/authority/list'; // 权限指令列表
+const treeURL = '/1/authority/tree'; // 权限指令树
 
 /**
  * 后台服务请求：权限指令
@@ -38,29 +36,20 @@ export class AuthorityService {
    * @param vo {AuthorityVO} 参考案例对象
    */
   constructor(vo) {
+    let vobject = null;
+    if (vo) {
+      vobject = new AuthorityVO({...vo});
+      Object.keys(vobject).forEach(key => { // 移除空字符串参数，前端组件默认值为空字符串，带到后端查询会有问题
+        if (vobject[key] === '') {
+          delete vobject[key];
+        }
+      })
+    }
     /**
      * 参考案例对象
      * @type {AuthorityVO}
      */
-    this.vo = vo || new AuthorityVO({});
-    if (vo) {
-      /**
-       * 参考案例对象
-       * @type {AuthorityVO}
-       */
-      this.vo = new AuthorityVO({...vo});
-      Object.keys(this.vo).forEach(key => { // 移除空字符串参数，前端组件默认值为空字符串，带到后端查询会有问题
-        if (this.vo[key] === '') {
-          delete this.vo[key];
-        }
-      })
-    } else {
-      /**
-       * 参考案例对象
-       * @type {AuthorityVO}
-       */
-      this.vo = new AuthorityVO({});
-    }
+    this.vo = vobject || new AuthorityVO({});
   }
 
   toString() {
@@ -73,7 +62,7 @@ export class AuthorityService {
    */
   async getTree() {
     return await axios
-      .get(AUTHORITY_URL.tree)
+      .get(treeURL)
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -84,7 +73,7 @@ export class AuthorityService {
    */
   async getList() {
     return await axios
-      .get(AUTHORITY_URL.list)
+      .get(listURL)
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -102,15 +91,6 @@ export default class AuthorityVO {
    */
   static self(self) {
     return self;
-  }
-
-  /**
-   * 将 result 对象中的 data 集合转换为当前对象集合
-   * @param data {Array<object>}
-   * @return {Array<AuthorityVO>}
-   */
-  static parseList(data) {
-    return data.map(AuthorityVO.of);
   }
 
   /**

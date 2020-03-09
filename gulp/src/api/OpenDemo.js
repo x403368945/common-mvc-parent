@@ -1,13 +1,11 @@
 import axios from 'axios';
 import Page from '../utils/entity/Page';
 import Result from '../utils/entity/Result';
-import Asserts from '../utils/entity/Asserts';
 
 /**
  * 请求 url 定义
  * @author 谢长春 2019-7-28
  */
-const OPEN_DEMO_URL = Object.freeze({
   // save: '', // 新增
   // update: '', // 修改
   // deleteById: '', // 按 id 删除
@@ -20,16 +18,15 @@ const OPEN_DEMO_URL = Object.freeze({
   // findByUidTimestamp: '', // 按 id + uid + 时间戳 查询单条记录
   // search: '', // 多条件批量查询，不分页
   // page: '' // 分页：多条件批量查询
-  codes: '/1/open/test/codes', // 查询所有状态码
-  save: '/1/open/test', // 新增
-  update: '/1/open/test/{id}', // 修改
-  deleteById: '/1/open/test/{id}', // 按 id 删除
-  markDeleteById: '/1/open/test/{id}', // 按 id 逻辑删除
-  markDelete: '/1/open/test', // 按 id + uid 批量逻辑删除
-  findById: '/1/open/test/{id}', // 按 id 查询单条记录
-  search: '/1/open/test', // 多条件批量查询，不分页
-  page: '/1/open/test/{number}/{size}' // 分页：多条件批量查询
-});
+const codesURL = '/1/open/test/codes';// 查询所有状态码
+const saveURL = '/1/open/test';// 新增
+const updateURL = '/1/open/test/{id}';// 修改
+const deleteByIdURL = '/1/open/test/{id}';// 按 id 删除
+const markDeleteByIdURL = '/1/open/test/{id}';// 按 id 逻辑删除
+const markDeleteURL = '/1/open/test';// 按 id + uid 批量逻辑删除
+const findByIdURL = '/1/open/test/{id}';// 按 id 查询单条记录
+const searchURL = '/1/open/test';// 多条件批量查询，不分页
+const pageURL = '/1/open/test/{number}/{size}';// 分页：多条件批量查询
 
 /**
  * 后台服务请求：参考案例：用于调试后端服务是否可用，以及基本传参格式是否正确，没有数据入库
@@ -59,7 +56,15 @@ export class OpenDemoService {
    * @param vo {OpenDemoVO} 参考案例对象
    */
   constructor(vo) {
-    Asserts.of().hasFalse(vo, () => 'vo');
+    let vobject = null;
+    if (vo) {
+      vobject = new OpenDemoVO({...vo});
+      Object.keys(vobject).forEach(key => { // 移除空字符串参数，前端组件默认值为空字符串，带到后端查询会有问题
+        if (vobject[key] === '') {
+          delete vobject[key];
+        }
+      })
+    }
     /**
      * 参考案例对象
      * @type {OpenDemoVO}
@@ -77,7 +82,7 @@ export class OpenDemoService {
    */
   async codes() {
     return await axios
-      .get(OPEN_DEMO_URL.codes)
+      .get(codesURL)
       .then(Result.ofResponse)
       .catch(Result.ofCatch)
   }
@@ -89,7 +94,7 @@ export class OpenDemoService {
   async save() {
     const {name, phone} = this.vo;
     return await axios
-      .post(OPEN_DEMO_URL.save, {
+      .post(saveURL, {
         json: {
           name,
           phone
@@ -106,7 +111,7 @@ export class OpenDemoService {
   async update() {
     const {id, name, phone} = this.vo;
     return await axios
-      .put(OPEN_DEMO_URL.update.format(id || 0), {
+      .put(updateURL.format(id || 0), {
         json: {
           name,
           phone
@@ -123,7 +128,7 @@ export class OpenDemoService {
   async deleteById() {
     const {id} = this.vo;
     return await axios
-      .delete(OPEN_DEMO_URL.deleteById.format(id || 0))
+      .delete(deleteByIdURL.format(id || 0))
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -135,7 +140,7 @@ export class OpenDemoService {
   async markDeleteById() {
     const {id} = this.vo;
     return await axios
-      .patch(OPEN_DEMO_URL.markDeleteById.format(id || 0))
+      .patch(markDeleteByIdURL.format(id || 0))
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -147,7 +152,7 @@ export class OpenDemoService {
   async markDelete() {
     const {ids} = this.vo;
     return await axios
-      .patch(OPEN_DEMO_URL.markDelete, {json: ids})
+      .patch(markDeleteURL, {json: ids})
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -159,7 +164,7 @@ export class OpenDemoService {
   async findById() {
     const {id} = this.vo;
     return await axios
-      .get(OPEN_DEMO_URL.findById.format(id || 0))
+      .get(findByIdURL.format(id || 0))
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -171,7 +176,7 @@ export class OpenDemoService {
   async search() {
     const {id, name, phone} = this.vo;
     return await axios
-      .get(OPEN_DEMO_URL.search, {
+      .get(searchURL, {
         params: {
           json: {
             id,
@@ -191,7 +196,7 @@ export class OpenDemoService {
   async pageable() {
     const {id, name, phone, page} = this.vo;
     return await axios
-      .get(OPEN_DEMO_URL.page.formatObject(page || Page.ofDefault()),
+      .get(pageURL.formatObject(page || Page.ofDefault()),
         {
           params: {
             json: {
@@ -219,15 +224,6 @@ export default class OpenDemoVO {
    */
   static self(self) {
     return self;
-  }
-
-  /**
-   * 将 result 对象中的 data 集合转换为当前对象集合
-   * @param data {Array}
-   * @return {Array<OpenDemoVO>}
-   */
-  static parseList(data) {
-    return data.map(new OpenDemoVO(data || {}));
   }
 
   /**

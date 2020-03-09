@@ -39,7 +39,7 @@ public class RoleController implements IAuthController<Long, TabRole> {
     private final RoleService service;
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'RC', 'RC_save')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'RC_save')")
     @ApiOperation(value = "1.新增角色", tags = {"1.0.0"})
     @ApiImplicitParam(name = "body", dataType = "TabRole", dataTypeClass = TabRole.class, required = true)
     @ApiOperationSupport(
@@ -57,7 +57,7 @@ public class RoleController implements IAuthController<Long, TabRole> {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'RC', 'RC_update')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'RC_update')")
     @ApiOperation(value = "2.修改角色", tags = {"1.0.0"})
     @ApiImplicitParam(name = "body", dataType = "TabRole", dataTypeClass = TabRole.class, required = true)
     @ApiOperationSupport(
@@ -73,7 +73,7 @@ public class RoleController implements IAuthController<Long, TabRole> {
     }
 
     @PatchMapping("/{id}/{uid}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'RC', 'RC_delete')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'RC_delete')")
     @ApiOperation(value = "3.逻辑删除角色", tags = {"1.0.0"})
     @ApiOperationSupport(order = 3)
     @ResponseBody
@@ -83,7 +83,7 @@ public class RoleController implements IAuthController<Long, TabRole> {
     }
 
     @PatchMapping
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'RC', 'RC_delete')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'RC_delete')")
     @ApiOperation(value = "4.批量逻辑删除角色表", tags = {"1.0.0"})
     @ApiOperationSupport(order = 4) // order id 相同的接口只能开放一个
     @ResponseBody
@@ -93,6 +93,7 @@ public class RoleController implements IAuthController<Long, TabRole> {
     }
 
     @GetMapping("/{id}/{uid}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'Menu_RC', 'RC_findByUid')")
     @ApiOperation(value = "5.按 id 和 uid 查询角色", tags = {"1.0.0"})
     @ApiOperationSupport(order = 5)
     @ResponseBody
@@ -101,8 +102,8 @@ public class RoleController implements IAuthController<Long, TabRole> {
         return new Result<TabRole>().execute(result -> result.setSuccess(service.findByUid(id, uid).orElse(null)));
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'Menu_Role', 'RC', 'RC_page')")
     @GetMapping("/page/{number}/{size}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'Menu_RC', 'RC_page')")
     @ApiOperation(value = "6.分页查询角色", tags = {"1.0.0"})
     @ApiOperationSupport(
             order = 6,
@@ -118,6 +119,7 @@ public class RoleController implements IAuthController<Long, TabRole> {
     }
 
     @GetMapping("/options")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'Menu_RC', 'RC_options')")
     @ApiOperation(value = "7.获取所有有效角色列表", tags = {"1.0.0"})
     @ApiOperationSupport(order = 7)
     @ResponseBody

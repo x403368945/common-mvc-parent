@@ -3,7 +3,8 @@ package com.ccx.demo.business.user.enums;
 import com.ccx.demo.business.user.vo.Authority;
 import com.google.common.collect.Sets;
 
-import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.ccx.demo.business.user.enums.AuthorityType.*;
 
@@ -14,7 +15,7 @@ import static com.ccx.demo.business.user.enums.AuthorityType.*;
  *
  * 命名规则：
  *   Menu_*: 首页菜单相关的权限
- *   {*Controller}_*: Controller 方法头上注解，规则 【{Controller 全称}_{方法名} => UC_deleteById】
+ *   {*C}_*: Controller 方法头上注解，规则 【*C_{方法名} => UC_deleteById】
  *
  * @author 谢长春 2019/8/27
  */
@@ -57,6 +58,6 @@ public enum AuthorityCode {
     }
 
     public Authority nodes(final Authority... nodes) {
-        return build().setNodes(Sets.newHashSet(nodes));
+        return build().setNodes(Stream.of(nodes).collect(Collectors.toCollection(Sets::newLinkedHashSet)));
     }
 }

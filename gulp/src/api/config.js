@@ -5,21 +5,22 @@
 import axios from 'axios';
 import isObject from 'lodash/isObject';
 
-axios.defaults.paramsSerializer = params => {
+const buildSearchParams = params => {
   // url 带参如果包含对象，需要经过转换，变成字符串，否则 axios 会出错
   if (params) {
     const searchParams = new URLSearchParams();
     Object.keys(params).filter(key => params[key]).forEach(key => {
       if (isObject(params[key])) {
-        searchParams.append(key, params[key]);
-      } else {
         searchParams.append(key, JSON.stringify(params[key]));
+      } else {
+        searchParams.append(key, params[key]);
       }
     });
     return searchParams.toString();
   }
   return '';
 };
+axios.defaults.paramsSerializer = buildSearchParams;
 /**
  * 开发环境 http 请求配置
  */
@@ -28,13 +29,8 @@ export const devConfig = () => {
   axios.interceptors.request.use(config => { // request 拦截器，拦截清秀参数，打印日志
     const {method, baseURL, url, params, data} = config;
     if (method.toUpperCase() === 'GET') {
-      const urlSearchParams = '';
-      // if (params) {
-      //   const searchParams = new URLSearchParams();
-      //   Object.keys(params).filter(key => params[key]).forEach(key => searchParams.append(key, JSON.stringify(params[key])));
-      //   urlSearchParams = `?${searchParams.toString()}`;
-      // }
-      console.log(JSON.stringify([method.toUpperCase(), `${baseURL}${url}${urlSearchParams}`, params]));
+      const searchParams = buildSearchParams(params);
+      console.log(JSON.stringify([method.toUpperCase(), `${baseURL}${url}${searchParams ? `?${searchParams}` : ''}`, params]));
     } else {
       console.log(JSON.stringify([method.toUpperCase(), `${baseURL}${url}`, data]));
     }

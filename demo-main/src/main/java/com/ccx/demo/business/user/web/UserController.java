@@ -86,7 +86,7 @@ public class UserController implements IAuthController<Long, TabUser> {
     }
 
     @PatchMapping("/{id}/{uid}")
-    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'UC_delete')")
     @ApiOperation(value = "4.逻辑删除用户表", tags = {"2020-03-08"})
     @ApiOperationSupport(order = 4) // order id 相同的接口只能开放一个<
     @ResponseBody
@@ -96,7 +96,7 @@ public class UserController implements IAuthController<Long, TabUser> {
     }
 
     @PatchMapping
-    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'UC_delete')")
     @ApiOperation(value = "5.批量逻辑删除用户表", tags = {"2020-03-08"})
     @ApiOperationSupport(order = 5) // order id 相同的接口只能开放一个<
     @ResponseBody
@@ -106,7 +106,7 @@ public class UserController implements IAuthController<Long, TabUser> {
     }
 
     @GetMapping("/{id}/{uid}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'UC_findByUid')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'Menu_UC', 'UC_findByUid')")
     @ApiOperation(value = "6.按 id 和 uid 查询用户表", tags = {"2020-03-08"})
     @ApiOperationSupport(order = 6) // order id 相同的接口只能开放一个<
     @ResponseBody
@@ -116,7 +116,7 @@ public class UserController implements IAuthController<Long, TabUser> {
     }
 
     @GetMapping("/page/{number}/{size}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'Menu_User')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'Menu_UC', 'Menu_page')")
     @ApiOperation(value = "7.分页查询用户表", tags = {"2020-03-08"})
     @ApiOperationSupport(
             order = 7,

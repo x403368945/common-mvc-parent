@@ -1,19 +1,19 @@
 import axios from 'axios';
 import Page from '../utils/entity/Page';
 import Result from '../utils/entity/Result';
+import AuthorityVO from './Authority';
 
 /**
  * 请求 url 定义
  * @author 谢长春 2019-8-30
  */
-const ROLE_URL = Object.freeze({
-  save: '/1/role', // 新增
-  update: '/1/role/{id}', // 修改
-  markDeleteByUid: '/1/role/{id}/{uid}', // 按 id + uid 逻辑删除
-  findByUid: '/1/role/{id}/{uid}', // 按 id + uid + 时间戳 查询单条记录
-  page: '/1/role/page/{number}/{size}', // 分页：多条件批量查询
-  options: '/1/role/options' // 角色下拉列表选项
-});
+const saveURL = '/1/role'; // 新增
+const updateURL = '/1/role/{id}'; // 修改
+const markDeleteByUidURL = '/1/role/{id}/{uid}'; // 按 id + uid 逻辑删除
+const markDeleteURL = '/1/role'; // 按 id + uid 批量逻辑删除
+const findByUidURL = '/1/role/{id}/{uid}'; // 按 id + ui 查询单条记录
+const pageURL = '/1/role/page/{number}/{size}'; // 分页：多条件批量查询
+const optionsURL = '/1/role/options';// 角色下拉列表选项
 
 /**
  * 后台服务请求：角色
@@ -43,6 +43,15 @@ export class RoleService {
    * @param vo {RoleVO} 参考案例对象
    */
   constructor(vo) {
+    let vobject = null;
+    if (vo) {
+      vobject = new RoleVO({...vo});
+      Object.keys(vobject).forEach(key => { // 移除空字符串参数，前端组件默认值为空字符串，带到后端查询会有问题
+        if (vobject[key] === '') {
+          delete vobject[key];
+        }
+      })
+    }
     /**
      * 参考案例对象
      * @type {RoleVO}
@@ -61,7 +70,7 @@ export class RoleService {
   async save() {
     const {name, authorityTree} = this.vo;
     return await axios
-      .post(ROLE_URL.save, {
+      .post(saveURL, {
         name,
         authorityTree
       })
@@ -76,7 +85,7 @@ export class RoleService {
   async update() {
     const {id, ...body} = this.vo;
     return await axios
-      .put(ROLE_URL.update.format(id || 0), body)
+      .put(updateURL.format(id || 0), body)
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -88,7 +97,19 @@ export class RoleService {
   async markDeleteByUid() {
     const {id, uid} = this.vo;
     return await axios
-      .patch(ROLE_URL.markDeleteByUid.format(id || 0, uid))
+      .patch(markDeleteByUidURL.format(id || 0, uid))
+      .then(Result.ofResponse)
+      .catch(Result.ofCatch);
+  }
+
+  /**
+   * 按 id + uid 批量逻辑删除
+   * @return {Promise<Result>}
+   */
+  async markDelete() {
+    const {markDeleteArray} = this.vo;
+    return await axios
+      .patch(markDeleteURL, markDeleteArray)
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -100,7 +121,7 @@ export class RoleService {
   async findByUid() {
     const {id, uid} = this.vo;
     return await axios
-      .get(ROLE_URL.findByUid.format(id || 0, uid))
+      .get(findByUidURL.format(id || 0, uid))
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -110,19 +131,9 @@ export class RoleService {
    * @return {Promise<Result>}
    */
   async pageable() {
-    const {id, name, amountRange, insertTimeRange, sorts, page} = this.vo;
+    const {page, markDeleteArray, ...params} = this.vo;
     return await axios
-      .get(ROLE_URL.page.formatObject(page || Page.ofDefault()),
-        {
-          params: {
-            id: id || undefined,
-            name: name || undefined,
-            amountRange,
-            insertTimeRange,
-            sorts
-          }
-        }
-      )
+      .get(pageURL.formatObject(page || Page.ofDefault()), {params})
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -133,7 +144,7 @@ export class RoleService {
    */
   async options() {
     return await axios
-      .get(ROLE_URL.options)
+      .get(optionsURL)
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -154,15 +165,6 @@ export default class RoleVO {
   }
 
   /**
-   * 将 result 对象中的 data 集合转换为当前对象集合
-   * @param data {Array<object>}
-   * @return {Array<RoleVO>}
-   */
-  static parseList(data) {
-    return data.map(new RoleVO(data || {}));
-  }
-
-  /**
    * 构造函数：内部应该列出所有可能的参数，并对参数做说明
    * @param id {number} 数据 ID
    * @param uid {string} 数据UUID，缓存和按ID查询时可使用强校验
@@ -179,6 +181,7 @@ export default class RoleVO {
    * @param timestamp {number} 按 id 查询时可能使用时间戳缓存
    * @param sorts {Array<OrderBy>} 排序字段集合
    * @param page {Page} 分页对象
+   * @param markDeleteArray {Array<MarkDelete>} 批量删除
    */
   constructor({
                 id = undefined,
@@ -195,7 +198,8 @@ export default class RoleVO {
                 deleted = undefined,
                 timestamp = undefined,
                 sorts = undefined,
-                page = undefined
+                page = undefined,
+                markDeleteArray = undefined
               } = {}) {
     /**
      * 数据 ID
@@ -272,6 +276,11 @@ export default class RoleVO {
      * @type {Page}
      */
     this.page = page;
+    /**
+     * 批量删除
+     * @type {Array<MarkDelete>}
+     */
+    this.markDeleteArray = markDeleteArray;
   }
 
   toString() {

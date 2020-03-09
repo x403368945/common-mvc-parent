@@ -2,6 +2,8 @@ package com.ccx.demo.business.user.vo;
 
 import com.alibaba.fastjson.annotation.JSONType;
 import com.ccx.demo.business.user.entity.TabUser;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
@@ -19,6 +21,7 @@ import java.util.stream.Stream;
  *
  * @author 谢长春
  */
+@ApiModel(description = "扩展用户实体VO")
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
@@ -37,6 +40,7 @@ public class TabUserVO extends TabUser {
     /**
      * 权限指令集合
      */
+    @ApiModelProperty(value = "权限指令代码集合")
     private List<String> authorityList;
 
     public List<String> getAuthorityList() {

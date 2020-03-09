@@ -67,7 +67,7 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(exclude = {"password"})
-@JSONType(orders = {"id", "uid", "subdomain", "username", "nickname", "phone", "email", "role", "registerSource", "deleted"})
+@JSONType(orders = {"id", "uid", "subdomain", "username", "nickname", "phone", "email", "avatar", "roles", "registerSource", "insertTime", "insertUserId", "updateTime", "updateUserId", "deleted"})
 public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere<JPAUpdateClause, QdslWhere> {
 
     private static final long serialVersionUID = 1945320644170494162L;
@@ -147,7 +147,6 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
     /**
      * 注册渠道
      */
-
     @Column(updatable = false)
     @ApiModelProperty(value = "账户注册渠道", hidden = true)
     private RegisterSource registerSource;
@@ -288,6 +287,7 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
                 .and(phone, () -> q.phone.eq(phone))
                 .and(email, () -> q.email.eq(email))
                 .and(subdomain, () -> q.subdomain.eq(subdomain))
+                .and(registerSource, () -> q.registerSource.eq(registerSource))
                 .and(insertUserId, () -> q.insertUserId.eq(insertUserId))
                 .and(updateUserId, () -> q.updateUserId.eq(updateUserId))
                 .and(q.deleted.eq(Objects.isNull(getDeleted()) ? Bool.NO : deleted))

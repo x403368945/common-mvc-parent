@@ -6,7 +6,6 @@ import com.support.mvc.entity.base.Item;
 /**
  * 用户注册渠道
  *
- *
  * @author 谢长春 2017年7月4日 下午5:19:05
  */
 public enum RegisterSource {
@@ -29,14 +28,28 @@ public enum RegisterSource {
     /**
      * 微信注册
      */
-    WECHAT("微信注册");
+    WECHAT("微信注册"),
+    /**
+     * 微信注册
+     */
+    @Deprecated TEMP("测试临时用户", true);
+
     /**
      * 枚举属性说明
      */
-    final String comment;
+    public final String comment;
+    /**
+     * 是否已废弃
+     */
+    public final boolean deprecated;
 
-    RegisterSource(String comment) {
+    RegisterSource(final String comment) {
+        this(comment, false);
+    }
+
+    RegisterSource(final String comment, final boolean deprecated) {
         this.comment = comment;
+        this.deprecated = deprecated;
     }
 
     /**
@@ -49,6 +62,7 @@ public enum RegisterSource {
                 .key(this.name())
                 .value(this.ordinal())
                 .comment(this.comment)
+                .deprecated(this.deprecated)
                 .build();
     }
 }
