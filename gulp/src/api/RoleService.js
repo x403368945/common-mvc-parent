@@ -1,12 +1,8 @@
 import axios from 'axios';
 import Page from '../utils/entity/Page';
 import Result from '../utils/entity/Result';
-import RoleVO from './entity/Role';
+import Role from './entity/Role';
 
-/**
- * 请求 url 定义
- * @author 谢长春 2019-8-30
- */
 const saveURL = '/1/role'; // 新增
 const updateURL = '/1/role/{id}'; // 修改
 const markDeleteByUidURL = '/1/role/{id}/{uid}'; // 按 id + uid 逻辑删除
@@ -31,7 +27,7 @@ export default class RoleService {
 
   /**
    * 静态构造函数
-   * @param vo {RoleVO} 参考案例对象
+   * @param vo {Role} 参考案例对象
    * @return {RoleService}
    */
   static of(vo) {
@@ -40,27 +36,19 @@ export default class RoleService {
 
   /**
    * 静态构造函数
-   * @param vo {RoleVO} 参考案例对象
+   * @param vo {Role} 参考案例对象
    */
-  constructor(vo) {
-    let vobject = null;
-    if (vo) {
-      vobject = new RoleVO({...vo});
-      Object.keys(vobject).forEach(key => { // 移除空字符串参数，前端组件默认值为空字符串，带到后端查询会有问题
-        if (vobject[key] === '') {
-          delete vobject[key];
-        }
-      })
-    }
+  constructor(vo = {}) {
     /**
      * 参考案例对象
-     * @type {RoleVO}
+     * @type {Role}
      */
-    this.vo = vo || new RoleVO({});
-  }
-
-  toString() {
-    return JSON.stringify(this)
+    this.vo = new Role({...vo});
+    Object.keys(this.vo).forEach(key => { // 移除空字符串参数，前端组件默认值为空字符串，带到后端查询会有问题
+      if (this.vo[key] === '') {
+        delete this.vo[key];
+      }
+    });
   }
 
   /**

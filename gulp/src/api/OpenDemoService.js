@@ -3,10 +3,6 @@ import Page from '../utils/entity/Page';
 import Result from '../utils/entity/Result';
 import OpenDemo from './entity/OpenDemo';
 
-/**
- * 请求 url 定义
- * @author 谢长春 2019-7-28
- */
 // save: '', // 新增
 // update: '', // 修改
 // deleteById: '', // 按 id 删除
@@ -56,25 +52,19 @@ export default class OpenDemoService {
    * 静态构造函数
    * @param vo {OpenDemo} 参考案例对象
    */
-  constructor(vo) {
-    let vobject = null;
-    if (vo) {
-      vobject = new OpenDemo({...vo});
-      Object.keys(vobject).forEach(key => { // 移除空字符串参数，前端组件默认值为空字符串，带到后端查询会有问题
-        if (vobject[key] === '') {
-          delete vobject[key];
-        }
-      })
-    }
+  constructor(vo = {}) {
     /**
      * 参考案例对象
      * @type {OpenDemo}
      */
-    this.vo = vo;
-  }
-
-  toString() {
-    return JSON.stringify(this)
+    this.vo = new OpenDemo({
+      ...vo
+    });
+    Object.keys(this.vo).forEach(key => { // 移除空字符串参数，前端组件默认值为空字符串，带到后端查询会有问题
+      if (this.vo[key] === '') {
+        delete this.vo[key];
+      }
+    });
   }
 
   /**

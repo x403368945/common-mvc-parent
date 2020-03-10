@@ -67,7 +67,7 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(exclude = {"password"})
-@JSONType(orders = {"id", "uid", "subdomain", "username", "nickname", "phone", "email", "avatar", "roles", "registerSource", "insertTime", "insertUserId", "updateTime", "updateUserId", "deleted"})
+@JSONType(orders = {"id", "uid", "domain", "username", "nickname", "phone", "email", "avatar", "roles", "registerSource", "insertTime", "insertUserId", "updateTime", "updateUserId", "deleted"})
 public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere<JPAUpdateClause, QdslWhere> {
 
     private static final long serialVersionUID = 1945320644170494162L;
@@ -89,7 +89,7 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
      * 子域名用户组
      */
     @Column(updatable = false)
-    @NotNull(groups = {ISave.class})
+//    @NotNull(groups = {ISave.class})
     @Size(max = 10)
     @ApiModelProperty(value = "子域名用户组", position = 3)
     private String domain;
@@ -111,7 +111,7 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
     /**
      * 用户昵称
      */
-    @NotNull(groups = {ISave.class})
+//    @NotNull(groups = {ISave.class})
     @Size(max = 30)
     @ApiModelProperty(value = "昵称", position = 6)
     private String nickname;
@@ -119,7 +119,7 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
      * 手机号
      */
     @Column(updatable = false)
-    @NotNull(groups = {ISave.class})
+//    @NotNull(groups = {ISave.class})
     @Size(max = 11)
     @ApiModelProperty(value = "手机号", position = 7)
     private String phone;
@@ -127,7 +127,7 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
      * 邮箱
      */
     @Column(updatable = false)
-    @NotNull(groups = {ISave.class})
+//    @NotNull(groups = {ISave.class})
     @Size(max = 30)
     @ApiModelProperty(value = "邮箱", position = 8)
     private String email;
@@ -162,7 +162,6 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
      * 创建用户ID
      */
     @Column(updatable = false)
-    @JSONField(serialize = false, deserialize = false)
     @NotNull(groups = {ISave.class})
     @Positive
     @ApiModelProperty(value = "新增操作人id", position = 13)

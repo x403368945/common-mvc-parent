@@ -12,10 +12,11 @@ import browser from 'browser-sync';
 import {query} from './src/utils/db-execute';
 import Table from './src/code/core/Table';
 import {devConfig} from './src/api/config'
-import UserTest from './test/api/User.test';
-import DemoListTest from './test/api/DemoList.test';
-import AuthorityTest from './test/api/Authority.test';
-import RoleTest from './test/api/Role.test';
+import UserServiceTest from './test/api/UserService.test';
+import DemoListServiceTest from './test/api/DemoListService.test';
+import AuthorityServiceTest from './test/api/AuthorityService.test';
+import RoleServiceTest from './test/api/RoleService.test';
+import CommonServiceTest from './test/api/CommonService.test';
 
 const web = browser.create();
 
@@ -30,15 +31,17 @@ gulp.task('default', async () => {
 
 gulp.task('test', async () => {
   devConfig();
-  // await OpenDemoTest.of().testAll();
-  await DemoListTest.of().testAll(); //
-  await UserTest.of().testAll(); // 测试用户相关的接口
-  await AuthorityTest.of().testAll();
-  await RoleTest.of().testAll();
+  // await OpenDemoServiceTest.of().testAll();
+  await DemoListServiceTest.of().testAll(); //
+  await UserServiceTest.of().testAll(); // 测试用户相关的接口
+  await AuthorityServiceTest.of().testAll();
+  await RoleServiceTest.of().testAll();
+  await CommonServiceTest.of().testAll();
 });
 gulp.task('test:one', async () => {
   devConfig();
-  (await UserTest.of().loginAdminBasic());
+  (await UserServiceTest.of().loginAdminBasic());
+  await CommonServiceTest.of().testAll();
 });
 
 gulp.task('replace:swagger:order:position', async () => {
@@ -78,10 +81,25 @@ async function db2java(option) {
   } = option;
 
   const mysql = require('mysql');
-  console.log([{database, host, user, password, port, table, template, pkg}]);
-  const connection = mysql.createConnection({database, host, user, password, port});
+  console.log([{
+    database,
+    host,
+    user,
+    password,
+    port,
+    table,
+    template,
+    pkg
+  }]);
+  const connection = mysql.createConnection({
+    database,
+    host,
+    user,
+    password,
+    port
+  });
   connection.connect();
-  const tables = await query(connection, `SHOW TABLE STATUS FROM ${database} `.concat(table && `where Name in ('${table.join("','")}')`));
+  const tables = await query(connection, `SHOW TABLE STATUS FROM ${database} `.concat(table && `where Name in ('${table.join('\',\'')}')`));
   console.table(tables);
   for (let i = 0, len = tables.length; i < len; i++) {
     const table = new Table(tables[i]);

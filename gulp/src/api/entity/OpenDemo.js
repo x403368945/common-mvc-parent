@@ -1,7 +1,7 @@
 import OpenDemoService from '../OpenDemoService';
 
 /**
- * 后台服务请求：参考案例：用于调试后端服务是否可用，以及基本传参格式是否正确，没有数据入库
+ * 实体：参考案例：用于调试后端服务是否可用，以及基本传参格式是否正确，没有数据入库
  * @author 谢长春 2019-7-28
  */
 export default class OpenDemo {

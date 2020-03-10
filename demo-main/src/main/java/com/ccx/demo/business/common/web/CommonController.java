@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.*;
 
@@ -64,6 +65,7 @@ public class CommonController {
         });
     }
 
+    @ApiIgnore
     @GetMapping("/system")
     @ApiOperation(value = "2.系统环境变量", tags = {"0.0.0"})
     @ApiOperationSupport(order = 2)

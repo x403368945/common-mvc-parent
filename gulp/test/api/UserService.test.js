@@ -2,23 +2,25 @@
  * 测试：后台服务请求：用户
  * @author 谢长春 2019-7-28
  */
-import UserVO, {UserService} from '../../src/api/User';
 import axios from 'axios';
 import sample from 'lodash/sample';
 import sampleSize from 'lodash/sampleSize';
-import {RoleService} from '../../src/api/Role';
+import User from '../../src/api/entity/User';
+import UserService from '../../src/api/UserService';
+import RoleService from '../../src/api/RoleService';
+import MarkDelete from '../../src/utils/entity/MarkDelete';
 
 /**
  * 当前登录用户
- * @type {UserVO}
+ * @type {User}
  */
 export const sessionUser = {};
 
-export default class UserTest {
+export default class UserServiceTest {
   /**
    * js 中， 类对象在经过方法传递后无法推断类型，造成类方法和变量提示不准确，这里 self 转换之后可以得到正确的提示
-   * @param self {UserTest}
-   * @return {UserTest}
+   * @param self {UserServiceTest}
+   * @return {UserServiceTest}
    */
   static self(self) {
     return self;
@@ -26,26 +28,26 @@ export default class UserTest {
 
   /**
    * 静态构造函数
-   * @return {UserTest}
+   * @return {UserServiceTest}
    */
   static of() {
-    return new UserTest();
+    return new UserServiceTest();
   }
 
   /**
    * 获取当前登录用户信息
-   * @return {UserVO}
+   * @return {User}
    */
   getSessionUser() {
     return sessionUser;
   }
 
   /**
-   * @return {Promise<UserTest>}
+   * @return {Promise<UserServiceTest>}
    */
   async login() {
     console.log('> 登录：管理员(admin-test:admin) ----------------------------------------------------------------------------------------------------');
-    const result = (await UserVO.of({
+    const result = (await User.of({
       username: 'admin-test',
       password: 'admin'
     }).getService().login()).print().assertData();
@@ -59,10 +61,10 @@ export default class UserTest {
   }
 
   /**
-   * @return {Promise<UserTest>}
+   * @return {Promise<UserServiceTest>}
    */
   async loginAdminBasic() {
-    console.log('> 登录[basic]）：用户(admin-test:admin) ----------------------------------------------------------------------------------------------------');
+    console.log('> 登录[basic]：用户(admin-test:admin) ----------------------------------------------------------------------------------------------------');
     axios.defaults.auth = {
       username: 'admin-test',
       password: 'admin'
@@ -77,7 +79,7 @@ export default class UserTest {
   }
 
   /**
-   * @return {Promise<UserTest>}
+   * @return {Promise<UserServiceTest>}
    */
   async loginUserBasic() {
     console.log('> 登录[basic]：用户(user-test:111111) ----------------------------------------------------------------------------------------------------');
@@ -95,113 +97,146 @@ export default class UserTest {
   }
 
   /**
-   * @return {Promise<UserTest>}
+   * @return {Promise<UserServiceTest>}
    */
   async logout() {
     console.log('> 退出 ----------------------------------------------------------------------------------------------------');
-    (await UserVO.of().getService().logout()).print().assertVersion().assertCode();
+    (await User.of().getService().logout()).print().assertCode();
     return this;
   }
 
   /**
-   * @return {Promise<UserTest>}
+   * @return {Promise<UserServiceTest>}
    */
   async getCurrentUser() {
     console.log('> 获取当前登录用户信息 ----------------------------------------------------------------------------------------------------');
-    (await UserVO.of().getService().getCurrentUser()).print().assertVersion().assertData();
+    (await User.of().getService().getCurrentUser()).print().assertData();
     return this;
   }
 
   /**
    *
-   * @return {Promise<UserTest>}
+   * @return {Promise<UserServiceTest>}
    */
   async updateNickname() {
     console.log('> 修改昵称 ----------------------------------------------------------------------------------------------------');
-    (await UserVO.of({nickname: `管理员${Math.random()}`}).getService().updateNickname()).print().assertVersion().assertCode();
+    (await User.of({nickname: `管理员${Math.random()}`}).getService().updateNickname()).print().assertCode();
     return this;
   }
 
   /**
    *
-   * @return {Promise<UserTest>}
+   * @return {Promise<UserServiceTest>}
    */
   async save() {
     console.log('> 新增用户 ----------------------------------------------------------------------------------------------------');
     const {data: roles} = await new RoleService().options();
-    (await UserVO.of({
-      username: `${new Date().getTime()}`,
-      password: '111111',
-      nickname: '随机单个角色',
-      domain: 'test',
-      roleList: [sample(roles)]
-    }).getService().save()).print().assertVersion().assertCode();
-    (await UserVO.of({
-      username: `${new Date().getTime()}`,
-      password: '111111',
-      nickname: '随机多个角色',
-      domain: 'test',
-      roleList: sampleSize(roles, parseInt(`${Math.random()}`.slice(-1)) + 1)
-    }).getService().save()).print().assertVersion().assertCode();
+    for (let i = 0; i < 2; i++) {
+      (await User.of({
+        username: `${new Date().getTime()}`,
+        password: '111111',
+        nickname: '随机单个角色',
+        domain: 'test',
+        roleList: [sample(roles)]
+      }).getService().save()).print().assertCode();
+      (await User.of({
+        username: `${new Date().getTime()}`,
+        password: '111111',
+        nickname: '随机多个角色',
+        domain: 'test',
+        roleList: sampleSize(roles, parseInt(`${Math.random()}`.slice(-1)) + 1)
+      }).getService().save()).print().assertCode();
+    }
     return this;
   }
 
   /**
    *
-   * @return {Promise<UserTest>}
+   * @return {Promise<UserServiceTest>}
    */
   async update() {
     console.log('> 修改用户 ----------------------------------------------------------------------------------------------------');
     const {data: roles} = await new RoleService().options();
-    const {data: users} = await new UserVO({
+    const {data: users} = await new User({
       domain: 'test'
     }).getService().pageable();
     const user = sample(users.filter(row => ![1, 2, 3, 4].includes(row.id)));
-    (await UserVO.of(Object.assign(user, {
+    (await User.of(Object.assign(user, {
       nickname: `编辑用户-${new Date().formatDate()}`,
       roleList: sampleSize(roles, parseInt(`${Math.random()}`.slice(-1)) + 1)
-    })).getService().update()).print().assertVersion().assertCode();
+    })).getService().update()).print().assertCode();
+    return this;
+  }
+
+  /**
+   * @return {Promise<UserServiceTest>}
+   */
+  async markDeleteByUId() {
+    console.log('> 按 id + uid 逻辑删除：在查询结果集中随机选取一条数据 ----------------------------------------------------------------------------------------------------');
+    const {data} = (await new User({
+      insertUserId: sessionUser.id
+    }).getService().pageable()).assertData();
+    const {id, uid} = sample(data);
+    (await new User({
+      id,
+      uid
+    }).getService().markDeleteByUid()).print().assertCode();
+    return this;
+  }
+
+  /**
+   * @return {Promise<UserServiceTest>}
+   */
+  async markDelete() {
+    console.log('> 按 id + uid 批量逻辑删除：在查询结果集中随机选取 2 条数据 ----------------------------------------------------------------------------------------------------');
+    const {data} = (await new User({
+      insertUserId: sessionUser.id
+    }).getService().pageable()).assertData();
+    const arrs = sampleSize(data, 2);
+    (await new User({
+      markDeleteArray: arrs.map(row => new MarkDelete(row))
+    }).getService().markDelete()).print().assertCode();
     return this;
   }
 
   /**
    *
-   * @return {Promise<UserTest>}
+   * @return {Promise<UserServiceTest>}
    */
   async findByUid() {
     console.log('> 查看用户详细信息 ----------------------------------------------------------------------------------------------------');
-    const {data: users} = await new UserVO().getService().pageable();
+    const {data: users} = await new User().getService().pageable();
     const {id, uid} = sample(users);
-    (await UserVO.of({
+    (await User.of({
       id,
       uid
-    }).getService().findByUid()).print().assertVersion().assertCode().assertData();
+    }).getService().findByUid()).print().assertCode().assertData();
     return this;
   }
 
   /**
    *
-   * @return {Promise<UserTest>}
+   * @return {Promise<UserServiceTest>}
    */
   async pageable() {
     console.log('> 分页查询用户 ----------------------------------------------------------------------------------------------------');
-    (await UserVO.of().getService().pageable()).print().assertVersion().assertCode().assertData();
+    (await User.of().getService().pageable()).print().assertCode().assertData();
     return this;
   }
 
   // /**
   //  *
-  //  * @return {Promise<UserTest>}
+  //  * @return {Promise<UserServiceTest>}
   //  */
   // async getUsersFromRole() {
   //   console.log('> 按角色查询用户集合 ----------------------------------------------------------------------------------------------------');
-  //   (await UserVO.of({roleId: 1}).getService().getUsersFromRole()).print().assertVersion().assertCode().assertData();
+  //   (await User.of({roleId: 1}).getService().getUsersFromRole()).print().assertCode().assertData();
   //   return this;
   // }
 
   /**
    *
-   * @return {UserTest}
+   * @return {UserServiceTest}
    */
   filename() {
     console.log(__filename);
@@ -211,7 +246,7 @@ export default class UserTest {
 
   /**
    *
-   * @return {UserTest}
+   * @return {UserServiceTest}
    */
   newline() {
     console.log('');
@@ -225,8 +260,8 @@ export default class UserTest {
   async testAll() {
     const moduleName = '用户';
     console.info(`${moduleName}：start ${'*'.repeat(200)}`);
-    await Promise.resolve(UserTest.of())
-      .then(service => service.filename()).then(s => s.newline())
+    await Promise.resolve(UserServiceTest.of())
+      .then(service => service.filename())
       // 开始
       .then(service => service.login()).then(s => s.newline())
       .then(service => service.loginAdminBasic())
@@ -240,6 +275,8 @@ export default class UserTest {
       .then(service => service.save()).then(s => s.newline())
       .then(service => service.pageable()).then(s => s.newline())
       .then(service => service.update()).then(s => s.newline())
+      .then(service => service.markDeleteByUId()).then(s => s.newline())
+      .then(service => service.markDelete()).then(s => s.newline())
       .then(service => service.findByUid()).then(s => s.newline())
       // .then(service => service.getUsersFromRole()).then(s => s.newline())
       // 结束

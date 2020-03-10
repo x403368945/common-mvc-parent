@@ -92,13 +92,13 @@ public class TabRole implements
      */
     @NotNull(groups = {ISave.class})
     @Size(max = 200)
-    @ApiModelProperty(value = "名称", position = 4)
+    @ApiModelProperty(value = "名称", position = 3)
     private String name;
     /**
      * 权限指令集合，{@link String}[]
      */
     @Convert(converter = ArrayStringJsonConvert.class)
-    @ApiModelProperty(value = "权限指令集合，{@link String}[]", position = 5)
+    @ApiModelProperty(value = "权限指令集合，{@link String}[]", position = 4)
     private String[] authorities;
     /**
      * 创建时间
@@ -106,7 +106,7 @@ public class TabRole implements
     @Column(insertable = false, updatable = false)
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @Null(groups = {ISave.class})
-    @ApiModelProperty(value = "数据新增时间", example = "2020-02-02 02:02:02", position = 6)
+    @ApiModelProperty(value = "数据新增时间", example = "2020-02-02 02:02:02", position = 5)
     private Timestamp insertTime;
     /**
      * 创建用户ID
@@ -114,7 +114,7 @@ public class TabRole implements
     @Column(updatable = false)
     @NotNull(groups = {ISave.class})
     @Positive
-    @ApiModelProperty(value = "新增操作人id", position = 7)
+    @ApiModelProperty(value = "新增操作人id", position = 6)
     private Long insertUserId;
     /**
      * 修改时间
@@ -122,21 +122,21 @@ public class TabRole implements
     @Column(insertable = false, updatable = false)
     @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")
     @Null(groups = {ISave.class})
-    @ApiModelProperty(value = "数据最后一次更新时间", example = "2020-02-02 02:02:02.002", position = 8)
+    @ApiModelProperty(value = "数据最后一次更新时间", example = "2020-02-02 02:02:02.002", position = 7)
     private Timestamp updateTime;
     /**
      * 修改用户ID
      */
     @NotNull(groups = {ISave.class, IUpdate.class})
     @Positive
-    @ApiModelProperty(value = "更新操作人id", position = 9)
+    @ApiModelProperty(value = "更新操作人id", position = 8)
     private Long updateUserId;
     /**
      * 是否逻辑删除（1、已删除， 0、未删除），参考：Enum{@link com.ccx.demo.enums.Bool}
      */
     @Column(insertable = false, updatable = false)
     @Null(groups = {ISave.class})
-    @ApiModelProperty(value = "是否逻辑删除，com.ccx.demo.enums.Bool", position = 10)
+    @ApiModelProperty(value = "是否逻辑删除，com.ccx.demo.enums.Bool", position = 9)
     private Bool deleted;
 
     /**
@@ -144,7 +144,7 @@ public class TabRole implements
      */
     @QueryTransient
     @Transient
-    @ApiModelProperty(value = "com.ccx.demo.code.role.entity.TabRole$OrderBy", position = 11)
+    @ApiModelProperty(value = "com.ccx.demo.code.role.entity.TabRole$OrderBy", position = 10)
     private List<Sorts.Order> sorts;
     /**
      * 前端配置的权限树

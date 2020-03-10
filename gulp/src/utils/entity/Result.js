@@ -306,16 +306,16 @@ export default class Result {
     return this;
   }
 
-  /**
-   * 断言接口版本是否匹配，用于测试接口，直接抛出异常
-   * @return {Result}
-   */
-  assertVersion() {
-    this.getExtras('version', msg => {
-      throw new Error(`接口版本不匹配，当前最新版本号【${this.v}】:${msg}`)
-    });
-    return this;
-  }
+  // /**
+  //  * 断言接口版本是否匹配，用于测试接口，直接抛出异常
+  //  * @return {Result}
+  //  */
+  // assertVersion() {
+  //   this.getExtras('version', msg => {
+  //     throw new Error(`接口版本不匹配，当前最新版本号【${this.v}】:${msg}`)
+  //   });
+  //   return this;
+  // }
 
   /**
    * 断言响应代码为成功且数据集合不能为空，用于测试接口，直接抛出异常

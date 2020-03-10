@@ -2,18 +2,18 @@
  * 测试：后台服务请求：角色
  * @author 谢长春 2019-8-30
  */
-import RoleVO from '../../src/api/Role';
-import UserTest, {sessionUser} from './User.test';
 import sample from 'lodash/sample';
-import AuthorityVO from '../../src/api/Authority';
+import Role from '../../src/api/entity/Role';
+import UserServiceTest, {sessionUser} from './UserService.test';
+import Authority from '../../src/api/entity/Authority';
 import sampleSize from 'lodash/sampleSize';
 import MarkDelete from '../../src/utils/entity/MarkDelete';
 
-export default class RoleTest {
+export default class RoleServiceTest {
   /**
    * js 中， 类对象在经过方法传递后无法推断类型，造成类方法和变量提示不准确，这里 self 转换之后可以得到正确的提示
-   * @param self {RoleTest}
-   * @return {RoleTest}
+   * @param self {RoleServiceTest}
+   * @return {RoleServiceTest}
    */
   static self(self) {
     return self;
@@ -21,16 +21,16 @@ export default class RoleTest {
 
   /**
    * 静态构造函数
-   * @return {RoleTest}
+   * @return {RoleServiceTest}
    */
   static of() {
-    return new RoleTest();
+    return new RoleServiceTest();
   }
 
   /**
    *
    * @param func {function}
-   * @return {Promise<RoleTest>}
+   * @return {Promise<RoleServiceTest>}
    */
   async call(func = () => undefined) {
     func();
@@ -38,11 +38,11 @@ export default class RoleTest {
   }
 
   /**
-   * @return {Promise<RoleTest>}
+   * @return {Promise<RoleServiceTest>}
    */
   async save() {
     console.log('> 新增 ----------------------------------------------------------------------------------------------------');
-    const {data: tree} = (await new AuthorityVO().getService().getTree()).assertCode().assertData();
+    const {data: tree} = (await new Authority().getService().getTree()).assertCode().assertData();
     const arrs = [
       {
         name: '随机部分权限',
@@ -56,20 +56,20 @@ export default class RoleTest {
       }
     ];
     for (let i = 0, len = arrs.length; i < len; i++) {
-      (await new RoleVO(arrs[i]).getService().save()).print().assertVersion().assertData();
-      (await new RoleVO(arrs[i]).getService().save()).print().assertVersion().assertData();
+      (await new Role(arrs[i]).getService().save()).print().assertData();
+      (await new Role(arrs[i]).getService().save()).print().assertData();
     }
     return this;
   }
 
   /**
-   * @return {Promise<RoleTest>}
+   * @return {Promise<RoleServiceTest>}
    */
   async update() {
     console.log('> 修改：在查询结果集中随机选取一条数据 ----------------------------------------------------------------------------------------------------');
-    const {data: tree} = (await new AuthorityVO().getService().getTree()).assertCode().assertData();
+    const {data: tree} = (await new Authority().getService().getTree()).assertCode().assertData();
 
-    const {data} = (await new RoleVO({
+    const {data} = (await new Role({
       insertUserId: sessionUser.id
     }).getService().pageable()).print().assertData();
     const row = Object.assign(sample(data), {
@@ -78,85 +78,85 @@ export default class RoleTest {
         () => parseInt(`${Math.random()}`.slice(-1)) % 2 === 0 ? 'true' : 'false'
       ))
     });
-    (await new RoleVO(row).getService().update()).print().assertVersion().assertCode();
+    (await new Role(row).getService().update()).print().assertCode();
 
     return this;
   }
 
   /**
-   * @return {Promise<RoleTest>}
+   * @return {Promise<RoleServiceTest>}
    */
   async markDeleteByUId() {
     console.log('> 按 id + uid 逻辑删除：在查询结果集中随机选取一条数据 ----------------------------------------------------------------------------------------------------');
-    const {data} = (await new RoleVO({
+    const {data} = (await new Role({
       insertUserId: sessionUser.id
     }).getService().pageable()).assertData();
-    const {id, uid} = sample(data.filter(row => ![1, 2].includes(row.id)));
-    (await new RoleVO({
+    const {id, uid} = sample(data);
+    (await new Role({
       id,
       uid
-    }).getService().markDeleteByUid()).print().assertVersion().assertCode();
+    }).getService().markDeleteByUid()).print().assertCode();
     return this;
   }
 
   /**
-   * @return {Promise<RoleTest>}
+   * @return {Promise<RoleServiceTest>}
    */
   async markDelete() {
     console.log('> 按 id + uid 批量逻辑删除：在查询结果集中随机选取 2 条数据 ----------------------------------------------------------------------------------------------------');
-    const {data} = (await new RoleVO({
+    const {data} = (await new Role({
       insertUserId: sessionUser.id
     }).getService().pageable()).assertData();
-    const arrs = sampleSize(data.filter(row => ![1, 2].includes(row.id)), 2);
-    (await new RoleVO({
+    const arrs = sampleSize(data, 2);
+    (await new Role({
       markDeleteArray: arrs.map(row => new MarkDelete(row))
-    }).getService().markDelete()).print().assertVersion().assertCode();
+    }).getService().markDelete()).print().assertCode();
     return this;
   }
 
   /**
-   * @return {Promise<RoleTest>}
+   * @return {Promise<RoleServiceTest>}
    */
   async findByUid() {
     console.log('> 按 id + uid 查询单条记录 ----------------------------------------------------------------------------------------------------');
-    const {data} = (await new RoleVO().getService().pageable()).assertData();
+    const {data} = (await new Role().getService().pageable()).assertData();
     const {id, uid} = sample(data);
-    (await new RoleVO({
+    (await new Role({
       id,
       uid
-    }).getService().findByUid()).print().assertVersion().assertCode();
+    }).getService().findByUid()).print().assertCode();
     return this;
   }
 
   /**
    *
-   * @return {Promise<RoleTest>}
+   * @return {Promise<RoleServiceTest>}
    */
   async pageable() {
     console.log('> 分页：多条件批量查询 ----------------------------------------------------------------------------------------------------');
-    (await new RoleVO().getService().pageable()).print().assertVersion().assertData();
-    (await new RoleVO({
+    (await new Role().getService().pageable()).print().assertData();
+    (await new Role({
       insertUserId: sessionUser.id
-    }).getService().pageable()).print().assertVersion().assertData();
-    (await new RoleVO({
+    }).getService().pageable()).print().assertData();
+    (await new Role({
       id: 1,
       deleted: 'NO'
-    }).getService().pageable()).print().assertVersion().assertData();
+    }).getService().pageable()).print().assertData();
     return this;
   }
 
   /**
-   * @return {Promise<RoleTest>}
+   * @return {Promise<RoleServiceTest>}
    */
   async options() {
     console.log('> 角色下拉列表选项 ----------------------------------------------------------------------------------------------------');
-    (await new RoleVO().getService().options()).print().assertVersion().assertData();
+    (await new Role().getService().options()).print().assertData();
     return this;
   }
 
   /**
    *
-   * @return {RoleTest}
+   * @return {RoleServiceTest}
    */
   filename() {
     console.log(__filename);
@@ -166,7 +166,7 @@ export default class RoleTest {
 
   /**
    *
-   * @return {RoleTest}
+   * @return {RoleServiceTest}
    */
   newline() {
     console.log('');
@@ -180,10 +180,10 @@ export default class RoleTest {
   async testAll() {
     const moduleName = '角色';
     console.info(`${moduleName}：start ${'*'.repeat(200)}`);
-    await Promise.resolve(RoleTest.of())
+    await Promise.resolve(RoleServiceTest.of())
       .then(service => service.filename())
       // admin 登录
-      .then(service => service.call(() => UserTest.of().loginAdminBasic()))
+      .then(service => service.call(() => UserServiceTest.of().loginAdminBasic()))
       // 开始
       .then(service => service.save()).then(s => s.newline())
       .then(service => service.update()).then(s => s.newline())

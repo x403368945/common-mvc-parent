@@ -2,10 +2,6 @@ import axios from 'axios';
 import Result from '../utils/entity/Result';
 import Authority from './entity/Authority';
 
-/**
- * 请求 url 定义
- * @author 谢长春 2019-8-30
- */
 const listURL = '/1/authority/list'; // 权限指令列表
 const treeURL = '/1/authority/tree'; // 权限指令树
 
@@ -36,25 +32,19 @@ export default class AuthorityService {
    * 静态构造函数
    * @param vo {Authority} 参考案例对象
    */
-  constructor(vo) {
-    let vobject = null;
-    if (vo) {
-      vobject = new Authority({...vo});
-      Object.keys(vobject).forEach(key => { // 移除空字符串参数，前端组件默认值为空字符串，带到后端查询会有问题
-        if (vobject[key] === '') {
-          delete vobject[key];
-        }
-      })
-    }
+  constructor(vo = {}) {
     /**
      * 参考案例对象
      * @type {Authority}
      */
-    this.vo = vobject || new Authority({});
-  }
-
-  toString() {
-    return JSON.stringify(this)
+    this.vo = new Authority({
+      ...vo
+    });
+    Object.keys(this.vo).forEach(key => { // 移除空字符串参数，前端组件默认值为空字符串，带到后端查询会有问题
+      if (this.vo[key] === '') {
+        delete this.vo[key];
+      }
+    })
   }
 
   /**

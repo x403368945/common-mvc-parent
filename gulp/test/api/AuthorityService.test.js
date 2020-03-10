@@ -2,14 +2,14 @@
  * 测试：后台服务请求：权限指令
  * @author 谢长春 2019-8-30
  */
-import {AuthorityService} from '../../src/api/Authority';
-import UserTest from './User.test';
+import UserServiceTest from './UserService.test';
+import AuthorityService from '../../src/api/AuthorityService';
 
-export default class AuthorityTest {
+export default class AuthorityServiceTest {
   /**
    * js 中， 类对象在经过方法传递后无法推断类型，造成类方法和变量提示不准确，这里 self 转换之后可以得到正确的提示
-   * @param self {AuthorityTest}
-   * @return {AuthorityTest}
+   * @param self {AuthorityServiceTest}
+   * @return {AuthorityServiceTest}
    */
   static self(self) {
     return self;
@@ -17,16 +17,16 @@ export default class AuthorityTest {
 
   /**
    * 静态构造函数
-   * @return {AuthorityTest}
+   * @return {AuthorityServiceTest}
    */
   static of() {
-    return new AuthorityTest();
+    return new AuthorityServiceTest();
   }
 
   /**
    *
    * @param func {function}
-   * @return {Promise<AuthorityTest>}
+   * @return {Promise<AuthorityServiceTest>}
    */
   async call(func = () => undefined) {
     func();
@@ -34,26 +34,26 @@ export default class AuthorityTest {
   }
 
   /**
-   * @return {Promise<AuthorityTest>}
+   * @return {Promise<AuthorityServiceTest>}
    */
   async getTree() {
     console.log('> 查询权限指令树 ----------------------------------------------------------------------------------------------------');
-    (await new AuthorityService().getTree()).print().assertVersion().assertData();
+    (await new AuthorityService().getTree()).print().assertData();
     return this;
   }
 
   /**
-   * @return {Promise<AuthorityTest>}
+   * @return {Promise<AuthorityServiceTest>}
    */
   async getList() {
     console.log('> 查询权限指令列表 ----------------------------------------------------------------------------------------------------');
-    (await new AuthorityService().getList()).print().assertVersion().assertData();
+    (await new AuthorityService().getList()).print().assertData();
     return this;
   }
 
   /**
    *
-   * @return {AuthorityTest}
+   * @return {AuthorityServiceTest}
    */
   filename() {
     console.log(__filename);
@@ -63,7 +63,7 @@ export default class AuthorityTest {
 
   /**
    *
-   * @return {AuthorityTest}
+   * @return {AuthorityServiceTest}
    */
   newline() {
     console.log('');
@@ -77,10 +77,10 @@ export default class AuthorityTest {
   async testAll() {
     const moduleName = '权限指令';
     console.info(`${moduleName}：start ${'*'.repeat(200)}`);
-    await Promise.resolve(AuthorityTest.of())
+    await Promise.resolve(AuthorityServiceTest.of())
       .then(service => service.filename())
       // admin 登录
-      .then(service => service.call(() => UserTest.of().loginAdminBasic()))
+      .then(service => service.call(() => UserServiceTest.of().loginAdminBasic()))
       // 开始
       .then(service => service.getTree()).then(s => s.newline())
       .then(service => service.getList()).then(s => s.newline())

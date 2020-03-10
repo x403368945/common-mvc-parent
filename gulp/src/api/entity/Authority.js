@@ -1,7 +1,7 @@
 import AuthorityService from '../AuthorityService';
 
 /**
- * 后台服务请求：权限指令
+ * 实体：权限指令
  * @author 谢长春 2019-7-28
  */
 export default class Authority {

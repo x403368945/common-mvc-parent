@@ -37,7 +37,6 @@ Content-Type: application/json
 Authorization: Basic {{username}} {{password}}
 
 {
-
 }
 
 ### 用户表: 按 id 物理删除
@@ -73,4 +72,6 @@ Authorization: Basic {{username}} {{password}}
     "uid": ""
   }
 ]
+
+###
 

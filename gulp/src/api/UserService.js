@@ -3,10 +3,6 @@ import Result from '../utils/entity/Result';
 import Page from '../utils/entity/Page';
 import User from './entity/User';
 
-/**
- * 请求 url 定义
- * @author 谢长春 2019-8-1
- */
 const loginURL = '/login'; // 登录
 const logoutURL = '/logout'; // 退出
 const currentUserURL = '/1/user/current'; // 当前登录用户信息
@@ -45,25 +41,19 @@ export default class UserService {
    * 构造函数
    * @param vo {User} 用户实体对象
    */
-  constructor(vo) {
-    let vobject = null;
-    if (vo) {
-      vobject = new User({...vo});
-      Object.keys(vobject).forEach(key => { // 移除空字符串参数，前端组件默认值为空字符串，带到后端查询会有问题
-        if (vobject[key] === '') {
-          delete vobject[key];
-        }
-      })
-    }
+  constructor(vo = {}) {
     /**
      * 用户实体对象
      * @type {User}
      */
-    this.vo = vobject || new User({});
-  }
-
-  toString() {
-    return JSON.stringify(this)
+    this.vo = new User({
+      ...vo
+    });
+    Object.keys(this.vo).forEach(key => { // 移除空字符串参数，前端组件默认值为空字符串，带到后端查询会有问题
+      if (this.vo[key] === '') {
+        delete this.vo[key];
+      }
+    });
   }
 
   /**

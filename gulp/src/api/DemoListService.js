@@ -3,10 +3,6 @@ import Page from '../utils/entity/Page';
 import Result from '../utils/entity/Result';
 import DemoList from './entity/DemoList';
 
-/**
- * 请求 url 定义
- * @author 谢长春 2019-7-28
- */
 const saveURL = '/1/demo-list'; // 新增
 const updateURL = '/1/demo-list/{id}'; // 修改
 const deleteByIdURL = '/1/demo-list/{id}'; // 按 id 删除
@@ -46,25 +42,19 @@ export default class DemoListService {
    * 静态构造函数
    * @param vo {DemoList} 参考案例对象
    */
-  constructor(vo) {
-    let vobject = null;
-    if (vo) {
-      vobject = new DemoList({...vo});
-      Object.keys(vobject).forEach(key => { // 移除空字符串参数，前端组件默认值为空字符串，带到后端查询会有问题
-        if (vobject[key] === '') {
-          delete vobject[key];
-        }
-      })
-    }
+  constructor(vo = {}) {
     /**
      * 参考案例对象
      * @type {DemoList}
      */
-    this.vo = vo || new DemoList({});
-  }
-
-  toString() {
-    return JSON.stringify(this)
+    this.vo = new DemoList({
+      ...vo
+    });
+    Object.keys(this.vo).forEach(key => { // 移除空字符串参数，前端组件默认值为空字符串，带到后端查询会有问题
+      if (this.vo[key] === '') {
+        delete this.vo[key];
+      }
+    });
   }
 
   /**
