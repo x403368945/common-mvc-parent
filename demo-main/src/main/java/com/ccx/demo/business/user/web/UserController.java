@@ -53,12 +53,28 @@ public class UserController implements IAuthController<Long, TabUser> {
                 .execute(result -> result.setSuccess(user.toTabUserVO()));
     }
 
-    @PostMapping
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'UC_save')")
-    @ApiOperation(value = "2.新增用户表", tags = {"2020-03-08"})
-    @ApiImplicitParam(name = "body", dataType = "TabUser", dataTypeClass = TabUser.class, required = true)
+    @GetMapping("/page/{number}/{size}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'Menu_UC', 'Menu_page')")
+    @ApiOperation(value = "2.分页查询用户表", tags = {"2020-03-08"})
     @ApiOperationSupport(
             order = 2,
+            ignoreParameters = {"insertTime", "updateTime"}
+    )
+    @ResponseBody
+    @Override
+    public Result<TabUser> page(final TabUser user, final int number, final int size, final TabUser condition) {
+        return new Result<TabUser>().execute(result -> result.setSuccess(service.findPage(
+                Optional.ofNullable(condition).orElseGet(TabUser::new),
+                Pager.builder().number(number).size(size).build()
+        )));
+    }
+
+    @PostMapping
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'UC_save')")
+    @ApiOperation(value = "3.新增用户表", tags = {"2020-03-08"})
+    @ApiImplicitParam(name = "body", dataType = "TabUser", dataTypeClass = TabUser.class, required = true)
+    @ApiOperationSupport(
+            order = 3,
             ignoreParameters = {
                     "body.id", "body.uid", "body.deleted", "body.insertTime", "body.insertUserId", "body.insertUserName", "body.updateTime", "body.updateUserId", "body.updateUserName", "body.timestamp", "body.sorts"
             })
@@ -72,10 +88,10 @@ public class UserController implements IAuthController<Long, TabUser> {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'UC_update')")
-    @ApiOperation(value = "3.修改用户表", tags = {"2020-03-08"})
+    @ApiOperation(value = "4.修改用户表", tags = {"2020-03-08"})
     @ApiImplicitParam(name = "body", dataType = "TabUser", dataTypeClass = TabUser.class, required = true)
     @ApiOperationSupport(
-            order = 3,
+            order = 4,
             ignoreParameters = {
                     "body.id", "body.uid", "body.deleted", "body.insertTime", "body.insertUserId", "body.insertUserName", "body.updateTime", "body.updateUserId", "body.updateUserName", "body.timestamp", "body.sorts"
             })
@@ -87,8 +103,8 @@ public class UserController implements IAuthController<Long, TabUser> {
 
     @PatchMapping("/{id}/{uid}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'UC_delete')")
-    @ApiOperation(value = "4.逻辑删除用户表", tags = {"2020-03-08"})
-    @ApiOperationSupport(order = 4) // order id 相同的接口只能开放一个<
+    @ApiOperation(value = "5.逻辑删除用户表", tags = {"2020-03-08"})
+    @ApiOperationSupport(order = 5) // order id 相同的接口只能开放一个<
     @ResponseBody
     @Override
     public Result<Void> markDeleteByUid(final TabUser user, final Long id, final String uid) {
@@ -97,8 +113,8 @@ public class UserController implements IAuthController<Long, TabUser> {
 
     @PatchMapping
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'UC_delete')")
-    @ApiOperation(value = "5.批量逻辑删除用户表", tags = {"2020-03-08"})
-    @ApiOperationSupport(order = 5) // order id 相同的接口只能开放一个<
+    @ApiOperation(value = "6.批量逻辑删除用户表", tags = {"2020-03-08"})
+    @ApiOperationSupport(order = 6) // order id 相同的接口只能开放一个<
     @ResponseBody
     @Override
     public Result<Void> markDelete(final TabUser user, final List<MarkDelete> body) {
@@ -107,30 +123,13 @@ public class UserController implements IAuthController<Long, TabUser> {
 
     @GetMapping("/{id}/{uid}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'Menu_UC', 'UC_findByUid')")
-    @ApiOperation(value = "6.按 id 和 uid 查询用户表", tags = {"2020-03-08"})
-    @ApiOperationSupport(order = 6) // order id 相同的接口只能开放一个<
+    @ApiOperation(value = "7.按 id 和 uid 查询用户表", tags = {"2020-03-08"})
+    @ApiOperationSupport(order = 7) // order id 相同的接口只能开放一个<
     @ResponseBody
     @Override
     public Result<TabUser> findByUid(final TabUser user, final Long id, final String uid) {
         return new Result<TabUser>().execute(result -> result.setSuccess(service.findByUid(id, uid).orElse(null)));
     }
-
-    @GetMapping("/page/{number}/{size}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'Menu_UC', 'Menu_page')")
-    @ApiOperation(value = "7.分页查询用户表", tags = {"2020-03-08"})
-    @ApiOperationSupport(
-            order = 7,
-            ignoreParameters = {"insertTime", "updateTime"}
-    )
-    @ResponseBody
-    @Override
-    public Result<TabUser> page(final TabUser user, final int number, final int size, final TabUser condition) {
-        return new Result<TabUser>().execute(result -> result.setSuccess(service.findPage(
-                Optional.ofNullable(condition).orElseGet(TabUser::new),
-                Pager.builder().number(number).size(size).build()
-        )));
-    }
-
 
     @PatchMapping("/nickname")
     @ApiOperation(value = "8.修改昵称", tags = {"2020-03-08"})

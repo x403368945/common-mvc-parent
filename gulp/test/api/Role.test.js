@@ -3,7 +3,7 @@
  * @author 谢长春 2019-8-30
  */
 import RoleVO from '../../src/api/Role';
-import UserTest from './User.test';
+import UserTest, {sessionUser} from './User.test';
 import sample from 'lodash/sample';
 import AuthorityVO from '../../src/api/Authority';
 import sampleSize from 'lodash/sampleSize';
@@ -46,9 +46,9 @@ export default class RoleTest {
     const arrs = [
       {
         name: '随机部分权限',
-        authorityTree: JSON.parse(JSON.stringify(tree).replace(/false/g,
-          () => parseInt(`${Math.random()}`.slice(-1)) % 2 === 0 ? 'true' : 'false'
-        ))
+        authorityTree: JSON.parse(JSON.stringify(tree)
+          .replace(/false/, 'true') // 保证有一个选中
+          .replace(/false/g, () => parseInt(`${Math.random()}`.slice(-1)) % 2 === 0 ? 'true' : 'false'))
       },
       {
         name: '全部权限',
@@ -69,8 +69,10 @@ export default class RoleTest {
     console.log('> 修改：在查询结果集中随机选取一条数据 ----------------------------------------------------------------------------------------------------');
     const {data: tree} = (await new AuthorityVO().getService().getTree()).assertCode().assertData();
 
-    const {data} = (await new RoleVO().getService().pageable()).print().assertData();
-    const row = Object.assign(sample(data.filter(row => ![1, 2].includes(row.id))), {
+    const {data} = (await new RoleVO({
+      insertUserId: sessionUser.id
+    }).getService().pageable()).print().assertData();
+    const row = Object.assign(sample(data), {
       name: '重命名角色',
       authorityTree: JSON.parse(JSON.stringify(tree).replace(/false/g,
         () => parseInt(`${Math.random()}`.slice(-1)) % 2 === 0 ? 'true' : 'false'
@@ -86,7 +88,9 @@ export default class RoleTest {
    */
   async markDeleteByUId() {
     console.log('> 按 id + uid 逻辑删除：在查询结果集中随机选取一条数据 ----------------------------------------------------------------------------------------------------');
-    const {data} = (await new RoleVO().getService().pageable()).assertData();
+    const {data} = (await new RoleVO({
+      insertUserId: sessionUser.id
+    }).getService().pageable()).assertData();
     const {id, uid} = sample(data.filter(row => ![1, 2].includes(row.id)));
     (await new RoleVO({
       id,
@@ -100,7 +104,9 @@ export default class RoleTest {
    */
   async markDelete() {
     console.log('> 按 id + uid 批量逻辑删除：在查询结果集中随机选取 2 条数据 ----------------------------------------------------------------------------------------------------');
-    const {data} = (await new RoleVO().getService().pageable()).assertData();
+    const {data} = (await new RoleVO({
+      insertUserId: sessionUser.id
+    }).getService().pageable()).assertData();
     const arrs = sampleSize(data.filter(row => ![1, 2].includes(row.id)), 2);
     (await new RoleVO({
       markDeleteArray: arrs.map(row => new MarkDelete(row))
@@ -129,6 +135,9 @@ export default class RoleTest {
   async pageable() {
     console.log('> 分页：多条件批量查询 ----------------------------------------------------------------------------------------------------');
     (await new RoleVO().getService().pageable()).print().assertVersion().assertData();
+    (await new RoleVO({
+      insertUserId: sessionUser.id
+    }).getService().pageable()).print().assertVersion().assertData();
     (await new RoleVO({
       id: 1,
       deleted: 'NO'

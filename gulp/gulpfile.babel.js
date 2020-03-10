@@ -28,41 +28,6 @@ process.env.BROWSER = false;
 gulp.task('default', async () => {
 });
 
-gulp.task('listener', function () {
-  watch('src/**/*.html', batch(function () {
-    web.reload();
-    gulp.start('build');
-  }));
-  // gulp.watch([
-  //     'src/**/*.js'
-  // ], function() {
-  //     console.log('js');
-  //     return gulp.src('src/**/*.js')
-  //         .pipe(plugins.changed('dest'))
-  //         .pipe(plugins.debug({title: 'scripts监听修改文件:'}))
-  //         .pipe(gulp.dest('dest'))
-  //         .pipe(reload({stream: true}));
-  // });
-  // gulp.watch('src/**/*.css', function() {
-  //     console.log('css');
-  //     return gulp.src('src/**/*.css')
-  //         .pipe(plugins.changed('dest'))
-  //         .pipe(plugins.debug({title: 'css监听修改文件:'}))
-  //         .pipe(gulp.dest('dest'))
-  //         .pipe(web.stream());
-  // });
-  return Promise.resolve();
-});
-gulp.task('server', gulp.series('listener', () => {
-  web.init({
-    // proxy: 'http://localhost/index.html'
-    server: {
-      baseDir: 'src/',
-      index: 'index.html'
-    }
-  });
-}));
-
 gulp.task('test', async () => {
   devConfig();
   // await OpenDemoTest.of().testAll();
@@ -74,8 +39,68 @@ gulp.task('test', async () => {
 gulp.task('test:one', async () => {
   devConfig();
   (await UserTest.of().loginAdminBasic());
-  await RoleTest.of().testAll();
 });
+
+gulp.task('replace:swagger:order:position', async () => {
+  const path = '';
+  if (!path) return;
+  let index = 1;
+  fs.writeFileSync(path, fs.readFileSync(path).toString().replace(/(position = )\d+/g, (m, $1) => `${$1}${index++}`));
+});
+gulp.task('db:java:code', async () => {
+  await db2java({
+    host: 'localhost',
+    port: '3306',
+    user: 'root',
+    password: '111111',
+    database: 'demo_main_db',
+    table: [
+      'tab_user',
+      'tab_role'
+    ], // 表名
+    module: '../demo-main', // 模块名
+    pkg: 'com.ccx.demo', // 包名(也会作为文件输出目录)
+    template: 'AuthUid.js' // 代码模板
+  });
+});
+
+async function db2java(option) {
+  const {
+    host, // = 'localhost',
+    port, // = '3306',
+    user, // = 'root',
+    password, // = '111111',
+    database, // = 'demo_main_db',
+    table, // = ['ny_order'], 表名
+    module, // = 'demo-service', 模块名
+    pkg, // = 'com.ccx.demo', 包名(也会作为文件输出目录)
+    template // = 'AuthUid.js' 代码模板
+  } = option;
+
+  const mysql = require('mysql');
+  console.log([{database, host, user, password, port, table, template, pkg}]);
+  const connection = mysql.createConnection({database, host, user, password, port});
+  connection.connect();
+  const tables = await query(connection, `SHOW TABLE STATUS FROM ${database} `.concat(table && `where Name in ('${table.join("','")}')`));
+  console.table(tables);
+  for (let i = 0, len = tables.length; i < len; i++) {
+    const table = new Table(tables[i]);
+    const columns = await query(connection, `SHOW FULL COLUMNS FROM ${table.name}`);
+    console.table(columns);
+    // console.log(table)
+    table
+      .setPkg(pkg)
+      .setColumns(columns)
+      .setOutput(module)
+    ;
+    await table.writeHttp(template.replace(/\.js/, ''));
+    await table.writeController(template.replace(/\.js/, ''));
+    await table.writeEntity(template.replace(/\.js/, ''));
+    await table.writeService(template.replace(/\.js/, ''));
+    await table.writeRepository(template.replace(/\.js/, ''));
+  }
+  connection.end();
+}
 
 gulp.task('mysql:read:write', async () => {
   // # 查看所有表定义参数，where name = '指定表名'
@@ -159,60 +184,40 @@ gulp.task('mysql:markdown', async () => {
   connection.end();
 });
 
-async function db2java(option) {
-  const {
-    host, // = 'localhost',
-    port, // = '3306',
-    user, // = 'root',
-    password, // = '111111',
-    database, // = 'demo_main_db',
-    table, // = ['ny_order'], 表名
-    module, // = 'demo-service', 模块名
-    pkg, // = 'com.ccx.demo', 包名(也会作为文件输出目录)
-    template // = 'AuthUid.js' 代码模板
-  } = option;
-
-  const mysql = require('mysql');
-  console.log([{database, host, user, password, port, table, template, pkg}]);
-  const connection = mysql.createConnection({database, host, user, password, port});
-  connection.connect();
-  const tables = await query(connection, `SHOW TABLE STATUS FROM ${database} `.concat(table && `where Name in ('${table.join("','")}')`));
-  console.table(tables);
-  for (let i = 0, len = tables.length; i < len; i++) {
-    const table = new Table(tables[i]);
-    const columns = await query(connection, `SHOW FULL COLUMNS FROM ${table.name}`);
-    console.table(columns);
-    // console.log(table)
-    table
-      .setPkg(pkg)
-      .setColumns(columns)
-      .setOutput(module)
-    ;
-    await table.writeHttp(template.replace(/\.js/, ''));
-    await table.writeController(template.replace(/\.js/, ''));
-    await table.writeEntity(template.replace(/\.js/, ''));
-    await table.writeService(template.replace(/\.js/, ''));
-    await table.writeRepository(template.replace(/\.js/, ''));
-  }
-  connection.end();
-}
-
-gulp.task('db:java:code', async () => {
-  await db2java({
-    host: 'localhost',
-    port: '3306',
-    user: 'root',
-    password: '111111',
-    database: 'demo_main_db',
-    table: [
-      'tab_user',
-      'tab_role'
-    ], // 表名
-    module: '../demo-main', // 模块名
-    pkg: 'com.ccx.demo', // 包名(也会作为文件输出目录)
-    template: 'AuthUid.js' // 代码模板
-  });
+gulp.task('listener', function () {
+  watch('src/**/*.html', batch(function () {
+    web.reload();
+    gulp.start('build');
+  }));
+  // gulp.watch([
+  //     'src/**/*.js'
+  // ], function() {
+  //     console.log('js');
+  //     return gulp.src('src/**/*.js')
+  //         .pipe(plugins.changed('dest'))
+  //         .pipe(plugins.debug({title: 'scripts监听修改文件:'}))
+  //         .pipe(gulp.dest('dest'))
+  //         .pipe(reload({stream: true}));
+  // });
+  // gulp.watch('src/**/*.css', function() {
+  //     console.log('css');
+  //     return gulp.src('src/**/*.css')
+  //         .pipe(plugins.changed('dest'))
+  //         .pipe(plugins.debug({title: 'css监听修改文件:'}))
+  //         .pipe(gulp.dest('dest'))
+  //         .pipe(web.stream());
+  // });
+  return Promise.resolve();
 });
+gulp.task('server', gulp.series('listener', () => {
+  web.init({
+    // proxy: 'http://localhost/index.html'
+    server: {
+      baseDir: 'src/',
+      index: 'index.html'
+    }
+  });
+}));
 
 gulp.task('in:out', async () => {
   const writer = fs.createWriteStream(path.resolve('temp/out.txt'));

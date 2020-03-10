@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 @ToString(callSuper = true)
 @JSONType(
         ignores = {"password"}, // 序列化时忽略属性，反序列化不受影响
-        orders = {"id", "uid", "subdomain", "username", "nickname", "phone", "email", "role", "registerSource", "deleted"}
+        orders = {"id", "uid", "domain", "username", "nickname", "phone", "email", "role", "registerSource", "deleted"}
 )
 public class TabUserVO extends TabUser {
     @SneakyThrows

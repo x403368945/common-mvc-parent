@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import springfox.documentation.annotations.ApiIgnore;
 
 /**
- * 参数配置
+ * 定时任务
  *
  * @author 谢长春 2017年7月21日 上午10:19:28
  */

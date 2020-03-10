@@ -25,11 +25,10 @@ CREATE DATABASE demo_main_db CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_general_ci
 */
 -- 用户表
 DROP TABLE IF EXISTS tab_user;
-CREATE TABLE tab_user
-(
+CREATE TABLE tab_user (
   id             BIGINT UNSIGNED     NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '数据ID，主键自增',
   uid            VARCHAR(32)         NOT NULL COMMENT '用户UUID，缓存和按ID查询时可使用强校验',
-  subdomain      VARCHAR(10)         NOT NULL DEFAULT '' COMMENT '子域名用户组',
+  domain         VARCHAR(10)         NOT NULL DEFAULT 'www' COMMENT '子域名用户组',
   username       VARCHAR(15)         NOT NULL COMMENT '登录名',
   password       VARCHAR(150)        NOT NULL COMMENT '登录密码',
   nickname       VARCHAR(30)         NOT NULL DEFAULT '' COMMENT '昵称',
@@ -47,14 +46,14 @@ CREATE TABLE tab_user
   KEY (username),
   KEY (phone),
   KEY (email)
-) ENGINE InnoDB
+)
+  ENGINE InnoDB
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_general_ci COMMENT '用户表';
 
 -- 角色
 DROP TABLE IF EXISTS tab_role;
-CREATE TABLE tab_role
-(
+CREATE TABLE tab_role (
   id           BIGINT UNSIGNED     NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '数据ID，主键自增',
   uid          VARCHAR(32)         NOT NULL COMMENT '用户UUID，缓存和按ID查询时可使用强校验',
   name         VARCHAR(200)        NOT NULL COMMENT '名称',
@@ -65,35 +64,36 @@ CREATE TABLE tab_role
   updateUserId BIGINT UNSIGNED     NOT NULL COMMENT '修改用户ID',
   deleted      TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否逻辑删除，参考：Enum{@link com.ccx.demo.enums.Bool}',
   KEY (uid)
-) ENGINE InnoDB
+)
+  ENGINE InnoDB
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_general_ci COMMENT '角色表';
 
 -- 用户登录记录表
 DROP TABLE IF EXISTS tab_user_login;
-CREATE TABLE tab_user_login
-(
+CREATE TABLE tab_user_login (
   id        BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '数据ID，主键自增',
   userId    BIGINT UNSIGNED NOT NULL COMMENT '用户ID，tab_user.id',
   ip        VARCHAR(15)     NOT NULL COMMENT '登录IP',
   timestamp TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '登录时间',
   KEY (timestamp)
-) ENGINE InnoDB
+)
+  ENGINE InnoDB
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_general_ci COMMENT '用户登录记录表';
 
 
 -- 用户微信绑定表
 DROP TABLE IF EXISTS tab_user_wechat;
-CREATE TABLE tab_user_wechat
-(
+CREATE TABLE tab_user_wechat (
   id         BIGINT UNSIGNED NOT NULL PRIMARY KEY COMMENT '用户ID，tab_user.id',
   openId     VARCHAR(128)    NULL COMMENT '微信 openId',
   unionId    VARCHAR(128)    NULL COMMENT '微信 unionId',
   updateTime TIMESTAMP(3)    NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '绑定时间',
   KEY (openId),
   KEY (unionId)
-) ENGINE InnoDB
+)
+  ENGINE InnoDB
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_general_ci COMMENT '用户微信绑定表';
 
@@ -169,12 +169,18 @@ CREATE OR REPLACE VIEW view_vip AS
 ;
 SELECT * FROM view_vip;
 */
-INSERT INTO tab_user(id, uid, username, password, nickname, roles, insertUserId, updateUserId) VALUES
+INSERT INTO tab_user(id, uid, domain, username, password, nickname, roles, insertUserId, updateUserId) VALUES
 -- 初始化超级管理员账户，密码：admin
-(1, replace(uuid(), '-', ''), 'admin', '$2a$10$VQ.Rj7bc73B.WwU99k7R.eEAwqXBNmvihobk3SZ4m30b9tCR6..h2', '超级管理员', '[1]', 1, 1),
+(1, replace(uuid(), '-', ''), 'www', 'admin', '$2a$10$VQ.Rj7bc73B.WwU99k7R.eEAwqXBNmvihobk3SZ4m30b9tCR6..h2', '超级管理员', '[1]', 1, 1),
 -- user:111111
-(2, replace(uuid(), '-', ''), 'user', '$2a$10$6unbpf74Dc7NEBywaCHl..FzzprMb69gA.Qi09U7ud7vlKHP9PXfu', '普通用户', '[2]', 1, 1);
+(2, replace(uuid(), '-', ''), 'www', 'user', '$2a$10$6unbpf74Dc7NEBywaCHl..FzzprMb69gA.Qi09U7ud7vlKHP9PXfu', '普通用户', '[2]', 1, 1),
+-- 初始化超级管理员测试账户，密码：admin
+(3, replace(uuid(), '-', ''), 'test', 'admin-test', '$2a$10$VQ.Rj7bc73B.WwU99k7R.eEAwqXBNmvihobk3SZ4m30b9tCR6..h2', '超级管理员', '[1]', 1, 1),
+-- user:111111
+(4, replace(uuid(), '-', ''), 'test', 'user-test', '$2a$10$6unbpf74Dc7NEBywaCHl..FzzprMb69gA.Qi09U7ud7vlKHP9PXfu', '普通用户', '[2]', 1, 1)
+;
 
 INSERT INTO tab_role(id, uid, name, authorities, insertUserId, updateUserId) VALUES
 (1, replace(uuid(), '-', ''), '超级管理员', '["ROLE_ADMIN"]', 1,1),
-(2, replace(uuid(), '-', ''), '普通用户', '["ROLE_USER"]', 1,1);
+(2, replace(uuid(), '-', ''), '普通用户', '["ROLE_USER"]', 1,1)
+;

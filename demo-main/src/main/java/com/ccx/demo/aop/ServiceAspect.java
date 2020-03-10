@@ -34,6 +34,18 @@ public class ServiceAspect implements IServiceAspect {
      * TODO 这里小心入坑
      * 如果 service 在子线程中，将获取不到用户信息，因为 Spring Security 用户信息放在 ThreadLocal 中
      * 如果在子线程中调用 service 中的方法，且该方法必须要有用户名，需要子线程外先设置好用户姓名，假如用户信息有放在缓存中，也可以通过用户ID获取缓存用户的信息
+     *
+     * 也可以通过设置上下文的方式将会话信息设置到子线程中
+     * final SecurityContext mainSecurityContext =  SecurityContextHolder.getContext();
+     * new Thread(() -> {
+     *     try {
+     *         SecurityContextHolder.setContext(mainSecurityContext); // 设置子线程 ThreadLocal
+     *         // 子线程代码
+     *     } finally {
+     *         SecurityContextHolder.clearContext(); // 清除子线程 ThreadLocal
+     *     }
+     * }).start();
+     * </pre>
      */
     @Override
     public String getNickname() {

@@ -2,11 +2,17 @@
  * 测试：后台服务请求：用户
  * @author 谢长春 2019-7-28
  */
-import UserVO from '../../src/api/User';
+import UserVO, {UserService} from '../../src/api/User';
 import axios from 'axios';
 import sample from 'lodash/sample';
 import sampleSize from 'lodash/sampleSize';
 import {RoleService} from '../../src/api/Role';
+
+/**
+ * 当前登录用户
+ * @type {UserVO}
+ */
+export const sessionUser = {};
 
 export default class UserTest {
   /**
@@ -27,14 +33,28 @@ export default class UserTest {
   }
 
   /**
+   * 获取当前登录用户信息
+   * @return {UserVO}
+   */
+  getSessionUser() {
+    return sessionUser;
+  }
+
+  /**
    * @return {Promise<UserTest>}
    */
   async login() {
-    console.log('> 登录：管理员(admin:admin) ----------------------------------------------------------------------------------------------------');
-    (await UserVO.of({
-      username: 'admin',
+    console.log('> 登录：管理员(admin-test:admin) ----------------------------------------------------------------------------------------------------');
+    const result = (await UserVO.of({
+      username: 'admin-test',
       password: 'admin'
     }).getService().login()).print().assertData();
+    result.dataFirst(user => {
+      Object.keys(sessionUser).forEach(key => {
+        delete sessionUser[key];
+      });
+      Object.assign(sessionUser, user);
+    });
     return this;
   }
 
@@ -42,11 +62,17 @@ export default class UserTest {
    * @return {Promise<UserTest>}
    */
   async loginAdminBasic() {
-    console.log('> 登录[basic]）：用户(admin:admin) ----------------------------------------------------------------------------------------------------');
+    console.log('> 登录[basic]）：用户(admin-test:admin) ----------------------------------------------------------------------------------------------------');
     axios.defaults.auth = {
-      username: 'admin',
+      username: 'admin-test',
       password: 'admin'
     };
+    (await new UserService().getCurrentUser()).dataFirst(user => {
+      Object.keys(sessionUser).forEach(key => {
+        delete sessionUser[key];
+      });
+      Object.assign(sessionUser, user);
+    });
     return this;
   }
 
@@ -54,11 +80,17 @@ export default class UserTest {
    * @return {Promise<UserTest>}
    */
   async loginUserBasic() {
-    console.log('> 登录[basic]：用户(user:111111) ----------------------------------------------------------------------------------------------------');
+    console.log('> 登录[basic]：用户(user-test:111111) ----------------------------------------------------------------------------------------------------');
     axios.defaults.auth = {
-      username: 'user',
+      username: 'user-test',
       password: '111111'
     };
+    (await new UserService().getCurrentUser()).dataFirst(user => {
+      Object.keys(sessionUser).forEach(key => {
+        delete sessionUser[key];
+      });
+      Object.assign(sessionUser, user);
+    });
     return this;
   }
 
@@ -101,14 +133,14 @@ export default class UserTest {
       username: `${new Date().getTime()}`,
       password: '111111',
       nickname: '随机单个角色',
-      registerSource: 'TEMP',
+      domain: 'test',
       roleList: [sample(roles)]
     }).getService().save()).print().assertVersion().assertCode();
     (await UserVO.of({
       username: `${new Date().getTime()}`,
       password: '111111',
       nickname: '随机多个角色',
-      registerSource: 'TEMP',
+      domain: 'test',
       roleList: sampleSize(roles, parseInt(`${Math.random()}`.slice(-1)) + 1)
     }).getService().save()).print().assertVersion().assertCode();
     return this;
@@ -122,9 +154,9 @@ export default class UserTest {
     console.log('> 修改用户 ----------------------------------------------------------------------------------------------------');
     const {data: roles} = await new RoleService().options();
     const {data: users} = await new UserVO({
-      registerSource: 'TEMP'
+      domain: 'test'
     }).getService().pageable();
-    const user = sample(users.filter(row => ![1, 2].includes(row.id)));
+    const user = sample(users.filter(row => ![1, 2, 3, 4].includes(row.id)));
     (await UserVO.of(Object.assign(user, {
       nickname: `编辑用户-${new Date().formatDate()}`,
       roleList: sampleSize(roles, parseInt(`${Math.random()}`.slice(-1)) + 1)

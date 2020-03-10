@@ -77,7 +77,7 @@ public class TabRole implements
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull(groups = {IUpdate.class, IMarkDelete.class})
     @Positive
-    @ApiModelProperty(value = "数据ID")
+    @ApiModelProperty(value = "数据ID", position = 1)
     private Long id;
     /**
      * 用户UUID，缓存和按ID查询时可使用强校验
@@ -85,20 +85,20 @@ public class TabRole implements
     @Column(updatable = false)
     @NotNull(groups = {IUpdate.class, IMarkDelete.class})
     @Size(min = 32, max = 32)
-    @ApiModelProperty(value = "数据uid")
+    @ApiModelProperty(value = "数据uid", position = 2)
     private String uid;
     /**
      * 名称
      */
     @NotNull(groups = {ISave.class})
     @Size(max = 200)
-    @ApiModelProperty(value = "名称")
+    @ApiModelProperty(value = "名称", position = 4)
     private String name;
     /**
      * 权限指令集合，{@link String}[]
      */
     @Convert(converter = ArrayStringJsonConvert.class)
-    @ApiModelProperty(value = "权限指令集合，{@link String}[]")
+    @ApiModelProperty(value = "权限指令集合，{@link String}[]", position = 5)
     private String[] authorities;
     /**
      * 创建时间
@@ -106,7 +106,7 @@ public class TabRole implements
     @Column(insertable = false, updatable = false)
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @Null(groups = {ISave.class})
-    @ApiModelProperty(value = "数据新增时间", example = "2020-02-02 02:02:02")
+    @ApiModelProperty(value = "数据新增时间", example = "2020-02-02 02:02:02", position = 6)
     private Timestamp insertTime;
     /**
      * 创建用户ID
@@ -114,7 +114,7 @@ public class TabRole implements
     @Column(updatable = false)
     @NotNull(groups = {ISave.class})
     @Positive
-    @ApiModelProperty(value = "新增操作人id")
+    @ApiModelProperty(value = "新增操作人id", position = 7)
     private Long insertUserId;
     /**
      * 修改时间
@@ -122,21 +122,21 @@ public class TabRole implements
     @Column(insertable = false, updatable = false)
     @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")
     @Null(groups = {ISave.class})
-    @ApiModelProperty(value = "数据最后一次更新时间", example = "2020-02-02 02:02:02.002")
+    @ApiModelProperty(value = "数据最后一次更新时间", example = "2020-02-02 02:02:02.002", position = 8)
     private Timestamp updateTime;
     /**
      * 修改用户ID
      */
     @NotNull(groups = {ISave.class, IUpdate.class})
     @Positive
-    @ApiModelProperty(value = "更新操作人id")
+    @ApiModelProperty(value = "更新操作人id", position = 9)
     private Long updateUserId;
     /**
      * 是否逻辑删除（1、已删除， 0、未删除），参考：Enum{@link com.ccx.demo.enums.Bool}
      */
     @Column(insertable = false, updatable = false)
     @Null(groups = {ISave.class})
-    @ApiModelProperty(value = "是否逻辑删除，com.ccx.demo.enums.Bool")
+    @ApiModelProperty(value = "是否逻辑删除，com.ccx.demo.enums.Bool", position = 10)
     private Bool deleted;
 
     /**
@@ -144,7 +144,7 @@ public class TabRole implements
      */
     @QueryTransient
     @Transient
-    @ApiModelProperty(value = "com.ccx.demo.code.role.entity.TabRole$OrderBy")
+    @ApiModelProperty(value = "com.ccx.demo.code.role.entity.TabRole$OrderBy", position = 11)
     private List<Sorts.Order> sorts;
     /**
      * 前端配置的权限树
@@ -234,9 +234,9 @@ public class TabRole implements
                 .and(name, () -> name.endsWith("%") || name.startsWith("%") ? q.name.like(name) : q.name.startsWith(name))
 //                .and(authorities, () -> q.authorities.eq(authorities))
 //                .and(insertTimeRange, () -> q.insertTime.between(insertTimeRange.rebuild().getBegin(), insertTimeRange.getEnd()))
-//                .and(insertUserId, () -> q.insertUserId.eq(insertUserId))
+                .and(insertUserId, () -> q.insertUserId.eq(insertUserId))
 //                .and(updateTimeRange, () -> q.updateTime.between(updateTimeRange.rebuild().getBegin(), updateTimeRange.getEnd()))
-//                .and(updateUserId, () -> q.updateUserId.eq(updateUserId))
+                .and(updateUserId, () -> q.updateUserId.eq(updateUserId))
                 .and(q.deleted.eq(Objects.isNull(getDeleted()) ? Bool.NO : deleted))
 //                .and(phone, () -> q.phone.eq(phone))
 //                .and(insertUserId, () -> q.insertUserId.eq(insertUserId))

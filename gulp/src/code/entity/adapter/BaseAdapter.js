@@ -18,7 +18,7 @@ export default class BaseAdapter {
   constructor() {
     this.fields = {
       // 默认字段生成策略
-      default: ({name, db_name, dataType, notNull, unsigned, length, fixed, comment}) => {
+      default: ({index, name, db_name, dataType, notNull, unsigned, length, fixed, comment}) => {
         const list = [];
         if (notNull) list.push('    @NotNull(groups = {ISave.class})');
         if (db_name.includes('_')) list.push(`    @Column(name = "${db_name}")`); // 数据库自字段 is_ 开头的特殊处理
@@ -88,25 +88,25 @@ export default class BaseAdapter {
             list.push('    @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")');
             break;
         }
-        list.push(`    @ApiModelProperty(value = "${comment}")`);
+        list.push(`    @ApiModelProperty(value = "${comment}", position = ${index})`);
         list.push(`    private ${dataType.java} ${name};`);
         return list.join('\n');
       },
-      id: ({name, dataType, length}) => {
+      id: ({index, name, dataType, length}) => {
         if ([DataType.BIGINT.mysql, DataType.INT.mysql].includes(dataType.mysql)) {
-          return `    @Id\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\n    @NotNull(groups = {IUpdate.class, IMarkDelete.class})\n    @Positive\n    @ApiModelProperty(value = "数据ID")\n    private Long ${name};`
+          return `    @Id\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\n    @NotNull(groups = {IUpdate.class, IMarkDelete.class})\n    @Positive\n    @ApiModelProperty(value = "数据ID", position = ${index})\n    private Long ${name};`
         } else {
-          return `    @Id\n    @NotBlank(groups = {IUpdate.class, IMarkDelete.class})\n    @Size(max = ${length})\n    @ApiModelProperty(value = "数据id")\n    private String ${name};`
+          return `    @Id\n    @NotBlank(groups = {IUpdate.class, IMarkDelete.class})\n    @Size(max = ${length})\n    @ApiModelProperty(value = "数据id", position = ${index})\n    private String ${name};`
         }
       },
-      uid: ({name}) => `    @Column(updatable = false)\n    @NotNull(groups = {ISave.class, IUpdate.class, IMarkDelete.class})\n    @Size(min = 32, max = 32)\n    @ApiModelProperty(value = "数据uid")\n    private String ${name};`,
-      deleted: ({name}) => `    @Column(insertable = false, updatable = false)\n    @Null(groups = {ISave.class})\n    @ApiModelProperty(value = "是否逻辑删除，com.ccx.demo.enums.Bool")\n    private Bool ${name};`,
-      insertTime: ({name}) => `    @Column(insertable = false, updatable = false)\n    @JSONField(format = "yyyy-MM-dd HH:mm:ss")\n    @Null(groups = {ISave.class})\n    @ApiModelProperty(value = "数据新增时间", example = "2020-02-02 02:02:02")\n    private Timestamp ${name};`,
-      updateTime: ({name}) => `    @Column(insertable = false, updatable = false)\n    @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")\n    @Null(groups = {ISave.class})\n    @ApiModelProperty(value = "数据最后一次更新时间", example = "2020-02-02 02:02:02.002")\n    private Timestamp ${name};`,
-      insertUserId: ({name}) => `    @Column(updatable = false)\n    @NotNull(groups = {ISave.class})\n    @Positive\n    @ApiModelProperty(value = "新增操作人id")\n    private Long ${name};`,
-      updateUserId: ({name}) => `    @NotNull(groups = {ISave.class, IUpdate.class})\n    @Positive\n    @ApiModelProperty(value = "更新操作人id")\n    private Long ${name};`,
-      insertUserName: ({name, length}) => `    @Column(updatable = false)\n    @NotNull(groups = {ISave.class})\n    @Size(max = ${length})\n    @ApiModelProperty(value = "新增操作人昵称")\n    private String ${name};`,
-      updateUserName: ({name, length}) => `    @NotNull(groups = {ISave.class, IUpdate.class})\n    @Size(max = ${length})\n    @ApiModelProperty(value = "更新操作人昵称")\n    private String ${name};`
+      uid: ({index, name}) => `    @Column(updatable = false)\n    @NotNull(groups = {ISave.class, IUpdate.class, IMarkDelete.class})\n    @Size(min = 32, max = 32)\n    @ApiModelProperty(value = "数据uid", position = ${index})\n    private String ${name};`,
+      deleted: ({index, name}) => `    @Column(insertable = false, updatable = false)\n    @Null(groups = {ISave.class})\n    @ApiModelProperty(value = "是否逻辑删除，com.ccx.demo.enums.Bool", position = ${index})\n    private Bool ${name};`,
+      insertTime: ({index, name}) => `    @Column(insertable = false, updatable = false)\n    @JSONField(format = "yyyy-MM-dd HH:mm:ss")\n    @Null(groups = {ISave.class})\n    @ApiModelProperty(value = "数据新增时间", example = "2020-02-02 02:02:02", position = ${index})\n    private Timestamp ${name};`,
+      updateTime: ({index, name}) => `    @Column(insertable = false, updatable = false)\n    @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")\n    @Null(groups = {ISave.class})\n    @ApiModelProperty(value = "数据最后一次更新时间", example = "2020-02-02 02:02:02.002", position = ${index})\n    private Timestamp ${name};`,
+      insertUserId: ({index, name}) => `    @Column(updatable = false)\n    @NotNull(groups = {ISave.class})\n    @Positive\n    @ApiModelProperty(value = "新增操作人id", position = ${index})\n    private Long ${name};`,
+      updateUserId: ({index, name}) => `    @NotNull(groups = {ISave.class, IUpdate.class})\n    @Positive\n    @ApiModelProperty(value = "更新操作人id", position = ${index})\n    private Long ${name};`,
+      insertUserName: ({index, name, length}) => `    @Column(updatable = false)\n    @NotNull(groups = {ISave.class})\n    @Size(max = ${length})\n    @ApiModelProperty(value = "新增操作人昵称", position = ${index})\n    private String ${name};`,
+      updateUserName: ({index, name, length}) => `    @NotNull(groups = {ISave.class, IUpdate.class})\n    @Size(max = ${length})\n    @ApiModelProperty(value = "更新操作人昵称", position = ${index})\n    private String ${name};`
     };
     this.props = {
       default: ({name, dataType, notNull, comment}) => `        ${name}(${dataType.java.toUpperCase()}.build(${notNull ? 'true, ' : ''}"${comment}"))`,

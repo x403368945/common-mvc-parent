@@ -6,6 +6,7 @@ import DataType from './DataType';
 export default class Column {
   /**
    * 通过 SHOW FULL COLUMNS FROM #{tableName} 获取到的参数
+   * @param index {number} 字段序号
    * @param Field {string} 字段名
    * @param Type {string} 数据库类型
    * @param Collation {string} 字符集
@@ -13,7 +14,12 @@ export default class Column {
    * @param Default {string} 默认值
    * @param Comment {string} 字段说明
    */
-  constructor({Field, Type, Collation, Null, Default, Comment}) {
+  constructor({index, Field, Type, Collation, Null, Default, Comment}) {
+    /**
+     * 字段排序，@ApiModelProperty position 需要该值
+     * @type {number}
+     */
+    this.index = index + 1;
     /**
      * 实体属性名，驼峰命名法
      * @type {string}

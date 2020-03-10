@@ -3,7 +3,7 @@
 ### @author 谢长春 on 2020-03-08
 ### ********************************************************************************************************************
 ### 角色表: 分页查询
-GET http://{{host}}:{{port}}/1/role/page/1/10
+GET http://{{host}}:{{port}}/1/role/page/1/10?insertUserId=3
 Content-Type: application/json
 Authorization: Basic {{username}} {{password}}
 

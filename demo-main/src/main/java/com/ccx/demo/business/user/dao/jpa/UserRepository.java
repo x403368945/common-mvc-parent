@@ -231,7 +231,7 @@ public interface UserRepository extends
 ////                .stream()
 ////                .map(row -> TabUser.builder()
 ////                        .id(row.get(q.id))
-////                        .subdomain(row.get(q.subdomain))
+////                        .domain(row.get(q.domain))
 ////                        .username(row.get(q.username))
 ////                        .phone(row.get(q.phone))
 ////                        .email(row.get(q.email))

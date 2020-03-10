@@ -61,7 +61,7 @@ public class TabUserLogin implements ITable, IWhere<JPAUpdateClause, QdslWhere> 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull(groups = {IUpdate.class, IMarkDelete.class})
     @Positive
-    @ApiModelProperty(value = "数据ID")
+    @ApiModelProperty(value = "数据ID", position = 1)
     private Long id;
     /**
      * 用户ID，tab_user.id
@@ -69,21 +69,21 @@ public class TabUserLogin implements ITable, IWhere<JPAUpdateClause, QdslWhere> 
     @NotNull(groups = {ISave.class})
     @Min(1)
     @DecimalMax("9223372036854776000")
-    @ApiModelProperty(value = "用户ID，tab_user.id")
+    @ApiModelProperty(value = "用户ID，tab_user.id", position = 2)
     private Long userId;
     /**
      * 登录IP
      */
     @NotNull(groups = {ISave.class})
     @Size(max = 15)
-    @ApiModelProperty(value = "登录IP")
+    @ApiModelProperty(value = "登录IP", position = 3)
     private String ip;
     /**
      * 登录时间
      */
     @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")
     @Column(insertable = false, updatable = false)
-    @ApiModelProperty(value = "登录时间")
+    @ApiModelProperty(value = "登录时间", position = 4)
     private Timestamp timestamp;
 
     /**
@@ -98,14 +98,14 @@ public class TabUserLogin implements ITable, IWhere<JPAUpdateClause, QdslWhere> 
      */
     @Transient
     @QueryTransient
-    @ApiModelProperty(value = "登录时间查询区间")
+    @ApiModelProperty(value = "登录时间查询区间", position = 6)
     private Dates.Range timestampRange;
     /**
      * 排序字段
      */
     @QueryTransient
     @Transient
-    @ApiModelProperty(value = "查询排序字段，com.ccx.demo.code.userlogin.entity.TabUserLogin$OrderBy")
+    @ApiModelProperty(value = "查询排序字段，com.ccx.demo.code.userlogin.entity.TabUserLogin$OrderBy", position = 7)
     private List<Sorts.Order> sorts;
 
 // Enum Start **********************************************************************************************************

@@ -74,7 +74,10 @@ export default class Table {
      * 列属性
      * @return {Array<Column>}
      */
-    this.columns = columns.map(obj => new Column(obj));
+    this.columns = columns.map((obj, index) => {
+      obj.index = index;
+      return new Column(obj);
+    });
     /**
      * 主键数据类型
      * @type {string}

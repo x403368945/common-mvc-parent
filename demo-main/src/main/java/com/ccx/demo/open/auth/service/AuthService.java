@@ -47,7 +47,7 @@ public class AuthService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
 //            TabUser obj = JSON.parseObject(jsonText, TabUser.class);
-//            Asserts.notEmpty(obj.getSubdomain(), "字段【subdomain】不能为空");
+//            Asserts.notEmpty(obj.getdomain(), "字段【domain】不能为空");
         Assert.hasText(username, "参数【username】不能为空");
         return userService.findUser(username)
                 .map(TabUser::loadUserDetail)

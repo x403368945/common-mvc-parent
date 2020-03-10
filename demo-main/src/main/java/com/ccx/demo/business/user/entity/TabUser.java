@@ -75,7 +75,7 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull(groups = {IUpdate.class, IMarkDelete.class})
     @Positive
-    @ApiModelProperty(value = "数据ID")
+    @ApiModelProperty(value = "数据ID", position = 1)
     private Long id;
     /**
      * 用户UUID，缓存和按ID查询时可使用强校验
@@ -83,7 +83,7 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
     @Column(updatable = false)
     @NotNull(groups = {ISave.class, IUpdate.class, IMarkDelete.class})
     @Size(min = 32, max = 32)
-    @ApiModelProperty(value = "数据uid")
+    @ApiModelProperty(value = "数据uid", position = 2)
     private String uid;
     /**
      * 子域名用户组
@@ -91,14 +91,14 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
     @Column(updatable = false)
     @NotNull(groups = {ISave.class})
     @Size(max = 10)
-    @ApiModelProperty(value = "子域名用户组")
-    private String subdomain;
+    @ApiModelProperty(value = "子域名用户组", position = 3)
+    private String domain;
     /**
      * 登录名
      */
     @NotNull(groups = {ISave.class})
     @Size(max = 15)
-    @ApiModelProperty(value = "登录名")
+    @ApiModelProperty(value = "登录名", position = 4)
     private String username;
     /**
      * 登录密码
@@ -106,14 +106,14 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
     @Column(updatable = false)
     @NotNull(groups = {ISave.class})
     @Size(max = 150)
-    @ApiModelProperty(value = "登录密码")
+    @ApiModelProperty(value = "登录密码", position = 5)
     private String password;
     /**
      * 用户昵称
      */
     @NotNull(groups = {ISave.class})
     @Size(max = 30)
-    @ApiModelProperty(value = "昵称")
+    @ApiModelProperty(value = "昵称", position = 6)
     private String nickname;
     /**
      * 手机号
@@ -121,7 +121,7 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
     @Column(updatable = false)
     @NotNull(groups = {ISave.class})
     @Size(max = 11)
-    @ApiModelProperty(value = "手机号")
+    @ApiModelProperty(value = "手机号", position = 7)
     private String phone;
     /**
      * 邮箱
@@ -129,26 +129,26 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
     @Column(updatable = false)
     @NotNull(groups = {ISave.class})
     @Size(max = 30)
-    @ApiModelProperty(value = "邮箱")
+    @ApiModelProperty(value = "邮箱", position = 8)
     private String email;
     /**
      * 用户头像
      */
     @Convert(converter = UserFileInfoJsonConvert.class)
-    @ApiModelProperty(value = "用户头像")
+    @ApiModelProperty(value = "用户头像", position = 9)
     private UserFileInfo avatar;
     /**
      * 角色 ID 集合，tab_role.id，{@link Long}[]
      * 角色 ID 集合，tab_role.id {@link TabRole#getId()}
      */
     @Convert(converter = ArrayLongJsonConvert.class)
-    @ApiModelProperty(value = "角色 ID 集合，tab_role.id，{@link Long}[]")
+    @ApiModelProperty(value = "角色 ID 集合，tab_role.id，{@link Long}[]", position = 10)
     private Long[] roles;
     /**
      * 注册渠道
      */
     @Column(updatable = false)
-    @ApiModelProperty(value = "账户注册渠道", hidden = true)
+    @ApiModelProperty(value = "账户注册渠道", hidden = true, position = 11)
     private RegisterSource registerSource;
     /**
      * 创建时间
@@ -156,7 +156,7 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
     @Column(insertable = false, updatable = false)
     @JSONField(serialize = false, deserialize = false, format = "yyyy-MM-dd HH:mm:ss")
     @Null(groups = {ISave.class})
-    @ApiModelProperty(value = "数据新增时间", example = "2020-02-02 02:02:02")
+    @ApiModelProperty(value = "数据新增时间", example = "2020-02-02 02:02:02", position = 12)
     private Timestamp insertTime;
     /**
      * 创建用户ID
@@ -165,7 +165,7 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
     @JSONField(serialize = false, deserialize = false)
     @NotNull(groups = {ISave.class})
     @Positive
-    @ApiModelProperty(value = "新增操作人id")
+    @ApiModelProperty(value = "新增操作人id", position = 13)
     private Long insertUserId;
     /**
      * 修改时间
@@ -173,21 +173,21 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
     @Column(insertable = false, updatable = false)
     @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")
     @Null(groups = {ISave.class})
-    @ApiModelProperty(value = "数据最后一次更新时间", example = "2020-02-02 02:02:02.002")
+    @ApiModelProperty(value = "数据最后一次更新时间", example = "2020-02-02 02:02:02.002", position = 14)
     private Timestamp updateTime;
     /**
      * 修改用户ID
      */
     @NotNull(groups = {ISave.class, IUpdate.class})
     @Positive
-    @ApiModelProperty(value = "更新操作人id")
+    @ApiModelProperty(value = "更新操作人id", position = 15)
     private Long updateUserId;
     /**
      * 是否逻辑删除，参考：Enum{@link com.ccx.demo.enums.Bool}
      */
     @Column(insertable = false, updatable = false)
     @Null(groups = {ISave.class})
-    @ApiModelProperty(value = "是否逻辑删除，com.ccx.demo.enums.Bool")
+    @ApiModelProperty(value = "是否逻辑删除，com.ccx.demo.enums.Bool", position = 16)
     private Bool deleted;
 
     /**
@@ -195,7 +195,7 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
      */
     @QueryTransient
     @Transient
-    @ApiModelProperty(value = "查询排序字段，com.ccx.demo.code.user.entity.TabUser$OrderBy")
+    @ApiModelProperty(value = "查询排序字段，com.ccx.demo.code.user.entity.TabUser$OrderBy", position = 17)
     private List<Sorts.Order> sorts;
     /**
      * 新增用户时，选择的角色集合，经过验证之后，将角色 ID 保存到 {@link TabUser#roles}
@@ -203,7 +203,7 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
     @NotEmpty(groups = {ISave.class, IUpdate.class})
     @QueryTransient
     @Transient
-    @ApiModelProperty(value = "角色集合，新增用户时，选择的角色集合，经过验证之后，才保存角色 ID ")
+    @ApiModelProperty(value = "角色集合，新增用户时，选择的角色集合，经过验证之后，才保存角色 ID ", position = 18)
     private Set<TabRole> roleList;
 
     @Override
@@ -218,7 +218,7 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
         // 按 id 排序可替代按创建时间排序
         id(tabUser.id),
 //        uid(tabUser.uid),
-//        subdomain(tabUser.subdomain),
+//        domain(tabUser.domain),
 //        username(tabUser.username),
 //        password(tabUser.password),
 //        nickname(tabUser.nickname),
@@ -286,7 +286,7 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
                 .and(username, () -> q.username.eq(username))
                 .and(phone, () -> q.phone.eq(phone))
                 .and(email, () -> q.email.eq(email))
-                .and(subdomain, () -> q.subdomain.eq(subdomain))
+                .and(domain, () -> q.domain.eq(domain))
                 .and(registerSource, () -> q.registerSource.eq(registerSource))
                 .and(insertUserId, () -> q.insertUserId.eq(insertUserId))
                 .and(updateUserId, () -> q.updateUserId.eq(updateUserId))
