@@ -110,7 +110,7 @@ export default class UserService {
    * @return {Promise<Result>}
    */
   async save() {
-    const {username, password, nickname, phone, email, roleList, domain} = this.vo;
+    const {username, password, nickname, phone, email, roleList, domain, avatar} = this.vo;
     return await axios
       .post(saveURL, {
         username,
@@ -119,7 +119,8 @@ export default class UserService {
         phone,
         email,
         roleList,
-        domain
+        domain,
+        avatar
       })
       .then(Result.ofResponse)
       .catch(Result.ofCatch);

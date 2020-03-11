@@ -62,6 +62,7 @@ public class DemoMongo implements
         ITabUserCache,
         IWhere<Update, QdslWhere> // 声明用于实现构建 com.support.mvc.dao.ISearchRepository 需要的查询条件
 {
+    private static final long serialVersionUID = 4003242305988435500L;
     /**
      * 数据ID，主键自增
      */

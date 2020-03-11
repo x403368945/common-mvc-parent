@@ -5,6 +5,8 @@ import com.ccx.demo.business.common.vo.UserFileInfo;
 
 import javax.persistence.AttributeConverter;
 
+import static com.alibaba.fastjson.serializer.SerializerFeature.IgnoreNonFieldGetter;
+
 /**
  * 支撑 mysql 原生 JSON 数据类型与实体类属性的映射；
  * 需要在实体类属性上添加注解：@Convert(converter = {@link UserFileInfoJsonConvert}.class)
@@ -14,7 +16,7 @@ import javax.persistence.AttributeConverter;
 public class UserFileInfoJsonConvert implements AttributeConverter<UserFileInfo, String> {
     @Override
     public String convertToDatabaseColumn(final UserFileInfo attribute) {
-        return JSON.toJSONString(attribute);
+        return JSON.toJSONString(attribute, IgnoreNonFieldGetter);
     }
 
     @Override

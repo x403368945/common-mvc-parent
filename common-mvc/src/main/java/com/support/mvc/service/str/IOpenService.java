@@ -13,6 +13,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 服务接口基础方法规范定义
@@ -105,9 +106,9 @@ public interface IOpenService<E> extends IService<E> {
      * @param ids {@link List<String>} 数据ID
      */
     @Transactional(rollbackFor = Exception.class)
-    default void markDeleteByIds(@NotEmpty(message = "【ids】不能为空") final List<@NotBlank String> ids) {
+    default void markDeleteByIds(@NotEmpty(message = "【ids】不能为空") final Set<@NotBlank String> ids) {
 //        DeleteRowsException.batch(repository.markDeleteByIds(ids, userId));
-        throw new NullPointerException(this.getClass().getName().concat("：方法【markDeleteByIds(final List<String> ids)】未实现"));
+        throw new NullPointerException(this.getClass().getName().concat("：方法【markDeleteByIds(final Set<String> ids)】未实现"));
     }
 
     /**

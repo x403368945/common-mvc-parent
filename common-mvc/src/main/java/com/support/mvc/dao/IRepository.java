@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 数据访问接口方法定义，默认继承 QDSL 查询，建议查询尽量使用 QDSL 语法 <br>
@@ -145,8 +146,8 @@ public interface IRepository<E, ID> extends ISearchRepository<E> {
      */
     @Modifying
     @Query
-    default long markDeleteByIds(final List<ID> ids, final Long userId) {
-        throw new NullPointerException(this.getClass().getName().concat("：方法【markDeleteByIds(final List<ID> ids, final Long userId)】未实现"));
+    default long markDeleteByIds(final Set<ID> ids, final Long userId) {
+        throw new NullPointerException(this.getClass().getName().concat("：方法【markDeleteByIds(final Set<ID> ids, final Long userId)】未实现"));
     }
 
     /**
@@ -157,8 +158,8 @@ public interface IRepository<E, ID> extends ISearchRepository<E> {
      */
     @Modifying
     @Query
-    default long markDeleteByIds(final List<ID> ids) {
-        throw new NullPointerException(this.getClass().getName().concat("：方法【markDeleteByIds(final List<ID> ids)】未实现"));
+    default long markDeleteByIds(final Set<ID> ids) {
+        throw new NullPointerException(this.getClass().getName().concat("：方法【markDeleteByIds(final Set<ID> ids)】未实现"));
     }
 
     /**

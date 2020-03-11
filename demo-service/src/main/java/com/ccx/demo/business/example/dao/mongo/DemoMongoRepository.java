@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import static com.ccx.demo.business.example.entity.DemoMongo.Props.*;
 import static com.ccx.demo.config.init.BeanInitializer.Beans.mongoTemplate;
@@ -72,7 +73,7 @@ public interface DemoMongoRepository extends
     }
 
     @Override
-    default long markDeleteByIds(final List<String> ids, final Long userId) {
+    default long markDeleteByIds(final Set<String> ids, final Long userId) {
         return mongoTemplate.<MongoTemplate>get()
                 .updateMulti(
                         new Query(where(id.name()).in(ids).and(insertUserId.name()).is(userId)),

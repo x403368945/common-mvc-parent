@@ -7,9 +7,11 @@ import com.ccx.demo.business.example.vo.TabDemoListVO;
 import com.ccx.demo.business.user.entity.TabUser;
 import com.ccx.demo.business.user.web.IAuthController;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import com.support.mvc.entity.base.MarkDelete;
 import com.support.mvc.entity.base.Pager;
 import com.support.mvc.entity.base.Result;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -21,12 +23,16 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 /**
- * 请求操作响应：案例
+ * 请求操作响应：测试案例表
  *
  * @author 谢长春 2018-10-5
  */
+@Api(tags = "测试案例表")
+@ApiSort(9) // 控制接口排序 <
 @RequestMapping("/1/demo-list")
 @Controller
 @Slf4j
@@ -36,167 +42,172 @@ public class DemoListController implements IAuthController<Long, TabDemoList> {
     private final DemoListService service;
 
     @PostMapping
-    @ApiOperation(value = "1.鉴权测试 POST 保存", tags = {"0.0.0"})
+    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_save')") // <
+    @ApiOperation(value = "1.新增测试案例表", tags = {"2020-03-11"})
     @ApiImplicitParam(name = "body", dataType = "TabDemoList", dataTypeClass = TabDemoList.class, required = true)
-    @ApiOperationSupport(order = 1, ignoreParameters = {"body.id", "body.uid", "body.deleted", "body.insertTime", "body.insertUserId", "body.insertUserName", "body.updateTime", "body.updateUserId", "body.updateUserName", "body.timestamp", "body.sorts"})
+    @ApiOperationSupport(
+            order = 1,
+            ignoreParameters = {
+                    "body.id", "body.uid", "body.deleted", "body.insertTime", "body.insertUserId", "body.insertUserName", "body.updateTime", "body.updateUserId", "body.updateUserName", "body.timestamp", "body.sorts"
+            })
     @ResponseBody
     @Override
-    public Result<TabDemoList> save(
-            @AuthenticationPrincipal final TabUser user,
-            // required = false 可以让请求先过来，如果参数为空再抛出异常，保证本次请求能得到响应
-            @RequestBody(required = false) final String body) {
-        return new Result<TabDemoList>().execute(result ->
-                result.setSuccess(service.save(JSON.parseObject(body, TabDemoList.class), user.getId()))
-        );
+    public Result<TabDemoList> save(final TabUser user, final String body) {
+        return new Result<TabDemoList>().execute(result -> result.setSuccess(
+                service.save(JSON.parseObject(body, TabDemoList.class), user.getId())
+        ));
     }
 
     @PutMapping("/{id}")
-    @ApiOperation(value = "2.鉴权测试 PUT 全量更新", tags = {"0.0.0"})
+    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_update')") // <
+    @ApiOperation(value = "2.修改测试案例表", tags = {"2020-03-11"})
     @ApiImplicitParam(name = "body", dataType = "TabDemoList", dataTypeClass = TabDemoList.class, required = true)
-    @ApiOperationSupport(order = 2, ignoreParameters = {"body.deleted", "body.insertTime", "body.insertUserId", "body.insertUserName", "body.updateTime", "body.updateUserId", "body.updateUserName", "body.sorts"})
+    @ApiOperationSupport(
+            order = 2,
+            ignoreParameters = {
+                    "body.id", "body.uid", "body.deleted", "body.insertTime", "body.insertUserId", "body.insertUserName", "body.updateTime", "body.updateUserId", "body.updateUserName", "body.timestamp", "body.sorts"
+            })
     @ResponseBody
     @Override
-    public Result<Void> update(
-            @AuthenticationPrincipal final TabUser user,
-            @ApiParam(required = true, value = "数据id", example = "1") @PathVariable final Long id,
-            // required = false 可以让请求先过来，如果参数为空再抛出异常，保证本次请求能得到响应
-            @RequestBody(required = false) final String body) {
+    public Result<Void> update(final TabUser user, final Long id, final String body) {
         return new Result<Void>().call(() -> service.update(id, user.getId(), JSON.parseObject(body, TabDemoList.class)));
     }
 
+    // 优先使用 deleteByUid 方法，可以阻止平行越权。 只有在实体没有 uid 的情况才能将该方法开放给前端<
     @DeleteMapping("/{id}")
-    @ApiOperation(value = "3.鉴权测试 DELETE 按 id 删除", tags = {"0.0.0"})
-    @ApiOperationSupport(order = 3)
+    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
+    @ApiOperation(value = "3.物理删除测试案例表", tags = {"2020-03-11"})
+    @ApiOperationSupport(order = 3) // order id 相同的接口只能开放一个
     @ResponseBody
     @Override
-    public Result<Void> deleteById(
-            @AuthenticationPrincipal final TabUser user,
-            @ApiParam(required = true, value = "数据id", example = "1") @PathVariable final Long id) {
+    public Result<Void> deleteById(final TabUser user, final Long id) {
         return new Result<Void>().call(() -> service.deleteById(id, user.getId()));
     }
 
     @DeleteMapping("/{id}/{uid}")
-    @ApiOperation(value = "4.鉴权测试 DELETE 按 id 和 uid 删除", tags = {"0.0.0"})
-    @ApiOperationSupport(order = 4)
+    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
+    @ApiOperation(value = "4.物理删除测试案例表", tags = {"2020-03-11"})
+    @ApiOperationSupport(order = 4) // order id 相同的接口只能开放一个<
     @ResponseBody
     @Override
-    public Result<Void> deleteByUid(
-            @AuthenticationPrincipal final TabUser user,
-            @ApiParam(required = true, value = "数据id", example = "1") @PathVariable final Long id,
-            @ApiParam(required = true, value = "数据uid", example = "uuid32") @PathVariable final String uid) {
+    public Result<Void> deleteByUid(final TabUser user, final Long id, final String uid) {
         return new Result<Void>().call(() -> service.deleteByUid(id, uid, user.getId()));
     }
 
-    @PatchMapping("/{id}")
-    @ApiOperation(value = "5.鉴权测试 PATCH 按 id 逻辑删除", tags = {"0.0.0"})
-    @ApiOperationSupport(order = 5)
-    @ResponseBody
-    @Override
-    public Result<Void> markDeleteById(
-            @AuthenticationPrincipal final TabUser user,
-            @ApiParam(required = true, value = "数据id", example = "1") @PathVariable final Long id) {
-        return new Result<Void>().call(() -> service.markDeleteById(id, user.getId()));
-    }
-
     @PatchMapping("/{id}/{uid}")
-    @ApiOperation(value = "6.鉴权测试 PATCH 按 id 和 uid 逻辑删除", tags = {"0.0.0"})
-    @ApiOperationSupport(order = 6)
+    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
+    @ApiOperation(value = "5.逻辑删除测试案例表", tags = {"2020-03-11"})
+    @ApiOperationSupport(order = 5) // order id 相同的接口只能开放一个<
     @ResponseBody
     @Override
-    public Result<Void> markDeleteByUid(
-            @AuthenticationPrincipal final TabUser user,
-            @ApiParam(required = true, value = "数据id", example = "1") @PathVariable final Long id,
-            @ApiParam(required = true, value = "数据uid", example = "uuid32") @PathVariable final String uid) {
+    public Result<Void> markDeleteByUid(final TabUser user, final Long id, final String uid) {
         return new Result<Void>().call(() -> service.markDeleteByUid(id, uid, user.getId()));
     }
 
     @PatchMapping
-    @ApiOperation(value = "7.鉴权测试 PATCH 按 id 和 uid 批量逻辑删除", tags = {"0.0.0"})
-    @ApiOperationSupport(order = 7)
+    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
+    @ApiOperation(value = "6.批量逻辑删除测试案例表", tags = {"2020-03-11"})
+    @ApiOperationSupport(order = 6) // order id 相同的接口只能开放一个<
     @ResponseBody
     @Override
-    public Result<Void> markDelete(
-            @AuthenticationPrincipal final TabUser user,
-            @RequestBody(required = false) final List<MarkDelete> body) {
-        return new Result<Void>().call(() -> service.markDelete(body, user.getId())); // 按 ID 和 UUID 逻辑删除
+    public Result<Void> markDeleteByIds(final TabUser user, final Set<Long> body) {
+        return new Result<Void>().call(() -> service.markDeleteByIds(body, user.getId()));
     }
 
-    @GetMapping("/{id}")
-    @ApiOperation(value = "8.鉴权测试 GET 按 id 查询单条记录", tags = {"0.0.0"})
-    @ApiOperationSupport(order = 8)
+    @PatchMapping
+    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
+    @ApiOperation(value = "7.批量逻辑删除测试案例表", tags = {"2020-03-11"})
+    @ApiOperationSupport(order = 7) // order id 相同的接口只能开放一个<
     @ResponseBody
     @Override
-    public Result<TabDemoList> findById(
-            @AuthenticationPrincipal final TabUser user,
-            @ApiParam(required = true, value = "数据id", example = "1") @PathVariable final Long id) {
+    public Result<Void> markDelete(final TabUser user, final List<MarkDelete> body) {
+        return new Result<Void>().call(() -> service.markDelete(body, user.getId()));
+    }
+
+    // 优先使用 findByUid 方法，可以阻止平行越权。 只有在实体没有 uid 的情况才能将该方法开放给前端<
+    @GetMapping("/{id}")
+    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_find')")
+    @ApiOperation(value = "8.按 id 查询测试案例表", tags = {"2020-03-11"})
+    @ApiOperationSupport(order = 8) // order id 相同的接口只能开放一个
+    @ResponseBody
+    @Override
+    public Result<TabDemoList> findById(final TabUser user, final Long id) {
         return new Result<TabDemoList>().execute(result -> result.setSuccess(service.findById(id).orElse(null)));
     }
 
     @GetMapping("/{id}/{uid}")
-    @ApiOperation(value = "9.鉴权测试 GET 按 id 和 uid 查询单条记录", tags = {"0.0.0"})
-    @ApiOperationSupport(order = 9)
+    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_find')")
+    @ApiOperation(value = "9.按 id 和 uid 查询测试案例表", tags = {"2020-03-11"})
+    @ApiOperationSupport(order = 9) // order id 相同的接口只能开放一个<
     @ResponseBody
     @Override
-    public Result<TabDemoList> findByUid(
-            @AuthenticationPrincipal final TabUser user,
-            @ApiParam(required = true, value = "数据id", example = "1") @PathVariable final Long id,
-            @ApiParam(required = true, value = "数据uid", example = "uuid32") @PathVariable final String uid) {
+    public Result<TabDemoList> findByUid(final TabUser user, final Long id, final String uid) {
         return new Result<TabDemoList>().execute(result -> result.setSuccess(service.findByUid(id, uid).orElse(null)));
     }
 
-    @GetMapping
-    @ApiOperation(value = "10.鉴权测试 GET 查询多条记录", tags = {"0.0.0"})
-    @ApiOperationSupport(order = 10)
-    @ResponseBody
-    @Override
-    public Result<TabDemoList> search(
-            @AuthenticationPrincipal final TabUser user,
-            @RequestParam(required = false, defaultValue = "{}") final TabDemoList condition) {
-        return new Result<TabDemoList>().execute(result -> result.setSuccess(service.findList(condition)));
-    }
 
     @GetMapping("/page/{number}/{size}")
-    @ApiOperation(value = "11.鉴权测试 GET 分页查询", tags = {"0.0.0"})
-    @ApiOperationSupport(order = 11)
+    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_page')") // <
+    @ApiOperation(value = "10.分页查询测试案例表", tags = {"2020-03-11"})
+    @ApiOperationSupport(
+            order = 10,
+            ignoreParameters = {"insertTime", "updateTime"}
+    )
     @ResponseBody
     @Override
-    public Result<TabDemoList> page(
-            @AuthenticationPrincipal final TabUser user,
-            @ApiParam(required = true, value = "页码", example = "1") @PathVariable final int number,
-            @ApiParam(required = true, value = "每页条数", example = "1") @PathVariable final int size,
-            @RequestParam(required = false, defaultValue = "{}") final TabDemoList condition) {
-        return new Result<TabDemoList>().execute(result -> result.setSuccess(service.findPage(condition, Pager.builder().number(number).size(size).build())));
+    public Result<TabDemoList> page(final TabUser user, final int number, final int size, final TabDemoList condition) {
+        return new Result<TabDemoList>().execute(result -> result.setSuccess(service.findPage(
+                Optional.ofNullable(condition).orElseGet(TabDemoList::new),
+                Pager.builder().number(number).size(size).build()
+        )));
     }
 
-    @GetMapping("/vo")
-    @ApiOperation(value = "12.鉴权测试 GET 查询多条记录， 扩展 10 的查询条件和返回参数", tags = {"0.0.0"})
-    @ApiOperationSupport(order = 12)
+    // 非必要情况下不要开放列表查询方法，因为没有分页控制，容易内存溢出。大批量查询数据应该使用分页查询<
+    @GetMapping
+    // @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_search')")
+    @ApiOperation(value = "11.分页查询测试案例表", tags = {"2020-03-11"})
+    @ApiOperationSupport(
+            order = 11,
+            ignoreParameters = {"insertTime", "updateTime"}
+    )
     @ResponseBody
-    public Result<TabDemoListVO> searchVO(
-            @AuthenticationPrincipal final TabUser user,
-            @RequestParam(required = false, defaultValue = "{}") final TabDemoListVO condition) {
-        return new Result<TabDemoListVO>().execute(result -> result.setSuccess(service.findListVO(condition)));
+    @Override
+    public Result<TabDemoList> search(final TabUser user, final TabDemoList condition) {
+        return new Result<TabDemoList>().execute(result -> result.setSuccess(service.findList(
+                Optional.ofNullable(condition).orElseGet(TabDemoList::new)
+        )));
     }
 
     @GetMapping("/page/vo/{number}/{size}")
-    @ApiOperation(value = "13.鉴权测试 GET 分页查询， 扩展 11 的查询条件和返回参数", tags = {"0.0.0"})
-    @ApiOperationSupport(order = 13)
+    @ApiOperation(value = "12.鉴权测试 GET 分页查询， 扩展 10 的查询条件和返回参数", tags = {"0.0.0"})
+    @ApiOperationSupport(order = 12)
     @ResponseBody
     public Result<TabDemoListVO> pageVO(
-            @AuthenticationPrincipal final TabUser user,
+            @ApiIgnore @AuthenticationPrincipal final TabUser user,
             @ApiParam(required = true, value = "页码", example = "1") @PathVariable final int number,
             @ApiParam(required = true, value = "每页条数", example = "1") @PathVariable final int size,
-            @RequestParam(required = false, defaultValue = "{}") final TabDemoListVO condition) {
+            final TabDemoListVO condition) {
         return new Result<TabDemoListVO>().execute(result -> result.setSuccess(service.findPageVO(
                 condition,
                 Pager.builder().number(number).size(size).build())
         ));
     }
 
+    @GetMapping("/vo")
+    @ApiOperation(value = "13.鉴权测试 GET 查询多条记录， 扩展 11 的查询条件和返回参数", tags = {"0.0.0"})
+    @ApiOperationSupport(order = 13)
+    @ResponseBody
+    public Result<TabDemoListVO> searchVO(
+            @ApiIgnore @AuthenticationPrincipal final TabUser user,
+            final TabDemoListVO condition) {
+        return new Result<TabDemoListVO>().execute(result -> result.setSuccess(service.findListVO(condition)));
+    }
+
     @ApiIgnore
     @GetMapping("/test")
     @ResponseBody
-    public Result<Void> test(@AuthenticationPrincipal final TabUser user) {
+    public Result<Void> test(@ApiIgnore @AuthenticationPrincipal final TabUser user) {
         return new Result<Void>().call(service::findListTest);
     }
+
 }

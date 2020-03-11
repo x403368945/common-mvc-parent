@@ -39,9 +39,15 @@ export default class CommonServiceTest {
    */
   async getEnumItems() {
     console.log('> 获取枚举所有选项 ----------------------------------------------------------------------------------------------------');
-    (await new CommonService().getEnumItems('com.ccx.demo.business.user.entity.TabUser$OrderBy')).print().assertData();
-    (await new CommonService().getEnumItems('com.ccx.demo.enums.Bool')).print().assertData();
-    (await new CommonService().getEnumItems('com.support.mvc.enums.Code')).print().assertData();
+    (await new CommonService().getEnumItems('com.ccx.demo.business.user.entity.TabUser$OrderBy'))
+      .print()
+      .assertData();
+    (await new CommonService().getEnumItems('com.ccx.demo.enums.Bool'))
+      .print()
+      .assertData();
+    (await new CommonService().getEnumItems('com.support.mvc.enums.Code'))
+      .print()
+      .assertData();
     return this;
   }
 
@@ -50,7 +56,9 @@ export default class CommonServiceTest {
    */
   async uploadTemp() {
     console.log('> 上传到临时目录，单个上传 ----------------------------------------------------------------------------------------------------');
-    (await new CommonService().uploadTemp(fs.createReadStream('./favicon.ico'))).print().assertData();
+    (await new CommonService().uploadTemp(fs.createReadStream('./favicon.ico')))
+      .print()
+      .assertData();
     return this;
   }
 
@@ -62,7 +70,9 @@ export default class CommonServiceTest {
     (await new CommonService().uploadTemps([
       fs.createReadStream('./favicon.ico'),
       fs.createReadStream('./package.json')
-    ])).print().assertData();
+    ]))
+      .print()
+      .assertData();
     return this;
   }
 
@@ -71,7 +81,9 @@ export default class CommonServiceTest {
    */
   async uploadUser() {
     console.log('> 上传到用户目录，单个上传 ----------------------------------------------------------------------------------------------------');
-    (await new CommonService().uploadUser(fs.createReadStream('./favicon.ico'))).print().assertData();
+    (await new CommonService().uploadUser(fs.createReadStream('./favicon.ico')))
+      .print()
+      .assertData();
     return this;
   }
 
@@ -83,7 +95,9 @@ export default class CommonServiceTest {
     (await new CommonService().uploadUsers([
       fs.createReadStream('./favicon.ico'),
       fs.createReadStream('./favicon.ico')
-    ])).print().assertData();
+    ]))
+      .print()
+      .assertData();
     return this;
   }
 

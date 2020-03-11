@@ -2,6 +2,8 @@ package com;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Duration;
+
 /**
  * Created by 谢长春 on 2017/10/14.
  */

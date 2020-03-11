@@ -42,7 +42,9 @@ export default class RoleServiceTest {
    */
   async save() {
     console.log('> 新增 ----------------------------------------------------------------------------------------------------');
-    const {data: tree} = (await new Authority().getService().getTree()).assertCode().assertData();
+    const {data: tree} = (await new Authority().getService().getTree())
+      .assertCode()
+      .assertData();
     const arrs = [
       {
         name: '随机部分权限',
@@ -56,8 +58,12 @@ export default class RoleServiceTest {
       }
     ];
     for (let i = 0, len = arrs.length; i < len; i++) {
-      (await new Role(arrs[i]).getService().save()).print().assertData();
-      (await new Role(arrs[i]).getService().save()).print().assertData();
+      (await new Role(arrs[i]).getService().save())
+        .print()
+        .assertData();
+      (await new Role(arrs[i]).getService().save())
+        .print()
+        .assertData();
     }
     return this;
   }
@@ -71,14 +77,18 @@ export default class RoleServiceTest {
 
     const {data} = (await new Role({
       insertUserId: sessionUser.id
-    }).getService().pageable()).print().assertData();
+    }).getService().pageable())
+      .print()
+      .assertData();
     const row = Object.assign(sample(data), {
       name: '重命名角色',
       authorityTree: JSON.parse(JSON.stringify(tree).replace(/false/g,
         () => parseInt(`${Math.random()}`.slice(-1)) % 2 === 0 ? 'true' : 'false'
       ))
     });
-    (await new Role(row).getService().update()).print().assertCode();
+    (await new Role(row).getService().update())
+      .print()
+      .assertCode();
 
     return this;
   }
@@ -90,12 +100,15 @@ export default class RoleServiceTest {
     console.log('> 按 id + uid 逻辑删除：在查询结果集中随机选取一条数据 ----------------------------------------------------------------------------------------------------');
     const {data} = (await new Role({
       insertUserId: sessionUser.id
-    }).getService().pageable()).assertData();
+    }).getService().pageable())
+      .assertData();
     const {id, uid} = sample(data);
     (await new Role({
       id,
       uid
-    }).getService().markDeleteByUid()).print().assertCode();
+    }).getService().markDeleteByUid())
+      .print()
+      .assertCode();
     return this;
   }
 
@@ -106,11 +119,14 @@ export default class RoleServiceTest {
     console.log('> 按 id + uid 批量逻辑删除：在查询结果集中随机选取 2 条数据 ----------------------------------------------------------------------------------------------------');
     const {data} = (await new Role({
       insertUserId: sessionUser.id
-    }).getService().pageable()).assertData();
+    }).getService().pageable())
+      .assertData();
     const arrs = sampleSize(data, 2);
     (await new Role({
       markDeleteArray: arrs.map(row => new MarkDelete(row))
-    }).getService().markDelete()).print().assertCode();
+    }).getService().markDelete())
+      .print()
+      .assertCode();
     return this;
   }
 
@@ -124,7 +140,9 @@ export default class RoleServiceTest {
     (await new Role({
       id,
       uid
-    }).getService().findByUid()).print().assertCode();
+    }).getService().findByUid())
+      .print()
+      .assertCode();
     return this;
   }
 
@@ -134,14 +152,20 @@ export default class RoleServiceTest {
    */
   async pageable() {
     console.log('> 分页：多条件批量查询 ----------------------------------------------------------------------------------------------------');
-    (await new Role().getService().pageable()).print().assertData();
+    (await new Role().getService().pageable())
+      .print()
+      .assertData();
     (await new Role({
       insertUserId: sessionUser.id
-    }).getService().pageable()).print().assertData();
+    }).getService().pageable())
+      .print()
+      .assertData();
     (await new Role({
       id: 1,
       deleted: 'NO'
-    }).getService().pageable()).print().assertData();
+    }).getService().pageable())
+      .print()
+      .assertData();
     return this;
   }
 
@@ -150,7 +174,9 @@ export default class RoleServiceTest {
    */
   async options() {
     console.log('> 角色下拉列表选项 ----------------------------------------------------------------------------------------------------');
-    (await new Role().getService().options()).print().assertData();
+    (await new Role().getService().options())
+      .print()
+      .assertData();
     return this;
   }
 

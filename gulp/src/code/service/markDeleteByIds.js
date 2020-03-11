@@ -16,7 +16,7 @@ const markDeleteByIds = (table, {auth = false, spare = false}) => {
   return `${spareBegin}
     // 注释掉的方法只有在需要的时候解开 <
     @Override
-    public void markDeleteByIds(final List<${idType}> ids${authUser}) {
+    public void markDeleteByIds(final Set<${idType}> ids${authUser}) {
         DeleteRowsException.asserts(repository.markDeleteByIds(ids${authUserId}), ids.size());
         //clearKeys(ids); // 若使用缓存需要解开代码
     }

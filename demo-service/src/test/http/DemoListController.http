@@ -1,5 +1,59 @@
-### 保存
-POST http://{{host}}:{{port}}/demo-list/1
+### ********************************************************************************************************************
+### 测试案例表
+### @author 谢长春 on 2020-03-11
+### ********************************************************************************************************************
+### 测试案例表: 分页查询
+GET http://{{host}}:{{port}}/1/demo-list/page/1/10
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+### 测试案例表: 分页查询
+GET http://{{host}}:{{port}}/1/demo-list/page/1/10?insertTimeRange={"begin":"2018-12-27", "end":"2018-12-27"}
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+### 测试案例表: 分页查询
+GET http://{{host}}:{{port}}/1/demo-list/page/1/10?amountRange={"min":0.0,"max":2000.0}
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+### 测试案例表: 分页查询
+GET http://{{host}}:{{port}}/1/demo-list/page/1/10?amountRange={"min":0.0,"max":2000.0}&sorts=[{name:"updateTime", direction:"DESC"}]
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+### 测试案例表: 分页查询
+GET http://{{host}}:{{port}}/1/demo-list/page/vo/1/10
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+### 测试案例表: 列表查询，不分页
+GET http://{{host}}:{{port}}/1/demo-list
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+### 测试案例表: 列表查询，不分页
+GET http://{{host}}:{{port}}/1/demo-list?insertTimeRange={"begin":"2018-12-27", "end":"2018-12-27"}
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+### 测试案例表: 列表查询，不分页
+GET http://{{host}}:{{port}}/1/demo-list/vo
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+### 测试案例表: 按 id 查询单条记录
+#GET http://{{host}}:{{port}}/1/demo-list/{{id}}
+#Content-Type: application/json
+#Authorization: Basic {{username}} {{password}}
+
+### 测试案例表: 按 id+uid 查询单条记录
+GET http://{{host}}:{{port}}/1/demo-list/{{id}}/{{uid}}
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+### 测试案例表: 保存
+POST http://{{host}}:{{port}}/1/demo-list
 Content-Type: application/json
 Authorization: Basic {{username}} {{password}}
 
@@ -10,8 +64,8 @@ Authorization: Basic {{username}} {{password}}
   "amount": 1000
 }
 
-### 修改
-PUT http://{{host}}:{{port}}/demo-list/1/2
+### 测试案例表: 修改
+PUT http://{{host}}:{{port}}/1/demo-list/{{id}}
 Content-Type: application/json
 Authorization: Basic {{username}} {{password}}
 
@@ -24,72 +78,40 @@ Authorization: Basic {{username}} {{password}}
   "updateTime": "2019-07-21 15:21:42"
 }
 
-### 物理删除:id
-DELETE http://{{host}}:{{port}}/demo-list/1/20
+### 测试案例表: 按 id 物理删除
+#DELETE http://{{host}}:{{port}}/1/demo-list/{{id}}
+#Content-Type: application/json
+#Authorization: Basic {{username}} {{password}}
+
+### 测试案例表: 按 id + uid 物理删除
+#DELETE http://{{host}}:{{port}}/1/demo-list/{{id}}/{{uid}}
+#Content-Type: application/json
+#Authorization: Basic {{username}} {{password}}
+
+### 测试案例表: 按 id+uid 删除单条记录
+PATCH http://{{host}}:{{port}}/1/demo-list/{{id}}/{{uid}}
+Content-Type: application/json
 Authorization: Basic {{username}} {{password}}
 
-### 物理删除:id+uid
-DELETE http://{{host}}:{{port}}/demo-list/1/21/1237cf2c19de4275a62b9c1b819bca7c
-Authorization: Basic {{username}} {{password}}
+### 测试案例表: 按 id 批量逻辑删除
+#PATCH http://{{host}}:{{port}}/1/demo-list
+#Content-Type: application/json
+#Authorization: Basic {{username}} {{password}}
+#
+#[1,2]
 
-### 逻辑删除:id
-PATCH http://{{host}}:{{port}}/demo-list/1/8
-Authorization: Basic {{username}} {{password}}
-
-### 逻辑删除:id+uid
-PATCH http://{{host}}:{{port}}/demo-list/1/9/426e8907e2914451b3d6a66b8b4880c0
-Authorization: Basic {{username}} {{password}}
-
-### 批量逻辑删除:id+uid
-PATCH http://{{host}}:{{port}}/demo-list/1
+### 测试案例表: 按 id+uid 批量逻辑删除
+PATCH http://{{host}}:{{port}}/1/demo-list
 Content-Type: application/json
 Authorization: Basic {{username}} {{password}}
 
 [
   {
-    "id": 12,
-    "uid": "e122cfb6575e442f91a4ff8310ce12d7"
-  },
-  {
-    "id": 13,
-    "uid": "0141ba6664e84a9795eb549d985b24f0"
+    "id": 0,
+    "uid": ""
   }
 ]
-
-### 查询:id+timestamp
-GET http://{{host}}:{{port}}/demo-list/1/4/1562813813000
-Authorization: Basic {{username}} {{password}}
-
-### 查询:id+uid+timestamp
-GET http://{{host}}:{{port}}/demo-list/1/1/1ec365fd461b44769e61a5c4425b06d3/1562813802000
-Authorization: Basic {{username}} {{password}}
-
-### 查询:不分页
-GET http://{{host}}:{{port}}/demo-list/1
-Authorization: Basic {{username}} {{password}}
-
-### 查询:不分页
-GET http://{{host}}:{{port}}/demo-list/1??insertTimeRange={"begin":"2018-12-27", "end":"2018-12-27"}
-Authorization: Basic {{username}} {{password}}
-
-### 查询:分页
-GET http://{{host}}:{{port}}/demo-list/1/page/1/10?amountRange={"min":0.0,"max":2000.0}
-Authorization: Basic {{username}} {{password}}
-
-### 查询:分页 + 排序
-GET http://{{host}}:{{port}}/demo-list/1/page/1/10?amountRange={"min":0.0,"max":2000.0}&sorts=[{name:"updateTime", direction:"DESC"}]
-Authorization: Basic {{username}} {{password}}
 
 ### 自定义方言
 GET http://{{host}}:{{port}}/demo-list/1/test
 Authorization: Basic {{username}} {{password}}
-
-### 查询:不分页
-GET http://{{host}}:{{port}}/demo-list/1/vo
-Authorization: Basic {{username}} {{password}}
-
-### 查询:不分页
-GET http://{{host}}:{{port}}/demo-list/1/page/vo/1/10
-Authorization: Basic {{username}} {{password}}
-
-###

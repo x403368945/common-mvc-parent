@@ -1,5 +1,29 @@
-### 保存
-POST http://{{host}}:{{port}}/convert/1
+### ********************************************************************************************************************
+### 测试自定义 Convert 表
+### @author 谢长春 on 2020-03-11
+### ********************************************************************************************************************
+### 测试自定义 Convert 表: 分页查询
+GET http://{{host}}:{{port}}/1/convert/page/1/10
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+### 测试自定义 Convert 表: 列表查询，不分页
+#GET http://{{host}}:{{port}}/1/convert
+#Content-Type: application/json
+#Authorization: Basic {{username}} {{password}}
+
+### 测试自定义 Convert 表: 按 id 查询单条记录
+#GET http://{{host}}:{{port}}/1/convert/{{id}}
+#Content-Type: application/json
+#Authorization: Basic {{username}} {{password}}
+
+### 测试自定义 Convert 表: 按 id+uid 查询单条记录
+GET http://{{host}}:{{port}}/1/convert/{{id}}/{{uid}}
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+### 测试自定义 Convert 表: 保存
+POST http://{{host}}:{{port}}/1/convert
 Content-Type: application/json
 Authorization: Basic {{username}} {{password}}
 
@@ -14,9 +38,8 @@ Authorization: Basic {{username}} {{password}}
     "comment": "成功"
   }
 }
-
-### 保存
-POST http://{{host}}:{{port}}/convert/1
+### 测试自定义 Convert 表: 保存
+POST http://{{host}}:{{port}}/1/convert
 Content-Type: application/json
 Authorization: Basic {{username}} {{password}}
 
@@ -35,8 +58,8 @@ Authorization: Basic {{username}} {{password}}
   ]
 }
 
-### 保存
-POST http://{{host}}:{{port}}/convert/1
+### 测试自定义 Convert 表: 保存
+POST http://{{host}}:{{port}}/1/convert
 Content-Type: application/json
 Authorization: Basic {{username}} {{password}}
 
@@ -48,8 +71,8 @@ Authorization: Basic {{username}} {{password}}
   ]
 }
 
-### 保存
-POST http://{{host}}:{{port}}/convert/1
+### 测试自定义 Convert 表: 保存
+POST http://{{host}}:{{port}}/1/convert
 Content-Type: application/json
 Authorization: Basic {{username}} {{password}}
 
@@ -61,70 +84,48 @@ Authorization: Basic {{username}} {{password}}
   ]
 }
 
-### 修改
-PUT http://{{host}}:{{port}}/convert/1/1
+
+
+### 测试自定义 Convert 表: 修改
+PUT http://{{host}}:{{port}}/1/convert/{{id}}
 Content-Type: application/json
 Authorization: Basic {{username}} {{password}}
 
 {
-  "id": 1,
-  "uid": "c252869c6a154b1b905ada988906cb0a",
-  "ids": [
-    1,
-    2
-  ],
-  "images": [
-    "100000000000000000000000000000000000000.png",
-    "200000000000000000000000000000000000000.png",
-    "300000000000000000000000000000000000000.png"
-  ],
-  "codes": [
-    "CUSTOMIZE",
-    "FILE_COPY",
-    "ORDER_BY"
-  ],
-  "items": [
-    {
-      "key": "SUCCESS",
-      "value": "1",
-      "comment": "成功"
-    },
-    {
-      "key": "FAILURE",
-      "value": "0",
-      "comment": "失败"
-    }
-  ],
-  "item": {
-    "key": "SUCCESS",
-    "value": "3",
-    "comment": "成功"
-  },
-  "insertTime": "2019-12-12 11:50:09.000",
-  "insertUserId": 1,
-  "updateTime": "2019-12-13 03:53:53.137",
-  "updateUserId": 1,
-  "deleted": "NO",
-  "timestamp": 1576124577146
+
 }
 
-### 修改
-PUT http://{{host}}:{{port}}/convert/1/3
+### 测试自定义 Convert 表: 按 id 物理删除
+#DELETE http://{{host}}:{{port}}/1/convert/{{id}}
+#Content-Type: application/json
+#Authorization: Basic {{username}} {{password}}
+
+### 测试自定义 Convert 表: 按 id + uid 物理删除
+#DELETE http://{{host}}:{{port}}/1/convert/{{id}}/{{uid}}
+#Content-Type: application/json
+#Authorization: Basic {{username}} {{password}}
+
+### 测试自定义 Convert 表: 按 id+uid 删除单条记录
+PATCH http://{{host}}:{{port}}/1/convert/{{id}}/{{uid}}
 Content-Type: application/json
 Authorization: Basic {{username}} {{password}}
 
-{
-  "uid": "dde9f290c6314f9bab88dd698941c6cb",
-  "updateTime": "2019-08-21 18:04:38.116",
-  "ids": [
-    200,
-    201,
-    202
-  ]
-}
+### 测试自定义 Convert 表: 按 id 批量逻辑删除
+#PATCH http://{{host}}:{{port}}/1/convert
+#Content-Type: application/json
+#Authorization: Basic {{username}} {{password}}
+#
+#[1,2]
 
-### 查询:不分页
-GET http://{{host}}:{{port}}/convert/1?json={ids:[1], codes:["CUSTOMIZE"], images:["100000000000000000000000000000000000000.png"]}
+### 测试自定义 Convert 表: 按 id+uid 批量逻辑删除
+PATCH http://{{host}}:{{port}}/1/convert
+Content-Type: application/json
 Authorization: Basic {{username}} {{password}}
 
-###
+[
+  {
+    "id": 0,
+    "uid": ""
+  }
+]
+

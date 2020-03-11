@@ -31,7 +31,6 @@ gulp.task('default', async () => {
 
 gulp.task('test', async () => {
   devConfig();
-  // await OpenDemoServiceTest.of().testAll();
   await DemoListServiceTest.of().testAll(); //
   await UserServiceTest.of().testAll(); // 测试用户相关的接口
   await AuthorityServiceTest.of().testAll();
@@ -41,7 +40,7 @@ gulp.task('test', async () => {
 gulp.task('test:one', async () => {
   devConfig();
   (await UserServiceTest.of().loginAdminBasic());
-  await CommonServiceTest.of().testAll();
+  await UserServiceTest.of().testAll();
 });
 
 gulp.task('replace:swagger:order:position', async () => {
@@ -58,13 +57,14 @@ gulp.task('db:java:code', async () => {
     password: '111111',
     database: 'demo_main_db',
     table: [
-      'tab_user',
-      'tab_role'
+      'tab_convert',
+      'tab_demo_list'
     ], // 表名
-    module: '../demo-main', // 模块名
+    module: '../demo-service', // 模块名
     pkg: 'com.ccx.demo', // 包名(也会作为文件输出目录)
     template: 'AuthUid.js' // 代码模板
   });
+
 });
 
 async function db2java(option) {

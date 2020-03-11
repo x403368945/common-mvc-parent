@@ -32,6 +32,7 @@ import static com.ccx.demo.business.example.entity.QTabDemoList.tabDemoList;
 @JSONType(orders = {"id", "uid", "name", "content", "amount", "status", "insertTime", "insertUserId", "insertUserName", "updateTime", "updateUserId", "updateUserName", "deleted", "insertUser", "updateUser"})
 public class TabDemoListVO extends TabDemoList {
 
+    private static final long serialVersionUID = -7251222373656975725L;
     /**
      * 查询参数：状态集合
      */

@@ -147,7 +147,7 @@ public class ValidService implements IBaseService<TabValid>, IOpenService<TabVal
     }
 
     @Override
-    public void markDeleteByIds(final List<Long> ids, final Long userId) {
+    public void markDeleteByIds(final Set<Long> ids, final Long userId) {
         log.info(JSON.toJSONString(Arrays.asList(ids, userId)));
     }
 
@@ -200,7 +200,7 @@ public class ValidService implements IBaseService<TabValid>, IOpenService<TabVal
     }
 
     @Override
-    public void markDeleteByIds(final List<Long> ids) {
+    public void markDeleteByIds(final Set<Long> ids) {
         log.info(JSON.toJSONString(ids));
     }
 

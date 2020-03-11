@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * 服务接口实现类：
@@ -55,7 +56,7 @@ public class DemoMongoService implements IBaseService<DemoMongo> {
     }
 
     @Override
-    public void markDeleteByIds(final List<String> ids, final Long userId) {
+    public void markDeleteByIds(final Set<String> ids, final Long userId) {
         DeleteRowsException.asserts(repository.markDeleteByIds(ids, userId), ids.size());
     }
 

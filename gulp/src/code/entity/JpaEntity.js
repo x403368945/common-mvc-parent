@@ -31,6 +31,7 @@ import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.BeanPath;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.support.mvc.entity.ITable;
 import com.support.mvc.entity.IWhere;
@@ -140,10 +141,10 @@ ${orderBy(table)},
 
     @Override
     public Then<JPAUpdateClause> update(final JPAUpdateClause jpaUpdateClause) {
-//        final Q${TabName} q = ${tabName};
-//        // 动态拼接 update 语句
-//        // 以下案例中 只有 name 属性 为 null 时才不会加入 update 语句；
-//        return Then.of(jpaUpdateClause)
+        final Q${TabName} q = ${tabName};
+        // 动态拼接 update 语句
+        // 以下案例中 只有 name 属性 为 null 时才不会加入 update 语句；
+        return Then.of(jpaUpdateClause)
 ${update(table)}
 ////                // 当 name != null 时更新 name 属性
 ////                .then(name, update -> update.set(q.name, name))
@@ -152,15 +153,14 @@ ${update(table)}
 ////                .then(update -> update.set(q.content, Optional.ofNullable(content).orElse("")))
 ////                // 数据库中 amount 可以为 null
 ////                .then(update -> update.set(q.amount, amount))
-//                ;
-        return null;
+                ;
     }
 
     @Override
     public QdslWhere where() {
-//        final Q${TabName} q = ${tabName};
-//        // 构建查询顺序规则请参考：com.support.mvc.entity.IWhere#where
-//        return QdslWhere.of()
+        final Q${TabName} q = ${tabName};
+        // 构建查询顺序规则请参考：com.support.mvc.entity.IWhere#where
+        return QdslWhere.of()
 ${where(table)}
 ////                .and(phone, () -> q.phone.eq(phone))
 ////                .and(insertUserId, () -> q.insertUserId.eq(insertUserId))
@@ -176,8 +176,7 @@ ${where(table)}
 ////                .and(name, () -> q.name.endsWith(name)) // 模糊匹配查询：前面带 %
 ////                .and(name, () -> q.name.contains(name)) // 模糊匹配查询：前后带 %,同 MessageFormat.format("%{0}%", name)
 ////                .and(name, () -> q.name.like(MessageFormat.format("%{0}%", name))) 模糊匹配查询：前后带 %
-//                ;
-        return null;
+                ;
     }
 
 //    @Override

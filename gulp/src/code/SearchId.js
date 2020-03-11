@@ -174,9 +174,7 @@ import com.support.mvc.entity.base.Pager;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static ${pkg}.config.init.BeanInitializer.Beans.jpaQueryFactory;
 import static ${pkg}.config.init.BeanInitializer.getAppContext;

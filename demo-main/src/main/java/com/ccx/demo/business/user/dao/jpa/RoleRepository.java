@@ -16,6 +16,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Set;
 
 import static com.ccx.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 /**
@@ -150,7 +151,7 @@ public interface RoleRepository extends
 
 
     @Override // <
-    default long markDeleteByIds(final List<Long> ids, final Long userId) {
+    default long markDeleteByIds(final Set<Long> ids, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Bool.YES)

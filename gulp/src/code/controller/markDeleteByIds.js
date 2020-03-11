@@ -23,7 +23,7 @@ const markDeleteByIds = (table, {auth = false, spare = false}) => {
     @ResponseBody
     @Override
     public Result<Void> markDeleteByIds(${authUser}final Set<${idType}> body) {
-        return new Result<Void>().call(() -> service.markDelete(body${authUserId}));
+        return new Result<Void>().call(() -> service.markDeleteByIds(body${authUserId}));
     }
 ${spareEnd}`
 };

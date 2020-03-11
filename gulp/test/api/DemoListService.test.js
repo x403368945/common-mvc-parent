@@ -50,15 +50,8 @@ export default class DemoListServiceTest {
       {name: `name-${random(10000)}`},
       {name: `name-${random(10000)}`},
       {name: `name-${random(10000)}`},
-      {
-        name: `name-${random(10000)}`,
-        content: `content-${random(1000000)}`
-      },
-      {
-        name: `name-${random(10000)}`,
-        content: `content-${random(1000000)}`,
-        amount: random(10000.9)
-      },
+      {name: `name-${random(10000)}`, content: `content-${random(1000000)}`},
+      {name: `name-${random(10000)}`, content: `content-${random(1000000)}`, amount: random(10000.9)},
       {
         name: `name-${random(10000)}`,
         content: `content-${random(1000000)}`,
@@ -67,7 +60,9 @@ export default class DemoListServiceTest {
       }
     ];
     for (let i = 0, len = arrs.length; i < len; i++) {
-      (await new DemoList(arrs[i]).getService().save()).print().assertData();
+      (await new DemoList(arrs[i]).getService().save())
+        .print()
+        .assertData();
     }
     return this;
   }
@@ -77,9 +72,13 @@ export default class DemoListServiceTest {
    */
   async update() {
     console.log('> 修改：在查询结果集中随机选取一条数据 ----------------------------------------------------------------------------------------------------');
-    const {data} = (await new DemoList().getService().pageable()).print().assertData();
+    const {data} = (await new DemoList().getService().pageable())
+      .print()
+      .assertData();
     const row = Object.assign(sample(data), {amount: random(10000.9).toFixed(2)});
-    (await new DemoList(row).getService().update()).print().assertCode();
+    (await new DemoList(row).getService().update())
+      .print()
+      .assertCode();
     return this;
   }
 
@@ -90,7 +89,11 @@ export default class DemoListServiceTest {
     console.log('> 按 id 删除：在查询结果集中随机选取一条数据 ----------------------------------------------------------------------------------------------------');
     const {data} = (await new DemoList().getService().pageable()).assertData();
     const {id} = sample(data);
-    (await new DemoList({id}).getService().deleteById()).print().assertData();
+    (await new DemoList({
+      id
+    }).getService().deleteById())
+      .print()
+      .assertData();
     return this;
   }
 
@@ -104,7 +107,9 @@ export default class DemoListServiceTest {
     (await new DemoList({
       id,
       uid
-    }).getService().deleteByUid()).print().assertData();
+    }).getService().deleteByUid())
+      .print()
+      .assertData();
     return this;
   }
 
@@ -115,7 +120,11 @@ export default class DemoListServiceTest {
     console.log('> 按 id 逻辑删除：在查询结果集中随机选取一条数据 ----------------------------------------------------------------------------------------------------');
     const {data} = (await new DemoList().getService().pageable()).assertData();
     const {id} = sample(data);
-    (await new DemoList({id}).getService().markDeleteById()).print().assertCode();
+    (await new DemoList({
+      id
+    }).getService().markDeleteById())
+      .print()
+      .assertCode();
     return this;
   }
 
@@ -129,7 +138,9 @@ export default class DemoListServiceTest {
     (await new DemoList({
       id,
       uid
-    }).getService().markDeleteByUid()).print().assertCode();
+    }).getService().markDeleteByUid())
+      .print()
+      .assertCode();
     return this;
   }
 
@@ -143,7 +154,11 @@ export default class DemoListServiceTest {
       id,
       uid
     }), 2);
-    (await new DemoList({uids}).getService().markDelete()).print().assertCode();
+    (await new DemoList({
+      uids
+    }).getService().markDelete())
+      .print()
+      .assertCode();
     return this;
   }
 
@@ -157,7 +172,9 @@ export default class DemoListServiceTest {
     (await new DemoList({
       id,
       timestamp
-    }).getService().findByIdTimestamp()).print().assertCode();
+    }).getService().findByIdTimestamp())
+      .print()
+      .assertCode();
     return this;
   }
 
@@ -172,7 +189,9 @@ export default class DemoListServiceTest {
       id,
       uid,
       timestamp
-    }).getService().findByUidTimestamp()).print().assertCode();
+    }).getService().findByUidTimestamp())
+      .print()
+      .assertCode();
     return this;
   }
 
@@ -182,7 +201,11 @@ export default class DemoListServiceTest {
   async search() {
     console.log('> 多条件批量查询，不分页 ----------------------------------------------------------------------------------------------------');
     const insertTimeRange = new DateRange(new Date().addMonth(-1).formatDate(), new Date().formatDate());
-    (await new DemoList({insertTimeRange}).getService().search()).print().assertData();
+    (await new DemoList({
+      insertTimeRange
+    }).getService().search())
+      .print()
+      .assertData();
     return this;
   }
 
@@ -195,8 +218,14 @@ export default class DemoListServiceTest {
     const insertTimeRange = new DateRange(new Date().addMonth(-1).formatDate(), new Date().formatDate());
     const amountRange = new NumRange(0, 9999);
     const sorts = [OrderBy.desc('updateTime')];
-    (await new DemoList().getService().pageable()).print().assertData();
-    (await new DemoList({sorts}).getService().pageable()).print().assertData();
+    (await new DemoList().getService().pageable())
+      .print()
+      .assertData();
+    (await new DemoList({
+      sorts
+    }).getService().pageable())
+      .print()
+      .assertData();
     (await new DemoList({
       amountRange,
       sorts

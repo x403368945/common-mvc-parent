@@ -12,6 +12,7 @@ const where = table => {
         case 'CHAR':
           return `//                .and(${name}, () -> ${name}.endsWith("%") || ${name}.startsWith("%") ? q.${name}.like(${name}) : q.${name}.eq(${name}))`;
         case 'VARCHAR':
+          if (name === 'uid') break;
           return length < 100
             ? `//                .and(${name}, () -> ${name}.endsWith("%") || ${name}.startsWith("%") ? q.${name}.like(${name}) : q.${name}.eq(${name}))`
             : `//                .and(${name}, () -> ${name}.endsWith("%") || ${name}.startsWith("%") ? q.${name}.like(${name}) : q.${name}.startsWith(${name}))`;
@@ -27,6 +28,8 @@ const where = table => {
         case 'DATETIME':
         case 'TIMESTAMP':
           return `//                .and(${name}Range, () -> q.${name}.between(${name}Range.rebuild().getBegin(), ${name}Range.getEnd()))`;
+        case 'JSON':
+          return `//                .and(${name}, () -> Expressions.booleanTemplate("JSON_CONTAINS({0},{1})>0", q.${name}, JSON.toJSONString(${name})))`;
       }
       return `//                .and(${name}, () -> q.${name}.eq(${name}))`;
     })

@@ -114,7 +114,7 @@ public class UserService implements IBaseService<TabUser>, ITabUserCache {
     }
 
     @Override
-    public void markDeleteByIds(final List<Long> ids, final Long userId) {
+    public void markDeleteByIds(final Set<Long> ids, final Long userId) {
         DeleteRowsException.asserts(repository.markDeleteByIds(ids, userId), ids.size());
         ids.forEach(this::clearCache);
     }

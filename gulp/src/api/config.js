@@ -31,6 +31,8 @@ export const devConfig = () => {
     if (method.toUpperCase() === 'GET') {
       const searchParams = buildSearchParams(params);
       console.log(JSON.stringify([method.toUpperCase(), `${baseURL}${url}${searchParams ? `?${searchParams}` : ''}`, params]));
+    } else if (((config.headers || {})['content-type'] || '').startsWith('multipart/form-data;')) {
+      console.log(JSON.stringify([method.toUpperCase(), `${baseURL}${url}`]));
     } else {
       console.log(JSON.stringify([method.toUpperCase(), `${baseURL}${url}`, data]));
     }

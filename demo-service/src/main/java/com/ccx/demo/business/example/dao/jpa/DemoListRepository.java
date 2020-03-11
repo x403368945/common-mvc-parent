@@ -18,22 +18,24 @@ import com.support.mvc.entity.base.Pager;
 import lombok.Data;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Collection;
+import com.alibaba.fastjson.annotation.JSONField;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.ccx.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
 import static com.ccx.demo.config.init.BeanInitializer.getAppContext;
 
 /**
- * 数据操作：
+ * 数据操作：测试案例表 <
  *
  * @author 谢长春 on 2018-12-17
  */
 public interface DemoListRepository extends
         JpaRepository<TabDemoList, Long>,
         IRepository<TabDemoList, Long> {
+    // 每个 DAO 层顶部只能有一个查询实体,且必须以 q 命名,表示当前操作的数据库表. 当 q 作为主表的连接查询方法也必须写在这个类
     QTabDemoList q = QTabDemoList.tabDemoList;
 
     /**
@@ -77,11 +79,13 @@ public interface DemoListRepository extends
          * @return {@link List<TabDemoList>}
          */
         @JSONField(serialize = false, deserialize = false)
-        default List<TabDemoList> getTabDemoListByIds(final Collection<Long> ids) {
+        default List<TabDemoList> getTabDemoListByIds(final Set<Long> ids) {
             return Lists.newArrayList(getAppContext().getBean(DemoListRepository.class).findAll(q.id.in(ids)));
         }
     }
 
+
+//     @CacheEvict(cacheNames = ITabDemoListCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
     @Override
     default long update(final Long id, final Long userId, final TabDemoList obj) {
         return obj.update(jpaQueryFactory.<JPAQueryFactory>get().update(q))
@@ -90,9 +94,10 @@ public interface DemoListRepository extends
                 .execute();
     }
 
+/*
+//     @CacheEvict(cacheNames = ITabDemoListCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
     @Override
     default TabDemoList deleteById(final Long id, final Long userId) {
-        // 只能删除自己创建的数据
         return Optional
                 .ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
                         .selectFrom(q)
@@ -107,15 +112,16 @@ public interface DemoListRepository extends
                         TabDemoList.builder().id(id).insertUserId(userId).build().json())
                 ));
     }
+*/
 
+//     @CacheEvict(cacheNames = ITabDemoListCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
     @Override
     default TabDemoList deleteByUid(final Long id, final String uid, final Long userId) {
-        // 只能删除自己创建的数据，且使用 UUID 强校验；
         // userId 为可选校验，一般业务场景，能获取到 UUID 已经表示已经加强校验了
         return Optional
                 .ofNullable(jpaQueryFactory.<JPAQueryFactory>get()
                         .selectFrom(q)
-                        .where(q.id.eq(id).and(q.uid.eq(uid)).and(q.insertUserId.eq(userId)))
+                        .where(q.id.eq(id).and(q.uid.eq(uid)))
                         .fetchOne()
                 )
                 .map(obj -> {
@@ -127,50 +133,63 @@ public interface DemoListRepository extends
                 ));
     }
 
+
+//     @CacheEvict(cacheNames = ITabDemoListCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
     @Override
     default long markDeleteById(final Long id, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Bool.YES)
                 .set(q.updateUserId, userId)
-                .where(q.id.eq(id).and(q.insertUserId.eq(userId)))
+                .where(q.id.eq(id).and(q.deleted.eq(Bool.NO)))
                 .execute();
     }
 
+
+//     @CacheEvict(cacheNames = ITabDemoListCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
     @Override
     default long markDeleteByUid(final Long id, final String uid, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Bool.YES)
                 .set(q.updateUserId, userId)
-                .where(q.id.eq(id).and(q.uid.eq(uid).and(q.insertUserId.eq(userId))))
+                .where(q.id.eq(id).and(q.uid.eq(uid)).and(q.deleted.eq(Bool.NO)))
                 .execute();
     }
 
-    @Override
-    default long markDeleteByIds(final List<Long> ids, final Long userId) {
+
+    @Override // <
+    default long markDeleteByIds(final Set<Long> ids, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Bool.YES)
                 .set(q.updateUserId, userId)
-                .where(q.id.in(ids).and(q.insertUserId.eq(userId)))
+                .where(q.id.in(ids).and(q.deleted.eq(Bool.NO)))
                 .execute();
     }
 
-    @Override
+
+    @Override // <
     default long markDelete(final List<MarkDelete> list, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .update(q)
                 .set(q.deleted, Bool.YES)
                 .set(q.updateUserId, userId)
                 .where(q.id.in(list.stream().map(MarkDelete::getLongId).toArray(Long[]::new))
-                        .and(q.deleted.eq(Bool.YES))
+                        .and(q.deleted.eq(Bool.NO))
                         .and(q.uid.in(list.stream().map(MarkDelete::getUid).toArray(String[]::new)))
                 )
                 .execute();
     }
 
-    @Override
+/*
+//     @Cacheable(cacheNames = ITabDemoListCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码
+     default TabDemoList findCacheById(final Long id){
+         return findById(id).orElse(null);
+     }
+*/
+
+    @Override // <
     default List<TabDemoList> findList(final TabDemoList condition) {
         return jpaQueryFactory.<JPAQueryFactory>get()
                 .selectFrom(q)

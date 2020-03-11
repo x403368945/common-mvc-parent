@@ -9,6 +9,8 @@ import User from '../../src/api/entity/User';
 import UserService from '../../src/api/UserService';
 import RoleService from '../../src/api/RoleService';
 import MarkDelete from '../../src/utils/entity/MarkDelete';
+import CommonService from "../../src/api/CommonService";
+import fs from "fs";
 
 /**
  * 当前登录用户
@@ -47,10 +49,12 @@ export default class UserServiceTest {
    */
   async login() {
     console.log('> 登录：管理员(admin-test:admin) ----------------------------------------------------------------------------------------------------');
-    const result = (await User.of({
+    const result = (await new User({
       username: 'admin-test',
       password: 'admin'
-    }).getService().login()).print().assertData();
+    }).getService().login())
+      .print()
+      .assertData();
     result.dataFirst(user => {
       Object.keys(sessionUser).forEach(key => {
         delete sessionUser[key];
@@ -101,7 +105,9 @@ export default class UserServiceTest {
    */
   async logout() {
     console.log('> 退出 ----------------------------------------------------------------------------------------------------');
-    (await User.of().getService().logout()).print().assertCode();
+    (await new User().getService().logout())
+      .print()
+      .assertCode();
     return this;
   }
 
@@ -110,7 +116,9 @@ export default class UserServiceTest {
    */
   async getCurrentUser() {
     console.log('> 获取当前登录用户信息 ----------------------------------------------------------------------------------------------------');
-    (await User.of().getService().getCurrentUser()).print().assertData();
+    (await new User().getService().getCurrentUser())
+      .print()
+      .assertData();
     return this;
   }
 
@@ -120,7 +128,11 @@ export default class UserServiceTest {
    */
   async updateNickname() {
     console.log('> 修改昵称 ----------------------------------------------------------------------------------------------------');
-    (await User.of({nickname: `管理员${Math.random()}`}).getService().updateNickname()).print().assertCode();
+    (await new User({
+      nickname: `管理员${Math.random()}`
+    }).getService().updateNickname())
+      .print()
+      .assertCode();
     return this;
   }
 
@@ -132,21 +144,37 @@ export default class UserServiceTest {
     console.log('> 新增用户 ----------------------------------------------------------------------------------------------------');
     const {data: roles} = await new RoleService().options();
     for (let i = 0; i < 2; i++) {
-      (await User.of({
+      (await new User({
         username: `${new Date().getTime()}`,
         password: '111111',
         nickname: '随机单个角色',
         domain: 'test',
         roleList: [sample(roles)]
-      }).getService().save()).print().assertCode();
-      (await User.of({
+      }).getService().save())
+        .print()
+        .assertCode();
+      (await new User({
         username: `${new Date().getTime()}`,
         password: '111111',
         nickname: '随机多个角色',
         domain: 'test',
         roleList: sampleSize(roles, parseInt(`${Math.random()}`.slice(-1)) + 1)
-      }).getService().save()).print().assertCode();
+      }).getService().save())
+        .print()
+        .assertCode();
     }
+
+    const {data: [avatar]} = (await new CommonService().uploadUser(fs.createReadStream('./favicon.ico')));
+    (await new User({
+      username: `${new Date().getTime()}`,
+      password: '111111',
+      nickname: '随机单个角色',
+      domain: 'test',
+      roleList: [sample(roles)],
+      avatar
+    }).getService().save())
+      .print()
+      .assertCode();
     return this;
   }
 
@@ -158,13 +186,17 @@ export default class UserServiceTest {
     console.log('> 修改用户 ----------------------------------------------------------------------------------------------------');
     const {data: roles} = await new RoleService().options();
     const {data: users} = await new User({
-      domain: 'test'
+      domain: 'test',
+      insertUserId: sessionUser.id
     }).getService().pageable();
-    const user = sample(users.filter(row => ![1, 2, 3, 4].includes(row.id)));
-    (await User.of(Object.assign(user, {
+    const {data: [avatar]} = (await new CommonService().uploadUser(fs.createReadStream('./favicon.ico')));
+    (await new User(Object.assign(sample(users), {
       nickname: `编辑用户-${new Date().formatDate()}`,
-      roleList: sampleSize(roles, parseInt(`${Math.random()}`.slice(-1)) + 1)
-    })).getService().update()).print().assertCode();
+      roleList: sampleSize(roles, parseInt(`${Math.random()}`.slice(-1)) + 1),
+      avatar
+    })).getService().update())
+      .print()
+      .assertCode();
     return this;
   }
 
@@ -180,7 +212,9 @@ export default class UserServiceTest {
     (await new User({
       id,
       uid
-    }).getService().markDeleteByUid()).print().assertCode();
+    }).getService().markDeleteByUid())
+      .print()
+      .assertCode();
     return this;
   }
 
@@ -191,11 +225,14 @@ export default class UserServiceTest {
     console.log('> 按 id + uid 批量逻辑删除：在查询结果集中随机选取 2 条数据 ----------------------------------------------------------------------------------------------------');
     const {data} = (await new User({
       insertUserId: sessionUser.id
-    }).getService().pageable()).assertData();
+    }).getService().pageable())
+      .assertData();
     const arrs = sampleSize(data, 2);
     (await new User({
       markDeleteArray: arrs.map(row => new MarkDelete(row))
-    }).getService().markDelete()).print().assertCode();
+    }).getService().markDelete())
+      .print()
+      .assertCode();
     return this;
   }
 
@@ -207,10 +244,13 @@ export default class UserServiceTest {
     console.log('> 查看用户详细信息 ----------------------------------------------------------------------------------------------------');
     const {data: users} = await new User().getService().pageable();
     const {id, uid} = sample(users);
-    (await User.of({
+    (await new User({
       id,
       uid
-    }).getService().findByUid()).print().assertCode().assertData();
+    }).getService().findByUid())
+      .print()
+      .assertCode()
+      .assertData();
     return this;
   }
 
@@ -220,7 +260,10 @@ export default class UserServiceTest {
    */
   async pageable() {
     console.log('> 分页查询用户 ----------------------------------------------------------------------------------------------------');
-    (await User.of().getService().pageable()).print().assertCode().assertData();
+    (await new User().getService().pageable())
+      .print()
+      .assertCode()
+      .assertData();
     return this;
   }
 
@@ -230,7 +273,7 @@ export default class UserServiceTest {
   //  */
   // async getUsersFromRole() {
   //   console.log('> 按角色查询用户集合 ----------------------------------------------------------------------------------------------------');
-  //   (await User.of({roleId: 1}).getService().getUsersFromRole()).print().assertCode().assertData();
+  //   (await new User({roleId: 1}).getService().getUsersFromRole()).print().assertCode().assertData();
   //   return this;
   // }
 

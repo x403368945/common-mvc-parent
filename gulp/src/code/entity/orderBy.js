@@ -7,7 +7,7 @@ const orderBy = table => {
   const {columns, names: {tabName}} = table;
   return columns.map(column => {
     const {name} = column;
-    return `        ${name}(${tabName}.${name})`;
+    return `${name === 'id' ? '' : '//'}        ${name}(${tabName}.${name})`;
   }).filter(Boolean).join(',\n');
 };
 export default orderBy;

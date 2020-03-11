@@ -6,8 +6,14 @@ import com.alibaba.fastjson.annotation.JSONType;
 import com.ccx.demo.business.example.entity.convert.ArrayCodeJsonConvert;
 import com.ccx.demo.business.user.cache.ITabUserCache;
 import com.ccx.demo.enums.Bool;
+import com.ccx.demo.business.user.cache.ITabUserCache;
+import com.google.common.collect.Lists;
 import com.querydsl.core.annotations.QueryEntity;
 import com.querydsl.core.annotations.QueryTransient;
+import com.querydsl.core.types.EntityPath;
+import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.BeanPath;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAUpdateClause;
@@ -25,6 +31,8 @@ import com.support.mvc.entity.validated.ISave;
 import com.support.mvc.entity.validated.IUpdate;
 import com.support.mvc.enums.Code;
 import com.utils.util.Then;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,10 +41,9 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
+import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
@@ -60,6 +67,7 @@ import static com.support.mvc.enums.Code.ORDER_BY;
 @AllArgsConstructor
 @Builder
 @Data
+@ApiModel(description = "测试自定义 Convert 表")
 @JSONType(orders = {"id", "uid", "ids", "images", "codes", "items", "item", "insertTime", "insertUserId", "insertUserName", "updateTime", "updateUserId", "updateUserName", "deleted"})
 public final class TabConvert implements
         ITable, // 所有与数据库表 - 实体类映射的表都实现该接口；方便后续一键查看所有表的实体
@@ -76,45 +84,53 @@ public final class TabConvert implements
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull(groups = {IUpdate.class, IMarkDelete.class})
     @Positive
+    @ApiModelProperty(value = "数据ID", position = 1)
     private Long id;
     /**
      * 数据UUID，缓存和按ID查询时可使用强校验
      */
     @Column(updatable = false)
-    @NotNull(groups = {IUpdate.class, IMarkDelete.class})
+    @NotNull(groups = {ISave.class, IUpdate.class, IMarkDelete.class})
     @Size(min = 32, max = 32)
+    @ApiModelProperty(value = "数据uid", position = 2)
     private String uid;
     /**
      * {@link List<Long>}
      */
     @Convert(converter = ArrayLongJsonConvert.class)
+    @ApiModelProperty(value = "{@link List<Long>}", position = 3)
     private Long[] ids;
     /**
      * {@link List<String>}
      */
     @Convert(converter = ArrayStringJsonConvert.class)
+    @ApiModelProperty(value = "{@link List<String>}", position = 4)
     private String[] images;
     /**
      * {@link List<com.support.mvc.enums.Code>}
      */
     @Convert(converter = ArrayCodeJsonConvert.class)
+    @ApiModelProperty(value = "{@link List<com.support.mvc.enums.Code>}", position = 5)
     private Code[] codes;
     /**
      * {@link List<com.support.mvc.entity.base.Item>}
      */
     @Convert(converter = ArrayItemJsonConvert.class)
+    @ApiModelProperty(value = "{@link List<com.support.mvc.entity.base.Item>}", position = 6)
     private Item[] items;
     /**
      * {@link com.support.mvc.entity.base.Item}
      */
     @Convert(converter = ItemJsonConvert.class)
+    @ApiModelProperty(value = "{@link com.support.mvc.entity.base.Item}", position = 7)
     private Item item;
     /**
      * 创建时间
      */
     @Column(insertable = false, updatable = false)
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @Null(groups = {ISave.class})
+    @ApiModelProperty(value = "数据新增时间", example = "2020-02-02 02:02:02", position = 8)
     private Timestamp insertTime;
     /**
      * 创建用户ID
@@ -122,6 +138,7 @@ public final class TabConvert implements
     @Column(updatable = false)
     @NotNull(groups = {ISave.class})
     @Positive
+    @ApiModelProperty(value = "新增操作人id", position = 9)
     private Long insertUserId;
     /**
      * 修改时间
@@ -129,18 +146,21 @@ public final class TabConvert implements
     @Column(insertable = false, updatable = false)
     @JSONField(format = "yyyy-MM-dd HH:mm:ss.SSS")
     @Null(groups = {ISave.class})
+    @ApiModelProperty(value = "数据最后一次更新时间", example = "2020-02-02 02:02:02.002", position = 10)
     private Timestamp updateTime;
     /**
      * 修改用户ID
      */
     @NotNull(groups = {ISave.class, IUpdate.class})
     @Positive
+    @ApiModelProperty(value = "更新操作人id", position = 11)
     private Long updateUserId;
     /**
-     * 是否逻辑删除（1、已删除， 0、未删除）
+     * 是否逻辑删除，参考：Enum{@link com.ccx.demo.enums.Bool}
      */
     @Column(insertable = false, updatable = false)
     @Null(groups = {ISave.class})
+    @ApiModelProperty(value = "是否逻辑删除，com.ccx.demo.enums.Bool", position = 12)
     private Bool deleted;
 
     /**
@@ -148,6 +168,7 @@ public final class TabConvert implements
      */
     @QueryTransient
     @Transient
+    @ApiModelProperty(value = "查询排序字段，com.ccx.demo.code.convert.entity.TabConvert$OrderBy")
     private List<Sorts.Order> sorts;
 
 // Enum Start **********************************************************************************************************
@@ -161,6 +182,7 @@ public final class TabConvert implements
 //        uid(tabConvert.uid),
 //        ids(tabConvert.ids),
 //        images(tabConvert.images),
+//        codes(tabConvert.codes),
 //        items(tabConvert.items),
 //        item(tabConvert.item),
 //        insertTime(tabConvert.insertTime),
@@ -252,8 +274,8 @@ public final class TabConvert implements
 //                // 模糊匹配查询：后面带 % ；建议优先使用
 //                .and(name, () -> q.name.startsWith(name)) // 模糊匹配查询：后面带 %
 //                .and(name, () -> q.name.endsWith(name)) // 模糊匹配查询：前面带 %
-//                .and(name, () -> q.name.like(MessageFormat.format("%{0}%", name)))
 //                .and(name, () -> q.name.contains(name)) // 模糊匹配查询：前后带 %,同 MessageFormat.format("%{0}%", name)
+//                .and(name, () -> q.name.like(MessageFormat.format("%{0}%", name))) 模糊匹配查询：前后带 %
                 ;
     }
 
@@ -271,6 +293,73 @@ public final class TabConvert implements
         }
     }
 
+    /**
+     * 获取查询实体与数据库表映射的所有字段,用于投影到 VO 类
+     * 支持追加扩展字段,追加扩展字段一般用于连表查询
+     *
+     * @param appends {@link Expression}[] 追加扩展连表查询字段
+     * @return {@link Expression}[]
+     */
+    public static Expression<?>[] allColumnAppends(final Expression<?>... appends) {
+        final List<Expression<?>> columns = Lists.newArrayList(appends);
+        final Class<?> clazz = tabConvert.getClass();
+        try {
+            for (Field field : clazz.getDeclaredFields()) {
+                if (field.getType().isPrimitive()) continue;
+                final Object o = field.get(tabConvert);
+                if (o instanceof EntityPath || o instanceof BeanPath) continue;
+                if (o instanceof Path) {
+                    columns.add((Path<?>) o);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("获取查询实体属性与数据库映射的字段异常", e);
+        }
+        return columns.toArray(new Expression<?>[0]);
+    }
+
 // DB End **************************************************************************************************************
 
 }
+/* ehcache 配置
+<cache alias="ITabConvertCache">
+    <key-type>java.lang.Long</key-type>
+    <value-type>com.ccx.demo.code.convert.entity.TabConvert</value-type>
+    <expiry>
+        <ttl unit="days">10</ttl>
+    </expiry>
+    <resources>
+        <heap>100</heap>
+        <offheap unit="MB">30</offheap>
+    </resources>
+</cache>
+*/
+/*
+import com.alibaba.fastjson.annotation.JSONField;
+import com.querydsl.core.annotations.QueryTransient;
+import com.support.mvc.entity.ICache;
+import java.beans.Transient;
+
+import static com.ccx.demo.config.init.BeanInitializer.Beans.getAppContext;
+/**
+ * 缓存：测试自定义 Convert 表
+ *
+ * @author 谢长春 on 2020-03-11
+ *\/
+public interface ITabConvertCache extends ICache {
+    String CACHE_ROW_BY_ID = "ITabConvertCache";
+
+    /**
+     * 按 ID 获取数据缓存行
+     *
+     * @param id {@link TabConvert#getId()}
+     * @return {@link Optional<TabConvert>}
+     *\/
+    @JSONField(serialize = false, deserialize = false)
+    default Optional<TabConvert> getTabConvertCacheById(final Long id) {
+        return Optional.ofNullable(id)
+                .filter(v -> v > 0)
+                .map(v -> getAppContext().getBean(ConvertRepository.class).findCacheById(v));
+    }
+}
+*/
