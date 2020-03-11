@@ -3,7 +3,6 @@ package com.support.aop.annotations;
 import java.lang.annotation.*;
 
 /**
- * 
  * @author 谢长春 2019/1/4
  */
 @Documented
@@ -47,6 +46,7 @@ public @interface MongoServiceAspect {
      * save | saveAll 方法是否自动设置Bool.NO 到 deleted 字段
      */
     Class<? extends Enum> deleted() default Deleted.class;
+
     /**
      * save | saveAll 方法是否自动设置当前时间到 [createTime] 字段
      *
