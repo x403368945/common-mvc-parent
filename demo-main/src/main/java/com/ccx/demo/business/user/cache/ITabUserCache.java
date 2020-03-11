@@ -8,10 +8,8 @@ import com.support.mvc.entity.ICache;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.beans.Transient;
-import java.util.Objects;
 import java.util.Optional;
 
-import static com.ccx.demo.config.init.BeanInitializer.getAppContext;
 import static com.ccx.demo.config.init.BeanInitializer.Beans.userRepository;
 
 /**

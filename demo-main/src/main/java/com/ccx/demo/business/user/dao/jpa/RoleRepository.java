@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Set;
 
 import static com.ccx.demo.config.init.BeanInitializer.Beans.jpaQueryFactory;
+
 /**
  * 数据操作：角色表
  *
@@ -126,7 +127,7 @@ public interface RoleRepository extends
 */
 
 
-//     @CacheEvict(cacheNames = ITabRoleCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
+    //     @CacheEvict(cacheNames = ITabRoleCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
     @Override
     default long markDeleteById(final Long id, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
@@ -138,7 +139,7 @@ public interface RoleRepository extends
     }
 
 
-//     @CacheEvict(cacheNames = ITabRoleCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
+    //     @CacheEvict(cacheNames = ITabRoleCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
     @Override
     default long markDeleteByUid(final Long id, final String uid, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
@@ -175,7 +176,7 @@ public interface RoleRepository extends
     }
 
     @Cacheable(cacheNames = ITabRoleCache.CACHE_ROW_BY_ID, key = "#id")
-    default TabRole findCacheById(final Long id){
+    default TabRole findCacheById(final Long id) {
         return findById(id).orElse(null);
     }
 

@@ -1,7 +1,8 @@
 package com.ccx.demo.business.example.dao.jpa;
 
-import com.ccx.demo.business.example.entity.TabConvert;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.ccx.demo.business.example.entity.QTabConvert;
+import com.ccx.demo.business.example.entity.TabConvert;
 import com.ccx.demo.enums.Bool;
 import com.google.common.collect.Lists;
 import com.querydsl.core.QueryResults;
@@ -13,7 +14,6 @@ import com.support.mvc.entity.base.MarkDelete;
 import com.support.mvc.entity.base.Pager;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -79,7 +79,7 @@ public interface ConvertRepository extends
     }
 
 
-//     @CacheEvict(cacheNames = ITabConvertCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
+    //     @CacheEvict(cacheNames = ITabConvertCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
     @Override
     default long update(final Long id, final Long userId, final TabConvert obj) {
         return obj.update(jpaQueryFactory.<JPAQueryFactory>get().update(q))
@@ -108,7 +108,7 @@ public interface ConvertRepository extends
     }
 */
 
-//     @CacheEvict(cacheNames = ITabConvertCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
+    //     @CacheEvict(cacheNames = ITabConvertCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
     @Override
     default TabConvert deleteByUid(final Long id, final String uid, final Long userId) {
         // userId 为可选校验，一般业务场景，能获取到 UUID 已经表示已经加强校验了
@@ -128,7 +128,7 @@ public interface ConvertRepository extends
     }
 
 
-//     @CacheEvict(cacheNames = ITabConvertCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
+    //     @CacheEvict(cacheNames = ITabConvertCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
     @Override
     default long markDeleteById(final Long id, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
@@ -140,7 +140,7 @@ public interface ConvertRepository extends
     }
 
 
-//     @CacheEvict(cacheNames = ITabConvertCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
+    //     @CacheEvict(cacheNames = ITabConvertCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
     @Override
     default long markDeleteByUid(final Long id, final String uid, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
@@ -223,7 +223,6 @@ public interface ConvertRepository extends
                 .orderBy(condition.buildQdslSorts())
                 .fetchResults();
     }
-
 
 
     @Override // <

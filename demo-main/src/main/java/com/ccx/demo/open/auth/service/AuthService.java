@@ -36,7 +36,7 @@ import javax.validation.constraints.NotBlank;
 public class AuthService implements UserDetailsService {
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
-//    private MailService mailService;
+    //    private MailService mailService;
 //    private UserCache userCache;
 //    private PhoneCode phoneCode;
     private final UserLoginService userLoginService;

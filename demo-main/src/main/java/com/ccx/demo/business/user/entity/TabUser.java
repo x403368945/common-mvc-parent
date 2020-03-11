@@ -216,7 +216,7 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
     public enum OrderBy {
         // 按 id 排序可替代按创建时间排序
         id(tabUser.id),
-//        uid(tabUser.uid),
+        //        uid(tabUser.uid),
 //        domain(tabUser.domain),
 //        username(tabUser.username),
 //        password(tabUser.password),
@@ -322,6 +322,7 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
                 .build()
                 .token();
     }
+
     /**
      * 获取查询实体与数据库表映射的所有字段,用于投影到 VO 类
      * 支持追加扩展字段,追加扩展字段一般用于连表查询

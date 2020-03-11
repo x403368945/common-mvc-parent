@@ -1,11 +1,5 @@
 package com.ccx.demo.config;
 
-import org.springframework.web.filter.CharacterEncodingFilter;
-import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
-
-import javax.servlet.Filter;
-import javax.servlet.ServletRegistration;
-
 /**
  * // spring-mvc start >> mvc 启动依赖，spring-boot 不需要改类，可以全部注解
  *

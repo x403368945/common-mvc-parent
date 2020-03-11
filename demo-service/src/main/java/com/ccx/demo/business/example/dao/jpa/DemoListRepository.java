@@ -18,7 +18,6 @@ import com.support.mvc.entity.base.Pager;
 import lombok.Data;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -85,7 +84,7 @@ public interface DemoListRepository extends
     }
 
 
-//     @CacheEvict(cacheNames = ITabDemoListCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
+    //     @CacheEvict(cacheNames = ITabDemoListCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
     @Override
     default long update(final Long id, final Long userId, final TabDemoList obj) {
         return obj.update(jpaQueryFactory.<JPAQueryFactory>get().update(q))
@@ -114,7 +113,7 @@ public interface DemoListRepository extends
     }
 */
 
-//     @CacheEvict(cacheNames = ITabDemoListCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
+    //     @CacheEvict(cacheNames = ITabDemoListCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
     @Override
     default TabDemoList deleteByUid(final Long id, final String uid, final Long userId) {
         // userId 为可选校验，一般业务场景，能获取到 UUID 已经表示已经加强校验了
@@ -134,7 +133,7 @@ public interface DemoListRepository extends
     }
 
 
-//     @CacheEvict(cacheNames = ITabDemoListCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
+    //     @CacheEvict(cacheNames = ITabDemoListCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
     @Override
     default long markDeleteById(final Long id, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()
@@ -146,7 +145,7 @@ public interface DemoListRepository extends
     }
 
 
-//     @CacheEvict(cacheNames = ITabDemoListCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
+    //     @CacheEvict(cacheNames = ITabDemoListCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
     @Override
     default long markDeleteByUid(final Long id, final String uid, final Long userId) {
         return jpaQueryFactory.<JPAQueryFactory>get()

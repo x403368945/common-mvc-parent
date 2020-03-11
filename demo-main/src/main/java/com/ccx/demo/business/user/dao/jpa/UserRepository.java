@@ -184,7 +184,6 @@ public interface UserRepository extends
     }
 
 
-
     @Override // <
     default <T extends TabUser> List<T> findListProjection(final TabUser condition, final Class<T> clazz) {
         return findListProjection(condition, clazz, TabUser.allColumnAppends());

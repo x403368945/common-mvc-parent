@@ -7,7 +7,6 @@ import java.util.Optional;
 /**
  * session 中的字段名
  *
- *
  * @author 谢长春 on 2017/11/23.
  */
 public enum Session {

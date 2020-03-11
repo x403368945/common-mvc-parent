@@ -17,9 +17,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * 请求操作响应：测试自定义 Convert 表
@@ -160,7 +160,7 @@ public class ConvertController implements IAuthController<Long, TabConvert> {
     public Result<TabConvert> page(final TabUser user, final int number, final int size, final TabConvert condition) {
         return new Result<TabConvert>().execute(result -> result.setSuccess(service.findPage(
                 Optional.ofNullable(condition).orElseGet(TabConvert::new),
-                                Pager.builder().number(number).size(size).build()
+                Pager.builder().number(number).size(size).build()
         )));
     }
 
