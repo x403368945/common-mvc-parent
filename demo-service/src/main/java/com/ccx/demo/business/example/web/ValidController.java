@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -227,7 +228,7 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<TabValid> save(
             @PathVariable int version,
-            @AuthenticationPrincipal final TabUser user,
+            @ApiIgnore @AuthenticationPrincipal final TabUser user,
             // required = false 可以让请求先过来，如果参数为空再抛出异常，保证本次请求能得到响应
             @RequestBody(required = false) final String body) {
         return new Result<TabValid>().execute(result -> {
@@ -305,7 +306,7 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<Void> update(
             @PathVariable int version,
-            @AuthenticationPrincipal final TabUser user,
+            @ApiIgnore @AuthenticationPrincipal final TabUser user,
             @ApiParam(required = true, value = "数据id", example = "1") @PathVariable final Long id,
             // required = false 可以让请求先过来，如果参数为空再抛出异常，保证本次请求能得到响应
             @RequestBody(required = false) final String body) {
@@ -341,7 +342,7 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<Void> deleteById(
             @PathVariable int version,
-            @AuthenticationPrincipal final TabUser user,
+            @ApiIgnore @AuthenticationPrincipal final TabUser user,
             @ApiParam(required = true, value = "数据id", example = "1") @PathVariable final Long id) {
         return new Result<Void>().call(() -> {
             {
@@ -361,7 +362,7 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<Void> deleteByUid(
             @PathVariable int version,
-            @AuthenticationPrincipal final TabUser user,
+            @ApiIgnore @AuthenticationPrincipal final TabUser user,
             @ApiParam(required = true, value = "数据id", example = "1") @PathVariable final Long id,
             @ApiParam(required = true, value = "数据uid", example = "uuid32") @PathVariable final String uid) {
         return new Result<Void>().call(() -> {
@@ -384,7 +385,7 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<Void> markDeleteById(
             @PathVariable int version,
-            @AuthenticationPrincipal final TabUser user,
+            @ApiIgnore @AuthenticationPrincipal final TabUser user,
             @ApiParam(required = true, value = "数据id", example = "1") @PathVariable final Long id) {
         return new Result<Void>().call(() -> {
             {
@@ -404,7 +405,7 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<Void> markDeleteByUid(
             @PathVariable int version,
-            @AuthenticationPrincipal final TabUser user,
+            @ApiIgnore @AuthenticationPrincipal final TabUser user,
             @ApiParam(required = true, value = "数据id", example = "1") @PathVariable final Long id,
             @ApiParam(required = true, value = "数据uid", example = "uuid32") @PathVariable final String uid) {
         return new Result<Void>().call(() -> {
@@ -428,7 +429,7 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<Void> markDelete(
             @PathVariable int version,
-            @AuthenticationPrincipal final TabUser user,
+            @ApiIgnore @AuthenticationPrincipal final TabUser user,
             @RequestBody(required = false) final List<MarkDelete> body) {
         return new Result<Void>().call(() -> {
             {
@@ -452,12 +453,39 @@ public class ValidController implements IAuthController<Long, TabValid> {
         });
     }
 
+    @GetMapping("/{id}")
+    @ResponseBody
+    public Result<TabValid> findById(
+            @ApiIgnore @AuthenticationPrincipal final TabUser user,
+            @PathVariable final int version,
+            @PathVariable final Long id) {
+        return new Result<TabValid>().execute(result -> {
+            if (0 == version) result.setSuccess(service.findById(1L).orElse(null));
+            if (1 == version) result.setSuccess(service.findById(null).orElse(null));
+            if (2 == version) result.setSuccess(service.findById(0L).orElse(null));
+        });
+    }
+
+    @GetMapping("/{id}/{uid}")
+    @ResponseBody
+    public Result<TabValid> findByUid(
+            @ApiIgnore @AuthenticationPrincipal final TabUser user,
+            @PathVariable final int version,
+            @PathVariable final Long id,
+            @PathVariable final String uid) {
+        return new Result<TabValid>().execute(result -> {
+            if (0 == version) result.setSuccess(service.findByUid(1L, Util.uuid32()).orElse(null));
+            if (1 == version) result.setSuccess(service.findByUid(null, null).orElse(null));
+            if (2 == version) result.setSuccess(service.findByUid(0L, "0").orElse(null));
+        });
+    }
+
     @GetMapping
     @ResponseBody
     public Result<TabValid> search(
             @PathVariable int version,
-            @AuthenticationPrincipal final TabUser user,
-            @RequestParam(required = false, defaultValue = "{}") final TabValid condition) {
+            @ApiIgnore @AuthenticationPrincipal final TabUser user,
+            final TabValid condition) {
         return new Result<TabValid>().execute(result -> {
             if (0 == version) result.setSuccess(service.findList(condition));
             if (1 == version) result.setSuccess(service.findList(TabValid.builder().value((short) 10).build()));
@@ -469,10 +497,10 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<TabValid> page(
             @PathVariable int version,
-            @AuthenticationPrincipal final TabUser user,
+            @ApiIgnore @AuthenticationPrincipal final TabUser user,
             @ApiParam(required = true, value = "页码", example = "1") @PathVariable final int number,
             @ApiParam(required = true, value = "每页条数", example = "1") @PathVariable final int size,
-            @RequestParam(required = false, defaultValue = "{}") final TabValid condition) {
+            final TabValid condition) {
         return new Result<TabValid>().execute(result -> {
             if (0 == version)
                 result.setSuccess(service.findPage(condition, Pager.builder().number(number).size(size).build()));

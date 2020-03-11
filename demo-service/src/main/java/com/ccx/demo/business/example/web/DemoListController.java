@@ -24,7 +24,6 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * 请求操作响应：测试案例表
@@ -104,6 +103,7 @@ public class DemoListController implements IAuthController<Long, TabDemoList> {
         return new Result<Void>().call(() -> service.markDeleteByUid(id, uid, user.getId()));
     }
 
+/*
     @PatchMapping
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
     @ApiOperation(value = "6.批量逻辑删除测试案例表", tags = {"2020-03-11"})
@@ -113,6 +113,7 @@ public class DemoListController implements IAuthController<Long, TabDemoList> {
     public Result<Void> markDeleteByIds(final TabUser user, final Set<Long> body) {
         return new Result<Void>().call(() -> service.markDeleteByIds(body, user.getId()));
     }
+*/
 
     @PatchMapping
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")

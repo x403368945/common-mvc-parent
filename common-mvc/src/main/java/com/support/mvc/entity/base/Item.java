@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,7 +25,8 @@ import java.util.Objects;
 @Accessors(chain = true)
 @ApiModel(description = "通用下拉选项")
 @JSONType(orders = {"key", "value", "checked", "comment", "childs"})
-public class Item {
+public class Item implements Serializable {
+    private static final long serialVersionUID = 6846618616027210259L;
     /**
      * 一般用于枚举 Enum::name()
      */

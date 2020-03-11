@@ -18,7 +18,7 @@ Authorization: Basic {{username}} {{password}}
 #Authorization: Basic {{username}} {{password}}
 
 ### 测试自定义 Convert 表: 按 id+uid 查询单条记录
-GET http://{{host}}:{{port}}/1/convert/{{id}}/{{uid}}
+GET http://{{host}}:{{port}}/1/convert/1/70235586336344dab550a7eeb7325621
 Content-Type: application/json
 Authorization: Basic {{username}} {{password}}
 
@@ -38,6 +38,7 @@ Authorization: Basic {{username}} {{password}}
     "comment": "成功"
   }
 }
+
 ### 测试自定义 Convert 表: 保存
 POST http://{{host}}:{{port}}/1/convert
 Content-Type: application/json
@@ -84,15 +85,51 @@ Authorization: Basic {{username}} {{password}}
   ]
 }
 
-
-
 ### 测试自定义 Convert 表: 修改
-PUT http://{{host}}:{{port}}/1/convert/{{id}}
+PUT http://{{host}}:{{port}}/1/convert/1
 Content-Type: application/json
 Authorization: Basic {{username}} {{password}}
 
 {
-
+  "id": 1,
+  "uid": "70235586336344dab550a7eeb7325621",
+  "ids": [
+    1,
+    2
+  ],
+  "images": [
+    "100000000000000000000000000000000000000.png",
+    "200000000000000000000000000000000000000.png",
+    "300000000000000000000000000000000000000.png"
+  ],
+  "codes": [
+    "CUSTOMIZE",
+    "FILE_COPY",
+    "ORDER_BY"
+  ],
+  "items": [
+    {
+      "key": "SUCCESS",
+      "value": "1",
+      "comment": "成功"
+    },
+    {
+      "key": "FAILURE",
+      "value": "0",
+      "comment": "失败"
+    }
+  ],
+  "item": {
+    "key": "SUCCESS",
+    "value": "3",
+    "comment": "成功"
+  },
+  "insertTime": "2019-12-12 11:50:09.000",
+  "insertUserId": 1,
+  "updateTime": "2020-03-11 15:38:05.186",
+  "updateUserId": 1,
+  "deleted": "NO",
+  "timestamp": 1576124577146
 }
 
 ### 测试自定义 Convert 表: 按 id 物理删除
@@ -106,7 +143,7 @@ Authorization: Basic {{username}} {{password}}
 #Authorization: Basic {{username}} {{password}}
 
 ### 测试自定义 Convert 表: 按 id+uid 删除单条记录
-PATCH http://{{host}}:{{port}}/1/convert/{{id}}/{{uid}}
+PATCH http://{{host}}:{{port}}/1/convert/7/c4b4b1c6d4a44f17a47cf0113e503b63
 Content-Type: application/json
 Authorization: Basic {{username}} {{password}}
 
@@ -124,8 +161,14 @@ Authorization: Basic {{username}} {{password}}
 
 [
   {
-    "id": 0,
-    "uid": ""
+    "id": 4,
+    "uid": "f6596074dc384cbeb072e88aae07d261"
+  },
+  {
+    "id": 6,
+    "uid": "22bec396427d4a3f830a24f703dfb17f"
   }
 ]
+
+###
 

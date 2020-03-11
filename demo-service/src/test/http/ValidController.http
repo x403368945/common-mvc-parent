@@ -549,16 +549,29 @@ PATCH http://{{host}}:{{port}}/9/valid
 Authorization: Basic {{username}} {{password}}
 
 
-### findByUidTimestamp *************************************************************************************************
-GET http://{{host}}:{{port}}/0/valid/1/1/1
+### findById *************************************************************************************************
+GET http://{{host}}:{{port}}/0/valid/1
 Authorization: Basic {{username}} {{password}}
 
 ###
-GET http://{{host}}:{{port}}/1/valid/1/1/1
+GET http://{{host}}:{{port}}/1/valid/1
 Authorization: Basic {{username}} {{password}}
 
 ###
-GET http://{{host}}:{{port}}/2/valid/1/1/1
+GET http://{{host}}:{{port}}/2/valid/1
+Authorization: Basic {{username}} {{password}}
+
+
+### findByUid *************************************************************************************************
+GET http://{{host}}:{{port}}/0/valid/1/1
+Authorization: Basic {{username}} {{password}}
+
+###
+GET http://{{host}}:{{port}}/1/valid/1/1
+Authorization: Basic {{username}} {{password}}
+
+###
+GET http://{{host}}:{{port}}/2/valid/1/1
 Authorization: Basic {{username}} {{password}}
 
 ### search *************************************************************************************************************

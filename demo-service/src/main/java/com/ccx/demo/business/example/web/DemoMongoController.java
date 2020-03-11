@@ -116,7 +116,7 @@ package com.ccx.demo.business.example.web;
 //    @Override
 //    public Result<?> search(
 //            @AuthenticationPrincipal final TabUser user,
-////            @RequestParam(required = false, defaultValue = "{}") final String json) {
+////            final String json) {
 //        return new Result<DemoMongo>()
 //                .execute(result -> result
 //                        .versionAssert(version, false) // 弱校验版本号
@@ -133,7 +133,7 @@ package com.ccx.demo.business.example.web;
 //            @AuthenticationPrincipal final TabUser user,
 ////            @ApiParam(required = true, value = "页码", example = "1") @PathVariable final int number,
 //            @ApiParam(required = true, value = "每页条数", example = "1") @PathVariable final int size,
-//            @RequestParam(required = false, defaultValue = "{}") final String json
+//            final String json
 //    ) {
 //        return new Result<DemoMongo>()
 //                .execute(result -> result
