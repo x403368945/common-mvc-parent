@@ -63,7 +63,7 @@ export default class BaseAdapter {
           case 'DECIMAL':
           case 'DOUBLE':
           case 'FLOAT':
-            list.push(`    @Digits(integer = ${length}, fraction = ${fixed || 0})`);
+            list.push(`    @Digits(integer = ${length - (fixed || 0)}, fraction = ${fixed || 0})`);
             break;
           case 'CHAR':
             list.push(`    @Size(min = ${length}, max = ${length})`);

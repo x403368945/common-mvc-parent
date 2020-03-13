@@ -67,27 +67,23 @@ public class DemoListService implements IBaseService<TabDemoList>
         UpdateRowsException.asserts(repository.update(id, userId, obj));
     }
 
-/*
-   // 注释掉的方法只有在需要的时候解开
+    // 注释掉的方法只有在需要的时候解开
     @Override
     public TabDemoList deleteById(final Long id, final Long userId) {
         return repository.deleteById(id, userId);
     }
-*/
-/*
+
     // 注释掉的方法只有在需要的时候解开
     @Override
     public TabDemoList deleteByUid(final Long id, final String uid, final Long userId) {
         return repository.deleteByUid(id, uid, userId);
     }
-*/
-/*
+
     // 注释掉的方法只有在需要的时候解开
     @Override
     public void markDeleteById(final Long id, final Long userId) {
         DeleteRowsException.asserts(repository.markDeleteById(id, userId));
     }
-*/
 
     @Override
     public void markDeleteByUid(final Long id, final String uid, final Long userId) {
@@ -109,13 +105,11 @@ public class DemoListService implements IBaseService<TabDemoList>
         //clearKeys(list.stream().map(MarkDelete::getLongId).collect(Collectors.toSet())); // 若使用缓存需要解开代码
     }
 
-/*
     @Override // <
     public Optional<TabDemoList> findById(final Long id) {
         return repository.findById(id);
 //         return Optional.ofNullable(repository.findCacheById(id)); // 若使用缓存需要解开代码
     }
-*/
 
     @Override
     public Optional<TabDemoList> findByUid(final Long id, final String uid) {
@@ -129,13 +123,11 @@ public class DemoListService implements IBaseService<TabDemoList>
         return repository.findPage(condition, Pager.rebuild(pager));
     }
 
-/*
-        // 非必要情况下不要开放列表查询方法，因为没有分页控制，容易内存溢出。大批量查询数据应该使用分页查询 <
-        @Override
-        public List<TabDemoList> findList(final TabDemoList condition) {
-            return repository.findList(condition);
-        }
-*/
+    // 非必要情况下不要开放列表查询方法，因为没有分页控制，容易内存溢出。大批量查询数据应该使用分页查询 <
+    @Override
+    public List<TabDemoList> findList(final TabDemoList condition) {
+        return repository.findList(condition);
+    }
 
     public List<TabDemoListVO> findListVO(final TabDemoList condition) {
         return repository.findListProjection(condition, TabDemoListVO.class);

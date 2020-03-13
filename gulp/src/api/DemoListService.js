@@ -1,4 +1,7 @@
 import axios from 'axios';
+import isArray from 'lodash/isArray';
+import isObject from 'lodash/isObject';
+import pickBy from 'lodash/pickBy';
 import Page from '../utils/entity/Page';
 import Result from '../utils/entity/Result';
 import DemoList from './entity/DemoList';
@@ -14,6 +17,8 @@ const findByIdURL = '/1/demo-list/{id}'; // 按 id 查询单条记录
 const findByUidURL = '/1/demo-list/{id}/{uid}'; // 按 id + uid + 时间戳 查询单条记录
 const searchURL = '/1/demo-list'; // 多条件批量查询，不分页
 const pageURL = '/1/demo-list/page/{number}/{size}'; // 分页：多条件批量查询
+const searchVoURL = '/1/demo-list/vo'; // 多条件批量查询，不分页，投影到 VO 类
+const pageVoURL = '/1/demo-list/page/vo/{number}/{size}'; // 分页：多条件批量查询，投影到 VO 类
 
 /**
  * 后台服务请求：参考案例：实体表操作
@@ -47,12 +52,15 @@ export default class DemoListService {
      * 参考案例对象
      * @type {DemoList}
      */
-    this.vo = new DemoList({
-      ...vo
-    });
-    Object.keys(this.vo).forEach(key => { // 移除空字符串参数，前端组件默认值为空字符串，带到后端查询会有问题
-      if (this.vo[key] === '') {
-        delete this.vo[key];
+    this.vo = new DemoList(pickBy(JSON.parse(JSON.stringify(vo)), value => value !== ''));
+    Object.keys(this.vo).forEach(key => { // 移除空字符串参数，前端组件默认值为空字符串，带到后端会有问题
+      if (isArray(this.vo[key])) {
+        this.vo[key] = this.vo[key].filter(item => item !== '');
+        this.vo[key].forEach(item => {
+          if (!isArray(item) && isObject(item)) {
+            pickBy(item, value => value !== '');
+          }
+        })
       }
     });
   }
@@ -133,9 +141,9 @@ export default class DemoListService {
    * @return {Promise<Result>}
    */
   async markDelete() {
-    const {uids} = this.vo;
+    const {markDeleteArray} = this.vo;
     return await axios
-      .patch(markDeleteURL, uids)
+      .patch(markDeleteURL, markDeleteArray)
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }
@@ -183,6 +191,29 @@ export default class DemoListService {
     const {page, ...params} = this.vo;
     return await axios
       .get(pageURL.formatObject(page || Page.ofDefault()), {params})
+      .then(Result.ofResponse)
+      .catch(Result.ofCatch);
+  }
+
+  /**
+   * 多条件批量查询，不分页
+   * @return {Promise<Result>}
+   */
+  async searchVO() {
+    return await axios
+      .get(searchVoURL, {params: this.vo})
+      .then(Result.ofResponse)
+      .catch(Result.ofCatch);
+  }
+
+  /**
+   * 分页：多条件批量查询
+   * @return {Promise<Result>}
+   */
+  async pageableVO() {
+    const {page, ...params} = this.vo;
+    return await axios
+      .get(pageVoURL.formatObject(page || Page.ofDefault()), {params})
       .then(Result.ofResponse)
       .catch(Result.ofCatch);
   }

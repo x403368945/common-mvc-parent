@@ -39,8 +39,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<String> hasNull(@PathVariable int version) {
         return new Result<String>().execute(result -> {
-            if (0 == version) result.setSuccess(service.hasNull(null));
-            if (1 == version) result.setSuccess(service.hasNull(""));
+            if (0 == version) result.setSuccess(service.hasNull(null)).addExtras("@Null", "成功");
+            if (1 == version) result.setSuccess(service.hasNull("")).addExtras("@Null", "失败");
         });
     }
 
@@ -48,8 +48,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<String> notNull(@PathVariable int version) {
         return new Result<String>().execute(result -> {
-            if (0 == version) result.setSuccess(service.notNull(""));
-            if (1 == version) result.setSuccess(service.notNull(null));
+            if (0 == version) result.setSuccess(service.notNull("")).addExtras("@NotNull", "成功");
+            if (1 == version) result.setSuccess(service.notNull(null)).addExtras("@NotNull", "失败");
         });
     }
 
@@ -57,9 +57,9 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<String> notBlank(@PathVariable int version) {
         return new Result<String>().execute(result -> {
-            if (0 == version) result.setSuccess(service.notBlank(null));
-            if (1 == version) result.setSuccess(service.notBlank("text"));
-            if (2 == version) result.setSuccess(service.notBlank(""));
+            if (0 == version) result.setSuccess(service.notBlank(null)).addExtras("@NotBlank", "失败");
+            if (1 == version) result.setSuccess(service.notBlank("text")).addExtras("@NotBlank", "成功");
+            if (2 == version) result.setSuccess(service.notBlank("")).addExtras("@NotBlank", "失败");
         });
     }
 
@@ -67,11 +67,11 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<String> size(@PathVariable int version) {
         return new Result<String>().execute(result -> {
-            if (0 == version) result.setSuccess(service.size("text"));
-            if (1 == version) result.setSuccess(service.size(null));
-            if (2 == version) result.setSuccess(service.size(""));
-            if (3 == version) result.setSuccess(service.size(Strings.repeat("-", 11)));
-            if (4 == version) result.setSuccess(service.size(Strings.repeat("测试", 5)));
+            if (0 == version) result.setSuccess(service.size("text")).addExtras("@Size", "成功");
+            if (1 == version) result.setSuccess(service.size(null)).addExtras("@Size", "成功");
+            if (2 == version) result.setSuccess(service.size("")).addExtras("@Size", "失败");
+            if (3 == version) result.setSuccess(service.size(Strings.repeat("-", 11))).addExtras("@Size", "失败");
+            if (4 == version) result.setSuccess(service.size(Strings.repeat("测试", 5))).addExtras("@Size", "成功");
         });
     }
 
@@ -79,10 +79,10 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<String> pattern(@PathVariable int version) {
         return new Result<String>().execute(result -> {
-            if (0 == version) result.setSuccess(service.pattern("text_0"));
-            if (1 == version) result.setSuccess(service.pattern(null));
-            if (2 == version) result.setSuccess(service.pattern(""));
-            if (3 == version) result.setSuccess(service.pattern("测试"));
+            if (0 == version) result.setSuccess(service.pattern("text_0")).addExtras("@Pattern", "成功");
+            if (1 == version) result.setSuccess(service.pattern(null)).addExtras("@Pattern", "成功");
+            if (2 == version) result.setSuccess(service.pattern("")).addExtras("@Pattern", "失败");
+            if (3 == version) result.setSuccess(service.pattern("测试")).addExtras("@Pattern", "失败");
         });
     }
 
@@ -90,10 +90,12 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<String> notEmpty(@PathVariable int version) {
         return new Result<String>().execute(result -> {
-            if (0 == version) result.setSuccess(service.notEmpty(Collections.singletonList(Util.uuid32())));
-            if (1 == version) result.setSuccess(service.notEmpty(null));
-            if (2 == version) result.setSuccess(service.notEmpty(Collections.emptyList()));
-            if (3 == version) result.setSuccess(service.notEmpty(Collections.singletonList("")));
+            if (0 == version)
+                result.setSuccess(service.notEmpty(Collections.singletonList(Util.uuid32()))).addExtras("@NotEmpty", "成功");
+            if (1 == version) result.setSuccess(service.notEmpty(null)).addExtras("@NotEmpty", "成功");
+            if (2 == version) result.setSuccess(service.notEmpty(Collections.emptyList())).addExtras("@NotEmpty", "失败");
+            if (3 == version)
+                result.setSuccess(service.notEmpty(Collections.singletonList(""))).addExtras("@NotEmpty", "失败");
         });
     }
 
@@ -101,8 +103,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<String> min(@PathVariable int version) {
         return new Result<String>().execute(result -> {
-            if (0 == version) result.setSuccess(service.min(null));
-            if (1 == version) result.setSuccess(service.min(0));
+            if (0 == version) result.setSuccess(service.min(null)).addExtras("@Min", "成功");
+            if (1 == version) result.setSuccess(service.min(0)).addExtras("@Min", "失败");
         });
     }
 
@@ -110,8 +112,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<String> max(@PathVariable int version) {
         return new Result<String>().execute(result -> {
-            if (0 == version) result.setSuccess(service.max(null));
-            if (1 == version) result.setSuccess(service.max(11));
+            if (0 == version) result.setSuccess(service.max(null)).addExtras("@Max", "成功");
+            if (1 == version) result.setSuccess(service.max(11)).addExtras("@Max", "成功");
         });
     }
 
@@ -119,8 +121,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<String> decimalMin(@PathVariable int version) {
         return new Result<String>().execute(result -> {
-            if (0 == version) result.setSuccess(service.decimalMin(null));
-            if (1 == version) result.setSuccess(service.decimalMin(BigDecimal.ZERO));
+            if (0 == version) result.setSuccess(service.decimalMin(null)).addExtras("@DecimalMin", "成功");
+            if (1 == version) result.setSuccess(service.decimalMin(BigDecimal.ZERO)).addExtras("@DecimalMin", "失败");
         });
     }
 
@@ -128,8 +130,9 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<String> decimalMax(@PathVariable int version) {
         return new Result<String>().execute(result -> {
-            if (0 == version) result.setSuccess(service.decimalMax(null));
-            if (1 == version) result.setSuccess(service.decimalMax(BigDecimal.valueOf(11)));
+            if (0 == version) result.setSuccess(service.decimalMax(null)).addExtras("@DecimalMax", "成功");
+            if (1 == version)
+                result.setSuccess(service.decimalMax(BigDecimal.valueOf(11))).addExtras("@DecimalMax", "失败");
         });
     }
 
@@ -137,8 +140,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<String> digits(@PathVariable int version) {
         return new Result<String>().execute(result -> {
-            if (0 == version) result.setSuccess(service.digits(null));
-            if (1 == version) result.setSuccess(service.digits(new BigDecimal("10.222")));
+            if (0 == version) result.setSuccess(service.digits(null)).addExtras("@Digits", "成功");
+            if (1 == version) result.setSuccess(service.digits(new BigDecimal("10.222"))).addExtras("@Digits", "失败");
         });
     }
 
@@ -146,8 +149,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<String> negative(@PathVariable int version) {
         return new Result<String>().execute(result -> {
-            if (0 == version) result.setSuccess(service.negative(null));
-            if (1 == version) result.setSuccess(service.negative(BigDecimal.ONE));
+            if (0 == version) result.setSuccess(service.negative(null)).addExtras("@Negative", "成功");
+            if (1 == version) result.setSuccess(service.negative(BigDecimal.ONE)).addExtras("@Negative", "失败");
         });
     }
 
@@ -155,8 +158,9 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<String> negativeOrZero(@PathVariable int version) {
         return new Result<String>().execute(result -> {
-            if (0 == version) result.setSuccess(service.negativeOrZero(null));
-            if (1 == version) result.setSuccess(service.negativeOrZero(BigDecimal.TEN));
+            if (0 == version) result.setSuccess(service.negativeOrZero(null)).addExtras("@NegativeOrZero", "成功");
+            if (1 == version)
+                result.setSuccess(service.negativeOrZero(BigDecimal.TEN)).addExtras("@NegativeOrZero", "失败");
         });
     }
 
@@ -164,8 +168,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<String> positive(@PathVariable int version) {
         return new Result<String>().execute(result -> {
-            if (0 == version) result.setSuccess(service.positive(null));
-            if (1 == version) result.setSuccess(service.positive(BigDecimal.ZERO));
+            if (0 == version) result.setSuccess(service.positive(null)).addExtras("@Positive", "成功");
+            if (1 == version) result.setSuccess(service.positive(BigDecimal.ZERO)).addExtras("@Positive", "失败");
         });
     }
 
@@ -173,8 +177,9 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<String> positiveOrZero(@PathVariable int version) {
         return new Result<String>().execute(result -> {
-            if (0 == version) result.setSuccess(service.positiveOrZero(null));
-            if (1 == version) result.setSuccess(service.positiveOrZero(BigDecimal.valueOf(-1)));
+            if (0 == version) result.setSuccess(service.positiveOrZero(null)).addExtras("@PositiveOrZero", "成功");
+            if (1 == version)
+                result.setSuccess(service.positiveOrZero(BigDecimal.valueOf(-1))).addExtras("@PositiveOrZero", "失败");
         });
     }
 
@@ -182,8 +187,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<String> assertTrue(@PathVariable int version) {
         return new Result<String>().execute(result -> {
-            if (0 == version) result.setSuccess(service.assertTrue(null));
-            if (1 == version) result.setSuccess(service.assertTrue(false));
+            if (0 == version) result.setSuccess(service.assertTrue(null)).addExtras("@AssertTrue", "成功");
+            if (1 == version) result.setSuccess(service.assertTrue(false)).addExtras("@AssertTrue", "失败");
         });
     }
 
@@ -191,8 +196,8 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<String> assertFalse(@PathVariable int version) {
         return new Result<String>().execute(result -> {
-            if (0 == version) result.setSuccess(service.assertFalse(null));
-            if (1 == version) result.setSuccess(service.assertFalse(true));
+            if (0 == version) result.setSuccess(service.assertFalse(null)).addExtras("@AssertFalse", "成功");
+            if (1 == version) result.setSuccess(service.assertFalse(true)).addExtras("@AssertFalse", "失败");
         });
     }
 
@@ -200,9 +205,9 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<String> email(@PathVariable int version) {
         return new Result<String>().execute(result -> {
-            if (0 == version) result.setSuccess(service.email(null));
-            if (1 == version) result.setSuccess(service.email("x@126.com"));
-            if (2 == version) result.setSuccess(service.email("126.com"));
+            if (0 == version) result.setSuccess(service.email(null)).addExtras("@Email", "成功");
+            if (1 == version) result.setSuccess(service.email("x@126.com")).addExtras("@Email", "成功");
+            if (2 == version) result.setSuccess(service.email("126.com")).addExtras("@Email", "失败");
         });
     }
 
@@ -210,8 +215,9 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<String> past(@PathVariable int version) {
         return new Result<String>().execute(result -> {
-            if (0 == version) result.setSuccess(service.past(null));
-            if (1 == version) result.setSuccess(service.past(Dates.now().addDay(1).timestamp()));
+            if (0 == version) result.setSuccess(service.past(null)).addExtras("@Past", "成功");
+            if (1 == version)
+                result.setSuccess(service.past(Dates.now().addDay(1).timestamp())).addExtras("@Past", "失败");
         });
     }
 
@@ -219,8 +225,9 @@ public class ValidController implements IAuthController<Long, TabValid> {
     @ResponseBody
     public Result<String> future(@PathVariable int version) {
         return new Result<String>().execute(result -> {
-            if (0 == version) result.setSuccess(service.future(null));
-            if (1 == version) result.setSuccess(service.future(Dates.now().addDay(-1).timestamp()));
+            if (0 == version) result.setSuccess(service.future(null)).addExtras("@Future", "成功");
+            if (1 == version)
+                result.setSuccess(service.future(Dates.now().addDay(-1).timestamp())).addExtras("@Future", "失败");
         });
     }
 
@@ -234,70 +241,77 @@ public class ValidController implements IAuthController<Long, TabValid> {
         return new Result<TabValid>().execute(result -> {
             {
                 if (0 == version)
-                    result.setSuccess(service.save(TabValid.builder().id(1L).label(Strings.repeat("测试", 5)).value((short) 1).content(Strings.repeat("内容", 15)).build(), user.getId()));
+                    result.setSuccess(service.save(TabValid.builder().id(1L).label(Strings.repeat("测试", 5)).value((short) 1).content(Strings.repeat("内容", 15)).build(), user.getId())).addExtras("@", "成功失败");
                 if (1 == version)
-                    result.setSuccess(service.save(TabValid.builder().id(1L).label(Strings.repeat("测试", 5)).value((short) 10).build(), user.getId()));
-                if (2 == version) result.setSuccess(service.save(null, null));
-                if (3 == version) result.setSuccess(service.save(TabValid.builder().build(), null));
-                if (4 == version) result.setSuccess(service.save(TabValid.builder().build(), user.getId()));
-                if (5 == version) result.setSuccess(service.save(TabValid.builder().id(1L).build(), user.getId()));
+                    result.setSuccess(service.save(TabValid.builder().id(1L).label(Strings.repeat("测试", 5)).value((short) 10).build(), user.getId())).addExtras("@", "成功失败");
+                if (2 == version) result.setSuccess(service.save(null, null)).addExtras("@", "成功失败");
+                if (3 == version)
+                    result.setSuccess(service.save(TabValid.builder().build(), null)).addExtras("@", "成功失败");
+                if (4 == version)
+                    result.setSuccess(service.save(TabValid.builder().build(), user.getId())).addExtras("@", "成功失败");
+                if (5 == version)
+                    result.setSuccess(service.save(TabValid.builder().id(1L).build(), user.getId())).addExtras("@", "成功失败");
                 if (6 == version)
-                    result.setSuccess(service.save(TabValid.builder().label(Strings.repeat("测试", 5)).value((short) 1).content(Strings.repeat("内容", 16)).build(), user.getId()));
+                    result.setSuccess(service.save(TabValid.builder().label(Strings.repeat("测试", 5)).value((short) 1).content(Strings.repeat("内容", 16)).build(), user.getId())).addExtras("@", "成功失败");
                 if (7 == version)
-                    result.setSuccess(service.save(TabValid.builder().label(Strings.repeat("测试", 5)).value((short) 1).build(), user.getId()));
+                    result.setSuccess(service.save(TabValid.builder().label(Strings.repeat("测试", 5)).value((short) 1).build(), user.getId())).addExtras("@", "成功失败");
                 if (8 == version)
-                    result.setSuccess(service.save(TabValid.builder().label(Strings.repeat("测试", 5)).value((short) 1).build(), 0L));
+                    result.setSuccess(service.save(TabValid.builder().label(Strings.repeat("测试", 5)).value((short) 1).build(), 0L)).addExtras("@", "成功失败");
             }
             {
                 if (9 == version)
-                    result.setSuccess(service.saveAll(Collections.singletonList(TabValid.builder().id(1L).label(Strings.repeat("测试", 5)).value((short) 1).content(Strings.repeat("内容", 15)).build()), user.getId()));
+                    result.setSuccess(service.saveAll(Collections.singletonList(TabValid.builder().id(1L).label(Strings.repeat("测试", 5)).value((short) 1).content(Strings.repeat("内容", 15)).build()), user.getId())).addExtras("@", "成功失败");
                 if (10 == version)
-                    result.setSuccess(service.saveAll(Collections.singletonList(TabValid.builder().id(1L).label(Strings.repeat("测试", 5)).value((short) 10).build()), user.getId()));
-                if (11 == version) result.setSuccess(service.saveAll(null, null));
-                if (12 == version) result.setSuccess(service.saveAll(Collections.singletonList(null), null));
-                if (13 == version) result.setSuccess(service.saveAll(Collections.emptyList(), null));
+                    result.setSuccess(service.saveAll(Collections.singletonList(TabValid.builder().id(1L).label(Strings.repeat("测试", 5)).value((short) 10).build()), user.getId())).addExtras("@", "成功失败");
+                if (11 == version) result.setSuccess(service.saveAll(null, null)).addExtras("@", "成功失败");
+                if (12 == version)
+                    result.setSuccess(service.saveAll(Collections.singletonList(null), null)).addExtras("@", "成功失败");
+                if (13 == version)
+                    result.setSuccess(service.saveAll(Collections.emptyList(), null)).addExtras("@", "成功失败");
                 if (14 == version)
-                    result.setSuccess(service.saveAll(Collections.singletonList(TabValid.builder().build()), null));
+                    result.setSuccess(service.saveAll(Collections.singletonList(TabValid.builder().build()), null)).addExtras("@", "成功失败");
                 if (15 == version)
-                    result.setSuccess(service.saveAll(Collections.singletonList(TabValid.builder().build()), user.getId()));
+                    result.setSuccess(service.saveAll(Collections.singletonList(TabValid.builder().build()), user.getId())).addExtras("@", "成功失败");
                 if (16 == version)
-                    result.setSuccess(service.saveAll(null, user.getId()));
+                    result.setSuccess(service.saveAll(null, user.getId())).addExtras("@", "成功失败");
                 if (17 == version)
-                    result.setSuccess(service.saveAll(Collections.singletonList(TabValid.builder().id(1L).build()), user.getId()));
+                    result.setSuccess(service.saveAll(Collections.singletonList(TabValid.builder().id(1L).build()), user.getId())).addExtras("@", "成功失败");
                 if (18 == version)
-                    result.setSuccess(service.saveAll(Collections.singletonList(TabValid.builder().label(Strings.repeat("测试", 5)).value((short) 1).content(Strings.repeat("内容", 16)).build()), user.getId()));
+                    result.setSuccess(service.saveAll(Collections.singletonList(TabValid.builder().label(Strings.repeat("测试", 5)).value((short) 1).content(Strings.repeat("内容", 16)).build()), user.getId())).addExtras("@", "成功失败");
                 if (19 == version)
-                    result.setSuccess(service.saveAll(Collections.singletonList(TabValid.builder().label(Strings.repeat("测试", 5)).value((short) 1).build()), user.getId()));
+                    result.setSuccess(service.saveAll(Collections.singletonList(TabValid.builder().label(Strings.repeat("测试", 5)).value((short) 1).build()), user.getId())).addExtras("@", "成功失败");
             }
             {
                 if (20 == version)
-                    result.setSuccess(service.save(TabValid.builder().id(1L).label(Strings.repeat("测试", 5)).value((short) 1).content(Strings.repeat("内容", 15)).build()));
+                    result.setSuccess(service.save(TabValid.builder().id(1L).label(Strings.repeat("测试", 5)).value((short) 1).content(Strings.repeat("内容", 15)).build())).addExtras("@", "成功失败");
                 if (21 == version)
-                    result.setSuccess(service.save(TabValid.builder().id(1L).label(Strings.repeat("测试", 5)).value((short) 10).build()));
-                if (22 == version) result.setSuccess(service.save(null));
-                if (23 == version) result.setSuccess(service.save(TabValid.builder().build()));
-                if (24 == version) result.setSuccess(service.save(TabValid.builder().id(1L).build()));
+                    result.setSuccess(service.save(TabValid.builder().id(1L).label(Strings.repeat("测试", 5)).value((short) 10).build())).addExtras("@", "成功失败");
+                if (22 == version) result.setSuccess(service.save(null)).addExtras("@", "成功失败");
+                if (23 == version) result.setSuccess(service.save(TabValid.builder().build())).addExtras("@", "成功失败");
+                if (24 == version)
+                    result.setSuccess(service.save(TabValid.builder().id(1L).build())).addExtras("@", "成功失败");
                 if (25 == version)
-                    result.setSuccess(service.save(TabValid.builder().label(Strings.repeat("测试", 5)).value((short) 1).content(Strings.repeat("内容", 16)).build()));
+                    result.setSuccess(service.save(TabValid.builder().label(Strings.repeat("测试", 5)).value((short) 1).content(Strings.repeat("内容", 16)).build())).addExtras("@", "成功失败");
                 if (26 == version)
-                    result.setSuccess(service.save(TabValid.builder().label(Strings.repeat("测试", 5)).value((short) 1).build()));
+                    result.setSuccess(service.save(TabValid.builder().label(Strings.repeat("测试", 5)).value((short) 1).build())).addExtras("@", "成功失败");
             }
             {
                 if (27 == version)
-                    result.setSuccess(service.saveAll(Collections.singletonList(TabValid.builder().id(1L).label(Strings.repeat("测试", 5)).value((short) 1).content(Strings.repeat("内容", 15)).build())));
+                    result.setSuccess(service.saveAll(Collections.singletonList(TabValid.builder().id(1L).label(Strings.repeat("测试", 5)).value((short) 1).content(Strings.repeat("内容", 15)).build()))).addExtras("@", "成功失败");
                 if (28 == version)
-                    result.setSuccess(service.saveAll(Collections.singletonList(TabValid.builder().id(1L).label(Strings.repeat("测试", 5)).value((short) 10).build())));
-                if (29 == version) result.setSuccess(service.saveAll(null));
-                if (30 == version) result.setSuccess(service.saveAll(Collections.singletonList(null)));
-                if (31 == version) result.setSuccess(service.saveAll(Collections.emptyList()));
+                    result.setSuccess(service.saveAll(Collections.singletonList(TabValid.builder().id(1L).label(Strings.repeat("测试", 5)).value((short) 10).build()))).addExtras("@", "成功失败");
+                if (29 == version) result.setSuccess(service.saveAll(null)).addExtras("@", "成功失败");
+                if (30 == version)
+                    result.setSuccess(service.saveAll(Collections.singletonList(null))).addExtras("@", "成功失败");
+                if (31 == version) result.setSuccess(service.saveAll(Collections.emptyList())).addExtras("@", "成功失败");
                 if (32 == version)
-                    result.setSuccess(service.saveAll(Collections.singletonList(TabValid.builder().build())));
+                    result.setSuccess(service.saveAll(Collections.singletonList(TabValid.builder().build()))).addExtras("@", "成功失败");
                 if (33 == version)
-                    result.setSuccess(service.saveAll(Collections.singletonList(TabValid.builder().id(1L).build())));
+                    result.setSuccess(service.saveAll(Collections.singletonList(TabValid.builder().id(1L).build()))).addExtras("@", "成功失败");
                 if (34 == version)
-                    result.setSuccess(service.saveAll(Collections.singletonList(TabValid.builder().label(Strings.repeat("测试", 5)).value((short) 1).content(Strings.repeat("内容", 16)).build())));
+                    result.setSuccess(service.saveAll(Collections.singletonList(TabValid.builder().label(Strings.repeat("测试", 5)).value((short) 1).content(Strings.repeat("内容", 16)).build()))).addExtras("@", "成功失败");
                 if (35 == version)
-                    result.setSuccess(service.saveAll(Collections.singletonList(TabValid.builder().label(Strings.repeat("测试", 5)).value((short) 1).build())));
+                    result.setSuccess(service.saveAll(Collections.singletonList(TabValid.builder().label(Strings.repeat("测试", 5)).value((short) 1).build()))).addExtras("@", "成功失败");
             }
         });
     }
@@ -310,7 +324,7 @@ public class ValidController implements IAuthController<Long, TabValid> {
             @ApiParam(required = true, value = "数据id", example = "1") @PathVariable final Long id,
             // required = false 可以让请求先过来，如果参数为空再抛出异常，保证本次请求能得到响应
             @RequestBody(required = false) final String body) {
-        return new Result<Void>().call(() -> {
+        return new Result<Void>().execute(result -> {
             {
                 if (0 == version)
                     service.update(1L, user.getId(), TabValid.builder().uid(Util.uuid32()).label(Strings.repeat("测试", 5)).value((short) 1).content(Strings.repeat("内容", 15)).build());
@@ -460,10 +474,10 @@ public class ValidController implements IAuthController<Long, TabValid> {
             @PathVariable final int version,
             @PathVariable final Long id) {
         return new Result<TabValid>().execute(result -> {
-            if (0 == version) result.setSuccess(service.findById(1L).orElse(null));
-            if (1 == version) result.setSuccess(service.findById(null).orElse(null));
-            if (2 == version) result.setSuccess(service.findById(0L).orElse(null));
-        });
+            if (0 == version) result.setSuccess(service.findById(1L).orElse(null)).addExtras("@", "成功失败");
+            if (1 == version) result.setSuccess(service.findById(null).orElse(null)).addExtras("@", "成功失败");
+            if (2 == version) result.setSuccess(service.findById(0L).orElse(null)).addExtras("@", "成功失败");
+        }).addExtras("@", "成功失败");
     }
 
     @GetMapping("/{id}/{uid}")
@@ -474,9 +488,10 @@ public class ValidController implements IAuthController<Long, TabValid> {
             @PathVariable final Long id,
             @PathVariable final String uid) {
         return new Result<TabValid>().execute(result -> {
-            if (0 == version) result.setSuccess(service.findByUid(1L, Util.uuid32()).orElse(null));
-            if (1 == version) result.setSuccess(service.findByUid(null, null).orElse(null));
-            if (2 == version) result.setSuccess(service.findByUid(0L, "0").orElse(null));
+            if (0 == version)
+                result.setSuccess(service.findByUid(1L, Util.uuid32()).orElse(null)).addExtras("@", "成功失败");
+            if (1 == version) result.setSuccess(service.findByUid(null, null).orElse(null)).addExtras("@", "成功失败");
+            if (2 == version) result.setSuccess(service.findByUid(0L, "0").orElse(null)).addExtras("@", "成功失败");
         });
     }
 
@@ -487,9 +502,10 @@ public class ValidController implements IAuthController<Long, TabValid> {
             @ApiIgnore @AuthenticationPrincipal final TabUser user,
             final TabValid condition) {
         return new Result<TabValid>().execute(result -> {
-            if (0 == version) result.setSuccess(service.findList(condition));
-            if (1 == version) result.setSuccess(service.findList(TabValid.builder().value((short) 10).build()));
-            if (2 == version) result.setSuccess(service.findList(null));
+            if (0 == version) result.setSuccess(service.findList(condition)).addExtras("@", "成功失败");
+            if (1 == version)
+                result.setSuccess(service.findList(TabValid.builder().value((short) 10).build())).addExtras("@", "成功失败");
+            if (2 == version) result.setSuccess(service.findList(null)).addExtras("@", "成功失败");
         });
     }
 
@@ -503,10 +519,10 @@ public class ValidController implements IAuthController<Long, TabValid> {
             final TabValid condition) {
         return new Result<TabValid>().execute(result -> {
             if (0 == version)
-                result.setSuccess(service.findPage(condition, Pager.builder().number(number).size(size).build()));
+                result.setSuccess(service.findPage(condition, Pager.builder().number(number).size(size).build())).addExtras("@", "成功失败");
             if (1 == version)
-                result.setSuccess(service.findPage(TabValid.builder().value((short) 10).build(), Pager.builder().number(number).size(size).build()));
-            if (2 == version) result.setSuccess(service.findPage(null, null));
+                result.setSuccess(service.findPage(TabValid.builder().value((short) 10).build(), Pager.builder().number(number).size(size).build())).addExtras("@", "成功失败");
+            if (2 == version) result.setSuccess(service.findPage(null, null)).addExtras("@", "成功失败");
         });
     }
 

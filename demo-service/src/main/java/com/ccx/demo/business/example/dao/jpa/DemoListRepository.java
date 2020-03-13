@@ -11,6 +11,7 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.support.mvc.dao.IRepository;
 import com.support.mvc.entity.base.MarkDelete;
@@ -93,7 +94,6 @@ public interface DemoListRepository extends
                 .execute();
     }
 
-/*
 //     @CacheEvict(cacheNames = ITabDemoListCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
     @Override
     default TabDemoList deleteById(final Long id, final Long userId) {
@@ -111,7 +111,6 @@ public interface DemoListRepository extends
                         TabDemoList.builder().id(id).insertUserId(userId).build().json())
                 ));
     }
-*/
 
     //     @CacheEvict(cacheNames = ITabDemoListCache.CACHE_ROW_BY_ID, key = "#id") // 若使用缓存需要解开代码 <
     @Override

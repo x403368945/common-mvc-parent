@@ -3,20 +3,47 @@
  * * @author 谢长春 2019-7-28
  */
 import axios from 'axios';
+import isNull from 'lodash/isNull';
+import isUndefined from 'lodash/isUndefined';
 import isObject from 'lodash/isObject';
+import isArray from 'lodash/isArray';
+import isFunction from 'lodash/isFunction';
+import pickBy from 'lodash/pickBy';
 
 const buildSearchParams = params => {
   // url 带参如果包含对象，需要经过转换，变成字符串，否则 axios 会出错
   if (params) {
     const searchParams = new URLSearchParams();
-    Object.keys(params).filter(key => params[key]).forEach(key => {
-      if (isObject(params[key])) {
-        searchParams.append(key, JSON.stringify(params[key]));
+    const arrayParam = (arrs, parent) => {
+      if (arrs.length === 0) return;
+      if (isFunction(arrs[0])) return;
+
+      if (isArray(arrs[0])) {
+        arrs.forEach((item, index) => arrayParam(item, `${parent}[${index}]`))
+      } else if (isObject(arrs[0])) {
+        arrs.forEach((item, index) => objectParam(item, `${parent}[${index}]`))
       } else {
-        searchParams.append(key, params[key]);
+        searchParams.append(parent, arrs.join(','));
       }
-    });
+    };
+    const objectParam = (obj, parent) => {
+      const parameters = pickBy(obj, value => !(value === '' || isNull(value) || isUndefined(value) || isFunction(value)));
+      Object.keys(parameters).forEach(key => {
+        const path = parent ? `${parent}.${key}` : key;
+        const value = parameters[key];
+        if (isArray(value)) {
+          arrayParam(value, path)
+        } else if (isObject(value)) {
+          objectParam(value, path);
+        } else {
+          searchParams.append(path, value);
+        }
+      });
+    };
+    objectParam(JSON.parse(JSON.stringify(params)));
     return searchParams.toString();
+    // console.log(qs.stringify({sorts: [OrderBy.desc('id')], arrs: ['a', 'b']}, {arrayFormat: 'repeat', allowDots: true}));
+    // return qs.stringify(parameters, {arrayFormat: 'repeat', allowDots: true});
   }
   return '';
 };
@@ -30,11 +57,11 @@ export const devConfig = () => {
     const {method, baseURL, url, params, data} = config;
     if (method.toUpperCase() === 'GET') {
       const searchParams = buildSearchParams(params);
-      console.log(JSON.stringify([method.toUpperCase(), `${baseURL}${url}${searchParams ? `?${searchParams}` : ''}`, params]));
+      console.log(JSON.stringify([`${method.toUpperCase()} ${baseURL}${url}${searchParams ? `?${searchParams}` : ''}`, params]));
     } else if (((config.headers || {})['content-type'] || '').startsWith('multipart/form-data;')) {
-      console.log(JSON.stringify([method.toUpperCase(), `${baseURL}${url}`]));
+      console.log(JSON.stringify([`${method.toUpperCase()} ${baseURL}${url}`]));
     } else {
-      console.log(JSON.stringify([method.toUpperCase(), `${baseURL}${url}`, data]));
+      console.log(JSON.stringify([`${method.toUpperCase()} ${baseURL}${url}`, data]));
     }
     return config;
   });

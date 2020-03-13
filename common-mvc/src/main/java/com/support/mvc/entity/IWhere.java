@@ -83,7 +83,6 @@ public interface IWhere<U, W> {
         }
         // 按指定字段排序
         return sorts.stream().map(Sorts::qdsl).collect(Collectors.toList()).toArray(new OrderSpecifier[]{});
-
     }
 
     /**
@@ -234,7 +233,7 @@ public interface IWhere<U, W> {
          * @return {@link QdslWhere}
          */
         public QdslWhere andIfNonEmpty(final Collection<?> collection, final Supplier<BooleanExpression> supplier) {
-            return and(!CollectionUtils.isNotEmpty(collection), supplier);
+            return and(CollectionUtils.isNotEmpty(collection), supplier);
         }
 
         public QdslWhere andIfNonEmpty(final Object[] objects, final Supplier<BooleanExpression> supplier) {

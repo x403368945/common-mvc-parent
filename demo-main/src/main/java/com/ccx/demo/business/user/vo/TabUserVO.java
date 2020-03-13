@@ -30,6 +30,9 @@ import java.util.stream.Stream;
         orders = {"id", "uid", "domain", "username", "nickname", "phone", "email", "role", "registerSource", "deleted"}
 )
 public class TabUserVO extends TabUser {
+
+    private static final long serialVersionUID = 7185030320855492326L;
+
     @SneakyThrows
     public static TabUserVO ofTabUser(final TabUser entity) {
         final TabUserVO vo = new TabUserVO();

@@ -1,6 +1,9 @@
 import axios from 'axios';
 import Result from '../utils/entity/Result';
 import Authority from './entity/Authority';
+import pickBy from 'lodash/pickBy';
+import isArray from 'lodash/isArray';
+import isObject from 'lodash/isObject';
 
 const listURL = '/1/authority/list'; // 权限指令列表
 const treeURL = '/1/authority/tree'; // 权限指令树
@@ -37,14 +40,17 @@ export default class AuthorityService {
      * 参考案例对象
      * @type {Authority}
      */
-    this.vo = new Authority({
-      ...vo
-    });
-    Object.keys(this.vo).forEach(key => { // 移除空字符串参数，前端组件默认值为空字符串，带到后端查询会有问题
-      if (this.vo[key] === '') {
-        delete this.vo[key];
+    this.vo = new Authority(pickBy(JSON.parse(JSON.stringify(vo)), value => value !== ''));
+    Object.keys(this.vo).forEach(key => { // 移除空字符串参数，前端组件默认值为空字符串，带到后端会有问题
+      if (isArray(this.vo[key])) {
+        this.vo[key] = this.vo[key].filter(item => item !== '');
+        this.vo[key].forEach(item => {
+          if (!isArray(item) && isObject(item)) {
+            pickBy(item, value => value !== '');
+          }
+        })
       }
-    })
+    });
   }
 
   /**

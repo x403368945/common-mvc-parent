@@ -104,6 +104,7 @@ public class TabUser extends UserDetail implements ITable, ITabUserCache, IWhere
      * 登录密码
      */
     @Column(updatable = false)
+    @JSONField(serialize = false)
     @NotNull(groups = {ISave.class})
     @Size(max = 150)
     @ApiModelProperty(value = "登录密码", position = 5)

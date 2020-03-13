@@ -2,6 +2,9 @@ import axios from 'axios';
 import Result from '../utils/entity/Result';
 import Page from '../utils/entity/Page';
 import User from './entity/User';
+import pickBy from 'lodash/pickBy';
+import isArray from 'lodash/isArray';
+import isObject from 'lodash/isObject';
 
 const loginURL = '/login'; // 登录
 const logoutURL = '/logout'; // 退出
@@ -46,12 +49,15 @@ export default class UserService {
      * 用户实体对象
      * @type {User}
      */
-    this.vo = new User({
-      ...vo
-    });
-    Object.keys(this.vo).forEach(key => { // 移除空字符串参数，前端组件默认值为空字符串，带到后端查询会有问题
-      if (this.vo[key] === '') {
-        delete this.vo[key];
+    this.vo = new User(pickBy(JSON.parse(JSON.stringify(vo)), value => value !== ''));
+    Object.keys(this.vo).forEach(key => { // 移除空字符串参数，前端组件默认值为空字符串，带到后端会有问题
+      if (isArray(this.vo[key])) {
+        this.vo[key] = this.vo[key].filter(item => item !== '');
+        this.vo[key].forEach(item => {
+          if (!isArray(item) && isObject(item)) {
+            pickBy(item, value => value !== '');
+          }
+        })
       }
     });
   }

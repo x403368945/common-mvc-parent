@@ -93,10 +93,20 @@ public class DemoListController implements IAuthController<Long, TabDemoList> {
         return new Result<Void>().call(() -> service.deleteByUid(id, uid, user.getId()));
     }
 
-    @PatchMapping("/{id}/{uid}")
+    @PatchMapping("/{id}")
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
     @ApiOperation(value = "5.逻辑删除测试案例表", tags = {"2020-03-11"})
     @ApiOperationSupport(order = 5) // order id 相同的接口只能开放一个<
+    @ResponseBody
+    @Override
+    public Result<Void> markDeleteById(final TabUser user, final Long id) {
+        return new Result<Void>().call(() -> service.markDeleteById(id, user.getId()));
+    }
+
+    @PatchMapping("/{id}/{uid}")
+    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
+    @ApiOperation(value = "6.逻辑删除测试案例表", tags = {"2020-03-11"})
+    @ApiOperationSupport(order = 6) // order id 相同的接口只能开放一个<
     @ResponseBody
     @Override
     public Result<Void> markDeleteByUid(final TabUser user, final Long id, final String uid) {
@@ -146,7 +156,6 @@ public class DemoListController implements IAuthController<Long, TabDemoList> {
         return new Result<TabDemoList>().execute(result -> result.setSuccess(service.findByUid(id, uid).orElse(null)));
     }
 
-
     @GetMapping("/page/{number}/{size}")
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_page')") // <
     @ApiOperation(value = "10.分页查询测试案例表", tags = {"2020-03-11"})
@@ -180,8 +189,11 @@ public class DemoListController implements IAuthController<Long, TabDemoList> {
     }
 
     @GetMapping("/page/vo/{number}/{size}")
-    @ApiOperation(value = "12.鉴权测试 GET 分页查询， 扩展 10 的查询条件和返回参数", tags = {"0.0.0"})
-    @ApiOperationSupport(order = 12)
+    @ApiOperation(value = "12.扩展 10 的查询条件和返回参数", tags = {"0.0.0"})
+    @ApiOperationSupport(
+            order = 12,
+            ignoreParameters = {"insertTime", "insertUser", "updateTime", "updateUser"}
+    )
     @ResponseBody
     public Result<TabDemoListVO> pageVO(
             @ApiIgnore @AuthenticationPrincipal final TabUser user,
@@ -195,8 +207,11 @@ public class DemoListController implements IAuthController<Long, TabDemoList> {
     }
 
     @GetMapping("/vo")
-    @ApiOperation(value = "13.鉴权测试 GET 查询多条记录， 扩展 11 的查询条件和返回参数", tags = {"0.0.0"})
-    @ApiOperationSupport(order = 13)
+    @ApiOperation(value = "13.扩展 11 的查询条件和返回参数", tags = {"0.0.0"})
+    @ApiOperationSupport(
+            order = 13,
+            ignoreParameters = {"insertTime", "insertUser", "updateTime", "updateUser"}
+    )
     @ResponseBody
     public Result<TabDemoListVO> searchVO(
             @ApiIgnore @AuthenticationPrincipal final TabUser user,

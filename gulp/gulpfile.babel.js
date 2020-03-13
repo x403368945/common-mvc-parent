@@ -31,16 +31,15 @@ gulp.task('default', async () => {
 
 gulp.task('test', async () => {
   devConfig();
-  await DemoListServiceTest.of().testAll(); //
+  await DemoListServiceTest.of().testAll();
   await UserServiceTest.of().testAll(); // 测试用户相关的接口
-  await AuthorityServiceTest.of().testAll();
-  await RoleServiceTest.of().testAll();
-  await CommonServiceTest.of().testAll();
+  await AuthorityServiceTest.of().testAll(); // 测试权限指令接口
+  await RoleServiceTest.of().testAll(); // 测试角色接口
+  await CommonServiceTest.of().testAll(); // 测试通用模块接口
 });
 gulp.task('test:one', async () => {
   devConfig();
   (await UserServiceTest.of().loginAdminBasic());
-  await UserServiceTest.of().testAll();
 });
 
 gulp.task('replace:swagger:order:position', async () => {
@@ -64,7 +63,6 @@ gulp.task('db:java:code', async () => {
     pkg: 'com.ccx.demo', // 包名(也会作为文件输出目录)
     template: 'AuthUid.js' // 代码模板
   });
-
 });
 
 async function db2java(option) {
@@ -131,6 +129,10 @@ gulp.task('mysql:read:write', async () => {
   // DESCRIBE tab_demo_list;
   // # 查看表数据行数
   // SELECT TABLE_NAME, TABLE_ROWS FROM INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA = 'demo_main_db'
+  // SELECT * FROM information_schema.PROCESSLIST WHERE db = 'demo_main_db';
+  // SELECT t.trx_mysql_thread_id,t.* FROM information_schema.INNODB_TRX t;
+  // SELECT t.THREAD_ID,t.* FROM performance_schema.threads t WHERE PROCESSLIST_ID = ${trx_mysql_thread_id};
+  // SELECT * FROM performance_schema.events_statements_current WHERE THREAD_ID = ${THREAD_ID};
   const mysql = require('mysql');
   const connection = mysql.createConnection({
     host: 'localhost',

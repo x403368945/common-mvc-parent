@@ -143,11 +143,11 @@ public class Result<E> implements IJson {
      */
     @ApiModelProperty(position = 2, value = "响应消息，用于页面弹窗内容")
     public String getMessage() {
-        if (Objects.equals(Code.CUSTOMIZE, code)) {
+        if (Objects.equals(Code.MESSAGE, code)) {
             // 处理自定义动态异常消息
             return Objects.isNull(this.exception)
                     ? null
-                    : this.exception.replace(Code.CUSTOMIZE.name().concat(":"), "");
+                    : this.exception.replace(Code.MESSAGE.name().concat(":"), "");
         }
         return this.code.comment;
     }

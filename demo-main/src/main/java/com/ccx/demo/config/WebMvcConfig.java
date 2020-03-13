@@ -2,11 +2,19 @@ package com.ccx.demo.config;
 
 import com.ccx.demo.config.init.AppConfig;
 import com.support.config.AbstractMvcConfig;
+import com.utils.util.Dates;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+
+import java.sql.Timestamp;
+import java.util.Date;
+
+import static com.utils.util.Dates.Pattern.yyyy_MM_dd_HH_mm_ss_SSS;
 
 /**
  * spring-boot 特殊处理：大部分配置在 application.yml 文件中，简化配置
@@ -44,6 +52,7 @@ public class WebMvcConfig extends AbstractMvcConfig
 //        implements ApplicationContextAware
 // spring-mvc end <<<<
 {
+
     @Autowired
     private AppConfig appConfig;
     // spring-mvc start >>
@@ -65,22 +74,6 @@ public class WebMvcConfig extends AbstractMvcConfig
 //        resolver.setMaxUploadSize(1048576000);
 //        return resolver;
 //    }
-//
-//    //    @Override
-////    public void addFormatters(final FormatterRegistry registry) {
-////        super.addFormatters(registry);
-////        registry.addFormatter(varietyFormatter());
-////        registry.addFormatter(dateFormatter());
-////    }
-////
-////    /**
-////     * 而VarietyFormatter可以自动转换我们的各种实体，将他们用在表单上（基本通过id）
-////     * @return {@link VarietyFormatter}
-////     */
-////    @Bean
-////    public VarietyFormatter varietyFormatter() {
-////        return new VarietyFormatter();
-////    }
 //
 //    @Bean
 //    public SpringResourceTemplateResolver templateResolver() {
@@ -174,4 +167,29 @@ public class WebMvcConfig extends AbstractMvcConfig
 //        return bean;
 //    }
 
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+//        registry.addFormatter(new VarietyFormatter()); // 而VarietyFormatter可以自动转换我们的各种实体，将他们用在表单上（基本通过id）
+        registry.addConverter(new Converter<String, Date>() {
+            @Override
+            public Date convert(final String dateString) {
+                return yyyy_MM_dd_HH_mm_ss_SSS.parseOfNullable(dateString).map(Dates::date).orElse(null);
+            }
+        });
+        registry.addConverter(new Converter<String, Timestamp>() {
+            @Override
+            public Timestamp convert(final String dateString) {
+                return yyyy_MM_dd_HH_mm_ss_SSS.parseOfNullable(dateString).map(Dates::timestamp).orElse(null);
+            }
+        });
+//        registry.addConverter(new Converter<String, Object[]>() {
+//            @Override
+//            public Object[] convert(final String dataString) {
+//                log.info(dataString);
+////                return yyyy_MM_dd_HH_mm_ss_SSS.parseOfNullable(dateString).map(Dates::timestamp).orElse(null);
+//                return null;
+//            }
+//        });
+    }
 }

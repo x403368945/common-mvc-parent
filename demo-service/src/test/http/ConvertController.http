@@ -103,7 +103,7 @@ Authorization: Basic {{username}} {{password}}
     "300000000000000000000000000000000000000.png"
   ],
   "codes": [
-    "CUSTOMIZE",
+    "MESSAGE",
     "FILE_COPY",
     "ORDER_BY"
   ],

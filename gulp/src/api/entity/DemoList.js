@@ -30,9 +30,13 @@ export default class DemoList {
    * @param updateUserName {string} 修改用户昵称
    * @param deleted {string} 逻辑删除状态，参考 {@link Bool}.*.key
    * @param timestamp {number} 按 id 查询时可能使用时间戳缓存
-   * @param uids {Array<Object>} id + uid批量带参，=> [{id:1,uid:''},{id:1,uid:''}]
+   * @param markDeleteArray {Array<MarkDelete>} id + uid批量带参，=> [{id:1,uid:''},{id:1,uid:''}]
    * @param amountRange {NumRange} 金额查询区间
    * @param insertTimeRange {DateRange} 创建时间查询区间
+   * @param statusArray {Array<DemoStatus>} VO查询参数：状态集合
+   * @param updateTimeRange {DateRange} VO查询参数：更新时间区间
+   * @param insertUser {User} VO扩展参数：数据新增用户信息
+   * @param updateUser {User} VO扩展参数：数据修改用户信息
    * @param sorts {Array<OrderBy>} 排序字段集合
    * @param page {Page} 分页对象
    */
@@ -51,9 +55,13 @@ export default class DemoList {
                 updateUserName = undefined,
                 deleted = undefined,
                 timestamp = undefined,
-                uids = undefined,
+                markDeleteArray = undefined,
                 amountRange = undefined,
                 insertTimeRange = undefined,
+                statusArray = undefined,
+                updateTimeRange = undefined,
+                insertUser = undefined,
+                updateUser = undefined,
                 sorts = undefined,
                 page = undefined
               } = {}) {
@@ -129,9 +137,9 @@ export default class DemoList {
     this.timestamp = timestamp;
     /**
      * id + uid批量带参，=> [{id:1,uid:''},{id:1,uid:''}]
-     * @type {Array<Object>}
+     * @type {Array<MarkDelete>}
      */
-    this.uids = uids;
+    this.markDeleteArray = markDeleteArray;
     /**
      * 金额查询区间
      * @type {NumRange}
@@ -142,6 +150,26 @@ export default class DemoList {
      * @type {DateRange}
      */
     this.insertTimeRange = insertTimeRange;
+    /**
+     * VO查询参数：状态集合
+     * @type {Array<DemoStatus>}
+     */
+    this.statusArray = statusArray;
+    /**
+     * VO查询参数：更新时间区间
+     * @type {DateRange}
+     */
+    this.updateTimeRange = updateTimeRange;
+    /**
+     * VO扩展参数：数据新增用户信息
+     * @type {User}
+     */
+    this.insertUser = insertUser;
+    /**
+     * VO扩展参数：数据修改用户信息
+     * @type {User}
+     */
+    this.updateUser = updateUser;
     /**
      * 排序字段集合
      * @type {Array<OrderBy>}

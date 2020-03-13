@@ -113,5 +113,5 @@ Authorization: Basic {{username}} {{password}}
 ]
 
 ### 自定义方言
-GET http://{{host}}:{{port}}/demo-list/1/test
+GET http://{{host}}:{{port}}/1/demo-list/test
 Authorization: Basic {{username}} {{password}}

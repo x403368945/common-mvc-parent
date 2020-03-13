@@ -165,12 +165,14 @@ public class TabDemoList implements
      */
     @QueryTransient
     @Transient
+    @ApiModelProperty(value = "金额查询区间")
     private Range<Double> amountRange;
     /**
      * 创建时间查询区间
      */
     @QueryTransient // 声明生成 Q{ClassName}.java 时忽略该属性
     @Transient // 声明 JPA + Hibernate 不与数据库建立映射，且 insert 和 update 忽略该属性
+    @ApiModelProperty(value = "创建时间查询区间")
     private Dates.Range insertTimeRange;
     /**
      * 排序字段
@@ -195,7 +197,7 @@ public class TabDemoList implements
 //		status(tabDemoList.status),
 //		insertTime(tabDemoList.insertTime),
 //		insertUserId(tabDemoList.insertUserId),
-//        updateTime(tabDemoList.updateTime),
+        updateTime(tabDemoList.updateTime),
 //		updateUserId(tabDemoList.updateUserId),
 //        deleted(tabDemoList.deleted),
         ;

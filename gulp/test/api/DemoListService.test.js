@@ -6,7 +6,7 @@ import random from 'lodash/random';
 import sample from 'lodash/sample';
 import sampleSize from 'lodash/sampleSize';
 import DemoList from '../../src/api/entity/DemoList';
-import UserServiceTest from './UserService.test';
+import UserServiceTest, {sessionUser} from './UserService.test';
 import {DemoStatus} from '../../src/api/Enums';
 import OrderBy from '../../src/utils/entity/OrderBy';
 import {DateRange, NumRange} from '../../src/utils/entity/Range';
@@ -51,11 +51,11 @@ export default class DemoListServiceTest {
       {name: `name-${random(10000)}`},
       {name: `name-${random(10000)}`},
       {name: `name-${random(10000)}`, content: `content-${random(1000000)}`},
-      {name: `name-${random(10000)}`, content: `content-${random(1000000)}`, amount: random(10000.9)},
+      {name: `name-${random(10000)}`, content: `content-${random(1000000)}`, amount: random(10000.9).toFixed(2)},
       {
         name: `name-${random(10000)}`,
         content: `content-${random(1000000)}`,
-        amount: random(10000.9),
+        amount: random(10000.9).toFixed(2),
         status: sample(DemoStatus.options()).value
       }
     ];
@@ -87,13 +87,16 @@ export default class DemoListServiceTest {
    */
   async deleteById() {
     console.log('> 按 id 删除：在查询结果集中随机选取一条数据 ----------------------------------------------------------------------------------------------------');
-    const {data} = (await new DemoList().getService().pageable()).assertData();
+    const {data} = (await new DemoList({
+      insertUserId: sessionUser.id
+    }).getService().pageable())
+      .assertData();
     const {id} = sample(data);
     (await new DemoList({
       id
     }).getService().deleteById())
       .print()
-      .assertData();
+      .assertCode();
     return this;
   }
 
@@ -102,14 +105,17 @@ export default class DemoListServiceTest {
    */
   async deleteByUid() {
     console.log('> 按 id + uid 删除：在查询结果集中随机选取一条数据 ----------------------------------------------------------------------------------------------------');
-    const {data} = (await new DemoList().getService().pageable()).assertData();
+    const {data} = (await new DemoList({
+      insertUserId: sessionUser.id
+    }).getService().pageable())
+      .assertData();
     const {id, uid} = sample(data);
     (await new DemoList({
       id,
       uid
     }).getService().deleteByUid())
       .print()
-      .assertData();
+      .assertCode();
     return this;
   }
 
@@ -118,7 +124,10 @@ export default class DemoListServiceTest {
    */
   async markDeleteById() {
     console.log('> 按 id 逻辑删除：在查询结果集中随机选取一条数据 ----------------------------------------------------------------------------------------------------');
-    const {data} = (await new DemoList().getService().pageable()).assertData();
+    const {data} = (await new DemoList({
+      insertUserId: sessionUser.id
+    }).getService().pageable())
+      .assertData();
     const {id} = sample(data);
     (await new DemoList({
       id
@@ -133,7 +142,9 @@ export default class DemoListServiceTest {
    */
   async markDeleteByUId() {
     console.log('> 按 id + uid 逻辑删除：在查询结果集中随机选取一条数据 ----------------------------------------------------------------------------------------------------');
-    const {data} = (await new DemoList().getService().pageable()).assertData();
+    const {data} = (await new DemoList({
+      insertUserId: sessionUser.id
+    }).getService().pageable()).assertData();
     const {id, uid} = sample(data);
     (await new DemoList({
       id,
@@ -149,13 +160,15 @@ export default class DemoListServiceTest {
    */
   async markDelete() {
     console.log('> 按 id + uid 批量逻辑删除：在查询结果集中随机选取 2 条数据 ----------------------------------------------------------------------------------------------------');
-    const {data} = (await new DemoList().getService().pageable()).assertData();
-    const uids = sampleSize(data).map(({id, uid}) => ({
+    const {data} = (await new DemoList({
+      insertUserId: sessionUser.id
+    }).getService().pageable()).assertData();
+    const markDeleteArray = sampleSize(data, 2).map(({id, uid}) => ({
       id,
       uid
-    }), 2);
+    }));
     (await new DemoList({
-      uids
+      markDeleteArray
     }).getService().markDelete())
       .print()
       .assertCode();
@@ -165,14 +178,13 @@ export default class DemoListServiceTest {
   /**
    * @return {Promise<DemoListServiceTest>}
    */
-  async findByIdTimestamp() {
-    console.log('> 按 id + 时间戳 查询单条记录 ----------------------------------------------------------------------------------------------------');
+  async findById() {
+    console.log('> 按 id 查询单条记录 ----------------------------------------------------------------------------------------------------');
     const {data} = (await new DemoList().getService().pageable()).assertData();
-    const {id, timestamp} = sample(data);
+    const {id} = sample(data);
     (await new DemoList({
-      id,
-      timestamp
-    }).getService().findByIdTimestamp())
+      id
+    }).getService().findById())
       .print()
       .assertCode();
     return this;
@@ -181,15 +193,14 @@ export default class DemoListServiceTest {
   /**
    * @return {Promise<DemoListServiceTest>}
    */
-  async findByUidTimestamp() {
+  async findByUid() {
     console.log('> 按 id + uid + 时间戳 查询单条记录 ----------------------------------------------------------------------------------------------------');
     const {data} = (await new DemoList().getService().pageable()).assertData();
-    const {id, uid, timestamp} = sample(data);
+    const {id, uid} = sample(data);
     (await new DemoList({
       id,
-      uid,
-      timestamp
-    }).getService().findByUidTimestamp())
+      uid
+    }).getService().findByUid())
       .print()
       .assertCode();
     return this;
@@ -239,6 +250,59 @@ export default class DemoListServiceTest {
   }
 
   /**
+   * @return {Promise<DemoListServiceTest>}
+   */
+  async searchVO() {
+    console.log('> VO 投影：多条件批量查询，不分页 ----------------------------------------------------------------------------------------------------');
+    const updateTimeRange = new DateRange(new Date().addMonth(-1).formatDate(), new Date().formatDate());
+    (await new DemoList({
+      updateTimeRange
+    }).getService().searchVO())
+      .print()
+      .assertData();
+    return this;
+  }
+
+  /**
+   *
+   * @return {Promise<DemoListServiceTest>}
+   */
+  async pageableVO() {
+    console.log('> VO 投影：分页：多条件批量查询 ----------------------------------------------------------------------------------------------------');
+    const updateTimeRange = new DateRange(new Date().addMonth(-1).formatDate(), new Date().formatDate());
+    const amountRange = new NumRange(0, 9999);
+    const sorts = [OrderBy.desc('updateTime')];
+    const statusArray = [DemoStatus.SUCCESS.key, DemoStatus.RUNNING.key];
+    (await new DemoList().getService().pageableVO())
+      .print()
+      .assertData();
+    (await new DemoList({
+      sorts
+    }).getService().pageableVO())
+      .print()
+      .assertData();
+    (await new DemoList({
+      amountRange,
+      sorts
+    }).getService().pageableVO()).print().assertCode();
+    (await new DemoList({
+      updateTimeRange,
+      amountRange,
+      sorts
+    }).getService().pageableVO()).print().assertCode();
+    (await new DemoList({
+      statusArray
+    }).getService().pageableVO()).print().assertCode();
+    (await new DemoList({
+      statusArray,
+      updateTimeRange,
+      amountRange,
+      sorts
+    }).getService().pageableVO()).print().assertCode();
+    return this;
+  }
+
+  /**
    *
    * @return {DemoListServiceTest}
    */
@@ -276,10 +340,12 @@ export default class DemoListServiceTest {
       .then(service => service.markDeleteById()).then(s => s.newline())
       .then(service => service.markDeleteByUId()).then(s => s.newline())
       .then(service => service.markDelete()).then(s => s.newline())
-      .then(service => service.findByIdTimestamp()).then(s => s.newline())
-      .then(service => service.findByUidTimestamp()).then(s => s.newline())
+      .then(service => service.findById()).then(s => s.newline())
+      .then(service => service.findByUid()).then(s => s.newline())
       .then(service => service.search()).then(s => s.newline())
       .then(service => service.pageable()).then(s => s.newline())
+      .then(service => service.searchVO()).then(s => s.newline())
+      .then(service => service.pageableVO()).then(s => s.newline())
       // 结束
       .then(() => console.info(`${moduleName}：end ${'*'.repeat(200)}\n\n\n\n\n`))
       .catch((e) => {

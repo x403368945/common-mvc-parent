@@ -2,6 +2,9 @@ import axios from 'axios';
 import Page from '../utils/entity/Page';
 import Result from '../utils/entity/Result';
 import Role from './entity/Role';
+import pickBy from 'lodash/pickBy';
+import isArray from 'lodash/isArray';
+import isObject from 'lodash/isObject';
 
 const saveURL = '/1/role'; // 新增
 const updateURL = '/1/role/{id}'; // 修改
@@ -43,10 +46,15 @@ export default class RoleService {
      * 参考案例对象
      * @type {Role}
      */
-    this.vo = new Role({...vo});
-    Object.keys(this.vo).forEach(key => { // 移除空字符串参数，前端组件默认值为空字符串，带到后端查询会有问题
-      if (this.vo[key] === '') {
-        delete this.vo[key];
+    this.vo = new Role(pickBy(JSON.parse(JSON.stringify(vo)), value => value !== ''));
+    Object.keys(this.vo).forEach(key => { // 移除空字符串参数，前端组件默认值为空字符串，带到后端会有问题
+      if (isArray(this.vo[key])) {
+        this.vo[key] = this.vo[key].filter(item => item !== '');
+        this.vo[key].forEach(item => {
+          if (!isArray(item) && isObject(item)) {
+            pickBy(item, value => value !== '');
+          }
+        })
       }
     });
   }
