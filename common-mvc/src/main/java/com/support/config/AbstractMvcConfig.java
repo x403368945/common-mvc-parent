@@ -57,7 +57,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @ControllerAdvice
 @Slf4j
 public class AbstractMvcConfig implements WebMvcConfigurer {
-// spring-boot start >>
 
     /**
      * spring-boot 特殊处理：添加异常处理
@@ -86,7 +85,6 @@ public class AbstractMvcConfig implements WebMvcConfigurer {
             return Code.FAILURE.toResult("500：请求失败，不明确的异常");
         }
     }
-// spring-boot end <<<<
 
     /**
      * 多线程管理

@@ -9,15 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>app-socket</artifactId>
-    <!-- // spring-mvc start >> -->
-    <!--<packaging>war</packaging>-->
-    <!-- // spring-mvc end <<<< -->
-    <!-- // spring-boot start >> -->
     <packaging>jar</packaging>
     <properties>
         <main.class>com.ccx.socket.AppSocketApplication</main.class>
     </properties>
-    <!-- // spring-boot end <<<< -->
 
     <!-- spring-boot 特殊处理：pom 相差比较大 -->
     <dependencies>
@@ -43,13 +38,6 @@
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
-            <!--     // spring-mvc start >> -->
-            <!--<plugin> &lt;!&ndash; war 包插件 &ndash;&gt;
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-            </plugin>-->
-            <!-- // spring-mvc end <<<< -->
-            <!-- // spring-boot start >> -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -68,7 +56,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- // spring-boot end <<<< -->
         </plugins>
     </build>
 </project>

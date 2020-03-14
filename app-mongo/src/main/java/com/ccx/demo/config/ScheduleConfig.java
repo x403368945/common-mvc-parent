@@ -14,9 +14,6 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
  */
 @Configuration
 @EnableScheduling
-// spring-mvc start >> mvc 需要指定扫描包
-//@ComponentScan(basePackages = "com.ccx.**.task")
-// spring-mvc end <<<<
 public class ScheduleConfig implements SchedulingConfigurer {
     @Override
     public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {

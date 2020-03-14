@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Import;
  *
  * @author 谢长春 2019/1/29
  */
-// spring-boot start >>
 @SpringBootApplication
 @Import(value = {InitConfig.class})
 public class AppSocketApplication extends SpringBootServletInitializer {
@@ -30,4 +29,3 @@ public class AppSocketApplication extends SpringBootServletInitializer {
 //        };
 //    }
 }
-// spring-boot end <<<<

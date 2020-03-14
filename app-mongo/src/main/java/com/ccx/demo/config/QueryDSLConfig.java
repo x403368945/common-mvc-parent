@@ -23,7 +23,6 @@ import javax.persistence.PersistenceContext;
  *
  * @author 谢长春 2019/1/23
  */
-// spring-boot start >>
 @Configuration
 @EnableJpaRepositories(basePackages = {"com.ccx.**.dao.jpa"})
 public class QueryDSLConfig {
@@ -36,4 +35,3 @@ public class QueryDSLConfig {
     }
 
 }
-// spring-boot end <<<<

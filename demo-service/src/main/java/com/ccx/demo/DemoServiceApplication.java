@@ -10,7 +10,6 @@ import org.springframework.boot.SpringApplication;
  *
  * @author 谢长春 2019/1/21
  */
-// spring-boot start >>
 public class DemoServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(DemoMainApplication.class, args);
@@ -24,4 +23,3 @@ public class DemoServiceApplication {
 //        };
 //    }
 }
-// spring-boot end <<<<

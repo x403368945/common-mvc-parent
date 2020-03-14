@@ -9,15 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>app-demo</artifactId>
-    <!-- // spring-mvc start >> -->
-    <!--<packaging>war</packaging>-->
-    <!-- // spring-mvc end <<<< -->
-    <!-- // spring-boot start >> -->
     <packaging>jar</packaging>
     <properties>
         <main.class>com.ccx.demo.AppDemoApplication</main.class>
     </properties>
-    <!-- // spring-boot end <<<< -->
 
     <!-- spring-boot 特殊处理：pom 文件差别较大 -->
     <dependencies>
@@ -25,17 +20,11 @@
             <groupId>com.ccx.parent</groupId>
             <artifactId>demo-main</artifactId>
             <version>${project.version}</version>
-            <!-- // spring-mvc start >> -->
-            <!--<classifier>classes</classifier>-->
-            <!-- // spring-mvc end <<<< -->
         </dependency>
         <dependency>
             <groupId>com.ccx.parent</groupId>
             <artifactId>demo-service</artifactId>
             <version>${project.version}</version>
-            <!-- // spring-mvc start >> -->
-            <!--<classifier>classes</classifier>-->
-            <!-- // spring-mvc end <<<< -->
             <exclusions>
                 <exclusion>
                     <groupId>com.ccx.parent</groupId>
@@ -47,13 +36,6 @@
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
-            <!-- // spring-mvc start >> -->
-            <!--<plugin> &lt;!&ndash; war 包插件 &ndash;&gt;
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-            </plugin>-->
-            <!-- // spring-mvc end <<<< -->
-            <!-- // spring-boot start >> -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -72,7 +54,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- // spring-boot end <<<< -->
         </plugins>
     </build>
 </project>

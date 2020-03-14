@@ -23,7 +23,6 @@ import java.util.stream.Stream;
  *
  * @author 谢长春 2019/1/21
  */
-// spring-boot start >>
 @SpringBootApplication
 @Import(value = {InitConfig.class, BusConfig.class})
 @EnableConfigurationProperties(value = {AppProperties.class})
@@ -41,4 +40,3 @@ public class Application extends SpringBootServletInitializer {
         };
     }
 }
-// spring-boot end <<<<

@@ -16,7 +16,6 @@ import org.springframework.context.annotation.Import;
  *
  * @author 谢长春 2019/1/29
  */
-// spring-boot start >>
 @SpringBootApplication
 @Import(value = {InitConfig.class})
 @EnableConfigurationProperties(value = {AppProperties.class})
@@ -41,4 +40,3 @@ public class AppSecurityApplication extends SpringBootServletInitializer {
 //        };
 //    }
 }
-// spring-boot end <<<<

@@ -17,30 +17,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
  */
 @Configuration
 @Slf4j
-// spring-mvc start >>
-/*
-@Import(value = {InitConfig.class})
-@EnableAspectJAutoProxy(proxyTargetClass = true)
-@ComponentScan(basePackages = {"com.ccx"})
-@EnableWebMvc
-@PropertySource({"classpath:application.properties"})
-*/
-// spring-mvc end <<<<
 public class WebMvcConfig extends AbstractMvcConfig {
-
-    // spring-mvc start >>
-//    /**
-//     * 注入文件上传的bean
-//     */
-//    @Bean
-//    public MultipartResolver multipartResolver() {
-//        final CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-////        StandardServletMultipartResolver resolver = new StandardServletMultipartResolver();
-//        resolver.setDefaultEncoding(UTF_8.displayName());
-//        resolver.setMaxUploadSize(1048576000);
-//        return resolver;
-//    }
-    // spring-mvc end <<<<
 
     /**
      * 添加自定义拦截器

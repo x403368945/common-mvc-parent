@@ -25,7 +25,6 @@ import java.util.Date;
  *
  * @author 谢长春
  */
-// spring-mvc start >> mvc 将 MySQL 和 MongoDB 配置分离
 @Configuration
 @EnableMongoRepositories(basePackages = {"com.ccx.**.dao.mongo"})
 public class MongodbConfig {

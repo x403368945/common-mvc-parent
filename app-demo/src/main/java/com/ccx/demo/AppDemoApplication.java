@@ -8,7 +8,6 @@ import org.springframework.boot.SpringApplication;
  *
  * @author 谢长春 2019/1/25
  */
-// spring-boot start >>
 public class AppDemoApplication {
 
     public static void main(String[] args) {
@@ -22,4 +21,3 @@ public class AppDemoApplication {
 //        };
 //    }
 }
-// spring-boot end <<<<

@@ -18,7 +18,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
  *
  * @author 谢长春 2019/1/21
  */
-// spring-boot start >>
 @SpringBootApplication
 @Import(value = {InitConfig.class})
 @EnableConfigurationProperties(value = {AppProperties.class})
@@ -37,4 +36,3 @@ public class Application extends SpringBootServletInitializer {
 //        };
 //    }
 }
-// spring-boot end <<<<

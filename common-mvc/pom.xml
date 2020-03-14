@@ -11,7 +11,6 @@
     <artifactId>common-mvc</artifactId>
     <packaging>jar</packaging>
 
-    <!-- // spring-boot start >> spring-boot 特殊处理：依赖库 -->
     <dependencies>
         <!-- 通过 jitpack.io 依赖开源项目 -->
         <dependency>
@@ -118,7 +117,6 @@
             <artifactId>knife4j-spring-boot-starter</artifactId>
         </dependency>
     </dependencies>
-    <!-- // spring-boot end <<<< -->
     <build>
         <plugins>
             <plugin> <!-- 打包源码 -->

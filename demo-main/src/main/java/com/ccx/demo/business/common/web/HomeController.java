@@ -16,16 +16,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
  */
 @Controller
 @Slf4j
-public class HomeController
-// spring-boot start >> mvc 不需要继承 {@link AbstractMvcConfig.ErrorController}
-        extends AbstractMvcConfig.ErrorController
-// spring-boot end <<<<
-{
-    // spring-boot start >> mvc 不需要继承 {@link AbstractMvcConfig.ErrorController}
+public class HomeController extends AbstractMvcConfig.ErrorController {
     public HomeController(ErrorAttributes errorAttributes) {
         super(errorAttributes);
     }
-    // spring-boot end <<<<
 
     @RequestMapping(value = "/", method = {GET, POST, PUT, PATCH, DELETE})
     public String home() {

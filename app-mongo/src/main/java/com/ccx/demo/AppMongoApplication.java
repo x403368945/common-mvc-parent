@@ -7,7 +7,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 
 /**
@@ -18,10 +17,8 @@ import org.springframework.data.mongodb.config.EnableMongoAuditing;
  *
  * @author 谢长春 2019/1/21
  */
-// spring-boot start >>
 @SpringBootApplication
 @Import(value = {InitConfig.class})
-@EnableJpaAuditing
 @EnableMongoAuditing
 @EnableCaching
 @EnableConfigurationProperties
@@ -38,4 +35,3 @@ public class AppMongoApplication extends SpringBootServletInitializer {
 //        };
 //    }
 }
-// spring-boot end <<<<
