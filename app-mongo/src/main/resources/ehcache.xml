@@ -1,0 +1,48 @@
+<config xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+        xmlns='http://www.ehcache.org/v3'
+        xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core.xsd">
+    <persistence directory="/app/files/ehcache"/> <!-- 缓存文件位置 -->
+
+    <cache alias="TokenCache">
+        <key-type>java.lang.Long</key-type>
+        <value-type>com.ccx.demo.open.auth.cache.TokenCache</value-type>
+        <resources>
+            <heap>100</heap><!-- heap表示使用堆内内存，heap（100）表示只能存放 100 个对象，当put第 101 个那么前面 100 个对象将有一个会被移除。 -->
+            <!--<offheap unit="MB">30</offheap>--><!-- offheap 表示堆外内存，将对象从堆中脱离出来序列化，然后存储在一大块内存中，这就像它存储到磁盘上一样，但它仍然在RAM中。对象在这种状态下不能直接使用，它们必须首先反序列化，也不受垃圾收集。序列化和反序列化将会影响部分性能,使用堆外内存能够降低GC导致的暂停 -->
+            <disk unit="MB" persistent="true">30</disk><!-- disk表示将对象写到磁盘中，这样有个好处是当服务重启时可以直接读取磁盘上面的内容将数据加载到服务中 -->
+        </resources>
+    </cache>
+    <cache alias="ITabUserCache">
+        <key-type>java.lang.Long</key-type>
+        <value-type>com.ccx.demo.business.user.entity.TabUser</value-type>
+        <expiry>
+            <ttl unit="days">10</ttl>
+        </expiry>
+        <resources>
+            <heap>100</heap>
+            <disk unit="MB" persistent="true">30</disk>
+        </resources>
+    </cache>
+    <cache alias="ITabUserCache.login">
+        <key-type>java.lang.String</key-type>
+        <value-type>com.ccx.demo.business.user.entity.TabUser</value-type>
+        <expiry>
+            <ttl unit="days">10</ttl>
+        </expiry>
+        <resources>
+            <heap>100</heap>
+            <disk unit="MB" persistent="true">30</disk>
+        </resources>
+    </cache>
+    <cache alias="ITabRoleCache">
+        <key-type>java.lang.Long</key-type>
+        <value-type>com.ccx.demo.business.user.entity.TabRole</value-type>
+        <expiry>
+            <ttl unit="days">10</ttl>
+        </expiry>
+        <resources>
+            <heap>100</heap>
+            <disk unit="MB" persistent="true">30</disk>
+        </resources>
+    </cache>
+</config>

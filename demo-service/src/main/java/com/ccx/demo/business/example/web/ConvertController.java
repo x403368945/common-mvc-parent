@@ -27,7 +27,7 @@ import java.util.Optional;
  * @author 谢长春 on 2019-08-21
  */
 @Api(tags = "测试自定义 Convert 表")
-@ApiSort(8) // 控制接口排序 <
+@ApiSort(5) // 控制接口排序 <
 @RequestMapping("/1/convert")
 @Controller
 @Slf4j
@@ -38,7 +38,7 @@ public class ConvertController implements IAuthController<Long, TabConvert> {
 
     @PostMapping
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_save')") // <
-    @ApiOperation(value = "1.新增测试自定义 Convert 表", tags = {"2020-03-11"})
+    @ApiOperation(value = "1.新增测试自定义 Convert 表", tags = {"0.0.1"})
     @ApiImplicitParam(name = "body", dataType = "TabConvert", dataTypeClass = TabConvert.class, required = true)
     @ApiOperationSupport(
             order = 1,
@@ -55,7 +55,7 @@ public class ConvertController implements IAuthController<Long, TabConvert> {
 
     @PutMapping("/{id}")
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_update')") // <
-    @ApiOperation(value = "2.修改测试自定义 Convert 表", tags = {"2020-03-11"})
+    @ApiOperation(value = "2.修改测试自定义 Convert 表", tags = {"0.0.1"})
     @ApiImplicitParam(name = "body", dataType = "TabConvert", dataTypeClass = TabConvert.class, required = true)
     @ApiOperationSupport(
             order = 2,
@@ -72,7 +72,7 @@ public class ConvertController implements IAuthController<Long, TabConvert> {
     // 优先使用 deleteByUid 方法，可以阻止平行越权。 只有在实体没有 uid 的情况才能将该方法开放给前端<
     @DeleteMapping("/{id}")
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
-    @ApiOperation(value = "3.物理删除测试自定义 Convert 表", tags = {"2020-03-11"})
+    @ApiOperation(value = "3.物理删除测试自定义 Convert 表", tags = {"0.0.1"})
     @ApiOperationSupport(order = 3) // order id 相同的接口只能开放一个
     @ResponseBody
     @Override
@@ -83,7 +83,7 @@ public class ConvertController implements IAuthController<Long, TabConvert> {
 /*
     @DeleteMapping("/{id}/{uid}")
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
-    @ApiOperation(value = "3.物理删除测试自定义 Convert 表", tags = {"2020-03-11"})
+    @ApiOperation(value = "3.物理删除测试自定义 Convert 表", tags = {"0.0.1"})
     @ApiOperationSupport(order = 3) // order id 相同的接口只能开放一个<
     @ResponseBody
     @Override
@@ -94,7 +94,7 @@ public class ConvertController implements IAuthController<Long, TabConvert> {
 
     @PatchMapping("/{id}/{uid}")
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
-    @ApiOperation(value = "3.逻辑删除测试自定义 Convert 表", tags = {"2020-03-11"})
+    @ApiOperation(value = "3.逻辑删除测试自定义 Convert 表", tags = {"0.0.1"})
     @ApiOperationSupport(order = 3) // order id 相同的接口只能开放一个<
     @ResponseBody
     @Override
@@ -105,7 +105,7 @@ public class ConvertController implements IAuthController<Long, TabConvert> {
 /*
     @PatchMapping
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
-    @ApiOperation(value = "4.批量逻辑删除测试自定义 Convert 表", tags = {"2020-03-11"})
+    @ApiOperation(value = "4.批量逻辑删除测试自定义 Convert 表", tags = {"0.0.1"})
     @ApiOperationSupport(order = 4) // order id 相同的接口只能开放一个<
     @ResponseBody
     @Override
@@ -116,7 +116,7 @@ public class ConvertController implements IAuthController<Long, TabConvert> {
 
     @PatchMapping
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
-    @ApiOperation(value = "4.批量逻辑删除测试自定义 Convert 表", tags = {"2020-03-11"})
+    @ApiOperation(value = "4.批量逻辑删除测试自定义 Convert 表", tags = {"0.0.1"})
     @ApiOperationSupport(order = 4) // order id 相同的接口只能开放一个<
     @ResponseBody
     @Override
@@ -128,7 +128,7 @@ public class ConvertController implements IAuthController<Long, TabConvert> {
     // 优先使用 findByUid 方法，可以阻止平行越权。 只有在实体没有 uid 的情况才能将该方法开放给前端<
     @GetMapping("/{id}")
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_find')")
-    @ApiOperation(value = "5.按 id 查询测试自定义 Convert 表", tags = {"2020-03-11"})
+    @ApiOperation(value = "5.按 id 查询测试自定义 Convert 表", tags = {"0.0.1"})
     @ApiOperationSupport(order = 5) // order id 相同的接口只能开放一个
     @ResponseBody
     @Override
@@ -139,7 +139,7 @@ public class ConvertController implements IAuthController<Long, TabConvert> {
 
     @GetMapping("/{id}/{uid}")
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_find')")
-    @ApiOperation(value = "5.按 id 和 uid 查询测试自定义 Convert 表", tags = {"2020-03-11"})
+    @ApiOperation(value = "5.按 id 和 uid 查询测试自定义 Convert 表", tags = {"0.0.1"})
     @ApiOperationSupport(order = 5) // order id 相同的接口只能开放一个<
     @ResponseBody
     @Override
@@ -150,10 +150,10 @@ public class ConvertController implements IAuthController<Long, TabConvert> {
 
     @GetMapping("/page/{number}/{size}")
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_page')") // <
-    @ApiOperation(value = "6.分页查询测试自定义 Convert 表", tags = {"2020-03-11"})
+    @ApiOperation(value = "6.分页查询测试自定义 Convert 表", tags = {"0.0.1"})
     @ApiOperationSupport(
             order = 6,
-            ignoreParameters = {"insertTime", "updateTime"}
+            ignoreParameters = {"insertTime", "updateTime", "items", "item"}
     )
     @ResponseBody
     @Override
@@ -168,7 +168,7 @@ public class ConvertController implements IAuthController<Long, TabConvert> {
     // 非必要情况下不要开放列表查询方法，因为没有分页控制，容易内存溢出。大批量查询数据应该使用分页查询<
     @GetMapping
     // @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_search')")
-    @ApiOperation(value = "7.分页查询测试自定义 Convert 表", tags = {"2020-03-11"})
+    @ApiOperation(value = "7.分页查询测试自定义 Convert 表", tags = {"0.0.1"})
     @ApiOperationSupport(
             order = 7,
             ignoreParameters = {"insertTime", "updateTime"}

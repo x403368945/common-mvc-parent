@@ -74,7 +74,7 @@ public interface ConvertRepository extends
          */
         @JSONField(serialize = false, deserialize = false)
         default List<TabConvert> getTabConvertByIds(final Set<Long> ids) {
-            return Lists.newArrayList(getAppContext().getBean(ConvertRepository.class).findAll(q.id.in(ids)));
+            return Lists.newArrayList(getAppContext().getBean(ConvertRepository.class).findAllById(ids));
         }
     }
 

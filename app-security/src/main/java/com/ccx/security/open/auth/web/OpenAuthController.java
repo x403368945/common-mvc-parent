@@ -43,7 +43,7 @@ public class OpenAuthController {
      * 默认以 session 模式登录
      */
     @PostMapping("/login")
-    @ApiOperation(value = "登录", tags = {"1.0.0"})
+    @ApiOperation(value = "登录", tags = {"0.0.1"})
     @ApiOperationSupport(order = 1, ignoreParameters = {"body.method", "body.phone", "body.code"})
     @ResponseBody
     public Result<TabUser> login(@RequestBody final AuthLogin body, HttpServletRequest request) {

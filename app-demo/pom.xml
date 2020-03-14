@@ -15,7 +15,7 @@
     <!-- // spring-boot start >> -->
     <packaging>jar</packaging>
     <properties>
-        <main.class>com.ccx.demo.Application</main.class>
+        <main.class>com.ccx.demo.AppDemoApplication</main.class>
     </properties>
     <!-- // spring-boot end <<<< -->
 

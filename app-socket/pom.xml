@@ -15,7 +15,7 @@
     <!-- // spring-boot start >> -->
     <packaging>jar</packaging>
     <properties>
-        <main.class>com.ccx.socket.Application</main.class>
+        <main.class>com.ccx.socket.AppSocketApplication</main.class>
     </properties>
     <!-- // spring-boot end <<<< -->
 

@@ -36,6 +36,17 @@ spring:
 
 ---
 # 开发环境 --------------------------------------------------------------------------------------------------------------
+app: # 开发环境 *********************************************************************************************************
+  env: dev # 当前环境：[dev:本地|beta:测试|prod:生产]
+  version: @version@ # 当前运行版本号
+  admin-user-id: 1 # 管理员用户ID
+  admin-user: admin # 管理员账户登录账户
+  ip: 127.0.0.1 # 当前主机 IP 地址
+  domain: http://127.0.0.1:8080 # 应用路径，域名；
+  path-root: /app/files # 应用文件根目录
+  token-expired: 30 # token 默认过期时间，30 天
+  auto-task:
+    enabled: false # 是否启用服务内部的定时任务 true：是，false：否
 spring:
   profiles: dev
   cache: # 需要使用 @EnableCaching 开启缓存，缓存配置
@@ -137,18 +148,12 @@ spring:
           result-set-log-enabled: false
   #    schema: classpath:schema.sql
   #    data: classpath:database-init.sql
-  data:
-    mongodb:
-      #      host: localhost
-      #      port: 27017
-      #      authentication-database: admin
-      #      username: root
-      #      password: 111111
-      #      database: demo_main_db
-      auto-index-creation: true
-      uri: "mongodb://root:111111@localhost:27017/demo_main_db?authSource=admin&authMechanism=SCRAM-SHA-1"
-app: # 开发环境 *********************************************************************************************************
-  env: dev # 当前环境：[dev:本地|beta:测试|prod:生产]
+
+---
+# 测试环境 --------------------------------------------------------------------------------------------------------------
+app: # 测试环境 *********************************************************************************************************
+  env: beta # 当前环境：[dev:本地|beta:测试|prod:生产]
+  version: @version@ # 当前运行版本号
   admin-user-id: 1 # 管理员用户ID
   admin-user: admin # 管理员账户登录账户
   ip: 127.0.0.1 # 当前主机 IP 地址
@@ -156,10 +161,7 @@ app: # 开发环境 ************************************************************
   path-root: /app/files # 应用文件根目录
   token-expired: 30 # token 默认过期时间，30 天
   auto-task:
-    enabled: false # 是否启用服务内部的定时任务 true：是，false：否
-
----
-# 测试环境 --------------------------------------------------------------------------------------------------------------
+    enabled: true # 是否启用服务内部的定时任务 true：是，false：否
 spring:
   profiles: beta
   datasource:
@@ -247,31 +249,20 @@ spring:
           statement-executable-sql-log-enable: true
           statement-close-after-log-enabled: false
           result-set-log-enabled: false
-  #    schema: classpath:schema.sql
-  #    data: classpath:database-init.sql
-  data:
-    mongodb:
-      #      host: localhost
-      #      port: 27017
-      #      authentication-database: admin
-      #      username: root
-      #      password: 111111
-      #      database: demo_main_db
-      auto-index-creation: true
-      uri: "mongodb://root:111111@localhost:27017/demo_main_db?authSource=admin&authMechanism=SCRAM-SHA-1"
-app: # 测试环境 *********************************************************************************************************
-  env: beta # 当前环境：[dev:本地|beta:测试|prod:生产]
-  admin-user-id: 1 # 管理员用户ID
-  admin-user: admin # 管理员账户登录账户
-  ip: 127.0.0.1 # 当前主机 IP 地址
-  domain: http://127.0.0.1:8080 # 应用路径，域名；
-  path-root: /app/files # 应用文件根目录
-  token-expired: 30 # token 默认过期时间，30 天
-  auto-task:
-    enabled: true # 是否启用服务内部的定时任务 true：是，false：否
 
 ---
 # 生产环境 --------------------------------------------------------------------------------------------------------------
+app: # 生产环境 *********************************************************************************************************
+  env: prod # 当前环境：[dev:本地|beta:测试|prod:生产]
+  version: @version@ # 当前运行版本号
+  admin-user-id: 1 # 管理员用户ID
+  admin-user: admin # 管理员账户登录账户
+  ip: 127.0.0.1 # 当前主机 IP 地址
+  domain: http://demo.cccc6666.com # 应用路径，域名；
+  path-root: /var/www/demo/files # 应用文件根目录
+  token-expired: 30 # token 默认过期时间，30 天
+  auto-task:
+    enabled: true # 是否启用服务内部的定时任务 true：是，false：否
 spring:
   profiles: prod
   datasource:
@@ -359,28 +350,6 @@ spring:
           statement-executable-sql-log-enable: true
           statement-close-after-log-enabled: false
           result-set-log-enabled: false
-    #    schema: classpath:schema.sql
-    #    data: classpath:database-init.sql
-  data:
-    mongodb:
-      #      host: localhost
-      #      port: 27017
-      #      authentication-database: admin
-      #      username: root
-      #      password: 111111
-      #      database: demo_main_db
-      auto-index-creation: true
-      uri: "mongodb://root:111111@localhost:27017/demo_main_db?authSource=admin&authMechanism=SCRAM-SHA-1"
-app: # 生产环境 *********************************************************************************************************
-  env: prod # 当前环境：[dev:本地|beta:测试|prod:生产]
-  admin-user-id: 1 # 管理员用户ID
-  admin-user: admin # 管理员账户登录账户
-  ip: 127.0.0.1 # 当前主机 IP 地址
-  domain: http://demo.cccc6666.com # 应用路径，域名；
-  path-root: /var/www/demo/files # 应用文件根目录
-  token-expired: 30 # token 默认过期时间，30 天
-  auto-task:
-    enabled: true # 是否启用服务内部的定时任务 true：是，false：否
 
 
 

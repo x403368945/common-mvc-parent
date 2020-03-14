@@ -1,0 +1,6 @@
+### 定时任务： 清除临时文件目录
+POST http://{{host}}:{{port}}/1/auto-task/clear-temp-directory
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+###

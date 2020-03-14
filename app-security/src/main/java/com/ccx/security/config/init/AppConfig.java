@@ -90,7 +90,7 @@ public class AppConfig {
                 "app.domain", () -> properties.getDomain()),
         PATH_ROOT("应用文件根目录",
                 "app.path-root", () -> properties.getPathRoot()),
-        TOKEN_EXPIRED("token 默认过期时间",
+        TOKEN_EXPIRED("token 默认过期时间(天)",
                 "app.token-expired", () -> Objects.toString(properties.getTokenExpired())),
         ;
         public final String key;

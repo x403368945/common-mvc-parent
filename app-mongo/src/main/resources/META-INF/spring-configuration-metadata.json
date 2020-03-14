@@ -1,0 +1,44 @@
+{
+  "properties": [
+    {
+      "name": "app.env",
+      "type": "java.lang.String",
+      "description": "当前环境：[dev:本地|beta:测试|prod:生产]."
+    },
+    {
+      "name": "app.admin-user-id",
+      "type": "java.lang.String",
+      "description": "管理员用户ID."
+    },
+    {
+      "name": "app.admin-user",
+      "type": "java.lang.String",
+      "description": "管理员账户登录账户."
+    },
+    {
+      "name": "app.ip",
+      "type": "java.lang.String",
+      "description": "当前主机 IP 地址."
+    },
+    {
+      "name": "app.domain",
+      "type": "java.lang.String",
+      "description": "应用路径，域名；."
+    },
+    {
+      "name": "app.path-root",
+      "type": "java.lang.String",
+      "description": "应用文件根目录."
+    },
+    {
+      "name": "app.token-expired",
+      "type": "java.lang.String",
+      "description": "token 默认过期时间，30 天."
+    },
+    {
+      "name": "app.auto-task.enabled",
+      "type": "java.lang.String",
+      "description": "是否启用服务内部的定时任务 true：是，false：否."
+    }
+  ]
+}

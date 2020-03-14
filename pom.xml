@@ -16,6 +16,7 @@
         <module>app-security</module><!-- Spring Security 基本应用【参考案例，独立运行】 -->
         <module>app-socket</module><!-- Spring Socket 基本应用【参考案例，独立运行】 -->
         <module>app-demo</module><!-- 组合打包所有发布模块，避免出现循环依赖 -->
+        <module>app-mongo</module><!-- 组合打包所有发布模块，避免出现循环依赖 -->
         <!--<module>app-db-master-slave</module>-->
         <!--<module>app-sharding-jdbc</module>--><!-- 单独打包发布 -->
     </modules>
@@ -308,7 +309,7 @@
                     <include>*.ico</include>
                 </includes>
             </resource>
-            <resource>
+            <!--<resource>
                 <directory>${basedir}/src/main/resources</directory>
                 <targetPath>${basedir}/target/test-classes</targetPath>
                 <filtering>true</filtering>
@@ -316,23 +317,23 @@
                     <include>*.properties</include>
                     <include>*.yml</include>
                 </includes>
-            </resource>
+            </resource>-->
             <resource> <!-- 指定必须编译打包的资源文件 -->
                 <directory>${basedir}/src/main/resources/env/${env}</directory>
                 <targetPath>${basedir}/target/classes</targetPath>
                 <filtering>true</filtering>
             </resource>
-            <resource>
+            <!--<resource>
                 <directory>${basedir}/src/main/resources/env/${env}</directory>
                 <targetPath>${basedir}/target/test-classes</targetPath>
                 <filtering>true</filtering>
-                <!-- 排除不打包的文件 -->
-                <!--
+                &lt;!&ndash; 排除不打包的文件 &ndash;&gt;
+                &lt;!&ndash;
                 <excludes>
                     <exclude>logback.xml</exclude>
                 </excludes>
-                -->
-            </resource>
+                &ndash;&gt;
+            </resource>-->
             <!--<resource>
                 <directory>src/demo/static</directory>&lt;!&ndash; 将静态资源复制到编译目录下 &ndash;&gt;
                 <targetPath>${basedir}/target/${artifactId}-${version}/static/</targetPath>

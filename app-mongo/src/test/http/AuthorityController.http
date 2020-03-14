@@ -1,0 +1,15 @@
+### ********************************************************************************************************************
+### 角色权限指令
+### @author 谢长春 on 2020-03-08
+### ********************************************************************************************************************
+### 角色权限指令: 获取全部权限配置树集合
+GET http://{{host}}:{{port}}/1/authority/tree
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+### 角色权限指令: 获取全部展开后的权限配置集合，可通过 parentCode 构造成权限树
+GET http://{{host}}:{{port}}/1/authority/list
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+###

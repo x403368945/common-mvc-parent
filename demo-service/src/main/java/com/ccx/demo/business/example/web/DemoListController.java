@@ -31,7 +31,7 @@ import java.util.Optional;
  * @author 谢长春 2018-10-5
  */
 @Api(tags = "测试案例表")
-@ApiSort(9) // 控制接口排序 <
+@ApiSort(6) // 控制接口排序 <
 @RequestMapping("/1/demo-list")
 @Controller
 @Slf4j
@@ -42,7 +42,7 @@ public class DemoListController implements IAuthController<Long, TabDemoList> {
 
     @PostMapping
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_save')") // <
-    @ApiOperation(value = "1.新增测试案例表", tags = {"2020-03-11"})
+    @ApiOperation(value = "1.新增测试案例表", tags = {"0.0.1"})
     @ApiImplicitParam(name = "body", dataType = "TabDemoList", dataTypeClass = TabDemoList.class, required = true)
     @ApiOperationSupport(
             order = 1,
@@ -59,7 +59,7 @@ public class DemoListController implements IAuthController<Long, TabDemoList> {
 
     @PutMapping("/{id}")
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_update')") // <
-    @ApiOperation(value = "2.修改测试案例表", tags = {"2020-03-11"})
+    @ApiOperation(value = "2.修改测试案例表", tags = {"0.0.1"})
     @ApiImplicitParam(name = "body", dataType = "TabDemoList", dataTypeClass = TabDemoList.class, required = true)
     @ApiOperationSupport(
             order = 2,
@@ -75,7 +75,7 @@ public class DemoListController implements IAuthController<Long, TabDemoList> {
     // 优先使用 deleteByUid 方法，可以阻止平行越权。 只有在实体没有 uid 的情况才能将该方法开放给前端<
     @DeleteMapping("/{id}")
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
-    @ApiOperation(value = "3.物理删除测试案例表", tags = {"2020-03-11"})
+    @ApiOperation(value = "3.物理删除测试案例表", tags = {"0.0.1"})
     @ApiOperationSupport(order = 3) // order id 相同的接口只能开放一个
     @ResponseBody
     @Override
@@ -85,7 +85,7 @@ public class DemoListController implements IAuthController<Long, TabDemoList> {
 
     @DeleteMapping("/{id}/{uid}")
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
-    @ApiOperation(value = "4.物理删除测试案例表", tags = {"2020-03-11"})
+    @ApiOperation(value = "4.物理删除测试案例表", tags = {"0.0.1"})
     @ApiOperationSupport(order = 4) // order id 相同的接口只能开放一个<
     @ResponseBody
     @Override
@@ -95,7 +95,7 @@ public class DemoListController implements IAuthController<Long, TabDemoList> {
 
     @PatchMapping("/{id}")
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
-    @ApiOperation(value = "5.逻辑删除测试案例表", tags = {"2020-03-11"})
+    @ApiOperation(value = "5.逻辑删除测试案例表", tags = {"0.0.1"})
     @ApiOperationSupport(order = 5) // order id 相同的接口只能开放一个<
     @ResponseBody
     @Override
@@ -105,7 +105,7 @@ public class DemoListController implements IAuthController<Long, TabDemoList> {
 
     @PatchMapping("/{id}/{uid}")
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
-    @ApiOperation(value = "6.逻辑删除测试案例表", tags = {"2020-03-11"})
+    @ApiOperation(value = "6.逻辑删除测试案例表", tags = {"0.0.1"})
     @ApiOperationSupport(order = 6) // order id 相同的接口只能开放一个<
     @ResponseBody
     @Override
@@ -116,7 +116,7 @@ public class DemoListController implements IAuthController<Long, TabDemoList> {
 /*
     @PatchMapping
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
-    @ApiOperation(value = "6.批量逻辑删除测试案例表", tags = {"2020-03-11"})
+    @ApiOperation(value = "6.批量逻辑删除测试案例表", tags = {"0.0.1"})
     @ApiOperationSupport(order = 6) // order id 相同的接口只能开放一个<
     @ResponseBody
     @Override
@@ -127,7 +127,7 @@ public class DemoListController implements IAuthController<Long, TabDemoList> {
 
     @PatchMapping
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_delete')")
-    @ApiOperation(value = "7.批量逻辑删除测试案例表", tags = {"2020-03-11"})
+    @ApiOperation(value = "7.批量逻辑删除测试案例表", tags = {"0.0.1"})
     @ApiOperationSupport(order = 7) // order id 相同的接口只能开放一个<
     @ResponseBody
     @Override
@@ -138,7 +138,7 @@ public class DemoListController implements IAuthController<Long, TabDemoList> {
     // 优先使用 findByUid 方法，可以阻止平行越权。 只有在实体没有 uid 的情况才能将该方法开放给前端<
     @GetMapping("/{id}")
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_find')")
-    @ApiOperation(value = "8.按 id 查询测试案例表", tags = {"2020-03-11"})
+    @ApiOperation(value = "8.按 id 查询测试案例表", tags = {"0.0.1"})
     @ApiOperationSupport(order = 8) // order id 相同的接口只能开放一个
     @ResponseBody
     @Override
@@ -148,7 +148,7 @@ public class DemoListController implements IAuthController<Long, TabDemoList> {
 
     @GetMapping("/{id}/{uid}")
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_find')")
-    @ApiOperation(value = "9.按 id 和 uid 查询测试案例表", tags = {"2020-03-11"})
+    @ApiOperation(value = "9.按 id 和 uid 查询测试案例表", tags = {"0.0.1"})
     @ApiOperationSupport(order = 9) // order id 相同的接口只能开放一个<
     @ResponseBody
     @Override
@@ -158,7 +158,7 @@ public class DemoListController implements IAuthController<Long, TabDemoList> {
 
     @GetMapping("/page/{number}/{size}")
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_page')") // <
-    @ApiOperation(value = "10.分页查询测试案例表", tags = {"2020-03-11"})
+    @ApiOperation(value = "10.分页查询测试案例表", tags = {"0.0.1"})
     @ApiOperationSupport(
             order = 10,
             ignoreParameters = {"insertTime", "updateTime"}
@@ -175,7 +175,7 @@ public class DemoListController implements IAuthController<Long, TabDemoList> {
     // 非必要情况下不要开放列表查询方法，因为没有分页控制，容易内存溢出。大批量查询数据应该使用分页查询<
     @GetMapping
     // @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', '{}_search')")
-    @ApiOperation(value = "11.分页查询测试案例表", tags = {"2020-03-11"})
+    @ApiOperation(value = "11.分页查询测试案例表", tags = {"0.0.1"})
     @ApiOperationSupport(
             order = 11,
             ignoreParameters = {"insertTime", "updateTime"}

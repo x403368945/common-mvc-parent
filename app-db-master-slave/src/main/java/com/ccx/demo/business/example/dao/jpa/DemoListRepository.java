@@ -72,7 +72,7 @@ public interface DemoListRepository extends
          */
         @JSONField(serialize = false, deserialize = false)
         default List<TabDemoList> getTabDemoListByIds(final Collection<Long> ids) {
-            return Lists.newArrayList(getAppContext().getBean(DemoListRepository.class).findAll(q.id.in(ids)));
+            return Lists.newArrayList(getAppContext().getBean(DemoListRepository.class).findAllById(ids));
         }
     }
 

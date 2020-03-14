@@ -8,7 +8,6 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.data.mongodb.config.EnableMongoAuditing;
 
 /**
  * spring-boot 特殊处理：只有 spring-boot 需要该文件
@@ -22,7 +21,6 @@ import org.springframework.data.mongodb.config.EnableMongoAuditing;
 @SpringBootApplication
 @Import(value = {InitConfig.class})
 @EnableJpaAuditing
-@EnableMongoAuditing
 @EnableCaching
 @EnableConfigurationProperties
 public class DemoMainApplication extends SpringBootServletInitializer {

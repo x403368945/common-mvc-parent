@@ -11,7 +11,6 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.support.mvc.dao.IRepository;
 import com.support.mvc.entity.base.MarkDelete;
@@ -80,7 +79,7 @@ public interface DemoListRepository extends
          */
         @JSONField(serialize = false, deserialize = false)
         default List<TabDemoList> getTabDemoListByIds(final Set<Long> ids) {
-            return Lists.newArrayList(getAppContext().getBean(DemoListRepository.class).findAll(q.id.in(ids)));
+            return Lists.newArrayList(getAppContext().getBean(DemoListRepository.class).findAllById(ids));
         }
     }
 

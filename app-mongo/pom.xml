@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>common-mvc-parent</artifactId>
+        <groupId>com.ccx.parent</groupId>
+        <version>1.0.1</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>app-mongo</artifactId>
+    <!-- // spring-mvc start >> -->
+    <!--<packaging>war</packaging>-->
+    <!-- // spring-mvc end <<<< -->
+    <!-- // spring-boot start >> -->
+    <packaging>jar</packaging>
+    <properties>
+        <main.class>com.ccx.demo.AppMongoApplication</main.class>
+    </properties>
+    <!-- // spring-boot end <<<< -->
+
+    <dependencies>
+        <dependency>
+            <groupId>com.ccx.parent</groupId>
+            <artifactId>common-mvc</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!--<dependency>
+            <groupId>com.ccx.parent</groupId>
+            <artifactId>common-mongo</artifactId>
+            <version>${project.version}</version>
+        </dependency>-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-mongodb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+        <!-- Ehcache3 Start : springboot 默认的 Ehcache 缓存版本只到 2.x ，3.x 需要使用 jcache 才能兼容 -->
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.cache</groupId>
+            <artifactId>cache-api</artifactId>
+        </dependency>
+        <!-- Ehcache3 End : springboot 默认的 Ehcache 缓存版本只到 2.x ，3.x 需要使用 jcache 才能兼容 -->
+        <!-- Redis Start-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
+        <!-- Redis End-->
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <!--<skip>true</skip>-->
+                    <fork>true</fork> <!-- devtools 热启动配置 -->
+                    <addResources>true</addResources>
+                    <mainClass>${main.class}</mainClass>
+                    <layout>ZIP</layout>
+                </configuration>
+                <!--<executions>
+                    &lt;!&ndash;
+                        repackage 之后jar包内部结构会改变，其他模块依赖该模块之后会打包失败，找不到依赖，所以这里必须注释
+                        如果需要单独打包发布该模块，需要再建一个用于发布的模块，依赖该模块打包成可运行的springboot.jar
+                     &ndash;&gt;
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>-->
+            </plugin>
+            <!--<plugin> &lt;!&ndash; war 包插件 &ndash;&gt;
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+            </plugin>-->
+            <!-- https://mvnrepository.com/artifact/com.mysema.maven/apt-maven-plugin -->
+            <plugin> <!-- 该插件可以生成 querydsl 需要的查询对象，执行 mvn compile 即可-->
+                <groupId>com.mysema.maven</groupId>
+                <artifactId>apt-maven-plugin</artifactId>
+            </plugin>
+            <plugin> <!-- 打包源码 -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+            <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-jar-plugin -->
+            <!--<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            &lt;!&ndash;<addClasspath>true</addClasspath>&ndash;&gt;
+                            <mainClass>${main.class}</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>-->
+        </plugins>
+    </build>
+
+</project>

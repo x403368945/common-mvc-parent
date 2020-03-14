@@ -263,7 +263,7 @@ public interface ${JavaName}Repository extends
          */
         @JSONField(serialize = false, deserialize = false)
         default List<${TabName}> get${TabName}ByIds(final Set<${idType}> ids) {
-            return Lists.newArrayList(getAppContext().getBean(${JavaName}Repository.class).findAll(q.id.in(ids)));
+            return Lists.newArrayList(getAppContext().getBean(${JavaName}Repository.class).findAllById(ids));
         }
     }
 

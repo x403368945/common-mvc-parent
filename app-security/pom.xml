@@ -15,7 +15,7 @@
     <!-- // spring-boot start >> -->
     <packaging>jar</packaging>
     <properties>
-        <main.class>com.ccx.security.Application</main.class>
+        <main.class>com.ccx.security.AppSecurityApplication</main.class>
     </properties>
     <!-- // spring-boot end <<<< -->
 

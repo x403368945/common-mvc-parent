@@ -1,0 +1,52 @@
+### 获取系统环境变量
+GET http://{{host}}:{{port}}/1/common/system
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+### 获取枚举选项
+GET http://{{host}}:{{port}}/1/common/enum/com.support.mvc.enums.Code
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+### 获取枚举选项
+GET http://{{host}}:{{port}}/1/common/enum/com.ccx.demo.business.user.entity.TabUser$OrderBy
+Content-Type: application/json
+Authorization: Basic {{username}} {{password}}
+
+### 单文件上传
+POST http://{{host}}:{{port}}/1/common/upload/temp
+Authorization: Basic {{username}} {{password}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="element-name.txt"
+Content-Type: text/plain
+
+Element Name
+--WebAppBoundary--
+
+### 多文件上传
+POST http://{{host}}:{{port}}/1/common/uploads/temp
+Authorization: Basic {{username}} {{password}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="files"; filename="element-name.txt"
+Content-Type: text/plain
+
+Element Name
+--WebAppBoundary
+Content-Disposition: form-data; name="files"; filename="index.html"
+Content-Type: text/html
+
+< index.html
+
+--WebAppBoundary
+Content-Disposition: form-data; name="files"; filename="logback.xml"
+Content-Type: application/xml
+
+< ../logback.xml
+
+--WebAppBoundary--
+
+###

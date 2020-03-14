@@ -69,7 +69,8 @@ export default class CommonServiceTest {
     console.log('> 上传到临时目录，批量上传 ----------------------------------------------------------------------------------------------------');
     (await new CommonService().uploadTemps([
       fs.createReadStream('./favicon.ico'),
-      fs.createReadStream('./package.json')
+      fs.createReadStream('./package.json'),
+      fs.createReadStream('/home/ccx/Desktop/华鑫信托-联合运营系统-合作方接口文档-诺亚-V2.0.19.pdf')
     ]))
       .print()
       .assertData();

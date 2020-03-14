@@ -6,6 +6,11 @@
       "description": "当前环境：[dev:本地|beta:测试|prod:生产]."
     },
     {
+      "name": "app.version",
+      "type": "java.lang.String",
+      "description": "当前运行版本号"
+    },
+    {
       "name": "app.admin-user-id",
       "type": "java.lang.String",
       "description": "管理员用户ID."
