@@ -213,7 +213,7 @@
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
-                <version>8.0.19</version>
+                <version>8.0.28</version>
             </dependency>
             <!-- druid 参考 https://github.com/alibaba/druid/tree/master/druid-spring-boot-starter -->
             <!-- https://mvnrepository.com/artifact/com.alibaba/druid-spring-boot-starter -->
